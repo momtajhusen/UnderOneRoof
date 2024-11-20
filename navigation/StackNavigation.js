@@ -9,6 +9,9 @@ import HomeScreen from '../screens/B2C/HomeScreen';
 import CategoryScreen from '../screens/B2C/CategorysScreen';
 import CartScreen from '../screens/B2C/CartScreen';
 import AccountScreen from '../screens/B2C/AccountScreen';
+import SignupOrLogin from '../screens/Auth/SignupOrLogin';
+import VerifyOtp from '../screens/Auth/VerifyOtp';
+import ShoppingMode from '../screens/Auth/ShoppingMode';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,10 +30,19 @@ const StackNavigation = () => {
       > 
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }} />
+        {/* Screen navigation  */}
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CartScreen" component={CartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ headerShown: false }} />
+        {/* Auth navigation  */}
+        <Stack.Screen name="SignupOrLogin" component={SignupOrLogin} options={{ headerShown: false }} />
+        <Stack.Screen name="VerifyOtp" component={VerifyOtp} options={{ headerShown: false }} />
+        <Stack.Screen name="ShoppingMode" component={ShoppingMode} options={{ headerShown: false }} />
+
+
+
+        
      </Stack.Navigator>
     );
 };

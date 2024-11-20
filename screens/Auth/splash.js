@@ -11,7 +11,7 @@ const SplashScreen = () => {
 
     useEffect(() => {
         setTimeout(() => {
-            navigation.replace('BottomNavigator');
+            navigation.replace('SignupOrLogin');
           }, 3000);
     }, []);
 
