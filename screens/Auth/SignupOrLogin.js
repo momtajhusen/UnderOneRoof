@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/Inputs/CustomInput';
 import CustomButtons from '../../components/Buttons/CustomButtons';
+import { LinearGradient } from 'expo-linear-gradient';
+import * as Animatable from 'react-native-animatable';
 import { rw, rh, rf } from '../../Service/responsive';
 
 
@@ -11,17 +13,24 @@ const SignupOrLogin = ({navigation}) => {
     return (
         <>
         <ScrollView>
-            <View style={styles.backContainer}>
-                 <View style={[styles.imageContainer]}>
-                      <Text style={{fontSize:rf(3), fontWeight:"bold", color:"white", position:"absolute", top:rh(3)}}>Under One Roof</Text>
-                      <Image
-                        animation="zoomIn"
-                        source={require('../../assets/auth/image34.png')}
-                        style={{width:rh(40), height:rh(40)}}
-                        resizeMode="contain"
-                      />
-                 </View>
+          <LinearGradient
+            colors={['#FF6D6D', '#FFFFFF', '#FF6D6D']}  // Add white in the middle
+            locations={[0, 0.5, 1]}                      // Position white in the center
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.backContainer}
+          >
+            <View style={[styles.imageContainer]}>
+              <Text style={{fontSize:rf(3), fontWeight:"bold", color:"white", position:"absolute", top:rh(3)}}>Under One Roof</Text>
+              <Animatable.Image
+                animation="fadeInUp"
+                source={require('../../assets/auth/image34.png')}
+                style={{width:rh(40), height:rh(40)}}
+                resizeMode="contain"
+              />
             </View>
+          </LinearGradient>
+
             <View style={styles.signuContainer}>
                 <View>
                     <Text style={{fontWeight:"bold", fontSize:rf(2.5), color:"#272727"}}>Sign Up or Login</Text>
@@ -56,7 +65,6 @@ export default SignupOrLogin;
 
 const styles = StyleSheet.create({
     backContainer: {
-      backgroundColor:"#FF5454",
       height:rh(100),
       position:"relative",
     },

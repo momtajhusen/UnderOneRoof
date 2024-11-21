@@ -10,7 +10,7 @@ const CategoryItem = ({ image, text }) => {
             <View style={styles.ImageContainer}>
                 <Image source={image} style={styles.image} resizeMode="cover" />
             </View>
-            <View style={{paddingVertical:rh(1), paddingHorizontal:rh(1)}}>
+            <View style={{paddingVertical:rh(0.5), paddingHorizontal:rh(1)}}>
                <Text style={styles.text}>{text}</Text>
             </View>
         </TouchableOpacity>
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     listContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        width:rw(21.5),
+        width:rw(22),
         backgroundColor: '#FFFFFF',
         overflow: 'hidden',
         borderRadius: rw(3),
@@ -37,14 +37,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: rw(17),
-        height: rh(10),
+        height: rh(8),
         backgroundColor: '#FFF4E6',
         overflow: 'hidden',
         borderRadius:10,
         marginTop:rh(0.5),
     },
     image: {
-        width: rw(15),
+        width: rw(17),
         height: rw(15),
     },
     text: {

@@ -12,21 +12,23 @@ const Tab = createBottomTabNavigator();
 const BottomNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={() => ({
-        tabBarActiveTintColor: "#FF3131", // Corrected spelling
-        tabBarInactiveTintColor: "black",
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#FF3131",
+        tabBarInactiveTintColor: "#6C6C6C",
         tabBarStyle: {
           backgroundColor: "white",
-          height: rh(10), // Responsive tab bar height
-          paddingTop: rh(1), // Adjusted padding to ensure space for icons and text
+          height: rh(10),
+          paddingTop: rh(1),
           borderTopWidth: 0,
           paddingBottom: rh(1),
         },
-        tabBarLabelStyle: { 
-          fontSize: rf(1.5), // Responsive font size for label
-          paddingBottom: rh(1.5), // Adjusted padding for label space
-          fontWeight: 'bold', 
-          textAlign: 'center', // Ensures label is centered below the icon
+        tabBarLabelStyle: {
+          fontSize: rf(1.5),
+          paddingBottom: rh(1.5),
+          fontWeight: 'bold',
+        },
+        tabBarIconStyle: {
+          marginBottom: 2,
         },
         headerShown: false,
       })}
@@ -35,50 +37,61 @@ const BottomNavigator = () => {
         name="Home" 
         component={HomeScreen} 
         options={{
-          title: 'Home', 
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="home" color={color} size={size} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialIcons 
+              name={focused ? "home" : "home"} // Filled when active, outline when inactive
+              color={color} 
+              size={rf(3.5)} 
+            />
           ),
         }} 
       />
       
-     <Tab.Screen 
+      <Tab.Screen 
         name="Category" 
         component={CategoryScreen} 
         options={{
-          title: 'Category', 
           tabBarLabel: 'Category',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="widgets" color={color} size={size} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons 
+              name={focused ? "widgets" : "widgets-outline"} // Filled when active, outline when inactive
+              color={color} 
+              size={rf(3.5)} 
+            />
           ),
         }} 
       />
 
       <Tab.Screen 
-        name="CartScreen" 
+        name="Cart" 
         component={CartScreen} 
         options={{
-          title: 'CartScreen', 
           tabBarLabel: 'Cart',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="cart" color={color} size={size} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons 
+              name={focused ? "cart" : "cart-outline"} // Filled when active, outline when inactive
+              color={color} 
+              size={rf(3.5)} 
+            />
           ),
         }} 
       />
 
-     <Tab.Screen 
+      <Tab.Screen 
         name="Account" 
         component={AccountScreen} 
         options={{
-          title: 'Account', 
           tabBarLabel: 'Account',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons 
+              name={focused ? "account" : "account-outline"} // Filled when active, outline when inactive
+              color={color} 
+              size={rf(3.5)} 
+            />
           ),
         }} 
       />
-
     </Tab.Navigator>
   );
 };

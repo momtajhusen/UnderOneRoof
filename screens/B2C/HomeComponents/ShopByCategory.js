@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import CategoryList from '../../../components/List/CategoryList';  // Import CategoryList
 import { rw } from '../../../Service/responsive';
 
-const BestSellers = () => {
+const ShopByCategory = () => {
 
     // Categories array define karte hain
     const categories = [
@@ -19,7 +19,7 @@ const BestSellers = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}>Bestsellers</Text>
+            <Text style={styles.headerText}>Shop By Category</Text>
             {/* CategoryList ko categories array ke har item ko map kar ke pass kar rahe hain */}
             <View style={styles.categoryListContainer}>
                 {categories.map((category) => (
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: rw(2),
-        marginHorizontal:rw(2),
+        marginLeft:rw(2),
     },
     categoryListContainer: {
         flexDirection: 'row',
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default BestSellers;
+export default ShopByCategory;

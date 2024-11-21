@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const ShoppingMode = ({ navigation }) => {
   return (
@@ -26,7 +28,8 @@ const ShoppingMode = ({ navigation }) => {
       {/* Shopping Mode Options */}
       <View style={styles.optionsContainer}>
         {/* Wholesale Mode */}
-        <TouchableOpacity 
+
+        {/* <TouchableOpacity 
           onPress={()=> navigation.navigate('BottomNavigator')}
           style={styles.listContainer}
         >
@@ -38,22 +41,50 @@ const ShoppingMode = ({ navigation }) => {
           <Text style={styles.listDescription}>
             Buy large quantities at lower prices, just for businesses!
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <TouchableOpacity 
+          onPress={()=> navigation.navigate('BottomNavigator')}
+        >
+            <LinearGradient
+              colors={['#FFF0DC', '#FFFFFF']}  // Light beige to white gradient
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}  // Diagonal gradient from top-left to bottom-right
+              style={styles.listContainer}
+            >
+              <View style={styles.iconRow}>
+                <MaterialIcons name="storefront" size={rf(5)} style={{ color: "#FF9100" }} />
+                <MaterialIcons name="arrow-forward" size={rf(4)} style={{ color: "#000000" }} />
+              </View>
+              <Text style={styles.listTitle}>Wholesale for Businesses</Text>
+              <Text style={styles.listDescription}>
+                Buy large quantities at lower prices, just for businesses!
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
 
         {/* Retail Mode */}
         <TouchableOpacity 
           onPress={()=> navigation.navigate('BottomNavigator')}
-          style={styles.listContainer}
         >
-          <View style={styles.iconRow}>
-            <MaterialCommunityIcons name="cart" size={rf(5)} style={{color:"#FF5454"}} />
-            <MaterialIcons name="arrow-forward" size={rf(4)} style={{fontSize:rf(3)}} />
-          </View>
-          <Text style={styles.listTitle}>Shop Retail Items</Text>
-          <Text style={styles.listDescription}>
-            Shop everyday items for your home and personal use, one at a time!
-          </Text>
+
+          <LinearGradient
+              colors={['#FFDCDC', '#FFFFFF']}  // Light beige to white gradient
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}  // Diagonal gradient from top-left to bottom-right
+              style={styles.listContainer}
+            >
+            <View style={styles.iconRow}>
+              <MaterialCommunityIcons name="cart" size={rf(5)} style={{color:"#FF5454"}} />
+              <MaterialIcons name="arrow-forward" size={rf(4)} style={{fontSize:rf(3)}} />
+            </View>
+            <Text style={styles.listTitle}>Shop Retail Items</Text>
+            <Text style={styles.listDescription}>
+              Shop everyday items for your home and personal use, one at a time!
+            </Text>
+            </LinearGradient>
         </TouchableOpacity>
+        
       </View>
     </View>
   );
