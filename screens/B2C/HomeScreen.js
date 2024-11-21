@@ -29,7 +29,7 @@ const HomeScreen = () => {
             </Text>
           </View>
           <Animatable.Image animation="fadeInUp" source={require('../../assets/HeaderImage/image1.png')} style={styles.imageCup} resizeMode="cover" />
-          <Animatable.Image animation="fadeInRight" source={require('../../assets/HeaderImage/Cheaseedsleaves.png')} style={{position:"absolute", right:rw(1), top:rh(4)}} resizeMode="cover" />
+          <Animatable.Image animation="fadeInRight" source={require('../../assets/HeaderImage/Cheaseedsleaves.png')} style={{position:"absolute", right:rw(0), top:rh(4)}} resizeMode="cover" />
           <Animatable.Image animation="fadeInLeft" source={require('../../assets/HeaderImage/image4.png')} style={{position:"absolute", left:rw(-15), top:rh(-3)}} resizeMode="cover" />
           <View style={{position:"absolute", bottom:rh(10)}}>
              <SearchDesigne />

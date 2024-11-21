@@ -6,7 +6,6 @@ import * as Animatable from 'react-native-animatable';
 import CategoryList from '../../components/List/CategoryList';
 import { rw, rh, rf } from '../../Service/responsive';
 
-
 // create a component
 const CategoryScreen  = ({navigation}) => {
 
