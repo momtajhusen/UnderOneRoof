@@ -119,7 +119,8 @@ export default VerifyOtp;
 const styles = StyleSheet.create({
     backButton: {
        fontSize:rf(3),
-       marginBottom:rh(1.5)
+       marginBottom:rh(1.5),
+       marginTop:rh(2),
     },
     container: {
       padding:20

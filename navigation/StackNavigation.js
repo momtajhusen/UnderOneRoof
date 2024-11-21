@@ -32,7 +32,7 @@ const StackNavigation = () => {
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }} />
         {/* Screen navigation  */}
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CategoryScreen" component={CategoryScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
         <Stack.Screen name="CartScreen" component={CartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ headerShown: false }} />
         {/* Auth navigation  */}

@@ -48,8 +48,8 @@ const SignupOrLogin = ({navigation}) => {
                   />
               <View style={{justifyContent:"center", flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}>
                    <Text>By logging into this app, you agree to our  
-                   <Text style={{ color: "#4C4CDB" }}> Terms of Service</Text>  and
-                   <Text style={{ color: "#4C4CDB" }}> Privacy Policy.</Text>
+                   <Text style={{ color: "#4C4CDB", fontWeight:"bold" }}> Terms of Service</Text>  and
+                   <Text style={{ color: "#4C4CDB", fontWeight:"bold" }}> Privacy Policy.</Text>
                 </Text>
               </View>
 

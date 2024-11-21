@@ -1,15 +1,80 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Animatable from 'react-native-animatable';
+import CategoryList from '../../components/List/CategoryList';
+import { rw, rh, rf } from '../../Service/responsive';
+
 
 // create a component
-const CategoryScreen  = () => {
+const CategoryScreen  = ({navigation}) => {
+
+        // Categories array define karte hain
+        const categories = [
+            { id: 1, image: require('../../assets/items/image5.png'), text: 'Dry Fruits' },
+            { id: 2, image: require('../../assets/image5.png'), text: 'Spices' },
+            { id: 3, image: require('../../assets/items/image5.png'), text: 'Kesar' },
+            { id: 4, image: require('../../assets/image5.png'), text: 'Spices' },
+            { id: 5, image: require('../../assets/items/image5.png'), text: 'Herbal Teas' },
+            { id: 6, image: require('../../assets/image5.png'), text: 'Herbal Teas' },
+            { id: 7, image: require('../../assets/items/image5.png'), text: 'Herbal Teas' },
+            { id: 8, image: require('../../assets/image5.png'), text: 'Herbal Teas' },
+            { id: 9, image: require('../../assets/items/image5.png'), text: 'Dry Fruits' },
+            { id: 10, image: require('../../assets/image5.png'), text: 'Spices' },
+            { id: 11, image: require('../../assets/items/image5.png'), text: 'Kesar' },
+            { id: 12, image: require('../../assets/image5.png'), text: 'Spices' },
+            { id: 13, image: require('../../assets/items/image5.png'), text: 'Herbal Teas' },
+            { id: 14, image: require('../../assets/image5.png'), text: 'Herbal Teas' },
+            { id: 15, image: require('../../assets/items/image5.png'), text: 'Herbal Teas' },
+            { id: 16, image: require('../../assets/image5.png'), text: 'Herbal Teas' },
+        ];
+
     return (
         <View>
-            <Text>CategoryScreen</Text>
+             {/* Back Container  */}
+             <View style={styles.backHeader}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <MaterialIcons name="arrow-back" size={rf(4)} style={{fontSize:rf(3)}} />
+                </TouchableOpacity>
+                <Text style={{marginLeft:rw(2), fontSize:rw(4), fontWeight:"bold"}}>Categories</Text>
+             </View>
+
+             {/* Category List Container  */}
+             <View style={styles.categoryListContainer}>
+            {categories.map((category, index) => (
+                    <Animatable.View
+                    key={category.id}
+                    animation="fadeInUp" // Animation type
+                    duration={800} // Duration of each animation
+                    delay={index * 20} // Delay based on the index
+                >
+                <CategoryList
+                    image={category.image} // Image prop
+                    text={category.text}   // Text prop
+                />
+                </Animatable.View>
+                ))}
+            </View>
         </View>
     );
 };
 
 //make this component available to the app
 export default CategoryScreen;
+
+
+const styles = StyleSheet.create({
+    backHeader: {
+        alignItems:"center",
+        flexDirection:"row",
+        paddingLeft:rw(5),
+        paddingTop:rh(4),
+    },
+    categoryListContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingLeft:rw(2),
+        marginTop:rh(2),
+    },
+});

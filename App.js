@@ -1,16 +1,19 @@
 import React from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import StackNavigation from './navigation/StackNavigation';
 
 const App = () => {
   return (
-          <NavigationContainer>
-              <StatusBar barStyle="light-content" backgroundColor="black" />
-              <StackNavigation />
-          </NavigationContainer>
+    <NavigationContainer>
+      <StatusBar 
+        translucent 
+        backgroundColor="transparent" 
+        barStyle="light-content"
+      />
+      <StackNavigation />
+    </NavigationContainer>
   );
 };
-
 
 export default App;
