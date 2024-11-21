@@ -10,7 +10,6 @@ import ShopByCategory from './HomeComponents/ShopByCategory';
 import RefreshYourDay from './HomeComponents/RefreshYourDay';
 import * as Animatable from 'react-native-animatable';
 
-
 const HomeScreen = () => {
   return (
     <ScrollView>
