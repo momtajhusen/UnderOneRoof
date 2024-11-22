@@ -12,6 +12,7 @@ import AccountScreen from '../screens/B2C/AccountScreen';
 import SignupOrLogin from '../screens/Auth/SignupOrLogin';
 import VerifyOtp from '../screens/Auth/VerifyOtp';
 import ShoppingMode from '../screens/Auth/ShoppingMode';
+import AddressBook from '../screens/B2C/CartComponents/AddressBook';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,10 +40,10 @@ const StackNavigation = () => {
         <Stack.Screen name="SignupOrLogin" component={SignupOrLogin} options={{ headerShown: false }} />
         <Stack.Screen name="VerifyOtp" component={VerifyOtp} options={{ headerShown: false }} />
         <Stack.Screen name="ShoppingMode" component={ShoppingMode} options={{ headerShown: false }} />
+        <Stack.Screen name="AddressBook" component={AddressBook} options={{ headerShown: false }} />
 
 
-
-        
+      
      </Stack.Navigator>
     );
 };

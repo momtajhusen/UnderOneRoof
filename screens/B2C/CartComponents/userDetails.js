@@ -3,9 +3,13 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
+import { useNavigation } from '@react-navigation/native';
 
 // create a component
 const UserDetails = () => {
+
+  const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             <View style={styles.headerRow}>
@@ -14,8 +18,11 @@ const UserDetails = () => {
                     <Text style={{fontWeight:"bold", marginRight:rw(1)}}>Delivery To:</Text>
                     <Text style={styles.locationText}>Home</Text>
                 </View>
-                <TouchableOpacity style={{paddingRight:rw(3)}}>
-                    <Text style={styles.changeText}>Change</Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('AddressBook')}
+                    style={{ paddingRight: rw(3) }}
+                    >
+                    <Text style={styles.changeText}>Change</Text>  
                 </TouchableOpacity>
             </View>
             <View style={styles.detailsContainer}>

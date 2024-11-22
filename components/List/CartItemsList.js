@@ -13,7 +13,7 @@ const CartItemsList = ({ itemImage, itemName, itemWeight, itemPrice, itemMRP, it
                 <View style={{flexDirection:"row", justifyContent:"between", width:rw(65)}}>
                     <Text style={styles.itemName} numberOfLines={1}>{itemName}</Text>
                     <TouchableOpacity onPress={onRemove} style={styles.removeButton}>
-                        <MaterialIcons style={styles.removeIcon} name="delete" />
+                        <MaterialIcons style={styles.removeIcon} name="delete-outline" />
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.itemWeight}>{itemWeight}</Text>

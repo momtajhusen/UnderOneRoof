@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Animatable from 'react-native-animatable';
+
 
 
 const ShoppingMode = ({ navigation }) => {
@@ -53,8 +55,14 @@ const ShoppingMode = ({ navigation }) => {
               style={styles.listContainer}
             >
               <View style={styles.iconRow}>
-                <MaterialIcons name="storefront" size={rf(5)} style={{ color: "#FF9100" }} />
-                <MaterialIcons name="arrow-forward" size={rf(4)} style={{ color: "#000000" }} />
+                <Animatable.View
+                animation="fadeInLeft" // Animation type
+                duration={800} // Duration of each animation
+                delay={20} 
+                >
+                  <MaterialIcons name="storefront" size={rf(5)} style={{ color: "#FF9100" }} />
+                </Animatable.View>
+                <MaterialIcons name="arrow-forward" size={rf(3)} style={{ color: "#000000" }} />
               </View>
               <Text style={styles.listTitle}>Wholesale for Businesses</Text>
               <Text style={styles.listDescription}>
@@ -75,8 +83,14 @@ const ShoppingMode = ({ navigation }) => {
               style={styles.listContainer}
             >
             <View style={styles.iconRow}>
-              <MaterialCommunityIcons name="cart" size={rf(5)} style={{color:"#FF5454"}} />
-              <MaterialIcons name="arrow-forward" size={rf(4)} style={{fontSize:rf(3)}} />
+              <Animatable.View
+                animation="fadeInLeft" // Animation type
+                duration={800} // Duration of each animation
+                delay={20} 
+              >
+                <MaterialCommunityIcons name="cart" size={rf(5)} style={{color:"#FF5454"}} />
+              </Animatable.View>
+              <MaterialIcons name="arrow-forward" size={rf(3)} />
             </View>
             <Text style={styles.listTitle}>Shop Retail Items</Text>
             <Text style={styles.listDescription}>
@@ -119,11 +133,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderRadius: 10,
     backgroundColor: '#f9f9f9',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 3,
-    shadowRadius: 1.41,
-    elevation: 2,
+    overflow:"hidden",
   },
   iconRow: {
     flexDirection: 'row',
