@@ -13,6 +13,9 @@ import SignupOrLogin from '../screens/Auth/SignupOrLogin';
 import VerifyOtp from '../screens/Auth/VerifyOtp';
 import ShoppingMode from '../screens/Auth/ShoppingMode';
 import AddressBook from '../screens/B2C/CartComponents/AddressBook';
+import HelpSupport from '../screens/B2C/AccountComponents/HelpSupport';
+import TermsConditions from '../screens/B2C/AccountComponents/TermsConditions';
+import PrivacyPolicy from '../screens/B2C/AccountComponents/PrivacyPolicy';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,9 +44,10 @@ const StackNavigation = () => {
         <Stack.Screen name="VerifyOtp" component={VerifyOtp} options={{ headerShown: false }} />
         <Stack.Screen name="ShoppingMode" component={ShoppingMode} options={{ headerShown: false }} />
         <Stack.Screen name="AddressBook" component={AddressBook} options={{ headerShown: false }} />
+        <Stack.Screen name="HelpSupport" component={HelpSupport} options={{ headerShown: false }} />
+        <Stack.Screen name="TermsConditions" component={TermsConditions} options={{ headerShown: false }} />
+        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{ headerShown: false }} />
 
-
-      
      </Stack.Navigator>
     );
 };

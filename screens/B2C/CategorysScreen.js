@@ -5,6 +5,7 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import CategoryList from '../../components/List/CategoryList';
 import { rw, rh, rf } from '../../Service/responsive';
+import Header from '../../components/header';
 
 // create a component
 const CategoryScreen  = ({navigation}) => {
@@ -32,12 +33,20 @@ const CategoryScreen  = ({navigation}) => {
     return (
         <View>
              {/* Back Container  */}
-             <View style={styles.backHeader}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                  <MaterialIcons name="arrow-back" size={rf(4)} style={{fontSize:rf(3)}} />
-                </TouchableOpacity>
-                <Text style={{marginLeft:rw(2), fontSize:rw(4), fontWeight:"bold"}}>Categories</Text>
-             </View>
+             <Header
+                title="Categories"
+                rightContent={
+                    <View style={{flexDirection:"row", gap: rw(4)}}>
+                      <TouchableOpacity>
+                         <MaterialIcons name="search" size={rf(3)} color="black" />
+                      </TouchableOpacity>
+                      <TouchableOpacity>
+                         <MaterialCommunityIcons  name="cart-outline" size={rf(3)} color="black" />
+                      </TouchableOpacity>
+                    </View>
+                }
+            />
+
 
              {/* Category List Container  */}
              <View style={styles.categoryListContainer}>
@@ -64,12 +73,6 @@ export default CategoryScreen;
 
 
 const styles = StyleSheet.create({
-    backHeader: {
-        alignItems:"center",
-        flexDirection:"row",
-        paddingLeft:rw(5),
-        paddingTop:rh(4),
-    },
     categoryListContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',

@@ -6,11 +6,6 @@ import StackNavigation from './navigation/StackNavigation';
 const App = () => {
   return (
     <NavigationContainer>
-      <StatusBar 
-        translucent 
-        backgroundColor="transparent" 
-        barStyle="light-content"
-      />
       <StackNavigation />
     </NavigationContainer>
   );

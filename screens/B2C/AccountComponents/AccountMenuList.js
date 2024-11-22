@@ -16,9 +16,9 @@ const AccountMenuList = () => {
             <View style={{paddingVertical:rh(1)}}>
                 <IconBtnList icon="person-outline" text="Your Profile" />
                 <IconBtnList icon="fmd-good" onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
-                <IconBtnList icon="help-outline" text="Help & Support" />
-                <IconBtnList icon="receipt-long" text="Terms & Conditions" />
-                <IconBtnList icon="privacy-tip" text="Privacy Policy" />
+                <IconBtnList icon="help-outline" onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
+                <IconBtnList icon="receipt-long" onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
+                <IconBtnList icon="privacy-tip" onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
                 <IconBtnList icon="person-remove" text="Delete Account" />
                 <IconBtnList icon="logout" text="Logout" />
             </View>

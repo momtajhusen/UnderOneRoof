@@ -43,7 +43,7 @@ const SignupOrLogin = ({navigation}) => {
                </View>
                <View style={{marginTop:rh(2)}}>
                   <CustomButtons 
-                    title="Get Otp"
+                    title="Get OTP"
                     onPress={()=> navigation.navigate('VerifyOtp')}
                   />
               <View style={{justifyContent:"center", flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}>

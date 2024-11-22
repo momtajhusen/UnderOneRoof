@@ -5,23 +5,14 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../Service/responsive';
 import OrderOrWishlist from './AccountComponents/OrderOrWishlist';
 import AccountMenuList from './AccountComponents/AccountMenuList';
+import Header from '../../components/header';
 
 // create a component
-const AccountScreen = () => {
+const AccountScreen = ({navigation}) => {
     return (
         <View>
             {/* Back Container */}
-            <View style={styles.backHeader}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialIcons name="arrow-back" size={rf(4)} style={{ fontSize: rf(3) }} />
-                    </TouchableOpacity>
-                    <Text style={{ marginLeft: rw(2), fontSize: rw(4), fontWeight: 'bold' }}></Text>
-                </View>
-                <TouchableOpacity>
-                  {/* <MaterialIcons name="search" size={rf(4)} style={{ fontSize: rf(3) }} /> */}
-                </TouchableOpacity>
-            </View>
+             <Header />
             <View style={styles.container}>
                 {/* Account Profile  */}
                 <View style={{flexDirection:"row", alignItems:"center"}}>
@@ -51,15 +42,6 @@ const AccountScreen = () => {
 export default AccountScreen;
 
 const styles = StyleSheet.create({
-    backHeader: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        paddingLeft: rw(4),
-        paddingTop: rh(4),
-        paddingBottom:rh(2),
-        justifyContent:"space-between",
-        marginRight:rw(5),
-    },
     container: {
         paddingHorizontal: rw(4),   
     },

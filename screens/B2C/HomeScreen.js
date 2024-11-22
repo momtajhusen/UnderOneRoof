@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../Service/themes/responsive';
 import SearchDesigne from '../../components/Search/searchDesigne';
@@ -13,6 +13,8 @@ import * as Animatable from 'react-native-animatable';
 const HomeScreen = () => {
   return (
     <ScrollView>
+     {/* <StatusBar barStyle="dark-content" backgroundColor="#FF6D6D" /> */}
+
       <View style={styles.container}>
         {/* Header Section */}
         <LinearGradient

@@ -1,13 +1,14 @@
 // Import necessary libraries
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../Service/responsive';
 import * as Animatable from 'react-native-animatable';
 import UserDetails from './CartComponents/userDetails';
 import CartItemsList from '../../components/List/CartItemsList';
 import PriceDetails from './CartComponents/PriceDetails';
 import SimilarProducts from './CartComponents/SimilarProducts';
+import Header from '../../components/header';
 
 
 // Sample array data for cart items
@@ -60,18 +61,17 @@ const CartScreen = ({ navigation }) => {
 
     return (
         <View style={{paddingBottom:rh(3)}}>
-            {/* Back Container */}
-            <View style={styles.backHeader}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialIcons name="arrow-back" size={rf(4)} style={{ fontSize: rf(3) }} />
-                    </TouchableOpacity>
-                    <Text style={{ marginLeft: rw(2), fontSize: rw(4), fontWeight: 'bold' }}>Your Cart</Text>
-                </View>
-                <TouchableOpacity>
-                  <MaterialIcons name="search" size={rf(4)} style={{ fontSize: rf(3) }} />
-                </TouchableOpacity>
-            </View>
+            {/* Header Container */}
+             <Header
+                title="Your Cart"
+                rightContent={
+                    <View style={{flexDirection:"row", gap: rw(4)}}>
+                      <TouchableOpacity>
+                         <MaterialIcons name="search" size={rf(3)} color="black" />
+                      </TouchableOpacity>
+                    </View>
+                }
+            />
 
             <ScrollView>
                 <View style={styles.container}>
@@ -126,15 +126,6 @@ const CartScreen = ({ navigation }) => {
 export default CartScreen;
 
 const styles = StyleSheet.create({
-    backHeader: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        paddingLeft: rw(5),
-        paddingTop: rh(4),
-        paddingBottom:rh(2),
-        justifyContent:"space-between",
-        marginRight:rw(5),
-    },
     container: {
         paddingHorizontal: rw(3),   
     },
