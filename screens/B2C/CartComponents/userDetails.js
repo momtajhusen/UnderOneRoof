@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
         paddingHorizontal:rw(1),
         paddingVertical:rh(1),
         borderRadius: rw(5),
-        elevation: 3, // for subtle shadow on Android
-        shadowColor: "#000", // shadow for iOS
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
+        // elevation: 3, // for subtle shadow on Android
+        // shadowColor: "#000", // shadow for iOS
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 5,
         marginTop: rh(2),
     },
     headerRow: {

@@ -19,7 +19,7 @@ const CartItemsList = ({ itemImage, itemName, itemWeight, itemPrice, itemMRP, it
                 <Text style={styles.itemWeight}>{itemWeight}</Text>
                 <View style={styles.priceContainer}>
                     <Text style={styles.itemPrice}>₹{itemPrice}</Text>
-                    <Text style={styles.itemMRP}>MRP ₹{itemMRP}</Text>
+                    <Text style={styles.itemMRP}>MRP <Text style={styles.itemMrpPrice}>₹{itemMRP}</Text></Text>
                 </View>
             </View>
             <View style={styles.quantityContainer}>
@@ -76,6 +76,11 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     itemMRP: {
+        fontSize: 14,
+        color: '#888',
+        marginLeft: 5,
+    },
+    itemMrpPrice: {
         fontSize: 14,
         color: '#888',
         textDecorationLine: 'line-through',

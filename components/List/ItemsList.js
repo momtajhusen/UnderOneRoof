@@ -35,7 +35,7 @@ const ItemsList = ({ items }) => {
                             <Text style={styles.type}>{item.type}</Text>
                         </View>
                         <View style={{paddingHorizontal:rw(2), paddingVertical:rh(0.5)}}>
-                            <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
+                            <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
                             <View style={{flexDirection:"row"}}>
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
@@ -46,7 +46,7 @@ const ItemsList = ({ items }) => {
                             </View>
                             <Text style={styles.discount}>{item.discount}</Text>
                             <Text style={styles.price}>
-                                ₹{item.price} <Text style={styles.mpr}>MPR ₹{item.mpr}</Text>
+                                ₹{item.price} <Text style={styles.mpr}>MPR <Text style={styles.mprPrice}>₹{item.mpr}</Text></Text>
                             </Text>
                         </View>
                     </View>
@@ -63,15 +63,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: rw(0),
     },
     itemContainer: {
-        width: rw(42), // Set fixed width for each card
+        width: rw(39), // Set fixed width for each card
         marginRight: 10, // Space between cards
         backgroundColor: '#fff',
         borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        elevation: 3,
-        padding: rw(0.5),
     },
     ImageContainer:{
       justifyContent:"center",
@@ -144,6 +139,11 @@ const styles = StyleSheet.create({
         fontWeight:"bold"
     },
     mpr: {
+        fontSize: rf(1.8),
+        color: '#999',
+        fontWeight:"normal"
+    },
+    mprPrice:{
         fontSize: rf(1.8),
         textDecorationLine: 'line-through',
         color: '#999',

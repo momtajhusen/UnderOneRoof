@@ -8,7 +8,10 @@ const PriceDetails = () => {
     return (
         <View style={styles.container}>
             <View style={styles.promoCodeContainer}>
-                <TextInput />
+                <TextInput 
+                   placeholder="Enter Coupan code"
+                   style={{paddingHorizontal:rw(2.5), width:rw(54)}}
+                />
                 <TouchableOpacity style={{backgroundColor:"#FF3131", borderRadius:10, width:rw(30), justifyContent:"center"}}>
                     <Text style={{textAlign:"center", color:"white"}}>Apply Code</Text>
                 </TouchableOpacity>
@@ -27,11 +30,11 @@ const PriceDetails = () => {
             </View>
             <View style={styles.textListSection}>
                 <Text style={styles.label}>Shipping Fee</Text>
-                <Text style={[styles.value, styles.fee]}>₹50</Text>
+                <Text style={[styles.value, styles.value]}>₹50</Text>
             </View>
             <View style={styles.textListSection}>
                 <Text style={styles.label}>Delivery Fee</Text>
-                <Text style={[styles.value, styles.fee]}>₹60</Text>
+                <Text style={[styles.value, styles.value]}>₹60</Text>
             </View>
 
             {/* Total Payment */}
@@ -39,6 +42,11 @@ const PriceDetails = () => {
                 <Text style={styles.totalLabel}>Total Payment</Text>
                 <Text style={styles.totalValue}>₹820</Text>
             </View>
+
+            <View style={styles.savedMessageContainer}>
+                <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹350</Text> in this order</Text>
+            </View>
+
         </View>
     );
 };
@@ -51,7 +59,7 @@ const styles = StyleSheet.create({
         borderRadius: rw(3),
     },
     promoCodeContainer:{
-     height:rh(4.5),
+     height:rh(5),
      borderRadius:10,
      marginBottom:rh(1),
      backgroundColor:"#F3F3F3",
@@ -99,8 +107,23 @@ const styles = StyleSheet.create({
     totalValue: {
         fontSize: rf(2.5),
         fontWeight: '700',
-        color: '#28A745', // Green for total payment
     },
+    savedMessageContainer:{
+        backgroundColor:"#FFD4D4",
+        position:"absolute",
+        zIndex:-1,
+        bottom:rh(-4),
+        width:rw(94),
+        height:rh(30),
+        borderRadius:10,
+    },
+    savedMessageText:{
+        color:"#FF3131",
+        position:"absolute",
+        bottom:rh(1), 
+        left:rw(25),
+        textAlign:"center",
+    }
 });
 
 export default PriceDetails;

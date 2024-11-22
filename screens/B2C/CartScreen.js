@@ -3,10 +3,11 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../Service/responsive';
+import * as Animatable from 'react-native-animatable';
 import UserDetails from './CartComponents/userDetails';
 import CartItemsList from '../../components/List/CartItemsList';
 import PriceDetails from './CartComponents/PriceDetails';
-import * as Animatable from 'react-native-animatable';
+import SimilarProducts from './CartComponents/SimilarProducts';
 
 
 // Sample array data for cart items
@@ -58,13 +59,18 @@ const CartScreen = ({ navigation }) => {
     };
 
     return (
-        <View>
+        <View style={{paddingBottom:rh(3)}}>
             {/* Back Container */}
             <View style={styles.backHeader}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialIcons name="arrow-back" size={rf(4)} style={{ fontSize: rf(3) }} />
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <MaterialIcons name="arrow-back" size={rf(4)} style={{ fontSize: rf(3) }} />
+                    </TouchableOpacity>
+                    <Text style={{ marginLeft: rw(2), fontSize: rw(4), fontWeight: 'bold' }}>Your Cart</Text>
+                </View>
+                <TouchableOpacity>
+                  <MaterialIcons name="search" size={rf(4)} style={{ fontSize: rf(3) }} />
                 </TouchableOpacity>
-                <Text style={{ marginLeft: rw(2), fontSize: rw(4), fontWeight: 'bold' }}>Your Cart</Text>
             </View>
 
             <ScrollView>
@@ -101,8 +107,13 @@ const CartScreen = ({ navigation }) => {
                 </View>
 
                 {/* Price Details  */}
-                <View style={[styles.container, {marginBottom:rh(10)}]}>
+                <View style={[styles.container, {marginBottom:rh(6)}]}>
                     <PriceDetails />
+                </View>
+
+                {/* Similar Products  */}
+                <View style={[styles.similarProducts, {marginBottom:rh(6)}]}>
+                    <SimilarProducts />
                 </View>
             </ScrollView>
 
@@ -120,8 +131,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: rw(5),
         paddingTop: rh(4),
+        justifyContent:"space-between",
+        marginRight:rw(5),
     },
     container: {
         paddingHorizontal: rw(3),   
+    },
+    similarProducts:{
+        paddingHorizontal: rw(3),
+        paddingVertical:rh(1),
+        backgroundColor:"white",
+        marginHorizontal:rw(3) ,
+        borderRadius:10
     }
 });
