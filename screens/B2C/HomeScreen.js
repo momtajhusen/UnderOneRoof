@@ -18,7 +18,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         {/* Header Section */}
         <LinearGradient
-          colors={['#FF6D6D', '#FF6D6D33']} 
+          colors={['#FF6D6D', '#FF6D6D33']} s
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.headerContainer}

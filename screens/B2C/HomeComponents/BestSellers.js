@@ -45,7 +45,7 @@ const BestSellers = () => {
 const styles = StyleSheet.create({
     container: {
         padding: rw(2),
-        paddingLeft:rw(2)
+        paddingLeft:rw(5)
     },
     headerText: {
         fontSize: 20,

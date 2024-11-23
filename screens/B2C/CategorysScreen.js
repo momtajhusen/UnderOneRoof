@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     categoryListContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        paddingLeft:rw(2),
+        paddingLeft:rw(5),
         marginTop:rh(2),
     },
 });

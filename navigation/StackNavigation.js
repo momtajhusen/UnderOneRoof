@@ -16,6 +16,7 @@ import AddressBook from '../screens/B2C/CartComponents/AddressBook';
 import HelpSupport from '../screens/B2C/AccountComponents/HelpSupport';
 import TermsConditions from '../screens/B2C/AccountComponents/TermsConditions';
 import PrivacyPolicy from '../screens/B2C/AccountComponents/PrivacyPolicy';
+import Checkout from '../screens/B2C/CartComponents/Checkout';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,9 @@ const StackNavigation = () => {
         <Stack.Screen name="HelpSupport" component={HelpSupport} options={{ headerShown: false }} />
         <Stack.Screen name="TermsConditions" component={TermsConditions} options={{ headerShown: false }} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{ headerShown: false }} />
+
+        <Stack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }} />
+
 
      </Stack.Navigator>
     );

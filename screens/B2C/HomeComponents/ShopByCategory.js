@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     },
     categoryListContainer: {
         flexDirection: 'row',
-        flexWrap: 'wrap', // Ensure the items wrap to the next line if needed
+        flexWrap: 'wrap',
+        marginLeft:rw(3)
     },
 });
 

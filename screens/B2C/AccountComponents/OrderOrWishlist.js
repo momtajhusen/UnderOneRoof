@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
 
@@ -9,11 +9,13 @@ const OrderOrWishlist = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.btnContainer}>
-               <MaterialIcons name="shopping-bag" size={rf(4)} style={{ fontSize: rf(3), color:"#272727" }} />
+               {/* <MaterialIcons name="shopping-bag" size={rf(4)} style={{ fontSize: rf(3), color:"#272727" }} /> */}
+               <Image source={require('../../../assets/bag-2.png')} style={{width:rw(7), height:rw(7)}} />
                <Text style={{color:"#272727"}}>Orders</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.btnContainer}>
-              <MaterialIcons name="favorite-border" size={rf(4)} style={{ fontSize: rf(3) }} />
+              {/* <MaterialIcons name="favorite-border" size={rf(4)} style={{ fontSize: rf(3) }} /> */}
+              <Image source={require('../../../assets/heart.png')} style={{width:rw(7), height:rw(7)}} />
               <Text style={{color:"#272727"}}>Wishlist</Text>
             </TouchableOpacity>
         </View>

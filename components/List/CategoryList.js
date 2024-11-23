@@ -7,11 +7,11 @@ import { rw, rh, rf } from '../../Service/responsive';
 const CategoryItem = ({ image, text }) => {
     return (
         <TouchableOpacity style={styles.listContainer}>
-            <View style={styles.ImageContainer}>
+            <View style={styles.imageContainer}>
                 <Image source={image} style={styles.image} resizeMode="cover" />
             </View>
-            <View style={{paddingVertical:rh(0.5), paddingHorizontal:rh(1)}}>
-               <Text style={styles.text}>{text}</Text>
+            <View style={styles.textContainer}>
+                <Text style={styles.text}>{text}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -24,34 +24,38 @@ const styles = StyleSheet.create({
     listContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        width:rw(22),
         backgroundColor: '#FFFFFF',
         overflow: 'hidden',
         borderRadius: rw(3),
-        borderWidth: 1,
-        borderColor: '#E5E5E5',
-        marginRight:rw(2),
-        marginBottom:rh(1),
+        marginRight: rw(2),
+        marginBottom: rh(1),
+        borderWidth:2,
+        borderColor:"white",
     },
-    ImageContainer: {
+    imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: rw(17),
+        width: rw(20),
         height: rh(8),
-        backgroundColor: '#FFF4E6',
+        backgroundColor: '#FFF4E6', // Light background color for image container
         overflow: 'hidden',
-        borderRadius:10,
-        marginTop:rh(0.5),
+        borderRadius: rw(2),
     },
     image: {
-        width: rw(17),
-        height: rw(15),
+        width: rw(22),
+        height: rw(17),
+    },
+    textContainer: {
+        paddingVertical: rh(0.5),
+        paddingHorizontal: rw(1),
+        alignItems: 'center',
     },
     text: {
-        fontWeight: 'bold',
-        fontSize: rf(1.7),
+        fontWeight: '600',
+        fontSize: rf(1.8),
         marginTop: rh(0.5),
-        color: '#333333',
+        width:rw(12),
+        color: '#555555', // Slightly lighter text color as per the design
         textAlign: 'center',
     },
 });

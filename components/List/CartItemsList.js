@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     removeButton: {
         marginLeft: rw(8),
         position:"absolute",
-        right:rh(0),
+        right:rw(1),
         top:rh(-1),
     },
     removeIcon: {

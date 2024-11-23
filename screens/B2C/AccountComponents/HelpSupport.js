@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { rw, rh, rf } from '../../../Service/responsive';
 import IconBtnList from '../../../components/List/IconBtnList';
 import { useNavigation } from '@react-navigation/native';
@@ -17,7 +17,7 @@ const AccountMenuList = () => {
             <Header title="Help & Support" />
             <View style={styles.container}>
                <View style={{flexDirection:"row", alignItems:"center", gap:rw(5), marginBottom:rh(2)}}>
-                   <MaterialIcons style={{padding:8, borderWidth:1, borderRadius:100,}} name="support-agent" size={rf(4)} color="black" />
+                   <Image source={require('../../../assets/support.png')} style={{width:rw(14), height:rw(14)}} />
                    <Text style={{fontSize:rf(2.5), fontWeight:"bold"}}>How can we assist {'\n'}you today?</Text>
                </View> 
 

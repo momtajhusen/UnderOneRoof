@@ -1,6 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Image } from 'react-native';
+
 import HomeScreen from '../screens/B2C/HomeScreen';
 import CategoryScreen from '../screens/B2C/CategorysScreen';
 import CartScreen from '../screens/B2C/CartScreen';
@@ -39,11 +41,24 @@ const BottomNavigator = () => {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <MaterialIcons 
-              name={focused ? "home" : "home"} // Filled when active, outline when inactive
-              color={color} 
-              size={rf(3.5)} 
-            />
+            focused ? (
+              <Image 
+                source={require('../assets/navigation-icon/home-1.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            ) : (
+              <Image 
+                source={require('../assets/navigation-icon/home-2.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            )
+            // <MaterialIcons 
+            //   name={focused ? "home" : "home"} 
+            //   color={color} 
+            //   size={rf(3.5)} 
+            // />
           ),
         }} 
       />
@@ -54,11 +69,24 @@ const BottomNavigator = () => {
         options={{
           tabBarLabel: 'Category',
           tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons 
-              name={focused ? "widgets" : "widgets-outline"} // Filled when active, outline when inactive
-              color={color} 
-              size={rf(3.5)} 
-            />
+            focused ? (
+              <Image 
+                source={require('../assets/navigation-icon/category-1.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            ) : (
+              <Image 
+                source={require('../assets/navigation-icon/category-2.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            )
+            // <MaterialCommunityIcons 
+            //   name={focused ? "widgets" : "widgets-outline"} 
+            //   color={color} 
+            //   size={rf(3.5)} 
+            // />
           ),
         }} 
       />
@@ -69,11 +97,24 @@ const BottomNavigator = () => {
         options={{
           tabBarLabel: 'Cart',
           tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons 
-              name={focused ? "cart" : "cart-outline"} // Filled when active, outline when inactive
-              color={color} 
-              size={rf(3.5)} 
-            />
+            focused ? (
+              <Image 
+                source={require('../assets/navigation-icon/cart-1.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            ) : (
+              <Image 
+                source={require('../assets/navigation-icon/cart-2.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            )
+            // <MaterialCommunityIcons 
+            //   name={focused ? "cart" : "cart-outline"} 
+            //   color={color} 
+            //   size={rf(3.5)} 
+            // />
           ),
         }} 
       />
@@ -84,11 +125,24 @@ const BottomNavigator = () => {
         options={{
           tabBarLabel: 'Account',
           tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons 
-              name={focused ? "account" : "account-outline"} // Filled when active, outline when inactive
-              color={color} 
-              size={rf(3.5)} 
-            />
+            focused ? (
+              <Image 
+                source={require('../assets/navigation-icon/account-1.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            ) : (
+              <Image 
+                source={require('../assets/navigation-icon/account-2.png')} 
+                resizeMode="cover" 
+                style={{ width: rf(3.5), height: rf(3.5) }} 
+              />
+            )
+            // <MaterialCommunityIcons 
+            //   name={focused ? "account" : "account-outline"} 
+            //   color={color} 
+            //   size={rf(3.5)} 
+            // />
           ),
         }} 
       />

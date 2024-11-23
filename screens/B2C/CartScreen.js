@@ -1,4 +1,3 @@
-// Import necessary libraries
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,10 +8,12 @@ import CartItemsList from '../../components/List/CartItemsList';
 import PriceDetails from './CartComponents/PriceDetails';
 import SimilarProducts from './CartComponents/SimilarProducts';
 import Header from '../../components/header';
+import ProceedDetails from './CartComponents/ProceedDetails';
+import { useNavigation } from '@react-navigation/native';
 
 
-// Sample array data for cart items
 const cartItemsData = [
+    // Sample cart data
     {
         id: '1',
         itemImage: 'https://www.jiomart.com/images/product/original/rv7xhpoeoi/farmfave-cold-pressed-groundnut-oil-5-litre-wood-pressed-100-natural-peanut-oil-for-cooking-product-images-orv7xhpoeoi-p592184502-0-202206232308.png?im=Resize=(420,420)',
@@ -42,53 +43,50 @@ const cartItemsData = [
     },
 ];
 
-// Create CartScreen component
 const CartScreen = ({ navigation }) => {
-    // Function to handle increase in quantity
+    
     const handleIncrease = (id) => {
         console.log(`Increase quantity for item ${id}`);
     };
 
-    // Function to handle decrease in quantity
     const handleDecrease = (id) => {
         console.log(`Decrease quantity for item ${id}`);
     };
 
-    // Function to handle removing an item
     const handleRemove = (id) => {
         console.log(`Remove item ${id}`);
     };
 
     return (
-        <View style={{paddingBottom:rh(3)}}>
-            {/* Header Container */}
-             <Header
+        <View style={styles.screenContainer}>
+            {/* Header */}
+            <Header
                 title="Your Cart"
                 rightContent={
-                    <View style={{flexDirection:"row", gap: rw(4)}}>
-                      <TouchableOpacity>
-                         <MaterialIcons name="search" size={rf(3)} color="black" />
-                      </TouchableOpacity>
+                    <View style={{ flexDirection: "row", gap: rw(4) }}>
+                        <TouchableOpacity>
+                            <MaterialIcons name="search" size={rf(3)} color="black" />
+                        </TouchableOpacity>
                     </View>
                 }
             />
 
-            <ScrollView>
+            <ScrollView contentContainerStyle={{ paddingBottom: rh(10) }}>
                 <View style={styles.container}>
                     <UserDetails />
                 </View>
 
-                {/* Render Cart Items */}
-                <View style={{ margin: rw(3.5), backgroundColor:"white", borderRadius:rw(5)}}>
+                {/* Cart Items */}
+                <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
                     <FlatList
                         data={cartItemsData}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item, index }) => (
                             <Animatable.View
                                 key={item.id}
-                                animation="fadeInUp" // Animation type
-                                duration={800} // Duration of each animation
-                                delay={index * 20} // Delay based on the index
+                                animation="fadeInUp"
+                                duration={800}
+                                delay={index * 20}
                             >
                                 <CartItemsList
                                     itemImage={item.itemImage}
@@ -106,34 +104,50 @@ const CartScreen = ({ navigation }) => {
                     />
                 </View>
 
-                {/* Price Details  */}
-                <View style={[styles.container, {marginBottom:rh(6)}]}>
+                {/* Price Details */}
+                <View style={[styles.container, { marginBottom: rh(6) }]}>
                     <PriceDetails />
                 </View>
 
-                {/* Similar Products  */}
-                <View style={[styles.similarProducts, {marginBottom:rh(6)}]}>
+                {/* Similar Products */}
+                <View style={[styles.similarProducts, { marginBottom: rh(6) }]}>
                     <SimilarProducts />
                 </View>
             </ScrollView>
 
-
+            {/* Fixed Proceed Details at the bottom */}
+            <View style={styles.proceedDetails}>
+                <ProceedDetails onPress={()=>navigation.navigate('Checkout')} />
+            </View>
         </View>
     );
 };
 
-// Make the component available to the app
 export default CartScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: rw(3),   
+    screenContainer: {
+        flex: 1,
     },
-    similarProducts:{
+    container: {
         paddingHorizontal: rw(3),
-        paddingVertical:rh(1),
-        backgroundColor:"white",
-        marginHorizontal:rw(3) ,
-        borderRadius:10
-    }
+    },
+    similarProducts: {
+        paddingHorizontal: rw(3),
+        paddingVertical: rh(1),
+        backgroundColor: "white",
+        marginHorizontal: rw(3),
+        borderRadius: 10,
+    },
+    proceedDetails: {
+        position: "absolute",
+        bottom: rh(0),
+        left: 0,
+        right: 0,
+        // paddingHorizontal: rw(3),
+        backgroundColor: "white",
+        borderTopWidth: 1,
+        borderTopColor: "#e0e0e0",
+        // paddingVertical: rh(1.5),
+    },
 });
