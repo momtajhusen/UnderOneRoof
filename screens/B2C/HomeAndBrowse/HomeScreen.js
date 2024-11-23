@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { rw, rh, rf } from '../../Service/themes/responsive';
-import SearchDesigne from '../../components/Search/searchDesigne';
-import HomeSlider from '../../components/Sliders/HomeSlider';
-import ExploreMoreSlider from '../../components/Sliders/ExploreMoreSlider';
+import { rw, rh, rf } from '../../../Service/themes/responsive';
+import SearchDesigne from '../../../components/Search/searchDesigne';
+import HomeSlider from '../../../components/Sliders/HomeSlider';
+import ExploreMoreSlider from '../../../components/Sliders/ExploreMoreSlider';
 import BestSellers from './HomeComponents/BestSellers';
 import ShopByCategory from './HomeComponents/ShopByCategory';
 import RefreshYourDay from './HomeComponents/RefreshYourDay';
@@ -29,9 +29,9 @@ const HomeScreen = () => {
               From groceries to personal care, everything you need in one place.
             </Text>
           </View>
-          <Animatable.Image animation="fadeInUp" source={require('../../assets/HeaderImage/image1.png')} style={styles.imageCup} resizeMode="cover" />
-          <Animatable.Image animation="fadeInRight" source={require('../../assets/HeaderImage/Cheaseedsleaves.png')} style={{position:"absolute", right:rw(0), top:rh(4)}} resizeMode="cover" />
-          <Animatable.Image animation="fadeInLeft" source={require('../../assets/HeaderImage/image4.png')} style={{position:"absolute", left:rw(-15), top:rh(-3)}} resizeMode="cover" />
+          <Animatable.Image animation="fadeInUp" source={require('../../../assets/HeaderImage/image1.png')} style={styles.imageCup} resizeMode="cover" />
+          <Animatable.Image animation="fadeInRight" source={require('../../../assets/HeaderImage/Cheaseedsleaves.png')} style={{position:"absolute", right:rw(0), top:rh(4)}} resizeMode="cover" />
+          <Animatable.Image animation="fadeInLeft" source={require('../../../assets/HeaderImage/image4.png')} style={{position:"absolute", left:rw(-15), top:rh(-3)}} resizeMode="cover" />
           <View style={{position:"absolute", bottom:rh(10)}}>
              <SearchDesigne />
           </View>

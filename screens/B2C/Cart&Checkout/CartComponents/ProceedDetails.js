@@ -1,7 +1,7 @@
 //import liraries
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { rw, rh, rf } from '../../../Service/responsive';
+import { rw, rh, rf } from '../../../../Service/responsive';
 
 // create a component
 const ProceedDetails = ({onPress}) => {

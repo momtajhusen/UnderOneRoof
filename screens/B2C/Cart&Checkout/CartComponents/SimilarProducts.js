@@ -1,11 +1,11 @@
 //import liraries
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { rw } from '../../../Service/responsive';
-import ItemsList from '../../../components/List/ItemsList';
+import { rf, rw } from '../../../../Service/responsive';
+import ItemsList from '../../../../components/List/ItemsList';
 
 // create a component
-const RefreshYourDay = () => {
+const SimilarProducts = () => {
 
     // Items List array define
     const productList = [
@@ -18,7 +18,7 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../assets/items/image1.png'), // Corrected path
+            image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
             name: "Honey Almond Energy Bars",
@@ -29,7 +29,7 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../assets/items/image2.png'), // Corrected path
+            image: require('../../../../assets/items/image2.png'), // Corrected path
         },
         {
             name: "Organic Green Tea",
@@ -40,7 +40,7 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../assets/items/image1.png'), // Corrected path
+            image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
             name: "Premium Roasted Almonds",
@@ -51,7 +51,7 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../assets/items/image1.png'), // Corrected path
+            image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
             name: "Honey Almond Energy Bars",
@@ -62,7 +62,7 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../assets/items/image2.png'), // Corrected path
+            image: require('../../../../assets/items/image2.png'), // Corrected path
         },
         {
             name: "Organic Green Tea",
@@ -73,13 +73,13 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../assets/items/image1.png'), // Corrected path
+            image: require('../../../../assets/items/image1.png'), // Corrected path
         }
     ];
 
     return (
-        <View style={{ padding: rw(4) }}>
-            <Text style={styles.headerText}>Refresh Your Day</Text>
+        <View>
+            <Text style={styles.headerText}>Similar Products</Text>
             <View>
                 {/* Passing productList as props */}
                 <ItemsList items={productList} />
@@ -89,11 +89,11 @@ const RefreshYourDay = () => {
 };
 
 //make this component available to the app
-export default RefreshYourDay;
+export default SimilarProducts;
 
 const styles = StyleSheet.create({
     headerText: {
-        fontSize: 20,
+        fontSize: rf(2.3),
         fontWeight: 'bold',
         marginBottom: rw(2),
         marginLeft: rw(2),

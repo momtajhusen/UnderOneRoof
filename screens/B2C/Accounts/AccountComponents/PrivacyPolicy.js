@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { rw, rh, rf } from '../../../Service/responsive';
-import Header from '../../../components/header';
+import { rw, rh, rf } from '../../../../Service/responsive';
+import Header from '../../../../components/header';
 
 // create a component
 const PrivacyPolicy = ({navigation}) => {

@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { rw, rh, rf } from '../../Service/responsive';
+import { rw, rh, rf } from '../../../Service/responsive';
 import * as Animatable from 'react-native-animatable';
 import UserDetails from './CartComponents/userDetails';
-import CartItemsList from '../../components/List/CartItemsList';
+import CartItemsList from '../../../components/List/CartItemsList';
 import PriceDetails from './CartComponents/PriceDetails';
 import SimilarProducts from './CartComponents/SimilarProducts';
-import Header from '../../components/header';
+import Header from '../../../components/header';
 import ProceedDetails from './CartComponents/ProceedDetails';
 import { useNavigation } from '@react-navigation/native';
 

@@ -2,17 +2,17 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { rw, rh, rf } from '../../../Service/responsive';
-import Header from '../../../components/header';
-import Stepper from '../../../components/stepper';
+import { rw, rh, rf } from '../../../../Service/responsive';
+import Header from '../../../../components/header';
+import Stepper from '../../../../components/stepper';
 import UserDetails from './userDetails';
-import CartItemsList from '../../../components/List/CartItemsList';
+import CartItemsList from '../../../../components/List/CartItemsList';
 import PriceDetails from './PriceDetails';
 import ProceedDetails from './ProceedDetails';
 
 
 // create a component
-const Checkout = () => {
+const Checkout = ({navigation}) => {
 
     const cartItemsData = [
         // Sample cart data
@@ -44,6 +44,18 @@ const Checkout = () => {
             itemQuantity: 2,
         },
     ];
+
+    const handleIncrease = (id) => {
+        console.log(`Increase quantity for item ${id}`);
+    };
+
+    const handleDecrease = (id) => {
+        console.log(`Decrease quantity for item ${id}`);
+    };
+
+    const handleRemove = (id) => {
+        console.log(`Remove item ${id}`);
+    };
 
     return (
         <View style={styles.container}>

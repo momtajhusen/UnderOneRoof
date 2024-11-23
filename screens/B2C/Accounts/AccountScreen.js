@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { rw, rh, rf } from '../../Service/responsive';
+import { rw, rh, rf } from '../../../Service/responsive';
 import OrderOrWishlist from './AccountComponents/OrderOrWishlist';
 import AccountMenuList from './AccountComponents/AccountMenuList';
-import Header from '../../components/header';
+import Header from '../../../components/header';
 
 // create a component
 const AccountScreen = ({navigation}) => {
@@ -17,7 +17,7 @@ const AccountScreen = ({navigation}) => {
                 {/* Account Profile  */}
                 <View style={{flexDirection:"row", alignItems:"center"}}>
                     <View style={{marginRight:rw(3)}}>
-                        <Image source={require('../../assets/user.png')} style={{width:rw(15), height:rh(7)}} />
+                        <Image source={require('../../../assets/user.png')} style={{width:rw(15), height:rh(7)}} />
                     </View>
                     <View>
                         <Text style={{fontWeight:"bold", fontSize:rf(2.5), marginBottom:rh(0.3)}}>Aman Kumar</Text>

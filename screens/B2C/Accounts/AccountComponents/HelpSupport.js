@@ -1,11 +1,10 @@
 //import liraries
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { rw, rh, rf } from '../../../Service/responsive';
-import IconBtnList from '../../../components/List/IconBtnList';
+import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import Header from '../../../components/header';
+import Header from '../../../../components/header';
 
 // create a component
 const AccountMenuList = () => {
@@ -17,7 +16,7 @@ const AccountMenuList = () => {
             <Header title="Help & Support" />
             <View style={styles.container}>
                <View style={{flexDirection:"row", alignItems:"center", gap:rw(5), marginBottom:rh(2)}}>
-                   <Image source={require('../../../assets/support.png')} style={{width:rw(14), height:rw(14)}} />
+                   <Image source={require('../../../../assets/support.png')} style={{width:rw(14), height:rw(14)}} />
                    <Text style={{fontSize:rf(2.5), fontWeight:"bold"}}>How can we assist {'\n'}you today?</Text>
                </View> 
 

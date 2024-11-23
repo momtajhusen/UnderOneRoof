@@ -1,7 +1,7 @@
 //import libraries
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { rw, rh, rf } from '../../../Service/responsive';
+import { rw, rh, rf } from '../../../../Service/responsive';
 
 // Create a component
 const PriceDetails = () => {

@@ -3,10 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'react-native';
 
-import HomeScreen from '../screens/B2C/HomeScreen';
-import CategoryScreen from '../screens/B2C/CategorysScreen';
-import CartScreen from '../screens/B2C/CartScreen';
-import AccountScreen from '../screens/B2C/AccountScreen';
+import HomeScreen from '../screens/B2C/HomeAndBrowse/HomeScreen';
+import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
+import AccountScreen from '../screens/B2C/Accounts/AccountScreen';
+import CategoryScreen from '../screens/B2C/Categorys/CategorysScreen';
 import { rw, rh, rf } from '../Service/responsive';
 
 const Tab = createBottomTabNavigator();

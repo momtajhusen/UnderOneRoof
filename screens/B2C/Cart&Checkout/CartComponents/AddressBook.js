@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { rw, rh, rf } from '../../../Service/responsive';
+import { rw, rh, rf } from '../../../../Service/responsive';
 import UserDetails from './userDetails';
 
 // create a component

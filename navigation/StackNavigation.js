@@ -5,18 +5,18 @@ import BottomNavigator from './BottomNavigation';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SplashScreen from '../screens/Auth/splash';
-import HomeScreen from '../screens/B2C/HomeScreen';
-import CategoryScreen from '../screens/B2C/CategorysScreen';
-import CartScreen from '../screens/B2C/CartScreen';
-import AccountScreen from '../screens/B2C/AccountScreen';
+import HomeScreen from '../screens/B2C/HomeAndBrowse/HomeScreen';
+import CategoryScreen from '../screens/B2C/Categorys/CategorysScreen';
+import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
+import AccountScreen from '../screens/B2C/Accounts/AccountScreen';
 import SignupOrLogin from '../screens/Auth/SignupOrLogin';
 import VerifyOtp from '../screens/Auth/VerifyOtp';
 import ShoppingMode from '../screens/Auth/ShoppingMode';
-import AddressBook from '../screens/B2C/CartComponents/AddressBook';
-import HelpSupport from '../screens/B2C/AccountComponents/HelpSupport';
-import TermsConditions from '../screens/B2C/AccountComponents/TermsConditions';
-import PrivacyPolicy from '../screens/B2C/AccountComponents/PrivacyPolicy';
-import Checkout from '../screens/B2C/CartComponents/Checkout';
+import AddressBook from '../screens/B2C/Cart&Checkout/CartComponents/AddressBook';
+import HelpSupport from '../screens/B2C/Accounts/AccountComponents/HelpSupport';
+import TermsConditions from '../screens/B2C/Accounts/AccountComponents/TermsConditions';
+import PrivacyPolicy from '../screens/B2C/Accounts/AccountComponents/PrivacyPolicy';
+import Checkout from '../screens/B2C/Cart&Checkout/CartComponents/Checkout';
 
 const Stack = createNativeStackNavigator();
 

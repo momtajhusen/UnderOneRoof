@@ -1,8 +1,8 @@
 //import liraries
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { rw, rh, rf } from '../../../Service/responsive';
-import IconBtnList from '../../../components/List/IconBtnList';
+import { rw, rh, rf } from '../../../../Service/responsive';
+import IconBtnList from '../../../../components/List/IconBtnList';
 import { useNavigation } from '@react-navigation/native';
 
 // create a component
