@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         padding: rw(5),
         borderRadius: rw(3),
+        width:rw(94),
     },
     promoCodeContainer:{
      height:rh(5),
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
         zIndex:-1,
         bottom:rh(-4),
         width:rw(94),
-        height:rh(30),
+        height:rh(35),
         borderRadius:10,
     },
     savedMessageText:{
@@ -127,3 +128,6 @@ const styles = StyleSheet.create({
 });
 
 export default PriceDetails;
+
+// savedMessageContainer  container right me bahar nikal raha hai 
+// container ke barabar cha hiye width but lift aur right se bahar nahi nikal na cha hiye

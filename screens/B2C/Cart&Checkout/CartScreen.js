@@ -117,7 +117,7 @@ const CartScreen = ({ navigation }) => {
 
             {/* Fixed Proceed Details at the bottom */}
             <View style={styles.proceedDetails}>
-                <ProceedDetails onPress={()=>navigation.navigate('Checkout')} />
+                <ProceedDetails btnText="Proceed" onPress={()=>navigation.navigate('Checkout')} />
             </View>
         </View>
     );

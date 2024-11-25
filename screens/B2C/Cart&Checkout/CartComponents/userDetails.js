@@ -43,7 +43,6 @@ const UserDetails = () => {
 const styles = StyleSheet.create({
     container: {
         width:rw(90),
-        marginLeft:rw(2.5),
         backgroundColor: "white",
         paddingHorizontal:rw(1),
         paddingVertical:rh(1),

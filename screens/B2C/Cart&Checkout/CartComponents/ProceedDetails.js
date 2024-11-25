@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 
 // create a component
-const ProceedDetails = ({onPress}) => {
+const ProceedDetails = ({btnText, onPress}) => {
     return (
         <View style={styles.container}>
             <View style={styles.priceDetails}>
@@ -14,7 +14,7 @@ const ProceedDetails = ({onPress}) => {
                 </Text>
             </View>
             <TouchableOpacity onPress={onPress} style={styles.btn}>
-                <Text style={styles.btnText}>Continue</Text>
+                <Text style={styles.btnText}>{btnText}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        height: rh(8),
+        height: rh(10),
         paddingHorizontal: rw(5),
         backgroundColor: "white",
     },
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     },
     btn: {
         backgroundColor: "#FF3131",
-        borderRadius: 4,
+        borderRadius: 10,
         paddingVertical: rh(1),
         paddingHorizontal: rw(15),
         alignItems: "center",

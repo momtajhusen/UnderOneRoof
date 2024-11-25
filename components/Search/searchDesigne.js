@@ -3,14 +3,19 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
 // create a component
 const SearchDesigne = () => {
+
+  const navigation = useNavigation();
+
     return (
         <View style={{position:"relative"}}>
-            <TouchableOpacity style={styles.search}>
+            <TouchableOpacity style={styles.search} onPress={()=>navigation.navigate('SearchScreen')}>
                 <View style={{flexDirection:"row", justifyContent:"start", alignItems:"center", paddingHorizontal: rw(2)  }}>
                     <MaterialIcons name="search" size={rf(3.5)}/>
                     <Text style={{textAlign:"center", marginLeft:rw(1)}}>Search here..</Text>

@@ -46,7 +46,7 @@ const ExploreMoreSlider = () => {
 const styles = StyleSheet.create({
     slide: {
         width: rw(80), // Same as itemWidth
-        height: rh(20),
+        height: rw(45),
         justifyContent: 'center',
         alignItems: 'center',
     },

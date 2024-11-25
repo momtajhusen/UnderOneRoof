@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { rw, rh, rf } from '../../../../Service/responsive';
@@ -9,6 +9,7 @@ import UserDetails from './userDetails';
 import CartItemsList from '../../../../components/List/CartItemsList';
 import PriceDetails from './PriceDetails';
 import ProceedDetails from './ProceedDetails';
+import PaymentMethodModal from './PaymentMethodModal';
 
 
 // create a component
@@ -57,6 +58,12 @@ const Checkout = ({navigation}) => {
         console.log(`Remove item ${id}`);
     };
 
+    // Function to toggle modal visibility
+    const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -103,15 +110,20 @@ const Checkout = ({navigation}) => {
 
                 {/* Price Details */}
                 <View style={[styles.container, { marginBottom: rh(6) }]}>
-                    <PriceDetails />
+                    <PriceDetails  />
                 </View>
+
 
             </ScrollView>
 
             {/* Fixed Proceed Details at the bottom */}
             <View style={styles.proceedDetails}>
-                <ProceedDetails onPress={()=>navigation.navigate('Checkout')} />
+                <ProceedDetails btnText="Continue" onPress={toggleModal} />
             </View>
+
+            {/* Payment Method Modal */}
+            <PaymentMethodModal isVisible={isModalVisible} toggleModal={toggleModal} />
+
 
         </View>
     );

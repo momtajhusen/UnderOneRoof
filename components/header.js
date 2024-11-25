@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: rw(4),
     alignItems: 'center',
-    justifyContent:"space-between"
+    justifyContent:"space-between",
   },
   headerText: {
     marginLeft: rw(2),

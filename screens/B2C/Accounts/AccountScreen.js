@@ -17,7 +17,7 @@ const AccountScreen = ({navigation}) => {
                 {/* Account Profile  */}
                 <View style={{flexDirection:"row", alignItems:"center"}}>
                     <View style={{marginRight:rw(3)}}>
-                        <Image source={require('../../../assets/user.png')} style={{width:rw(15), height:rh(7)}} />
+                        <Image source={require('../../../assets/user.png')} style={{width:rw(15), height:rw(15)}} />
                     </View>
                     <View>
                         <Text style={{fontWeight:"bold", fontSize:rf(2.5), marginBottom:rh(0.3)}}>Aman Kumar</Text>

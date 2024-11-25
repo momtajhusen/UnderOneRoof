@@ -17,6 +17,8 @@ import HelpSupport from '../screens/B2C/Accounts/AccountComponents/HelpSupport';
 import TermsConditions from '../screens/B2C/Accounts/AccountComponents/TermsConditions';
 import PrivacyPolicy from '../screens/B2C/Accounts/AccountComponents/PrivacyPolicy';
 import Checkout from '../screens/B2C/Cart&Checkout/CartComponents/Checkout';
+import OrderPlaced from '../screens/B2C/Cart&Checkout/CartComponents/OrderPlaced';
+import SearchScreen from '../screens/B2C/Cart&Checkout/CartComponents/SearchScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,12 +46,15 @@ const StackNavigation = () => {
         <Stack.Screen name="SignupOrLogin" component={SignupOrLogin} options={{ headerShown: false }} />
         <Stack.Screen name="VerifyOtp" component={VerifyOtp} options={{ headerShown: false }} />
         <Stack.Screen name="ShoppingMode" component={ShoppingMode} options={{ headerShown: false }} />
+        
         <Stack.Screen name="AddressBook" component={AddressBook} options={{ headerShown: false }} />
         <Stack.Screen name="HelpSupport" component={HelpSupport} options={{ headerShown: false }} />
         <Stack.Screen name="TermsConditions" component={TermsConditions} options={{ headerShown: false }} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{ headerShown: false }} />
 
         <Stack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }} />
+        <Stack.Screen name="OrderPlaced" component={OrderPlaced} options={{ headerShown: false }} />
+        <Stack.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
 
 
      </Stack.Navigator>
