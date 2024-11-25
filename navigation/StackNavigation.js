@@ -21,6 +21,7 @@ import OrderPlaced from '../screens/B2C/Cart&Checkout/CartComponents/OrderPlaced
 import SearchScreen from '../screens/B2C/Cart&Checkout/CartComponents/SearchScreen';
 import Orders from '../screens/B2C/Accounts/AccountComponents/Orders';
 import Wishlist from '../screens/B2C/Accounts/AccountComponents/Wishlist';
+import MyProfile from '../screens/B2C/Accounts/AccountComponents/MyProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +60,9 @@ const StackNavigation = () => {
         <Stack.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Orders" component={Orders} options={{ headerShown: false }} />
         <Stack.Screen name="Wishlist" component={Wishlist} options={{ headerShown: false }} />
+        <Stack.Screen name="MyProfile" component={MyProfile} options={{ headerShown: false }} />
 
+        
      </Stack.Navigator>
     );
 };

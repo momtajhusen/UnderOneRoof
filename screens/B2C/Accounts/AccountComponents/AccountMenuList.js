@@ -28,7 +28,7 @@ const AccountMenuList = () => {
     <View style={styles.container}>
       <Text style={styles.headerText}>Other Information</Text>
       <View style={styles.menuList}>
-        <IconBtnList icon="person-outline" text="Your Profile" />
+        <IconBtnList icon="person-outline" onPress={() => navigation.navigate('MyProfile')} text="Your Profile" />
         <IconBtnList icon="fmd-good" onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
         <IconBtnList icon="help-outline" onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
         <IconBtnList icon="receipt-long" onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
