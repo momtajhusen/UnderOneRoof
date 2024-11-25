@@ -3,12 +3,19 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 // create a component
 const OrderOrWishlist = () => {
+
+  const navigation = useNavigation();
+
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.btnContainer}>
+            <TouchableOpacity onPress={()=>navigation.navigate('Orders')} style={styles.btnContainer}>
                {/* <MaterialIcons name="shopping-bag" size={rf(4)} style={{ fontSize: rf(3), color:"#272727" }} /> */}
                <Image source={require('../../../../assets/bag-2.png')} style={{width:rw(7), height:rw(7)}} />
                <Text style={{color:"#272727"}}>Orders</Text>

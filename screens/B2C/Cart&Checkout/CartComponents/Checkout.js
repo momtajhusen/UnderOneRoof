@@ -9,7 +9,7 @@ import UserDetails from './userDetails';
 import CartItemsList from '../../../../components/List/CartItemsList';
 import PriceDetails from './PriceDetails';
 import ProceedDetails from './ProceedDetails';
-import PaymentMethodModal from './PaymentMethodModal';
+import PaymentMethodModal from '../../../../components/Modals/PaymentMethodModal';
 
 
 // create a component

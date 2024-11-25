@@ -11,8 +11,8 @@ const PrivacyPolicy = ({navigation}) => {
         <View>
             <Header 
                 rightContent={
-                    <View style={{ flexDirection: "row", gap: rw(4) }}>
-                        <SearchInput />
+                    <View style={{ flexDirection: "row", width:rw(80)}}>
+                        <SearchInput placeholder="Search here.." autoFocus={true} />
                     </View>
                 }
             />

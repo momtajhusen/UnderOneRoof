@@ -6,6 +6,12 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 
 const ItemsList = ({ items }) => {
+
+
+    const handleAdd = () => {
+       alert("Hello");
+    };
+
     return (
         <FlatList
             data={items}
@@ -19,7 +25,7 @@ const ItemsList = ({ items }) => {
                         <TouchableOpacity style={styles.likeIcon}>
                            <MaterialIcons name="favorite-border" size={rf(3)} style={{color:"#BCBCBC"}}/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.addbtn}>
+                        <TouchableOpacity onPress={() => handleAdd()} style={styles.addbtn}>
                             <Text style={styles.btntext}>Add</Text>
                         </TouchableOpacity>
 

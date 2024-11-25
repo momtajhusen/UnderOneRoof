@@ -5,7 +5,7 @@ import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // create a component
-const SearchInput = () => {
+const SearchInput = ({autoFocus, placeholder="Search here.."}) => {
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
@@ -17,9 +17,9 @@ const SearchInput = () => {
                 />
                 <TextInput 
                     style={styles.input} 
-                    placeholder="Search for items..."
+                    placeholder={placeholder}
                     placeholderTextColor="#aaa"
-                    autoFocus={true} // Automatically focuses on input
+                    autoFocus={autoFocus} // Automatically focuses on input
                 />
             </View>
         </View>
@@ -29,18 +29,17 @@ const SearchInput = () => {
 // define your styles
 const styles = StyleSheet.create({
     container: {
-        width: '95%',
+        width: '100%',
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'white',
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: rw(3),
         paddingHorizontal: rw(3),
         paddingVertical: rh(1),
-        elevation: 2, // Subtle shadow
     },
     icon: {
         marginRight: rw(1),
