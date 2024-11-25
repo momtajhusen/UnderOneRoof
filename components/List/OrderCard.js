@@ -22,7 +22,7 @@ const OrderCard = ({ status, dateTime, totalAmount, products, ctaText, onCTAClic
   const statusStyle = getStatusStyle();
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card}>
       {/* Status Section */}
       <View style={styles.statusContainer}>
         <View style={styles.statusRow}>
@@ -67,7 +67,7 @@ const OrderCard = ({ status, dateTime, totalAmount, products, ctaText, onCTAClic
           <MaterialIcons name="arrow-forward" size={rw(4)} color="#fff" />
         </LinearGradient>
       </TouchableOpacity> */}
-    </View>
+    </TouchableOpacity>
   );
 };
 

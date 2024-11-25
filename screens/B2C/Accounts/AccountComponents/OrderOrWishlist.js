@@ -12,7 +12,6 @@ const OrderOrWishlist = () => {
 
   const navigation = useNavigation();
 
-
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={()=>navigation.navigate('Orders')} style={styles.btnContainer}>
@@ -20,7 +19,7 @@ const OrderOrWishlist = () => {
                <Image source={require('../../../../assets/bag-2.png')} style={{width:rw(7), height:rw(7)}} />
                <Text style={{color:"#272727"}}>Orders</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnContainer}>
+            <TouchableOpacity onPress={()=>navigation.navigate('Wishlist')}  style={styles.btnContainer}>
               {/* <MaterialIcons name="favorite-border" size={rf(4)} style={{ fontSize: rf(3) }} /> */}
               <Image source={require('../../../../assets/heart.png')} style={{width:rw(7), height:rw(7)}} />
               <Text style={{color:"#272727"}}>Wishlist</Text>
