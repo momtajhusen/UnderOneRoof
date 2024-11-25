@@ -1,41 +1,73 @@
-//import liraries
-import React, { Component } from 'react';
+// Import libraries
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { rw, rh, rf } from '../../../../Service/responsive';
+import { rw, rh } from '../../../../Service/responsive';
 import IconBtnList from '../../../../components/List/IconBtnList';
 import { useNavigation } from '@react-navigation/native';
+import LogOutAlert from '../../../../components/PopupModal/LogoutAlert';
+import DeleteAccountAlert from '../../../../components/PopupModal/DeleteAccountAlert';
 
-// create a component
+// Create the component
 const AccountMenuList = () => {
+  const [isModalVisibleLogOut, setIsModalVisibleLogOut] = useState(false);
+  const [isModalVisibleDeleteAccount, setIsModalVisibleDeleteAccount] = useState(false);
 
   const navigation = useNavigation();
 
-    return (
-        <View style={styles.container}>
-            <Text style={{fontSize:rw(4.5), fontWeight:"bold", marginLeft:rw(3)}}>Other Information</Text>
-            <View style={{paddingVertical:rh(1)}}>
-                <IconBtnList icon="person-outline" text="Your Profile" />
-                <IconBtnList icon="fmd-good" onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
-                <IconBtnList icon="help-outline" onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
-                <IconBtnList icon="receipt-long" onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
-                <IconBtnList icon="privacy-tip" onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
-                <IconBtnList icon="person-remove" text="Delete Account" />
-                <IconBtnList icon="logout" text="Logout" />
-            </View>
-        </View>
-    );
+  // Toggle modal visibility for Log Out
+  const toggleLogOutAlertModal = () => {
+    setIsModalVisibleLogOut(!isModalVisibleLogOut);
+  };
+
+  // Toggle modal visibility for Delete Account
+  const toggleDeleteAccountAlertModal = () => {
+    setIsModalVisibleDeleteAccount(!isModalVisibleDeleteAccount);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Other Information</Text>
+      <View style={styles.menuList}>
+        <IconBtnList icon="person-outline" text="Your Profile" />
+        <IconBtnList icon="fmd-good" onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
+        <IconBtnList icon="help-outline" onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
+        <IconBtnList icon="receipt-long" onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
+        <IconBtnList icon="privacy-tip" onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
+        
+        {/* Delete Account Button */}
+        <IconBtnList icon="person-remove" text="Delete Account" onPress={toggleDeleteAccountAlertModal} />
+
+        {/* Logout Button */}
+        <IconBtnList icon="logout" text="Logout" onPress={toggleLogOutAlertModal} />
+      </View>
+
+      {/* Show the LogOut Alert Modal */}
+      <LogOutAlert isModalVisible={isModalVisibleLogOut} toggleModal={toggleLogOutAlertModal} />
+
+      {/* Show the Delete Account Alert Modal */}
+      <DeleteAccountAlert isModalVisible={isModalVisibleDeleteAccount} toggleModal={toggleDeleteAccountAlertModal} />
+    </View>
+  );
 };
 
-// define your styles
+// Define styles
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal:rw(1),
-        paddingVertical:rh(1),
-        backgroundColor: '#FFFFFF',
-        borderRadius:10,
-        marginTop:rh(1.5)
-    },
+  container: {
+    paddingHorizontal: rw(1),
+    paddingVertical: rh(1),
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    marginTop: rh(1.5),
+  },
+  headerText: {
+    fontSize: rw(4.5),
+    fontWeight: "bold",
+    marginLeft: rw(3),
+  },
+  menuList: {
+    paddingVertical: rh(1),
+  },
 });
 
-//make this component available to the app
+// Make this component available to the app
 export default AccountMenuList;

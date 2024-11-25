@@ -33,6 +33,7 @@ const AccountScreen = ({navigation}) => {
                     <AccountMenuList />
                      <Text style={{textAlign:"center", marginTop:rh(3), fontSize:rf(2), color:"#717171"}}>V5.54</Text>
                 </View>
+
             </View>
         </View>
     );
