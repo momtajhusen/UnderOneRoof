@@ -2,11 +2,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
+import { useNavigation } from '@react-navigation/native';
 
 // create a reusable component
 const CategoryItem = ({ image, text }) => {
+
+  const navigation = useNavigation();
+
     return (
-        <TouchableOpacity style={styles.listContainer}>
+        <TouchableOpacity  onPress={()=>navigation.navigate('ProductListing')} style={styles.listContainer}>
             <View style={styles.imageContainer}>
                 <Image source={image} style={styles.image} resizeMode="cover" />
             </View>
@@ -46,14 +50,14 @@ const styles = StyleSheet.create({
         height: rw(17),
     },
     textContainer: {
-        paddingVertical: rh(0.5),
         paddingHorizontal: rw(1),
         alignItems: 'center',
+        justifyContent:"center",
+        height:rh(5.5),
     },
     text: {
         fontWeight: '600',
         fontSize: rf(1.8),
-        marginTop: rh(0.5),
         width:rw(12),
         color: '#555555', // Slightly lighter text color as per the design
         textAlign: 'center',

@@ -5,7 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 
 
-const ItemsList = ({ items }) => {
+const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
 
 
     const handleAdd = () => {
@@ -16,20 +16,20 @@ const ItemsList = ({ items }) => {
         <FlatList
             data={items}
             keyExtractor={(item, index) => index.toString()}
-            horizontal={true} // Enable horizontal scrolling
-            showsHorizontalScrollIndicator={false} // Hide horizontal scrollbar
-            contentContainerStyle={styles.listContainer} // Add some padding
+            horizontal={layout === 'horizontal' ? true : false}
+            vertical={true}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.listContainer} 
             renderItem={({ item }) => (
-                <TouchableOpacity style={styles.itemContainer}>
+                <TouchableOpacity style={[styles.itemContainer, listContainerStyle]}>
                     <View style={styles.ImageContainer}>
                         <TouchableOpacity style={styles.likeIcon}>
-                           <MaterialIcons name="favorite-border" size={rf(3)} style={{color:"#BCBCBC"}}/>
+                        <MaterialIcons name="favorite-border" size={rf(3)} style={{color:"#BCBCBC"}}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => handleAdd()} style={styles.addbtn}>
                             <Text style={styles.btntext}>Add</Text>
                         </TouchableOpacity>
-
-                        {/* Local image */}
                         <Image
                             source={item.image}
                             style={styles.image}
@@ -48,7 +48,7 @@ const ItemsList = ({ items }) => {
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
-                                <Text>({item.likes})</Text>
+                                <Text style={{fontSize:rf(1.5)}}>({item.likes})</Text>
                             </View>
                             <Text style={styles.discount}>{item.discount}</Text>
                             <Text style={styles.price}>
@@ -67,10 +67,14 @@ export default ItemsList;
 const styles = StyleSheet.create({
     listContainer: {
         paddingHorizontal: rw(0),
+        flexDirection:"row",
+        flexWrap: 'wrap',
+        marginBottom:rh(2),
+        overflow:"hidden"
     },
     itemContainer: {
         width: rw(39), // Set fixed width for each card
-        marginRight: 10, // Space between cards
+        marginRight: rw(1.5), // Space between cards
         backgroundColor: '#fff',
         borderRadius: 10,
     },
@@ -96,11 +100,10 @@ const styles = StyleSheet.create({
     },
     addbtn:{
         position:"absolute",
-        width:rw(20),
-        height:rh(4),
+        width:rw(19),
+        height:rh(3.5),
         right:rw(1),
         bottom:rh(0.5),
-        padding:rw(1),
         borderWidth:2,
         borderColor:"#FF3131",
         zIndex:100,
@@ -119,6 +122,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: '#333',
+        height:rh(5),
     },
     weight: {
         fontSize: rf(1.5),

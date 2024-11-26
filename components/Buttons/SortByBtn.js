@@ -5,10 +5,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../Service/responsive';
 
 // create a component
-const SortByBtn = ({onPress}) => {
+const SortByBtn = ({onPress, style}) => {
 
     return (
-        <TouchableOpacity onPress={onPress} style={styles.shortByBtn}>
+        <TouchableOpacity onPress={onPress} style={[styles.shortByBtn, style]}>
             <MaterialIcons name="swap-vert" size={25} color="black" />
             <Text style={{textAlign:"center"}}>Sort</Text>
        </TouchableOpacity>  
