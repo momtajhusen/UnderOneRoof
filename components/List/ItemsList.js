@@ -22,12 +22,12 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.listContainer} 
             renderItem={({ item }) => (
-                <TouchableOpacity style={[styles.itemContainer, listContainerStyle]}>
-                    <View style={styles.ImageContainer}>
+                <TouchableOpacity  disabled={item.stock === 0} style={[styles.itemContainer, listContainerStyle, item.stock === 0 && styles.disabledItem]}>
+                    <View  style={styles.ImageContainer}>
                         <TouchableOpacity style={styles.likeIcon}>
                         <MaterialIcons name="favorite-border" size={rf(3)} style={{color:"#BCBCBC"}}/>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleAdd()} style={styles.addbtn}>
+                        <TouchableOpacity disabled={item.stock === 0} onPress={() => handleAdd()} style={styles.addbtn}>
                             <Text style={styles.btntext}>Add</Text>
                         </TouchableOpacity>
                         <Image
@@ -48,7 +48,15 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
                                     <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon}/>
-                                <Text style={{fontSize:rf(1.5)}}>({item.likes})</Text>
+                                    <Text style={{fontSize:rf(1.5)}}>({item.likes})</Text>
+                                    
+                              {/* "Out of Stock" Message */}
+                                {item.stock == 0 ? (
+                                    <View style={styles.OutOfStock}>
+                                    <Text style={{ color: "white", textAlign: "center" }}>Out Of Stock</Text>
+                                    </View>
+                                ) : null}
+          
                             </View>
                             <Text style={styles.discount}>{item.discount}</Text>
                             <Text style={styles.price}>
@@ -110,6 +118,21 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
         borderRadius:8,
         justifyContent:"center",
+    },
+    OutOfStock:{
+        position:"absolute",
+        width:rw(25),
+        height:rh(3),
+        lefy:rw(1),
+        bottom:rh(0.5),
+        top:rh(-8),
+        backgroundColor:"#FF3131",
+        justifyContent:"center",
+        borderRadius:10,
+        opacity:100,
+    },  
+    disabledItem: {
+        opacity:0.5
     },
     btntext:{
       textAlign:"center",

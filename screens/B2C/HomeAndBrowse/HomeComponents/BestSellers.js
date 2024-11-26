@@ -32,6 +32,7 @@ const BestSellers = () => {
                     delay={index * 20} // Delay based on the index
                 >
                 <CategoryList
+                    id={category.id}
                     image={category.image} // Image prop
                     text={category.text}   // Text prop
                 />

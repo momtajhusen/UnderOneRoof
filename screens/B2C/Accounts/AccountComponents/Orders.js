@@ -40,6 +40,15 @@ const Orders = ({navigation}) => {
         },
     ];
 
+      // Sort By Options 
+        const options = [
+            'All',
+            'Last 7 Days',
+            'Last 30 Days',
+            'Last 1 Year',
+            'Custom Date',
+        ];
+
         // Function to toggle modal visibility
         const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
         const toggleModal = () => {
@@ -65,7 +74,7 @@ const Orders = ({navigation}) => {
 
 
            {/* Sort By Modal Method Modal */}
-           <SortbyModal isVisible={isModalVisible} toggleModal={toggleModal} />
+           <SortbyModal options={options} isVisible={isModalVisible} toggleModal={toggleModal} />
 
         </View>
     );

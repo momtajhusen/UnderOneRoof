@@ -5,18 +5,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { rw, rh, rf } from '../../Service/responsive';
 
-const SortByModal = ({ isVisible, toggleModal }) => {
-    const [selectedOption, setSelectedOption] = useState('All');
+const SortByModal = ({ isVisible, toggleModal, options }) => {
+
+    const [selectedOption, setSelectedOption] = useState(options[0]);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [customDate, setCustomDate] = useState(null);
-
-    const options = [
-        'All',
-        'Last 7 Days',
-        'Last 30 Days',
-        'Last 1 Year',
-        'Custom Date',
-    ];
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
