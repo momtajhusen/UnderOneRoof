@@ -80,6 +80,7 @@ const CartScreen = ({ navigation }) => {
                 <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
                     <FlatList
                         data={cartItemsData}
+                        vertical={false}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item, index }) => (
                             <Animatable.View
@@ -144,10 +145,8 @@ const styles = StyleSheet.create({
         bottom: rh(0),
         left: 0,
         right: 0,
-        // paddingHorizontal: rw(3),
         backgroundColor: "white",
         borderTopWidth: 1,
         borderTopColor: "#e0e0e0",
-        // paddingVertical: rh(1.5),
     },
 });

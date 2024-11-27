@@ -1,15 +1,22 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
-
-
+import { useNavigation } from '@react-navigation/native';
 
 const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
 
+  const navigation = useNavigation();
 
-    const handleAdd = () => {
-       alert("Hello");
+
+    const [selectedCategoryId, setSelectedCategoryId] = useState(1);
+
+    const handleAdd = (id) => {
+       alert(id);
+    };
+
+    const onWishlistedToggle = (id) => {
+         alert(id);
     };
 
     return (
@@ -22,12 +29,20 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.listContainer} 
             renderItem={({ item }) => (
-                <TouchableOpacity  disabled={item.stock === 0} style={[styles.itemContainer, listContainerStyle, item.stock === 0 && styles.disabledItem]}>
+                <TouchableOpacity onPress={()=>navigation.navigate('ProductDetail', { item: item})} disabled={item.stock === 0} style={[styles.itemContainer, listContainerStyle, item.stock === 0 && styles.disabledItem]}>
                     <View  style={styles.ImageContainer}>
-                        <TouchableOpacity style={styles.likeIcon}>
-                        <MaterialIcons name="favorite-border" size={rf(3)} style={{color:"#BCBCBC"}}/>
+
+                    {item.isWishlisted == true ? (
+                        <TouchableOpacity onPress={()=>onWishlistedToggle(item.id)} style={styles.likeIcon}>
+                         <MaterialIcons name="favorite" size={rf(3)} style={{color:"#DC3545"}}/>
                         </TouchableOpacity>
-                        <TouchableOpacity disabled={item.stock === 0} onPress={() => handleAdd()} style={styles.addbtn}>
+                    ) : 
+                        <TouchableOpacity onPress={()=>onWishlistedToggle(item.id)} style={styles.likeIcon}>
+                          <MaterialIcons name="favorite-border" size={rf(3)} style={{color:"#BCBCBC"}}/>
+                        </TouchableOpacity>
+                    }
+
+                        <TouchableOpacity disabled={item.stock === 0} onPress={() => handleAdd(item.id)} style={styles.addbtn}>
                             <Text style={styles.btntext}>Add</Text>
                         </TouchableOpacity>
                         <Image

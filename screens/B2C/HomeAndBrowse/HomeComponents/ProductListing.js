@@ -46,6 +46,7 @@ import ItemsList from '../../../../components/List/ItemsList';
   // Items List array define
   const productList = [
     {
+      id:1,
       name: "Premium Roasted Almonds",
       weight: "500g",
       type: "Roasted",
@@ -54,10 +55,13 @@ import ItemsList from '../../../../components/List/ItemsList';
       discount: "25% OFF",
       rating: 5,
       likes: 22500,
-      stock: 50, // Added stock data
+      stock: 50,
       image: require('../../../../assets/items/image1.png'),
+      cartQuantity: 0, // Quantity in user's cart
+      isWishlisted: false // Wishlisted status
     },
     {
+      id:2,
       name: "Honey Almond Energy Bars",
       weight: "500g",
       type: "Natural",
@@ -66,10 +70,13 @@ import ItemsList from '../../../../components/List/ItemsList';
       discount: "25% OFF",
       rating: 5,
       likes: 22500,
-      stock: 30, // Added stock data
+      stock: 30,
       image: require('../../../../assets/items/image2.png'),
+      cartQuantity: 0,
+      isWishlisted: true
     },
     {
+      id:3,
       name: "Organic Green Tea",
       weight: "500g",
       type: "Organic",
@@ -78,10 +85,13 @@ import ItemsList from '../../../../components/List/ItemsList';
       discount: "25% OFF",
       rating: 5,
       likes: 22500,
-      stock: 40, // Added stock data
+      stock: 40,
       image: require('../../../../assets/items/image1.png'),
+      cartQuantity: 0,
+      isWishlisted: false
     },
     {
+      id:3,
       name: "Premium Roasted Almonds",
       weight: "500g",
       type: "Roasted",
@@ -90,10 +100,13 @@ import ItemsList from '../../../../components/List/ItemsList';
       discount: "25% OFF",
       rating: 5,
       likes: 22500,
-      stock: 20, // Added stock data
+      stock: 20,
       image: require('../../../../assets/items/image1.png'),
+      cartQuantity: 0,
+      isWishlisted: false
     },
     {
+      id:4,
       name: "Honey Almond Energy Bars",
       weight: "500g",
       type: "Natural",
@@ -102,10 +115,13 @@ import ItemsList from '../../../../components/List/ItemsList';
       discount: "25% OFF",
       rating: 5,
       likes: 22500,
-      stock: 0, // Added stock data
+      stock: 0,
       image: require('../../../../assets/items/image2.png'),
+      cartQuantity: 0,
+      isWishlisted: false
     },
     {
+      id:5,
       name: "Organic Green Tea",
       weight: "500g",
       type: "Organic",
@@ -114,10 +130,13 @@ import ItemsList from '../../../../components/List/ItemsList';
       discount: "25% OFF",
       rating: 5,
       likes: 22500,
-      stock: 0, // Added stock data
+      stock: 0,
       image: require('../../../../assets/items/image1.png'),
+      cartQuantity: 0,
+      isWishlisted: false
     }
   ];
+  
 
   // Sort By Options 
   const options = [
@@ -248,7 +267,7 @@ const ProductListing = ({ route }) => {
           </Text> */}
 
           <View style={{paddingTop:rh(1), flexDirection:"row", paddingBottom:rh(5)}}>
-               <ItemsList items={productList} layout="vertical" listContainerStyle={{width:rw(36), marginBottom:rh(1)}} />
+               <ItemsList items={productList} layout="vertical" listContainerStyle={{width:rw(37.3), marginBottom:rh(1)}} />
           </View>
 
         </View>
