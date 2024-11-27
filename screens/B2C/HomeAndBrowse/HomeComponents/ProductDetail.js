@@ -237,7 +237,7 @@ const ProductDetail = ({ route, navigation }) => {
                   renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
                   keyExtractor={(item, index) => index.toString()}
                   ListHeaderComponent={
-                       <View style={{borderBottomWidth:1, borderColor:"#ccc" }}>
+                       <View>
                           <RatingProductCard
                               rating={reviewData.rating}
                               reviewCount={reviewData.reviewCount}
@@ -247,7 +247,6 @@ const ProductDetail = ({ route, navigation }) => {
                               <Text style={{color:"white", textAlign:"center"}}>View All</Text>
                           </TouchableOpacity>
                        </View>
-
                   }
               />
             </View>
@@ -259,6 +258,15 @@ const ProductDetail = ({ route, navigation }) => {
 
         </View>
       </ScrollView>
+
+      <View style={{width:rw(100), height:rh(9), backgroundColor:"white", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingVertical:rh(1), paddingHorizontal:rw(5)}}>
+           <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')} style={{backgroundColor:"#DFDFDF", paddingVertical:rh(1.5), paddingHorizontal:rw(13), borderRadius:10}}>
+              <Text style={{color:"black", fontWeight:"bold"}}>Buy Now</Text>
+           </TouchableOpacity>
+           <TouchableOpacity style={{backgroundColor:"#FF3131", paddingVertical:rh(1.5), paddingHorizontal:rw(13), borderRadius:10}}>
+              <Text style={{color:"white", fontWeight:"bold"}}>Add to Cart</Text>
+           </TouchableOpacity>
+      </View>
     </View>
   );
 };

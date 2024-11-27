@@ -1,20 +1,26 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import UserDetails from './userDetails';
 import PriceDetails from './PriceDetails';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 // create a component
 const OrderPlaced = () => {
+
+  const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
+          <ScrollView>
              <View style={styles.successContainer}>
-                 <View style={{paddingHorizontal: rw(4)}}>
+                 <TouchableOpacity onPress={() => navigation.goBack()} style={{paddingHorizontal: rw(4)}}>
                    <MaterialIcons name="arrow-back" size={rf(3)} color="white" />
-                 </View>
+                 </TouchableOpacity>
                  <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
                     <View style={{flexDirection:"row", gap:rw(2), alignItems:"center"}}>
                        <MaterialIcons name="check-circle" size={35} color="white" />
@@ -26,13 +32,68 @@ const OrderPlaced = () => {
                  </View>
              </View>
              <View style={styles.detailsContainer}>
-                  <View style={{flexDirection:"row"}}>
+                  <View style={{flexDirection:"row", marginLeft:rw(2.5)}}>
                       <Text style={{fontWeight:"bold", fontSize:rf(2)}}>Order ID : </Text>
                       <Text style={{fontWeight:"normal"}}>#8912937981230</Text>
                   </View>
-                  <UserDetails />
-                  <PriceDetails />
+
+                  <View style={{marginVertical:rh(1)}}>
+                    <UserDetails type="change" />
+                  </View>
+
+                  <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
+                     <Image source={require('../../../../assets/FastTruckicon.png')} style={{width:rw(8)}} />
+                     <View style={{flexDirection:"row", alignItems:"center", gap:rw(2)}}> 
+                        <Text>Estimated Delivery by</Text>
+                        <Text style={{fontWeight:"bold"}}>24, October, 2024</Text>
+                     </View>
+                  </View>
+
+                  <View style={{gap:rh(1), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(2), borderRadius:10}}>
+                     <Text style={{fontWeight:"bold"}}>Order Items(3)</Text>
+                      <View style={{backgroundColor:"#F3F3F3", padding:rw(1.5), borderRadius:rw(2), flexDirection:"row"}}>
+                            <Image source={require('../../../../assets/image45.png')} style={{width:rw(18), height:rh(8)}} />
+                            <View style={{padding:rw(2)}}>
+                            <Text style={{fontWeight:"400"}}>Premium Roasted Almonds <Text style={{color:"#717171"}}>(250g)</Text></Text>
+                            <Text style={{marginVertical:rh(0.5), color:"#717171"}}>₹499 | Qty: 1</Text>
+                            </View>
+                      </View>
+                      <View style={{backgroundColor:"#F3F3F3", padding:rw(1.5), borderRadius:rw(2), flexDirection:"row"}}>
+                            <Image source={require('../../../../assets/image56.png')} style={{width:rw(18), height:rh(8)}} />
+                            <View style={{padding:rw(2)}}>
+                            <Text style={{fontWeight:"400"}}>Premium Roasted Almonds <Text style={{color:"#717171"}}>(250g)</Text></Text>
+                            <Text style={{marginVertical:rh(0.5), color:"#717171"}}>₹499 | Qty: 1</Text>
+                            </View>
+                      </View>
+                      <View style={{backgroundColor:"#F3F3F3", padding:rw(1.5), borderRadius:rw(2), flexDirection:"row"}}>
+                            <Image source={require('../../../../assets/image765.png')} style={{width:rw(18), height:rh(8)}} />
+                            <View style={{padding:rw(2)}}>
+                            <Text style={{fontWeight:"400"}}>Premium Roasted Almonds <Text style={{color:"#717171"}}>(250g)</Text></Text>
+                            <Text style={{marginVertical:rh(0.5), color:"#717171"}}>₹499 | Qty: 1</Text>
+                            </View>
+                      </View>
+                  </View>
+
+                  <View style={{marginBottom:rh(1)}}>
+                     <PriceDetails promoCode={false} style={{backgroundColor:"blue"}} />
+                  </View>
+
+                  <View style={{marginBottom:rh(1), padding:rw(3), backgroundColor:"white", borderRadius:10}}>
+                      <View style={{flexDirection:"row", gap:5, alignItems:"center"}}>
+                         <MaterialIcons name="credit-card" size={rf(3)} color="#9D9D9D" />
+                         <Text style={{color:"#9D9D9D", fontSize:rf(2)}}>Payment Mode</Text>
+                      </View>
+                      <View style={{padding:rw(2), backgroundColor:"#FFEAEA", borderRadius:10, marginTop:rh(1)}}>
+                         <View style={{flexDirection:"row", gap:rw(2)}}>
+                            <Text style={{fontWeight:"bold", fontSize:18}}>Payment Completed</Text>
+                            <MaterialIcons name="check-circle" size={rf(3)} color="#44B200" />
+                         </View>
+                         <Text style={{color:"#868686"}}>Pre-Paid Order</Text>
+                      </View>
+                  </View>
+                  
              </View>
+           </ScrollView>
         </View>
     );
 };
@@ -44,19 +105,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'green',
     },
     successContainer:{
-        height:rh(30),
+        height:rh(25),
         backgroundColor:"green",
     },
     detailsContainer:{
-      height:rh(70),
       backgroundColor:"white",
       borderTopLeftRadius:30,
       borderTopRightRadius:30,
       backgroundColor:"#F3F3F3",  
-      padding:rw(3),
-      paddingHorizontal:rw(5)
+      paddingHorizontal:rw(3),
+      paddingVertical:rh(2),
+      paddingBottom:rh(1)
     }
 });
 
 //make this component available to the app
 export default OrderPlaced;
+
+

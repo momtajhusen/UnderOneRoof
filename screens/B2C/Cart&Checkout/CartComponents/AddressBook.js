@@ -4,30 +4,26 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import UserDetails from './userDetails';
+import Header from '../../../../components/header';
 
 // create a component
 const AddressBook = ({navigation}) => {
     return (
         <View>
             {/* Back Container */}
-            <View style={styles.backHeader}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialIcons name="arrow-back" size={rf(4)} style={{ fontSize: rf(3) }} />
-                    </TouchableOpacity>
-                    <Text style={{ marginLeft: rw(2), fontSize: rw(4), fontWeight: 'bold' }}>Address Book</Text>
-                </View>
-            </View>
+            <Header
+              Title="Address Book"
+            />
+ 
             <View style={styles.container}>
                 <TouchableOpacity style={styles.addaddressbtn}>
                     <MaterialIcons name="add" size={rf(4)} style={{ fontSize: rf(3), color:"#FF3131" }} />
                     <Text style={{color:"#FF3131", fontWeight:"bold", marginLeft:rw(1)}}>Add Address</Text>
                 </TouchableOpacity>
-                <View>
+                <View style={{gap:rh(1)}}>
                     <UserDetails />
                     <UserDetails />
                     <UserDetails />
-
                 </View>
             </View>
         </View>
@@ -60,5 +56,6 @@ const styles = StyleSheet.create({
      paddingLeft:rw(2),
      paddingVertical:rh(1),
      borderRadius:10,
+     marginBottom:rh(1)
     }
 });

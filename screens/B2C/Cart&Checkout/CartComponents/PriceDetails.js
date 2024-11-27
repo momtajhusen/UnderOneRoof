@@ -4,18 +4,28 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 import { rw, rh, rf } from '../../../../Service/responsive';
 
 // Create a component
-const PriceDetails = () => {
-    return (
-        <View style={styles.container}>
-            <View style={styles.promoCodeContainer}>
-                <TextInput 
-                   placeholder="Enter Coupan code"
-                   style={{paddingHorizontal:rw(2.5), width:rw(54)}}
-                />
-                <TouchableOpacity style={{backgroundColor:"#FF3131", borderRadius:10, width:rw(30), justifyContent:"center"}}>
-                    <Text style={{textAlign:"center", color:"white"}}>Apply Code</Text>
-                </TouchableOpacity>
-            </View>
+const PriceDetails = ({style, promoCode="true"}) => {
+            return (
+                    <View style={[styles.container, {style}]}>
+            {promoCode && (
+                <View style={styles.promoCodeContainer}>
+                    <TextInput 
+                        placeholder="Enter Coupon code"
+                        style={{ paddingHorizontal: rw(2.5), width: rw(54) }}
+                    />
+
+                    <TouchableOpacity 
+                        style={{
+                            backgroundColor: "#FF3131", 
+                            borderRadius: 10, 
+                            width: rw(30), 
+                            justifyContent: "center"
+                        }}
+                    >
+                        <Text style={{ textAlign: "center", color: "white" }}>Apply Code</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
             {/* Header */}
             <Text style={styles.header}>Price Details</Text>
 
@@ -57,7 +67,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         padding: rw(5),
         borderRadius: rw(3),
-        width:rw(94),
+        width:"100%",
     },
     promoCodeContainer:{
      height:rh(5),
@@ -68,7 +78,7 @@ const styles = StyleSheet.create({
      justifyContent:"space-between"
     },
     header: {
-        fontSize: rf(2.3),
+        fontSize: rf(2),
         fontWeight: '700',
         marginBottom: rh(0.5),
         color: '#333',
@@ -106,7 +116,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     totalValue: {
-        fontSize: rf(2.5),
+        fontSize: rf(2),
         fontWeight: '700',
     },
     savedMessageContainer:{
@@ -114,7 +124,7 @@ const styles = StyleSheet.create({
         position:"absolute",
         zIndex:-1,
         bottom:rh(-4),
-        width:rw(94),
+        width:rw(92),
         height:rh(35),
         borderRadius:10,
     },
