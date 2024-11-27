@@ -10,6 +10,7 @@ const RatingProductCard = ({ rating, reviewCount, images }) => {
 
       {/* Ratings Section */}
       <View style={styles.ratingRow}>
+        <View>
         <View style={styles.starsContainer}>
           {[...Array(5)].map((_, index) => (
             <Text
@@ -19,8 +20,10 @@ const RatingProductCard = ({ rating, reviewCount, images }) => {
               ★
             </Text>
           ))}
+          <Text style={styles.reviewCount}>({reviewCount})</Text>
         </View>
-        <Text style={styles.reviewCount}>({reviewCount})</Text>
+        </View>
+
       </View>
 
       {/* Images Section */}
@@ -70,6 +73,8 @@ const styles = StyleSheet.create({
   starsContainer: {
     flexDirection: 'row',
     marginRight: rw(2),
+    justifyContent:"center",
+    alignItems:"center"
   },
   activeStar: {
     color: '#FF3131',

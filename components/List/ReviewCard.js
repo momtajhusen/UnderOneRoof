@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive'; // Ensure this is correctly linked in your project.
 
-const ReviewCard = ({ image, rating, reviewText, reviewer, date }) => {
+const ReviewCard = ({ image, rating, reviewText, reviewer, date, style }) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       <View style={styles.imageContainer}>
         <Image source={image} style={styles.productImage} />
       </View>

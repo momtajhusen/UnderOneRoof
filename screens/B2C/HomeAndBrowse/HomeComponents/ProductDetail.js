@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  FlatList
 } from 'react-native';
 import Header from '../../../../components/header';
 import { rw, rh, rf } from '../../../../Service/responsive';
@@ -13,6 +14,9 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { LinearGradient } from 'expo-linear-gradient';
 import Collapsible from 'react-native-collapsible';
+import ReviewCard from '../../../../components/List/ReviewCard';
+import RatingProductCard from '../../../../components/List/RatingProductCard';
+import SimilarProducts from '../../Cart&Checkout/CartComponents/SimilarProducts';
 
 
 
@@ -32,6 +36,34 @@ const ProductDetail = ({ route, navigation }) => {
     require('../../../../assets/items/image1.png'),
     require('../../../../assets/items/image2.png'),
   ];
+
+  const reviews = [
+    {
+        image: require('../../../../assets/RatingImage/image5.png'),
+        rating: 4,
+        reviewText: 'Taste is very good.',
+        reviewer: 'Mr. Aman Shukla',
+        date: '24/March/2024',
+    },
+    {
+        image: require('../../../../assets/RatingImage/image9.png'),
+        rating: 5,
+        reviewText: 'Value for money product',
+        reviewer: 'Mr. Aman Shukla',
+        date: '24/March/2024',
+    },
+  ];
+
+  const reviewData = {
+      rating: 4.5,
+      reviewCount: 22500,
+      images: [
+          require('../../../../assets/RatingImage/image.png'),
+          require('../../../../assets/RatingImage/image-1.png'),
+          require('../../../../assets/RatingImage/image-2.png'),
+          require('../../../../assets/RatingImage/image5.png'),
+      ],
+  };
 
   const renderItem = ({ item }) => (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -62,7 +94,8 @@ const ProductDetail = ({ route, navigation }) => {
 
       <ScrollView>
         <View contentContainerStyle={styles.scrollContainer}>
-        <Carousel
+          <View>
+          <Carousel
             data={images}
             renderItem={renderItem}
             sliderWidth={rw(100)}
@@ -83,6 +116,11 @@ const ProductDetail = ({ route, navigation }) => {
               />
             ))}
           </View>
+          <TouchableOpacity style={{position:"absolute", bottom:rh(1), right:rw(5), width:rw(10), height:rh(5), justifyContent:"center", alignItems:"center"}}>
+             <MaterialIcons name="favorite-border" size={rf(3.5)} color="#888" />
+          </TouchableOpacity>
+          </View>
+         
         </View>
 
         <View style={styles.detailsContainer}>
@@ -128,59 +166,56 @@ const ProductDetail = ({ route, navigation }) => {
         {/* New Content Section */}
         <View style={styles.newContentContainer}>
 
+            <View style={styles.DescriptionContainer}>
+              <TouchableOpacity
+                onPress={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
+                style={styles.CollapsedHeader}
+              >
+                <Text style={styles.sectionTitle}>Description:</Text>
+                <MaterialIcons name={isDescriptionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
+              </TouchableOpacity>
+              {/* <Collapsible collapsed={isDescriptionCollapsed}> */}
+              <View style={styles.textContainer}>
+                <Text style={styles.descriptionText}>
+                  Indulge in the deliciously crunchy and nutritious Roasted Almonds. Sourced from the finest farms, these almonds are lightly roasted to bring out their natural flavor, making them a perfect snack for any time of the day. Rich in nutrients, they are a great source of healthy fats, protein, and vitamins that promote overall well-being.
+                </Text>
+              </View>
+              {/* </Collapsible> */}
+            </View>
 
-        <View style={styles.DescriptionContainer}>
-          <TouchableOpacity
-            onPress={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
-            style={styles.CollapsedHeader}
-          >
-            <Text style={styles.sectionTitle}>Description:</Text>
-            <MaterialIcons name={isDescriptionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
-          </TouchableOpacity>
-          {/* <Collapsible collapsed={isDescriptionCollapsed}> */}
-          <View style={styles.textContainer}>
-            <Text style={styles.descriptionText}>
-              Indulge in the deliciously crunchy and nutritious Roasted Almonds. Sourced from the finest farms, these almonds are lightly roasted to bring out their natural flavor, making them a perfect snack for any time of the day. Rich in nutrients, they are a great source of healthy fats, protein, and vitamins that promote overall well-being.
-            </Text>
-          </View>
-          {/* </Collapsible> */}
-        </View>
+            <View style={styles.DescriptionContainer}>
+              <TouchableOpacity
+                onPress={() => setIsNutritionCollapsed(!isNutritionCollapsed)}
+                style={styles.CollapsedHeader}
+              >
+                <Text style={styles.sectionTitle}>Nutritional Information (Per 100g):</Text>
+                <MaterialIcons name={isNutritionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
+              </TouchableOpacity>
+              {/* <Collapsible collapsed={isNutritionCollapsed}> */}
+              <View style={styles.textContainer}>
+    
+                  {[
+                    { label: "Calories", value: "579 kcal" },
+                    { label: "Protein", value: "21g" },
+                    { label: "Total Fat", value: "50g" },
+                    { label: "Saturated Fat", value: "4g" },
+                    { label: "Carbohydrates", value: "22g" },
+                    { label: "Sodium", value: "5g" },
+                  ].map((item, index) => (
+                    <View key={index} style={{flexDirection:"row", justifyContent:"space-between", paddingRight:rw(30)}}>
+                      <Text style={styles.nutritionText}>{item.label}:</Text>
+                      <Text style={styles.nutritionText}>{item.value}</Text>
+                    </View>
+                  ))}
+              </View>
 
-        <View style={styles.DescriptionContainer}>
-          <TouchableOpacity
-            onPress={() => setIsNutritionCollapsed(!isNutritionCollapsed)}
-            style={styles.CollapsedHeader}
-          >
-            <Text style={styles.sectionTitle}>Nutritional Information (Per 100g):</Text>
-            <MaterialIcons name={isNutritionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
-          </TouchableOpacity>
-          {/* <Collapsible collapsed={isNutritionCollapsed}> */}
-          <View style={styles.textContainer}>
- 
-              {[
-                { label: "Calories", value: "579 kcal" },
-                { label: "Protein", value: "21 g" },
-                { label: "Total Fat", value: "50 g" },
-                { label: "Saturated Fat", value: "4 g" },
-                { label: "Carbohydrates", value: "4 g" },
-              ].map((item, index) => (
-                <View key={index} style={{flexDirection:"row", gap:rw(20)}}>
-                  <Text style={styles.nutritionText}>{item.label}:</Text>
-                  <Text style={styles.nutritionText}>{item.value}</Text>
-                </View>
-              ))}
-          </View>
+              {/* </Collapsible> */}
+            </View>
 
-          {/* </Collapsible> */}
-        </View>
-
-
-
-
-           <View style={styles.DescriptionContainer}>
+            <View style={styles.DescriptionContainer}>
               <Text style={styles.sectionTitle}>Delivery Options:</Text>
 
-              <View style={{flexDirection:"row", gap:rw(3)}}>
+              <View style={{flexDirection:"row", gap:rw(3), marginBottom:rh(1)}}>
                 <MaterialIcons name="local-shipping" size={20} color="#FF9100" />
                 <Text style={styles.deliveryText}>
                   <Text style={{ fontWeight: 'bold' }}>Standard Delivery:</Text> 3-5 business days
@@ -194,12 +229,32 @@ const ProductDetail = ({ route, navigation }) => {
                 </Text>
               </View>
             
+            </View>
+
+            <View style={{backgroundColor:"white", borderRadius:10}}>
+              <FlatList
+                  data={reviews}
+                  renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
+                  keyExtractor={(item, index) => index.toString()}
+                  ListHeaderComponent={
+                       <View style={{borderBottomWidth:1, borderColor:"#ccc" }}>
+                          <RatingProductCard
+                              rating={reviewData.rating}
+                              reviewCount={reviewData.reviewCount}
+                              images={reviewData.images}
+                          />
+                          <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(20), height:rh(4.5), borderRadius:10, alignItems:"center", justifyContent:"center", position:"absolute", right:"2%", top:"4%"}}>
+                              <Text style={{color:"white", textAlign:"center"}}>View All</Text>
+                          </TouchableOpacity>
+                       </View>
+
+                  }
+              />
+            </View>
+           
+           <View style={{backgroundColor:"white", marginTop:rh(1), marginBottom:rh(1), padding:rw(3), borderRadius:5, overflow:"hidden"}}>
+              <SimilarProducts />
            </View>
-
-
-          <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(30), height:rh(5), borderRadius:10, alignItems:"center", justifyContent:"center"}}>
-              <Text style={{color:"white", textAlign:"center"}}>View All</Text>
-          </TouchableOpacity>
 
 
         </View>
@@ -213,15 +268,15 @@ const styles = StyleSheet.create({
   scrollContainer: { paddingBottom: rh(2) },
   carouselItem: { justifyContent: 'center', alignItems: 'center' },
   productImage: { width: rw(60), height: rw(60) },
-  indicatorContainer: { flexDirection: 'row', justifyContent: 'center', marginTop: rh(1) },
+  indicatorContainer: { flexDirection: 'row', justifyContent: 'center', marginVertical: rh(1) },
   indicator: { width: rw(2), height: rw(2), borderRadius: rw(1), backgroundColor: '#D3D3D3', margin: rw(1) },
   activeIndicator: { backgroundColor: '#FF6D00' },
   detailsContainer: { marginHorizontal: rw(4), padding:rw(2), borderRadius:10, overflow:"hidden", backgroundColor:"white" },
-  discountText: { color: '#FF6D00', fontSize: rf(1.8), fontWeight: 'bold' },
-  productTitle: { fontSize: rf(2.3), fontWeight: 'bold' },
+  discountText: { color: '#FF6D00', fontSize: rf(1.8), fontWeight: 'bold', marginBottom:rh(1) },
+  productTitle: { fontSize: rf(2), fontWeight: 'bold' },
   ratingText: { color: '#FF3131', fontSize: rf(2.5), fontWeight: 'bold', marginBottom: rh(1) },
   reviewCount: { color: '#A0A0A0', fontSize: rf(1.8) },
-  selectText: { fontSize: rf(1.8), color:"#717171" },
+  selectText: { fontSize: rf(1.8), color:"#717171", marginBottom:rh(1) },
   quantityContainer: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: rh(0.5) },
   quantityBox: { 
     borderWidth: 1, 
@@ -238,7 +293,7 @@ const styles = StyleSheet.create({
 
   saveText: { color: '#FF6D00', fontSize: rf(1.5), fontWeight: 'bold', marginLeft:rw(2), marginVertical:rh(0.5) },
   newContentContainer: { paddingHorizontal: rw(4), marginVertical: rh(1) },
-  sectionTitle: { fontSize: rf(2.2), fontWeight: 'bold', marginBottom: rh(1) },
+  sectionTitle: { fontSize: rf(2), fontWeight: 'bold', marginBottom: rh(1) },
   DescriptionContainer:{
    backgroundColor:"white",
    padding:rw(2.5),
@@ -263,6 +318,7 @@ const styles = StyleSheet.create({
   },
   nutritionText:{
     textAlign:"center",
+    paddingVertical:rh(0.5)
   },
   deliveryText: { fontSize: rf(1.8), marginBottom: rh(0.5) },
 });
