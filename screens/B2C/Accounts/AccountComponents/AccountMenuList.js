@@ -28,17 +28,17 @@ const AccountMenuList = () => {
     <View style={styles.container}>
       <Text style={styles.headerText}>Other Information</Text>
       <View style={styles.menuList}>
-        <IconBtnList icon="person-outline" onPress={() => navigation.navigate('MyProfile')} text="Your Profile" />
-        <IconBtnList icon="fmd-good" onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
-        <IconBtnList icon="help-outline" onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
-        <IconBtnList icon="receipt-long" onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
-        <IconBtnList icon="privacy-tip" onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
+        <IconBtnList icon={require('../../../../assets/account/user.png')} onPress={() => navigation.navigate('MyProfile')} text="Your Profile" />
+        <IconBtnList icon={require('../../../../assets/account/location.png')} onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
+        <IconBtnList icon={require('../../../../assets/account/HelpCircle.png')} onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
+        <IconBtnList icon={require('../../../../assets/account/Group26.png')} onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
+        <IconBtnList icon={require('../../../../assets/account/Group.png')} onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
         
         {/* Delete Account Button */}
-        <IconBtnList icon="person-remove" text="Delete Account" onPress={toggleDeleteAccountAlertModal} />
+        <IconBtnList icon={require('../../../../assets/account/user-remove.png')}text="Delete Account" onPress={toggleDeleteAccountAlertModal} />
 
         {/* Logout Button */}
-        <IconBtnList icon="logout" text="Logout" onPress={toggleLogOutAlertModal} />
+        <IconBtnList icon={require('../../../../assets/account/Power.png')} text="Logout" onPress={toggleLogOutAlertModal} />
       </View>
 
       {/* Show the LogOut Alert Modal */}

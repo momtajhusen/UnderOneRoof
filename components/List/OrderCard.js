@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient'; // For gradient button
-import { rw, rh, rf } from '../../Service/responsive'; // Responsive helpers
+import { LinearGradient } from 'expo-linear-gradient';  
+import { rw, rh, rf } from '../../Service/responsive'; 
 
-const OrderCard = ({ status, dateTime, totalAmount, products, ctaText, onCTAClick }) => {
+const OrderCard = ({ status, dateTime, totalAmount, products, ctaText, onCTAClick, onPress }) => {
   // Dynamic status styling based on the order status
   const getStatusStyle = () => {
     switch (status) {
@@ -22,7 +22,7 @@ const OrderCard = ({ status, dateTime, totalAmount, products, ctaText, onCTAClic
   const statusStyle = getStatusStyle();
 
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity onPress={onPress} style={styles.card}>
       {/* Status Section */}
       <View style={styles.statusContainer}>
         <View style={styles.statusRow}>

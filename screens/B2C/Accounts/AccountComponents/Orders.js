@@ -68,7 +68,7 @@ const Orders = ({navigation}) => {
                 <Text style={{marginTop:rh(1.5), marginBottom:rh(0.5),  fontWeight:"bold", fontSize:rf(2)}}>Recent Orders</Text>
             
                 {orders.map((order, index) => (
-                    <OrderCard key={index} {...order} />
+                    <OrderCard onPress={()=>navigation.navigate('OrderDetails')} key={index} {...order} />
                 ))}
             </View>
 

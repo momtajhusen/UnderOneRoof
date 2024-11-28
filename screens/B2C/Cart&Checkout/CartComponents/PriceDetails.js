@@ -4,9 +4,9 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 import { rw, rh, rf } from '../../../../Service/responsive';
 
 // Create a component
-const PriceDetails = ({style, promoCode="true"}) => {
+const PriceDetails = ({style, promoCode="true", saveMessage="true"}) => {
             return (
-                    <View style={[styles.container, {style}]}>
+            <View style={[styles.container, {style}]}>
             {promoCode && (
                 <View style={styles.promoCodeContainer}>
                     <TextInput 
@@ -53,9 +53,14 @@ const PriceDetails = ({style, promoCode="true"}) => {
                 <Text style={styles.totalValue}>₹820</Text>
             </View>
 
+            {saveMessage && (
             <View style={styles.savedMessageContainer}>
                 <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹350</Text> in this order</Text>
-            </View>
+                </View>
+            )}
+
+
+
 
         </View>
     );
