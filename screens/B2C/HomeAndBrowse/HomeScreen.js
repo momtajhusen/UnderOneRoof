@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   SliderCategoryContainer: {
     backgroundColor: '#fff',
     marginTop: -rh(5), // To create a floating effect below the header
-    backgroundColor: "#ddd",
+    backgroundColor: "#F3F3F3",
   },
   categoryText: {
     fontSize: rf(2.5),

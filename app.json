@@ -2,6 +2,22 @@
   "expo": {
     "name": "UnderOneRoof",
     "slug": "UnderOneRoof",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "d842f218-bd83-49bd-99f8-aaa5c67a4b3e"
+      }
+    },
+    "splash": {
+      "image": "./assets/auth/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "yellow"
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/d842f218-bd83-49bd-99f8-aaa5c67a4b3e"
+    },
+    "android": {},
+    "ios": {}
   }
 }

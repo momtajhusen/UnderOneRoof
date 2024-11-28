@@ -19,7 +19,8 @@ const SplashScreen = () => {
         <View  style={styles.container}>
             <Animatable.Image
                 animation="zoomIn"
-                source={require('../../assets/auth/image 45.png')}
+                delay={20}
+                source={require('../../assets/auth/logo.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />

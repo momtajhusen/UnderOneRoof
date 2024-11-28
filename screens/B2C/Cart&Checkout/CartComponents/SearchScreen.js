@@ -8,7 +8,7 @@ import SearchInput from '../../../../components/Search/SearchInput';
 // create a component
 const PrivacyPolicy = ({navigation}) => {
     return (
-        <View>
+        <View style={{flex:1, backgroundColor:"#F3F3F3"}}>
             <Header 
                 rightContent={
                     <View style={{ flexDirection: "row", width:rw(80)}}>

@@ -77,8 +77,9 @@ const Checkout = ({navigation}) => {
                 steps={['Address', 'Order Summary', 'Payment']} 
                 currentStep={1} // Active step: "Order Summary"
             />
-
-            <UserDetails />
+            <View style={{marginTop:rh(1)}}>
+               <UserDetails />
+            </View>
 
                 {/* Cart Items */}
                 <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
