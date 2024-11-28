@@ -26,6 +26,7 @@ import ProductListing from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductL
 import ProductDetail from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductDetail';
 import AllRating from '../screens/B2C/HomeAndBrowse/HomeComponents/AllRating';
 import OrderDetails from '../screens/B2C/Accounts/AccountComponents/OrdersDetail';
+import RatingAndReviews from '../screens/B2C/Accounts/AccountComponents/RatingAndReviews';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,13 +36,7 @@ const StackNavigation = () => {
     const navigation = useNavigation();
   
     return (
-        <Stack.Navigator
-        // screenOptions={{
-        //   headerStyle: { backgroundColor: "white" },
-        //   headerTitleStyle: { color: "black" },
-        //   headerTintColor: "black",
-        // }}
-      > 
+        <Stack.Navigator> 
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }} />
         {/* Screen navigation  */}
@@ -69,7 +64,7 @@ const StackNavigation = () => {
         <Stack.Screen name="ProductDetail" component={ProductDetail} options={{ headerShown: false }} />
         <Stack.Screen name="AllRating" component={AllRating} options={{ headerShown: false }} />
         <Stack.Screen name="OrderDetails" component={OrderDetails} options={{ headerShown: false }} />
-
+        <Stack.Screen name="RatingAndReviews" component={RatingAndReviews} options={{ headerShown: false }} />
      </Stack.Navigator>
     );
 };

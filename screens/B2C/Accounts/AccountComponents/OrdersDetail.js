@@ -1,15 +1,22 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert} from 'react-native';
 import Header from '../../../../components/header';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import OrderSummary from '../../../../components/List/OrderSummary';
 import OrderItems from '../../../../components/List/OrderItems';
 import PriceDetails from '../../Cart&Checkout/CartComponents/PriceDetails';
+import * as Clipboard from 'expo-clipboard';
 
 // create a component
-const OrderDetails = () => {
+const OrderDetails = ({navigation}) => {
+
+    const copyToClipboard = () => {
+        const orderId = "#834982930-343";
+        Clipboard.setString(orderId);
+      };
+
     return (
         <View style={styles.container}>
                <Header title="Orders Detail" />
@@ -31,7 +38,7 @@ const OrderDetails = () => {
                          <Image source={require('../../../../assets/account/star.png')} style={{width:rw(6), height:rw(6)}} />
                          <Text style={{fontWeight:"bold"}}>Loved It? Let Us Know!</Text>
                        </View>
-                       <TouchableOpacity style={{width:rw(25), paddingVertical:rh(1), borderRadius:10, backgroundColor:"#FF3131"}}>
+                       <TouchableOpacity onPress={()=>navigation.navigate('RatingAndReviews')} style={{width:rw(25), paddingVertical:rh(1), borderRadius:10, backgroundColor:"#FF3131"}}>
                           <Text style={{color:"white", textAlign:"center"}}>Rate Now</Text>
                        </TouchableOpacity>
                     </View>
@@ -66,7 +73,9 @@ const OrderDetails = () => {
                                 <Text style={{color:"#717171"}}>Order id:</Text>
                                 <View style={{flexDirection:"row", gap:rw(2)}}>
                                    <Text style={{color:"#717171", fontWeight:"bold"}}>#834982930-343</Text>
-                                    <MaterialIcons name="content-copy" size={15}/>
+                                    <TouchableOpacity onPress={copyToClipboard}>
+                                       <MaterialIcons name="content-copy" size={15}/>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                             <View>
