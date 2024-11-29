@@ -27,6 +27,7 @@ import ProductDetail from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductDe
 import AllRating from '../screens/B2C/HomeAndBrowse/HomeComponents/AllRating';
 import OrderDetails from '../screens/B2C/Accounts/AccountComponents/OrdersDetail';
 import RatingAndReviews from '../screens/B2C/Accounts/AccountComponents/RatingAndReviews';
+import EditAddress from '../screens/B2C/Accounts/AccountComponents/EditAddress';
 
 const Stack = createNativeStackNavigator();
 
@@ -65,6 +66,8 @@ const StackNavigation = () => {
         <Stack.Screen name="AllRating" component={AllRating} options={{ headerShown: false }} />
         <Stack.Screen name="OrderDetails" component={OrderDetails} options={{ headerShown: false }} />
         <Stack.Screen name="RatingAndReviews" component={RatingAndReviews} options={{ headerShown: false }} />
+        <Stack.Screen name="EditAddress" component={EditAddress} options={{ headerShown: false }} />
+
      </Stack.Navigator>
     );
 };

@@ -49,7 +49,6 @@ const CollapsibleReviewCard = ({ imageUri, title, onSubmit }) => {
                 placeholder="Tell Us What You Think"
                 style={styles.textInput}
                 multiline
-                autoFocus={true}
             />
 
           {/* Add Image Button */}
@@ -114,7 +113,6 @@ const styles = StyleSheet.create({
     borderColor: "#FF7A7A",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10,
   },
   addImageText: {
     color: "#FF7A7A",

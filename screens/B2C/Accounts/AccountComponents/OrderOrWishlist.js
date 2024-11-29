@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         marginTop:rh(3),
         borderRadius:10,
-        borderWidth:2,
+        borderWidth:rw(0.5),
         borderColor:"#FFFFFF",
         backgroundColor: '#FFF4E6',
-        padding:2,
+        padding:rw(0.5),
     },
     btnContainer:{
         justifyContent:"center",

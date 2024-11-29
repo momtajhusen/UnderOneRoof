@@ -4,14 +4,15 @@ import { TextInput, View, Text, StyleSheet } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 
 
-const TextInputField = ({ label, value, onChange, placeholder, keyboardType = 'default' }) => (
+const TextInputField = ({ label, value, style, onChange, placeholder, keyboardType = 'default' }) => (
   <View style={styles.container}>
     {label && <Text style={styles.label}>{label}</Text>}
     <TextInput
-      style={styles.input}
+      style={[styles.input, {style}]}
       value={value}
       onChangeText={onChange}
       placeholder={placeholder}
+      placeholderTextColor="#717171"
       keyboardType={keyboardType}
     />
   </View>
@@ -19,7 +20,7 @@ const TextInputField = ({ label, value, onChange, placeholder, keyboardType = 'd
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
+    marginBottom: rh(1),
   },
   label: {
     fontSize: 16,
@@ -32,7 +33,8 @@ const styles = StyleSheet.create({
     paddingHorizontal:rw(4),
     height:rh(5.5),
     borderRadius: 8,
-    fontSize:rf(2)
+    fontSize:rf(2),
+    backgroundColor:"#FFFFFF"
   },
 });
 

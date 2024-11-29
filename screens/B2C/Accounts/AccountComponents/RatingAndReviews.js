@@ -10,11 +10,11 @@ const RatingAndReviews = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleSubmit = () => {
-        setModalVisible(true); // Open the modal
+        setModalVisible(true);  
     };
 
     const handleModalClose = () => {
-        setModalVisible(false); // Close the modal
+        setModalVisible(false);  
     };
 
     return (

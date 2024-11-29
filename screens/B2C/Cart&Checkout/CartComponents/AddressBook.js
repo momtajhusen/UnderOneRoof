@@ -16,7 +16,7 @@ const AddressBook = ({navigation}) => {
             />
  
             <View style={styles.container}>
-                <TouchableOpacity style={styles.addaddressbtn}>
+                <TouchableOpacity onPress={()=>navigation.navigate('EditAddress')} style={styles.addaddressbtn}>
                     <MaterialIcons name="add" size={rf(4)} style={{ fontSize: rf(3), color:"#FF3131" }} />
                     <Text style={{color:"#FF3131", fontWeight:"bold", marginLeft:rw(1)}}>Add Address</Text>
                 </TouchableOpacity>
