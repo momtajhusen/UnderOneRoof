@@ -2,14 +2,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
-import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Header from '../../../../components/header';
 
 // create a component
-const AccountMenuList = () => {
+const AccountMenuList = ({navigation}) => {
 
-  const navigation = useNavigation();
 
     return (
         <View>
@@ -21,7 +19,7 @@ const AccountMenuList = () => {
                </View> 
 
                <View style={{gap:rh(1)}}>
-                    <TouchableOpacity style={{flexDirection:"row", backgroundColor:"white", borderRadius:10, padding:10, alignItems:"center", justifyContent:"space-between"}}>
+                    <TouchableOpacity onPress={()=>navigation.navigate('FAQs')} style={{flexDirection:"row", backgroundColor:"white", borderRadius:10, padding:10, alignItems:"center", justifyContent:"space-between"}}>
                        <View style={{flexDirection:"row", alignItems:"center"}}>
                             <MaterialIcons style={{color:"#FF9100", marginRight:rw(2)}} name="contact-support" size={40} color="black" />
                             <View>

@@ -1,6 +1,6 @@
 // Import libraries
 import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import Header from "../../../../components/header";
 import { rw, rh, rf } from "../../../../Service/responsive";
 import TextInputField from "../../../../components/Inputs/TextInputField";
@@ -16,7 +16,7 @@ const EditAddress = () => {
   ];
 
   const renderSaveOption = ({ item }) => (
-    <View
+    <TouchableOpacity
       style={[
         styles.saveOptionContainer,
         { backgroundColor: item.isActive ? "#272727" : "#FFFFFF" },
@@ -30,7 +30,7 @@ const EditAddress = () => {
       >
         {item.label}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     gap: rw(2),
   },
   saveOptionContainer: {
-    paddingVertical: rw(3),
-    paddingHorizontal: rw(5),
+    paddingVertical: rw(2),
+    paddingHorizontal: rw(3),
     borderRadius: 10,
   },
   saveOptionText: {
