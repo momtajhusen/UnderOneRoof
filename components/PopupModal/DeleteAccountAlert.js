@@ -27,7 +27,7 @@ const DeleteAccountAlert = ({ isModalVisible, toggleModal }) => {
           <Text style={styles.text}>Are you sure?</Text>
           <Text style={{fontSize:rf(2), textAlign:"center", color:"#717171"}}>You want to delete your account permanently.</Text>
 
-          <Text style={{fontSize:rf(2), textAlign:"center", color:"#717171", marginTop:rh(2)}}>All your data, including account information and preferences, will be permanently removed.</Text>
+          <Text style={{fontSize:rf(2), width:rw(75), textAlign:"center", color:"#717171", marginTop:rh(2), fontStyle: "italic"}}>All your data, including account information and preferences, will be permanently removed.</Text>
 
 
 
@@ -108,12 +108,12 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: '#333',
-    fontSize: rf(2), // Responsive font size
+    fontSize: rf(1.8), // Responsive font size
     fontWeight:"bold",
   },
   logoutButtonText: {
     color: '#ffffff',
-    fontSize: rf(2),
+    fontSize: rf(1.8),
     fontWeight:"bold"
   },
 });

@@ -32,7 +32,7 @@ const AccountMenuList = () => {
         <IconBtnList icon={require('../../../../assets/account/location.png')} onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
         <IconBtnList icon={require('../../../../assets/account/HelpCircle.png')} onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
         <IconBtnList icon={require('../../../../assets/account/Group26.png')} onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
-        <IconBtnList icon={require('../../../../assets/account/Group.png')} onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
+        <IconBtnList iconImageStyle={{width:rw(4), height:rw(5)}} icon={require('../../../../assets/account/Group.png')} onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
         
         {/* Delete Account Button */}
         <IconBtnList icon={require('../../../../assets/account/user-remove.png')}text="Delete Account" onPress={toggleDeleteAccountAlertModal} />
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     marginTop: rh(1.5),
   },
   headerText: {
-    fontSize: rw(4.5),
+    fontSize: rw(4),
     fontWeight: "bold",
     marginLeft: rw(3),
   },

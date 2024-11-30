@@ -20,18 +20,18 @@ import ItemsList from '../../../../components/List/ItemsList';
 
   // Dummy data for side navigation
   const categories = [
-    { id: 1, name: 'Dry Fruits', icon: require('../../../../assets/image5.png') },
-    { id: 2, name: 'Spices', icon: require('../../../../assets/items/image2.png') },
-    { id: 3, name: 'Kesar', icon: require('../../../../assets/items/image1.png') },
-    { id: 4, name: 'Energy Bars', icon: require('../../../../assets/items/image5.png') },
-    { id: 5, name: 'Edible Oils', icon: require('../../../../assets/items/image42.png') },
-    { id: 6, name: 'Dry Fruits', icon: require('../../../../assets/image5.png') },
-    { id: 7, name: 'Spices', icon: require('../../../../assets/items/image2.png') },
-    { id: 8, name: 'Kesar', icon: require('../../../../assets/items/image1.png') },
-    { id: 9, name: 'Energy Bars', icon: require('../../../../assets/items/image5.png') },
-    { id: 10, name: 'Edible Oils', icon: require('../../../../assets/items/image42.png') },
-    { id: 11, name: 'Dry Fruits', icon: require('../../../../assets/image5.png') },
-    { id: 12, name: 'Spices', icon: require('../../../../assets/items/image2.png') },
+    { id: 1, name: 'Dry Fruits', icon: require('../../../../assets/CategorIcon/image1.png') },
+    { id: 2, name: 'Spices', icon: require('../../../../assets/CategorIcon/image2.png') },
+    { id: 3, name: 'Kesar', icon: require('../../../../assets/CategorIcon/image3.png') },
+    { id: 4, name: 'Energy Bars', icon: require('../../../../assets/CategorIcon/image4.png') },
+    { id: 5, name: 'Edible Oils', icon: require('../../../../assets/CategorIcon/image5.png') },
+    { id: 6, name: 'Dry Fruits', icon: require('../../../../assets/CategorIcon/image6.png') },
+    { id: 7, name: 'Spices', icon: require('../../../../assets/CategorIcon/image7.png') },
+    { id: 8, name: 'Kesar', icon: require('../../../../assets/CategorIcon/image1.png') },
+    { id: 9, name: 'Energy Bars', icon: require('../../../../assets/CategorIcon/image2.png') },
+    { id: 10, name: 'Edible Oils', icon: require('../../../../assets/CategorIcon/image3.png') },
+    { id: 11, name: 'Dry Fruits', icon: require('../../../../assets/CategorIcon/image4.png') },
+    { id: 12, name: 'Spices', icon: require('../../../../assets/CategorIcon/image5.png') },
   ];
 
   // Filter list array
@@ -86,12 +86,12 @@ import ItemsList from '../../../../components/List/ItemsList';
       rating: 5,
       likes: 22500,
       stock: 40,
-      image: require('../../../../assets/items/image1.png'),
+      image: require('../../../../assets/items/image3.png'),
       cartQuantity: 0,
       isWishlisted: false
     },
     {
-      id:3,
+      id:4,
       name: "Premium Roasted Almonds",
       weight: "500g",
       type: "Roasted",
@@ -101,12 +101,12 @@ import ItemsList from '../../../../components/List/ItemsList';
       rating: 5,
       likes: 22500,
       stock: 20,
-      image: require('../../../../assets/items/image1.png'),
+      image: require('../../../../assets/items/image4.png'),
       cartQuantity: 0,
       isWishlisted: false
     },
     {
-      id:4,
+      id:5,
       name: "Honey Almond Energy Bars",
       weight: "500g",
       type: "Natural",
@@ -116,12 +116,12 @@ import ItemsList from '../../../../components/List/ItemsList';
       rating: 5,
       likes: 22500,
       stock: 0,
-      image: require('../../../../assets/items/image2.png'),
+      image: require('../../../../assets/items/image1.png'),
       cartQuantity: 0,
       isWishlisted: false
     },
     {
-      id:5,
+      id:6,
       name: "Organic Green Tea",
       weight: "500g",
       type: "Organic",
@@ -176,10 +176,12 @@ const ProductListing = ({ route }) => {
             rightContent={
                 <View style={{flexDirection:"row", gap: rw(4)}}>
                   <TouchableOpacity>
-                      <MaterialIcons name="search" size={rf(3)} color="black" />
+                      {/* <MaterialIcons name="search" size={rf(3)} color="black" /> */}
+                      <Image source={require('../../../../assets/Search.png')} style={{width:rw(5.5), height:rw(5.5)}} />
                   </TouchableOpacity>
                   <TouchableOpacity>
-                      <MaterialCommunityIcons  name="cart-outline" size={rf(3)} color="black" />
+                      {/* <MaterialCommunityIcons  name="cart-outline" size={rf(3)} color="black" /> */}
+                      <Image source={require('../../../../assets/Cart.png')} style={{width:rw(5.5), height:rw(5.5)}} />
                   </TouchableOpacity>
                 </View>
             }
@@ -234,7 +236,7 @@ const ProductListing = ({ route }) => {
         {/* Product Section */}
         <View style={styles.productSection}>
           <View style={{ flexDirection: "row", gap:3, width:rw(70)}}>
-              <SortByBtn style={{width:rw(25)}} onPress={toggleModal} />
+              <SortByBtn style={{width:rw(25), backgroundColor:"#DFDFDF"}} onPress={toggleModal} />
               <View style={styles.filterContainer}>
               <FlatList
                 data={filters}
@@ -290,6 +292,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex: 1,
+    paddingVertical:rh(1)
   },
   sideContainer:{
     position:"relative",

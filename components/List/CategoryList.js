@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderRadius: rw(3),
         marginRight: rw(2),
-        marginBottom: rh(1),
+        marginBottom: rh(1.8),
         borderWidth:2,
         borderColor:"white",
     },

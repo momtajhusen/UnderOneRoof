@@ -2,21 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CategoryList from '../../../../components/List/CategoryList';
 import * as Animatable from 'react-native-animatable';
-import { rw } from '../../../../Service/responsive';
+import { rw, rf, rh } from '../../../../Service/responsive';
 
 
 const BestSellers = () => {
 
     // Categories array define karte hain
     const categories = [
-        { id: 1, image: require('../../../../assets/image5.png'), text: 'Dry Fruits' },
-        { id: 2, image: require('../../../../assets/items/image5.png'), text: 'Spices' },
-        { id: 3, image: require('../../../../assets/image5.png'), text: 'Kesar' },
-        { id: 4, image: require('../../../../assets/items/image5.png'), text: 'Spices' },
-        { id: 5, image: require('../../../../assets/image5.png'), text: 'Herbal Teas' },
-        { id: 6, image: require('../../../../assets/items/image5.png'), text: 'Herbal Teas' },
-        { id: 7, image: require('../../../../assets/image5.png'), text: 'Herbal Teas' },
-        { id: 8, image: require('../../../../assets/items/image5.png'), text: 'Herbal Teas' },
+        { id: 1, image: require('../../../../assets/CategorIcon/image1.png'), text: 'Dry Fruits' },
+        { id: 2, image: require('../../../../assets/CategorIcon/image2.png'), text: 'Spices' },
+        { id: 3, image: require('../../../../assets/CategorIcon/image3.png'), text: 'Kesar' },
+        { id: 4, image: require('../../../../assets/CategorIcon/image4.png'), text: 'Spices' },
+        { id: 5, image: require('../../../../assets/CategorIcon/image5.png'), text: 'Herbal Teas' },
+        { id: 6, image: require('../../../../assets/CategorIcon/image6.png'), text: 'Herbal Teas' },
+        { id: 7, image: require('../../../../assets/CategorIcon/image7.png'), text: 'Herbal Teas' },
+        { id: 8, image: require('../../../../assets/CategorIcon/image1.png'), text: 'Herbal Teas' },
     ];
 
     return (
@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
         paddingLeft:rw(5)
     },
     headerText: {
-        fontSize: 20,
+        fontSize: rf(2),
         fontWeight: 'bold',
         marginBottom: rw(2),
-        marginHorizontal:rw(2),
+        // marginHorizontal:rw(2),
     },
     categoryListContainer: {
         flexDirection: 'row',

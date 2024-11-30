@@ -9,11 +9,18 @@ import BestSellers from './HomeComponents/BestSellers';
 import ShopByCategory from './HomeComponents/ShopByCategory';
 import RefreshYourDay from './HomeComponents/RefreshYourDay';
 import * as Animatable from 'react-native-animatable';
+import { useFocusEffect } from "@react-navigation/native";
+
 
 const HomeScreen = () => {
+
+  useFocusEffect(() => {
+    StatusBar.setBackgroundColor("#FF6D6D");
+  });
+
   return (
     <ScrollView>
-     {/* <StatusBar barStyle="dark-content" backgroundColor="#FF6D6D" /> */}
+     <StatusBar barStyle="dark-content" backgroundColor="#FF6D6D" />
 
       <View style={styles.container}>
         {/* Header Section */}
@@ -26,12 +33,12 @@ const HomeScreen = () => {
           <View style={{position:"absolute", top:rh(4), zIndex:100}}>
             <Text style={styles.headerTitle}>Shop Your Daily Essentials</Text>
             <Text style={styles.headerSubtitle}>
-              From groceries to personal care, everything you need in one place.
+              From groceries to personal care, everything you {'\n'} need in one place.
             </Text>
           </View>
-          <Animatable.Image animation="fadeInUp" source={require('../../../assets/HeaderImage/image1.png')} style={styles.imageCup} resizeMode="cover" />
-          <Animatable.Image animation="fadeInRight" source={require('../../../assets/HeaderImage/Cheaseedsleaves.png')} style={{position:"absolute", right:rw(0), top:rh(4)}} resizeMode="cover" />
-          <Animatable.Image animation="fadeInLeft" source={require('../../../assets/HeaderImage/image4.png')} style={{position:"absolute", left:rw(-15), top:rh(-3)}} resizeMode="cover" />
+          <Animatable.Image animation="fadeInUp"  source={require('../../../assets/HeaderImage/image1.png')} style={styles.imageCup} resizeMode="cover" />
+          <Animatable.Image animation="fadeInRight"  source={require('../../../assets/HeaderImage/Cheaseedsleaves.png')} style={{position:"absolute", width:rw(25), height:rh(22), right:rw(0), top:rh(0)}}   />
+          <Image source={require('../../../assets/HeaderImage/image4.png')} style={{width:rw(25), height:rh(18), position:"absolute", left:rw(0), top:rh(0)}} resizeMode="cover" />
           <View style={{position:"absolute", bottom:rh(10)}}>
              <SearchDesigne />
           </View>
@@ -43,7 +50,7 @@ const HomeScreen = () => {
             <HomeSlider />
           </View>
           {/* Bestsellers Category Container */}
-          <View>
+          <View style={{marginTop:rh(2)}}>
             <BestSellers />
           </View>
           {/* Shop By Category Container */}
@@ -79,13 +86,13 @@ const styles = StyleSheet.create({
     paddingVertical: rh(2),
   },
   headerTitle: {
-    fontSize: rf(3),
+    fontSize: rf(2.5),
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
   },
   headerSubtitle: {
-    fontSize: rf(2),
+    fontSize: rf(1.5),
     color: '#fff',
     textAlign: 'center',
     marginTop: rh(1),

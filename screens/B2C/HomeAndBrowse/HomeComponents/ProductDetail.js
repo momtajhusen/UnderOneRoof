@@ -32,9 +32,11 @@ const ProductDetail = ({ route, navigation }) => {
   
 
   const images = [
-    require('../../../../assets/items/image2.png'),
     require('../../../../assets/items/image1.png'),
     require('../../../../assets/items/image2.png'),
+    require('../../../../assets/items/image3.png'),
+    require('../../../../assets/items/image4.png'),
+    require('../../../../assets/items/image5.png'),
   ];
 
   const reviews = [
@@ -82,11 +84,7 @@ const ProductDetail = ({ route, navigation }) => {
         rightContent={
           <View style={{ flexDirection: 'row', gap: rw(4) }}>
             <TouchableOpacity>
-              <MaterialCommunityIcons
-                name="cart-outline"
-                size={rf(3.5)}
-                color="black"
-              />
+              <Image source={require('../../../../assets/Cart.png')} style={{width:rw(5.5), height:rw(5.5)}} />
             </TouchableOpacity>
           </View>
         }

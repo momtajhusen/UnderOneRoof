@@ -10,6 +10,7 @@ const SimilarProducts = () => {
     // Items List array define
     const productList = [
         {
+            id:1,
             name: "Premium Roasted Almonds",
             weight: "500g",
             type: "Roasted",
@@ -21,6 +22,7 @@ const SimilarProducts = () => {
             image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
+            id:2,
             name: "Honey Almond Energy Bars",
             weight: "500g",
             type: "Natural",
@@ -32,6 +34,7 @@ const SimilarProducts = () => {
             image: require('../../../../assets/items/image2.png'), // Corrected path
         },
         {
+            id:3,
             name: "Organic Green Tea",
             weight: "500g",
             type: "Organic",
@@ -43,6 +46,7 @@ const SimilarProducts = () => {
             image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
+            id:4,
             name: "Premium Roasted Almonds",
             weight: "500g",
             type: "Roasted",
@@ -54,6 +58,7 @@ const SimilarProducts = () => {
             image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
+            id:5,
             name: "Honey Almond Energy Bars",
             weight: "500g",
             type: "Natural",
@@ -65,6 +70,7 @@ const SimilarProducts = () => {
             image: require('../../../../assets/items/image2.png'), // Corrected path
         },
         {
+            id:6,
             name: "Organic Green Tea",
             weight: "500g",
             type: "Organic",

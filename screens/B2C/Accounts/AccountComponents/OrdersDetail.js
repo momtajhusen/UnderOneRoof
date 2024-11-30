@@ -66,30 +66,31 @@ const OrderDetails = ({navigation}) => {
                     {/* Order Summary  */}
                     <View style={{backgroundColor:"white", padding:rw(3), borderRadius:10, marginBottom:rh(1)}}>
                         <View>
-                            <Text style={{fontWeight:"600", fontSize:rf(2.4)}}>Order Summary</Text>
+                            <Text style={{fontWeight:"600", fontSize:rf(2)}}>Order Summary</Text>
                         </View>
-                        <View style={{gap:rh(2)}}>
+                        <View style={{gap:rh(2), marginTop:rh(1.5)}}>
                             <View>
                                 <Text style={{color:"#717171"}}>Order id:</Text>
-                                <View style={{flexDirection:"row", gap:rw(2)}}>
-                                   <Text style={{color:"#717171", fontWeight:"bold"}}>#834982930-343</Text>
+                                <View style={{flexDirection:"row", gap:rw(2), alignItems:"center"}}>
+                                   <Text style={{color:"#272727", fontWeight:"400"}}>#834982930-343</Text>
                                     <TouchableOpacity onPress={copyToClipboard}>
-                                       <MaterialIcons name="content-copy" size={15}/>
+                                       {/* <MaterialIcons name="content-copy" size={15}/> */}
+                                       <Image source={require('../../../../assets/CopyIcon.png')} style={{width:rw(4), height:rw(4)}} />
                                     </TouchableOpacity>
                                 </View>
                             </View>
                             <View>
                                 <Text style={{color:"#717171"}}>Order Date:</Text>
-                                <Text style={{color:"#717171", fontWeight:"bold"}}>19 October, 2024</Text>
+                                <Text style={{color:"#272727", fontWeight:"400"}}>19 October, 2024</Text>
                             </View>
                             <View>
                                 <Text style={{color:"#717171"}}>Delivery To:</Text>
-                                <Text style={{color:"#717171", fontWeight:"bold"}}>Aman Shukla,
+                                <Text style={{color:"#272727", fontWeight:"400"}}>Aman Shukla,
                                 A-123, Green Park Main, Near Hauz Khas Metro Station, New Delhi - 110016, India.</Text>
                             </View>
                             <View>
                                 <Text style={{color:"#717171"}}>Delivery Date:</Text>
-                                <Text style={{color:"#717171", fontWeight:"bold"}}>24 October, 2024</Text>
+                                <Text style={{color:"#272727", fontWeight:"400"}}>24 October, 2024</Text>
                             </View>
                         </View>
                     </View>

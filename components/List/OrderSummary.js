@@ -17,12 +17,12 @@ const OrderSummary = () => {
                 </View>
                 <TouchableOpacity style={{flexDirection:"row", padding:rw(1.5), borderRadius:5, gap:rw(2), alignItems:"center", borderWidth:1, borderColor:"#DFDFDF", width:rw(40) }}>
                 <Text style={{fontWeight:"600"}}>Download Invoice</Text>
-                <MaterialIcons name="download" size={20} style={styles.starIcon}/>
+                <Image source={require('../../assets/download.png')} style={{width:rw(5), height:rw(5)}} />
                 </TouchableOpacity>
             </View>
             <View>
               <TouchableOpacity>
-                 <Image source={require('../../assets/account/trash.png')} style={{width:rw(6), height:rw(6)}} />
+                 <Image source={require('../../assets/account/trash.png')} style={{width:rw(5), height:rw(5)}} />
               </TouchableOpacity>
             </View>
 

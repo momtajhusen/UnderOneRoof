@@ -1,22 +1,29 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Image, TouchableOpacity} from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import UserDetails from './userDetails';
 import PriceDetails from './PriceDetails';
 import { useNavigation } from '@react-navigation/native';
 import OrderItems from '../../../../components/List/OrderItems';
-
+import { useFocusEffect } from "@react-navigation/native";
 
 
 // create a component
 const OrderPlaced = () => {
 
+   useFocusEffect(() => {
+      StatusBar.setBackgroundColor("green");
+    });
+
   const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
+            {/* StatusBar */}
+            <StatusBar barStyle="dark-content" backgroundColor="green" />
+
           <ScrollView>
              <View style={styles.successContainer}>
                  <TouchableOpacity onPress={() => navigation.goBack()} style={{paddingHorizontal: rw(4)}}>
@@ -43,7 +50,7 @@ const OrderPlaced = () => {
                   </View>
 
                   <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
-                     <Image source={require('../../../../assets/FastTruckicon.png')} style={{width:rw(8)}} />
+                     <Image source={require('../../../../assets/FastTruckicon.png')} style={{width:rw(8), height:rh(3)}} />
                      <View style={{flexDirection:"row", alignItems:"center", gap:rw(2)}}> 
                         <Text>Estimated Delivery by</Text>
                         <Text style={{fontWeight:"bold"}}>24, October, 2024</Text>

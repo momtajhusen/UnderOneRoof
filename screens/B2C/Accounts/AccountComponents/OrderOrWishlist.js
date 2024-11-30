@@ -16,12 +16,12 @@ const OrderOrWishlist = () => {
         <View style={styles.container}>
             <TouchableOpacity onPress={()=>navigation.navigate('Orders')} style={styles.btnContainer}>
                {/* <MaterialIcons name="shopping-bag" size={rf(4)} style={{ fontSize: rf(3), color:"#272727" }} /> */}
-               <Image source={require('../../../../assets/bag-2.png')} style={{width:rw(7), height:rw(7)}} />
+               <Image source={require('../../../../assets/bag-2.png')} style={{width:rw(6), height:rw(6)}} />
                <Text style={{color:"#272727"}}>Orders</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>navigation.navigate('Wishlist')}  style={styles.btnContainer}>
               {/* <MaterialIcons name="favorite-border" size={rf(4)} style={{ fontSize: rf(3) }} /> */}
-              <Image source={require('../../../../assets/heart.png')} style={{width:rw(7), height:rw(7)}} />
+              <Image source={require('../../../../assets/heart.png')} style={{width:rw(6), height:rw(6)}} />
               <Text style={{color:"#272727"}}>Wishlist</Text>
             </TouchableOpacity>
         </View>

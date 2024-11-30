@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image } from 'react-native';
+import { Pressable, Image } from 'react-native';
 
 import HomeScreen from '../screens/B2C/HomeAndBrowse/HomeScreen';
 import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
@@ -35,116 +34,108 @@ const BottomNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen 
-        name="Home" 
-        component={HomeScreen} 
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ focused }) => (
             focused ? (
-              <Image 
-                source={require('../assets/navigation-icon/home-1.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/home-1.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             ) : (
-              <Image 
-                source={require('../assets/navigation-icon/home-2.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/home-2.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             )
-            // <MaterialIcons 
-            //   name={focused ? "home" : "home"} 
-            //   color={color} 
-            //   size={rf(3.5)} 
-            // />
           ),
-        }} 
+          tabBarButton: (props) => (
+            <Pressable {...props} android_ripple={null} />
+          ),
+        }}
       />
-      
-      <Tab.Screen 
-        name="Category" 
-        component={CategoryScreen} 
+
+      <Tab.Screen
+        name="Category"
+        component={CategoryScreen}
         options={{
           tabBarLabel: 'Category',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ focused }) => (
             focused ? (
-              <Image 
-                source={require('../assets/navigation-icon/category-1.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/category-1.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             ) : (
-              <Image 
-                source={require('../assets/navigation-icon/category-2.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/category-2.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             )
-            // <MaterialCommunityIcons 
-            //   name={focused ? "widgets" : "widgets-outline"} 
-            //   color={color} 
-            //   size={rf(3.5)} 
-            // />
           ),
-        }} 
+          tabBarButton: (props) => (
+            <Pressable {...props} android_ripple={null} />
+          ),
+        }}
       />
 
-      <Tab.Screen 
-        name="Cart" 
-        component={CartScreen} 
+      <Tab.Screen
+        name="Cart"
+        component={CartScreen}
         options={{
           tabBarLabel: 'Cart',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ focused }) => (
             focused ? (
-              <Image 
-                source={require('../assets/navigation-icon/cart-1.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/cart-1.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             ) : (
-              <Image 
-                source={require('../assets/navigation-icon/cart-2.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/cart-2.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             )
-            // <MaterialCommunityIcons 
-            //   name={focused ? "cart" : "cart-outline"} 
-            //   color={color} 
-            //   size={rf(3.5)} 
-            // />
           ),
-        }} 
+          tabBarButton: (props) => (
+            <Pressable {...props} android_ripple={null} />
+          ),
+        }}
       />
 
-      <Tab.Screen 
-        name="Account" 
-        component={AccountScreen} 
+      <Tab.Screen
+        name="Account"
+        component={AccountScreen}
         options={{
           tabBarLabel: 'Account',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ focused }) => (
             focused ? (
-              <Image 
-                source={require('../assets/navigation-icon/account-1.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/account-1.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             ) : (
-              <Image 
-                source={require('../assets/navigation-icon/account-2.png')} 
-                resizeMode="cover" 
-                style={{ width: rf(3.5), height: rf(3.5) }} 
+              <Image
+                source={require('../assets/navigation-icon/account-2.png')}
+                resizeMode="cover"
+                style={{ width: rf(3.5), height: rf(3.5) }}
               />
             )
-            // <MaterialCommunityIcons 
-            //   name={focused ? "account" : "account-outline"} 
-            //   color={color} 
-            //   size={rf(3.5)} 
-            // />
           ),
-        }} 
+          tabBarButton: (props) => (
+            <Pressable {...props} android_ripple={null} />
+          ),
+        }}
       />
     </Tab.Navigator>
   );

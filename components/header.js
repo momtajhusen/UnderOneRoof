@@ -5,14 +5,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { rw, rh, rf } from '../Service/responsive';
+import { useFocusEffect } from "@react-navigation/native";
+
 
 // create a component
 const Header = ({ title = '', rightContent = null }) => {
+  
+  useFocusEffect(() => {
+    StatusBar.setBackgroundColor("#FADFDF");
+  });
+
   const navigation = useNavigation();
 
   return (
     <LinearGradient
-      colors={['#FADFDF', '#F0F0F0']} // Gradient from red to white
+      colors={['#FADFDF', '#F0F0F0']}
       style={styles.gradientBackground}
     >
       {/* StatusBar */}
@@ -43,6 +50,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingTop: rh(1), // Add padding for StatusBar
     paddingBottom: rh(2),
+    borderBottomWidth:1,
+    borderColor:"#E9E9E9",
   },
   backHeader: {
     flexDirection: 'row',
@@ -52,9 +61,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     marginLeft: rw(2),
-    fontSize: rw(4.5),
+    fontSize: rw(4),
     fontWeight: 'bold',
-    color: 'black',
+    color: '#272727',
   },
 });
 

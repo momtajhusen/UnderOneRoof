@@ -2,9 +2,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
+import { useNavigation } from '@react-navigation/native';
+
 
 // Create a component
 const PriceDetails = ({style, promoCode="true", saveMessage="true"}) => {
+
+  const navigation = useNavigation();
+
+
             return (
             <View style={[styles.container, {style}]}>
             {promoCode && (
@@ -21,6 +27,7 @@ const PriceDetails = ({style, promoCode="true", saveMessage="true"}) => {
                             width: rw(30), 
                             justifyContent: "center"
                         }}
+                        onPress={()=>navigation.navigate('RatingAndReviews')}
                     >
                         <Text style={{ textAlign: "center", color: "white" }}>Apply Code</Text>
                     </TouchableOpacity>
@@ -58,9 +65,6 @@ const PriceDetails = ({style, promoCode="true", saveMessage="true"}) => {
                 <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹350</Text> in this order</Text>
                 </View>
             )}
-
-
-
 
         </View>
     );
@@ -143,6 +147,3 @@ const styles = StyleSheet.create({
 });
 
 export default PriceDetails;
-
-// savedMessageContainer  container right me bahar nikal raha hai 
-// container ke barabar cha hiye width but lift aur right se bahar nahi nikal na cha hiye

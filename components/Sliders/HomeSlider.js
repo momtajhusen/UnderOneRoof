@@ -8,10 +8,10 @@ const { width: screenWidth } = Dimensions.get('window');
 const HomeSlider = () => {
     const sliderData = [
         require('../../assets/Slider/Banner1.png'),
-        require('../../assets/Slider/Banner2.png'),
-        require('../../assets/Slider/Banner3.png'),
-        require('../../assets/Slider/Banner4.png'),
-        require('../../assets/Slider/Banner5.png'),
+        require('../../assets/Slider/Banner1.png'),
+        require('../../assets/Slider/Banner1.png'),
+        require('../../assets/Slider/Banner1.png'),
+        require('../../assets/Slider/Banner1.png'),
     ];
 
     const renderItem = ({ item }) => (

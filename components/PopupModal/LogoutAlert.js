@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     height: rw(18),
   },
   text: {
-    fontSize: rf(2.5), // Responsive font size
+    fontSize: rf(2), // Responsive font size
     color: '#333333',
     textAlign: 'center',
     marginVertical: rh(1), // Vertical margin based on screen height
@@ -102,12 +102,12 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: '#333',
-    fontSize: rf(2), // Responsive font size
+    fontSize: rf(1.8), // Responsive font size
     fontWeight:"bold",
   },
   logoutButtonText: {
     color: '#ffffff',
-    fontSize: rf(2),
+    fontSize: rf(1.8),
     fontWeight:"bold"
   },
 });

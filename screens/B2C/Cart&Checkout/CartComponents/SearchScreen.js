@@ -26,24 +26,24 @@ const PrivacyPolicy = ({navigation}) => {
                 {/* Items container */}
                 <View style={styles.itemsContainer}>
                     <View style={styles.searhedContainer}>
-                        <Image style={styles.image} source={require('../../../../assets/items/image5.png')} />
+                        <Image style={styles.image} source={require('../../../../assets/SearchItemsIcon/image1.png')} />
                         <Text>Edible Oils</Text>
                     </View>
                     <View style={styles.searhedContainer}>
-                        <Image style={styles.image} source={require('../../../../assets/items/image42.png')} />
+                        <Image style={styles.image} source={require('../../../../assets/SearchItemsIcon/image2.png')} />
                         <Text>Dry Fruits</Text>
                     </View>
                     <View style={styles.searhedContainer}>
-                        <Image style={styles.image} source={require('../../../../assets/items/image1.png')} />
+                        <Image style={styles.image} source={require('../../../../assets/SearchItemsIcon/image3.png')} />
                         <Text>Spices</Text>
                     </View>
                     <View style={styles.searhedContainer}>
-                        <Image style={styles.image} source={require('../../../../assets/items/image1.png')} />
+                        <Image style={styles.image} source={require('../../../../assets/SearchItemsIcon/image1.png')} />
                         <Text>Snacks</Text>
                     </View>
                     <View style={styles.searhedContainer}>
-                        <Image style={styles.image} source={require('../../../../assets/items/image1.png')} />
-                        <Text>Beverages sdsdsd</Text>
+                        <Image style={styles.image} source={require('../../../../assets/SearchItemsIcon/image2.png')} />
+                        <Text>Beverages</Text>
                     </View>
                 </View>
             </View>
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: rw(1.5),
         paddingVertical: rh(1),
         borderRadius: 10,
-        marginBottom: rh(1), // Adds space between rows
     },
     image: {
         width: rw(8),

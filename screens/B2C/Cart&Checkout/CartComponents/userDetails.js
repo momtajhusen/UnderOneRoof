@@ -1,6 +1,6 @@
 // import libraries
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
@@ -14,7 +14,7 @@ const UserDetails = ({type}) => {
         <TouchableOpacity  disabled={type === "show"} style={styles.container}>
             <View style={styles.headerRow}>
                 <View style={styles.locationContainer}>
-                    <MaterialIcons name="fmd-good" size={rf(4)} color="#FF3131" style={styles.locationIcon} />
+                    <Image source={require('../../../../assets/location-tick.png')} style={{width:rw(6), height:rw(6), marginRight:rw(2)}} />
                     <Text style={{fontWeight:"bold", marginRight:rw(1)}}>Delivery To:</Text>
                     <Text style={styles.locationText}>Home</Text>
                 </View>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     },
     changeText: {
         color: "#FF3131",
-        fontWeight: "bold",
+        fontWeight: "500",
         fontSize: rf(2),
     },
     detailsContainer: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     },
     userName: {
         fontWeight: "bold",
-        fontSize: rf(2.2),
+        fontSize: rf(2),
         color: "#333",
         marginBottom: rh(0.5),
     },

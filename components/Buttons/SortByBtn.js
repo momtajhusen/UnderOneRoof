@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../Service/responsive';
 
@@ -9,7 +9,7 @@ const SortByBtn = ({onPress, style}) => {
 
     return (
         <TouchableOpacity onPress={onPress} style={[styles.shortByBtn, style]}>
-            <MaterialIcons name="swap-vert" size={25} color="black" />
+            <Image source={require('../../assets/Filter.png')}  style={{width:rw(5), height:rw(5)}}/>
             <Text style={{textAlign:"center"}}>Sort</Text>
        </TouchableOpacity>  
     );
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
         borderColor:"#DFDFDF",
         borderRadius:10,
         backgroundColor:"white",
+        gap:rw(1)
     }
 });
 

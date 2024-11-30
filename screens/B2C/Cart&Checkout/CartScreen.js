@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
 import * as Animatable from 'react-native-animatable';
@@ -10,7 +10,6 @@ import SimilarProducts from './CartComponents/SimilarProducts';
 import Header from '../../../components/header';
 import ProceedDetails from './CartComponents/ProceedDetails';
 import { useNavigation } from '@react-navigation/native';
-
 
 const cartItemsData = [
     // Sample cart data
@@ -65,7 +64,8 @@ const CartScreen = ({ navigation }) => {
                 rightContent={
                     <View style={{ flexDirection: "row", gap: rw(4) }}>
                         <TouchableOpacity>
-                            <MaterialIcons name="search" size={rf(3)} color="black" />
+                            {/* <MaterialIcons name="search" size={rf(3)} color="black" /> */}
+                           <Image source={require('../../../assets/Search.png')} style={{width:rw(5.5), height:rw(5.5)}} />
                         </TouchableOpacity>
                     </View>
                 }

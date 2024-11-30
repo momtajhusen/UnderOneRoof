@@ -103,6 +103,7 @@ const Checkout = ({navigation}) => {
                                     onIncrease={() => handleIncrease(item.id)}
                                     onDecrease={() => handleDecrease(item.id)}
                                     onRemove={() => handleRemove(item.id)}
+                                    deleteIconStyle={{marginRight:rw(4)}}
                                 />
                             </Animatable.View>
                         )}

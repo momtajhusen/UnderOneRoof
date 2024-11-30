@@ -1,7 +1,7 @@
 //import liraries
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { rw } from '../../../../Service/responsive';
+import { rw, rf, rh } from '../../../../Service/responsive';
 import ItemsList from '../../../../components/List/ItemsList';
 
 // create a component
@@ -10,6 +10,7 @@ const RefreshYourDay = () => {
     // Items List array define
     const productList = [
         {
+            id:1,
             name: "Premium Roasted Almonds",
             weight: "500g",
             type: "Roasted",
@@ -21,6 +22,7 @@ const RefreshYourDay = () => {
             image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
+            id:2,
             name: "Honey Almond Energy Bars",
             weight: "500g",
             type: "Natural",
@@ -29,9 +31,10 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../../assets/items/image2.png'), // Corrected path
+            image: require('../../../../assets/items/image3.png'), // Corrected path
         },
         {
+            id:3,
             name: "Organic Green Tea",
             weight: "500g",
             type: "Organic",
@@ -40,9 +43,10 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../../assets/items/image1.png'), // Corrected path
+            image: require('../../../../assets/items/image2.png'), // Corrected path
         },
         {
+            id:4,
             name: "Premium Roasted Almonds",
             weight: "500g",
             type: "Roasted",
@@ -51,9 +55,10 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../../assets/items/image1.png'), // Corrected path
+            image: require('../../../../assets/items/image4.png'), // Corrected path
         },
         {
+            id:5,
             name: "Honey Almond Energy Bars",
             weight: "500g",
             type: "Natural",
@@ -62,9 +67,10 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../../assets/items/image2.png'), // Corrected path
+            image: require('../../../../assets/items/image1.png'), // Corrected path
         },
         {
+            id:6,
             name: "Organic Green Tea",
             weight: "500g",
             type: "Organic",
@@ -73,7 +79,7 @@ const RefreshYourDay = () => {
             discount: "25% OFF",
             rating: 5,
             likes: 22500,
-            image: require('../../../../assets/items/image1.png'), // Corrected path
+            image: require('../../../../assets/items/image2.png'), // Corrected path
         }
     ];
 
@@ -93,7 +99,7 @@ export default RefreshYourDay;
 
 const styles = StyleSheet.create({
     headerText: {
-        fontSize: 20,
+        fontSize: rf(2),
         fontWeight: 'bold',
         marginBottom: rw(2),
         marginLeft: rw(2),
