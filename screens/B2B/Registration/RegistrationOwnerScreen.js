@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
-import Checkbox from 'expo-checkbox'; // Importing Expo Checkbox
+import Checkbox from 'expo-checkbox'; 
 import Header from '../../../components/header';
 import { rw, rh, rf } from '../../../Service/responsive';
 import LinearStepIndicator from '../../../components/Stepper/LinearIndicatorStepper';
 import TextInputField from '../../../components/Inputs/TextInputField';
 
-const RegistrationOwnerScreen = () => {
+const RegistrationOwnerScreen = ({navigation}) => {
     const [selectedBusinessTypes, setSelectedBusinessTypes] = useState([]);
 
     // List of business types
@@ -94,7 +94,7 @@ const RegistrationOwnerScreen = () => {
                                         onValueChange={() => toggleSelection(item)}
                                         color={
                                             selectedBusinessTypes.includes(item)
-                                                ? '#4630EB' // Checked color
+                                                ? '#FF3131' // Checked color
                                                 : undefined // Default color
                                         }
                                         style={{ borderRadius: 5 }}
@@ -108,7 +108,7 @@ const RegistrationOwnerScreen = () => {
 
                 {/* Floating Button */}
                 <View style={{width:rw(100), padding:rw(2), paddingBottom:rh(2), backgroundColor:"white", position: 'absolute',bottom: rh(0)}}>
-                    <TouchableOpacity style={{width:"80%", alignSelf: 'center',backgroundColor: 'red',paddingVertical: rh(1.7), borderRadius: 10}}>
+                    <TouchableOpacity onPress={()=>navigation.navigate('OutletDetailsScreen')} style={{width:"90%", alignSelf: 'center',backgroundColor: 'red',paddingVertical: rh(1.7), borderRadius: 10}}>
                         <Text style={{fontWeight: 'bold',textAlign: 'center',color: 'white',}}>Next</Text>
                     </TouchableOpacity>
                 </View>

@@ -32,6 +32,8 @@ import FAQs from '../screens/B2C/Accounts/AccountComponents/FAQs';
 
 // B2B Navigation 
 import RegistrationOwnerScreen from '../screens/B2B/Registration/RegistrationOwnerScreen';
+import OutletDetailsScreen from '../screens/B2B/Registration/OutletDetailsScreen';
+import BusinessDetails from '../screens/B2B/Registration/BusinessDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -75,6 +77,12 @@ const StackNavigation = () => {
 
         {/*  B2B Navigation  */}
         <Stack.Screen name="RegistrationOwnerScreen" component={RegistrationOwnerScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="OutletDetailsScreen" component={OutletDetailsScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="BusinessDetails" component={BusinessDetails} options={{ headerShown: false }} />
+
+        
+
+
 
 
 
