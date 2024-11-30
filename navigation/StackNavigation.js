@@ -30,6 +30,9 @@ import RatingAndReviews from '../screens/B2C/Accounts/AccountComponents/RatingAn
 import EditAddress from '../screens/B2C/Accounts/AccountComponents/EditAddress';
 import FAQs from '../screens/B2C/Accounts/AccountComponents/FAQs';
 
+// B2B Navigation 
+import RegistrationOwnerScreen from '../screens/B2B/Registration/RegistrationOwnerScreen';
+
 const Stack = createNativeStackNavigator();
 
 // create a component
@@ -69,6 +72,10 @@ const StackNavigation = () => {
         <Stack.Screen name="RatingAndReviews" component={RatingAndReviews} options={{ headerShown: false }} />
         <Stack.Screen name="EditAddress" component={EditAddress} options={{ headerShown: false }} />
         <Stack.Screen name="FAQs" component={FAQs} options={{ headerShown: false }} />
+
+        {/*  B2B Navigation  */}
+        <Stack.Screen name="RegistrationOwnerScreen" component={RegistrationOwnerScreen} options={{ headerShown: false }} />
+
 
 
      </Stack.Navigator>

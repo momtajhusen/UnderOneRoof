@@ -11,13 +11,21 @@
     "splash": {
       "image": "./assets/auth/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "yellow"
+      "backgroundColor": "#FFFF00"
     },
     "runtimeVersion": "1.0.0",
     "updates": {
+      "enabled": true,
+      "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/d842f218-bd83-49bd-99f8-aaa5c67a4b3e"
     },
-    "android": {},
-    "ios": {}
+    "android": {
+      "package": "com.example.underoneroof",
+      "versionCode": 1
+    },
+    "ios": {
+      "bundleIdentifier": "com.example.underoneroof",
+      "buildNumber": "1.0.0"
+    }
   }
 }

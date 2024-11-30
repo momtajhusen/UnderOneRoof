@@ -46,7 +46,7 @@ const ShoppingMode = ({ navigation }) => {
         </TouchableOpacity> */}
 
         <TouchableOpacity 
-          onPress={()=> navigation.navigate('BottomNavigator')}
+          onPress={()=> navigation.navigate('RegistrationOwnerScreen')}
         >
             <LinearGradient
               colors={['#FFF0DC', '#FFFFFF']}  // Light beige to white gradient

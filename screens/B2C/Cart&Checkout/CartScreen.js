@@ -107,7 +107,7 @@ const CartScreen = ({ navigation }) => {
 
                 {/* Price Details */}
                 <View style={[styles.container, { marginBottom: rh(6) }]}>
-                    <PriceDetails />
+                    <PriceDetails style={{backgroundColor:"green"}} />
                 </View>
 
                 {/* Similar Products */}

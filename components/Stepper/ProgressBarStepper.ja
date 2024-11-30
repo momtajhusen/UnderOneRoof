@@ -1,0 +1,133 @@
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { rw, rh, rf } from '../Service/responsive';
+
+const Stepper = ({ steps, currentStep }) => {
+    return (
+        <View style={styles.container}>
+            {steps.map((step, index) => {
+                const isActive = index === currentStep;
+                const isCompleted = index < currentStep;
+
+                return (
+                    <View key={index} style={styles.stepContainer}>
+                        {/* Step Wrapper */}
+                        <View style={styles.stepWrapper}>
+                            {/* Step Circle */}
+                            <View
+                                style={[
+                                    styles.circle,
+                                    isActive && styles.activeCircle,
+                                    isCompleted && styles.completedCircle,
+                                ]}
+                            >
+                                {isCompleted ? (
+                                    <Text style={styles.checkMark}>✓</Text>
+                                ) : (
+                                    <View style={isActive ? styles.activeDot : styles.dot} />
+                                )}
+                            </View>
+
+                            {/* Line Between Steps */}
+                            {index < steps.length - 1 && (
+                                <View
+                                    style={[
+                                        styles.line,
+                                        isCompleted && styles.completedLine,
+                                    ]}
+                                />
+                            )}
+                        </View>
+
+                        {/* Step Label */}
+                        <Text
+                            style={[
+                                styles.label,
+                                isActive
+                                    ? styles.activeLabel
+                                    : isCompleted
+                                    ? styles.completedLabel
+                                    : styles.inactiveLabel,
+                            ]}
+                        >
+                            {step}
+                        </Text>
+                    </View>
+                );
+            })}
+        </View>
+    );
+};
+
+export default Stepper;
+
+// Styles
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTo: 20,
+        borderBottomWidth:1,
+        borderColor:"#ddd",
+        paddingBottom:rh(2)
+    },
+    stepContainer: {
+        alignItems: 'center',
+        flex: 1, // Distribute steps evenly
+    },
+    stepWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    circle: {
+        width: rw(8),
+        height: rw(8),
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#BFBFBF',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFFFFF',
+    },
+    activeCircle: {
+        borderColor: '#FF3131',
+    },
+    completedCircle: {
+        backgroundColor: '#FF3131',
+        borderColor: '#FF3131',
+    },
+    checkMark: {
+        color: '#FFFFFF',
+        fontSize: 12,
+    },
+    line: {
+        height: 2,
+        width: '100%',
+        backgroundColor: '#BFBFBF',
+        position: 'absolute',
+        top: '50%', // Align line to the center of the circle
+        left: 10, // Adjust start point (depends on circle width)
+        right: -10, // Adjust endpoint (depends on circle width)
+        zIndex: -1, // Send line behind the circles
+    },
+    completedLine: {
+        backgroundColor: '#66CC66',
+    },
+    label: {
+        marginTop: 3,
+        fontSize: rf(1.8),
+        textAlign: 'center',
+    },
+    activeLabel: {
+        color: '#FF3131',
+        fontWeight: 'bold',
+    },
+    completedLabel: {
+        color: '#66CC66',
+    },
+    inactiveLabel: {
+        color: '#BFBFBF',
+    },
+});
