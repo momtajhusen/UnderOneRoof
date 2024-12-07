@@ -20,6 +20,7 @@ import Checkout from '../screens/B2C/Cart&Checkout/CartComponents/Checkout';
 import OrderPlaced from '../screens/B2C/Cart&Checkout/CartComponents/OrderPlaced';
 import SearchScreen from '../screens/B2C/Cart&Checkout/CartComponents/SearchScreen';
 import Orders from '../screens/B2C/Accounts/AccountComponents/Orders';
+import B2BOrders from '../screens/B2B/Accounts/B2BOrders';
 import Wishlist from '../screens/B2C/Accounts/AccountComponents/Wishlist';
 import MyProfile from '../screens/B2C/Accounts/AccountComponents/MyProfile';
 import ProductListing from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductListing';
@@ -30,13 +31,24 @@ import OrderDetails from '../screens/B2C/Accounts/AccountComponents/OrdersDetail
 import RatingAndReviews from '../screens/B2C/Accounts/AccountComponents/RatingAndReviews';
 import EditAddress from '../screens/B2C/Accounts/AccountComponents/EditAddress';
 import FAQs from '../screens/B2C/Accounts/AccountComponents/FAQs';
-import B2BBottomNavigator from './B2BBottomNavigation'; 
-import B2BSearchScreen from '../screens/B2B/HomeAndBrowse/B2BSearchScreen';
+
+
 
 // B2B Navigation 
 import RegistrationOwnerScreen from '../screens/B2B/Registration/RegistrationOwnerScreen';
 import OutletDetailsScreen from '../screens/B2B/Registration/OutletDetailsScreen';
 import BusinessDetails from '../screens/B2B/Registration/BusinessDetails';
+import B2BAddressBook from '../screens/B2B/Accounts/B2BAddressBooksScreen';
+import B2BRatingAndReviews from '../screens/B2B/Accounts/B2BRatingsAndReviewsScreen';
+import B2BBottomNavigator from './B2BBottomNavigation'; 
+import B2BSearchScreen from '../screens/B2B/HomeAndBrowse/B2BSearchScreen';
+import B2BOrderDetails from '../screens/B2B/Accounts/B2BOrdersDetailsScreen';
+import B2BEditAddress from '../screens/B2B/Accounts/B2BAddressEditScreen';
+import B2BMyProfile from '../screens/B2B/Accounts/B2BMyProfileScreen';
+import B2BHelpAndSupport from '../screens/B2B/Accounts/B2BHelpAndSupportScreen';
+import B2BPrivacyPolicy from '../screens/B2B/Accounts/B2BPrivacyPolicy';
+import B2BTermsConditions from '../screens/B2B/Accounts/B2BTermsConditions';
+import B2BRequestProductsScreen from '../screens/B2B/Accounts/B2BRequestProductsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,8 +98,18 @@ const StackNavigation = () => {
         <Stack.Screen name="BusinessDetails" component={BusinessDetails} options={{ headerShown: false }} />
         <Stack.Screen name="B2BProductListing" component={B2BProductListing} options={{ headerShown: false }} />
         <Stack.Screen name="B2BSearchScreen" component={B2BSearchScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BOrders" component={B2BOrders} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BOrderDetails" component={B2BOrderDetails} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BAddressBook" component={B2BAddressBook} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BEditAddress" component={B2BEditAddress} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BRatingAndReviews" component={B2BRatingAndReviews} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BMyProfile" component={B2BMyProfile} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BHelpAndSupport" component={B2BHelpAndSupport} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BPrivacyPolicy" component={B2BPrivacyPolicy} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BTermsConditions" component={B2BTermsConditions} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BRequestProductsScreen" component={B2BRequestProductsScreen} options={{ headerShown: false }} />
 
-        
+    
      </Stack.Navigator>
     );
 };

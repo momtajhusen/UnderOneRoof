@@ -2,12 +2,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { rw, rh, rf } from '../../../../Service/responsive';
-import Header from '../../../../components/header';
+import { rw, rh, rf } from '../../../Service/responsive';
+import Header from '../../../components/header';
 
 
 // create a component
-const TermsConditions = ({navigation}) => {
+const B2BTermsConditions = ({navigation}) => {
     return (
         <View>
              <Header title="Terms & Conditions" />
@@ -45,7 +45,7 @@ const TermsConditions = ({navigation}) => {
 };
 
 //make this component available to the app
-export default TermsConditions;
+export default B2BTermsConditions;
 
 const styles = StyleSheet.create({
     container: {

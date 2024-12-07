@@ -5,9 +5,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../Service/responsive';
 
 // create a component
-const IconBtnList = ({icon, text, onPress, iconImageStyle}) => {
+const IconBtnList = ({icon, text, onPress, iconImageStyle, ListStyle}) => {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.container}>
+        <TouchableOpacity onPress={onPress} style={[styles.container, ListStyle]}>
             <View style={{flexDirection:"row", alignItems:"center"}}>
                 <View style={{ width:rw(10), height:rw(10), justifyContent:"center", alignItems:"center", fontSize: rf(3), marginRight:rw(2), backgroundColor:"#FFF4E6", borderRadius:100 }}>
                   <Image source={icon} style={[{ width: rw(5), height: rw(5) }, iconImageStyle]} />

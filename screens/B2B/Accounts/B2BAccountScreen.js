@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
-import OrderOrWishlist from './AccountComponents/OrderOrWishlist';
-import AccountMenuList from './AccountComponents/AccountMenuList';
+import OrderOrWishlist from '../../B2C/Accounts/AccountComponents/OrderOrWishlist';
+import B2BAccountMenuList from './ComponentSections/B2BAccountMenuList';
 import Header from '../../../components/header';
 
 // create a component
-const AccountScreen = ({navigation}) => {
+const B2BAccountScreen = ({navigation}) => {
     return (
         <View>
             {/* Back Container */}
@@ -24,13 +24,10 @@ const AccountScreen = ({navigation}) => {
                         <Text style={{fontSize:rf(2), color:"#717171"}}>+91-732899374</Text>
                     </View>
                 </View>
-                {/* Order Or Wishlist */}
-                <View>
-                    <OrderOrWishlist onPressOrder={()=>navigation.navigate('Orders')} onPressWishlist={()=>navigation.navigate('Wishlist')} />
-                </View>
+ 
                 {/* Account Menu List */}
                 <View>
-                    <AccountMenuList />
+                    <B2BAccountMenuList />
                      <Text style={{textAlign:"center", marginTop:rh(3), fontSize:rf(2), color:"#717171"}}>V5.54</Text>
                 </View>
 
@@ -40,7 +37,7 @@ const AccountScreen = ({navigation}) => {
 };
 
 //make this component available to the app
-export default AccountScreen;
+export default B2BAccountScreen;
 
 const styles = StyleSheet.create({
     container: {

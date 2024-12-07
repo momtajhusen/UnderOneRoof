@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { rw, rh, rf } from '../../../../Service/responsive';
-import Header from '../../../../components/header';
+import { rw, rh, rf } from '../../../Service/responsive';
+import Header from '../../../components/header';
 
 // create a component
-const PrivacyPolicy = ({navigation}) => {
+const B2BPrivacyPolicy = ({navigation}) => {
     return (
         <View>
              <Header title="Privacy Policy" />
@@ -45,7 +45,7 @@ const PrivacyPolicy = ({navigation}) => {
 };
 
 //make this component available to the app
-export default PrivacyPolicy;
+export default B2BPrivacyPolicy;
 
 const styles = StyleSheet.create({
     container: {

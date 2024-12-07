@@ -4,7 +4,7 @@ import { Pressable, Image } from 'react-native';
 
 import B2BHomeScreen from '../screens/B2B/HomeAndBrowse/B2BHomeSceeen';
 import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
-import AccountScreen from '../screens/B2C/Accounts/AccountScreen';
+import B2BAccountScreen from '../screens/B2B/Accounts/B2BAccountScreen';
 import B2BCategoryScreen from '../screens/B2B/HomeAndBrowse/B2BCategoryScreen';
 import { rw, rh, rf } from '../Service/responsive';
 
@@ -114,7 +114,7 @@ const B2BBottomNavigator = () => {
 
       <Tab.Screen
         name="Account"
-        component={AccountScreen}
+        component={B2BAccountScreen}
         options={{
           tabBarLabel: 'Account',
           tabBarIcon: ({ focused }) => (
