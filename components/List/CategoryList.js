@@ -5,12 +5,12 @@ import { rw, rh, rf } from '../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 
 // create a reusable component
-const CategoryItem = ({ id, image, text }) => {
+const CategoryItem = ({ id, image, text, onPress }) => {
 
   const navigation = useNavigation();
 
     return (
-        <TouchableOpacity  onPress={() => navigation.navigate('ProductListing', { selectCategoryId: id, selectCategoryName: text })} style={styles.listContainer}>
+        <TouchableOpacity  onPress={onPress} style={styles.listContainer}>
             <View style={styles.imageContainer}>
                 <Image source={image} style={styles.image} resizeMode="cover" />
             </View>

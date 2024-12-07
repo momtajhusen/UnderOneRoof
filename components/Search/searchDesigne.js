@@ -9,13 +9,13 @@ import { useNavigation } from '@react-navigation/native';
 
 
 // create a component
-const SearchDesigne = () => {
+const SearchDesigne = ({onPress}) => {
 
   const navigation = useNavigation();
 
     return (
         <View style={{position:"relative"}}>
-            <TouchableOpacity style={styles.search} onPress={()=>navigation.navigate('SearchScreen')}>
+            <TouchableOpacity style={styles.search} onPress={onPress}>
                 <View style={{flexDirection:"row", justifyContent:"start", alignItems:"center", paddingHorizontal: rw(2.5)  }}>
                     {/* <MaterialIcons name="search" size={rf(3.5)}/> */}
 

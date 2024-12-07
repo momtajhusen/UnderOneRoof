@@ -15,7 +15,7 @@ import LinearStepIndicator from '../../../components/Stepper/LinearIndicatorStep
 import TextInputField from '../../../components/Inputs/TextInputField';
 import FileUploadField from '../../../components/Inputs/FileUploadField';
 
-const BusinessDetails = () => {
+const BusinessDetails = ({navigation}) => {
   const [isGstRegistered, setIsGstRegistered] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -32,6 +32,11 @@ const BusinessDetails = () => {
     setIsModalVisible(false);
     // Add navigation logic if needed
     console.log('Continue Shopping');
+  };
+
+  const handleContinueShopping = () => {
+    handleModalClose();
+    navigation.navigate('B2BBottomNavigator'); 
   };
 
   return (
@@ -113,7 +118,7 @@ const BusinessDetails = () => {
             </Text>
             <TouchableOpacity
               style={styles.modalButton}
-              onPress={handleModalClose}
+              onPress={handleContinueShopping}
             >
               <Text style={styles.modalButtonText}>Continue Shopping</Text>
             </TouchableOpacity>

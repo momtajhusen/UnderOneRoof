@@ -18,6 +18,12 @@ const HomeScreen = () => {
     StatusBar.setBackgroundColor("#FF6D6D");
   });
 
+  const sliderData = [
+    require('../../../assets/Slider/Banner1.png'),
+    require('../../../assets/Slider/Banner1.png'),
+    require('../../../assets/Slider/Banner1.png'),
+  ];
+
   return (
     <ScrollView>
      <StatusBar barStyle="dark-content" backgroundColor="#FF6D6D" />
@@ -40,18 +46,18 @@ const HomeScreen = () => {
           <Animatable.Image animation="fadeInRight"  source={require('../../../assets/HeaderImage/Cheaseedsleaves.png')} style={{position:"absolute", width:rw(25), height:rh(22), right:rw(0), top:rh(0)}}   />
           <Image source={require('../../../assets/HeaderImage/image4.png')} style={{width:rw(25), height:rh(18), position:"absolute", left:rw(0), top:rh(0)}} resizeMode="cover" />
           <View style={{position:"absolute", bottom:rh(10)}}>
-             <SearchDesigne />
+             <SearchDesigne onPress={()=>navigation.navigate('SearchScreen')} />
           </View>
         </LinearGradient>
         {/* Slider & Categories Section */}
         <View style={styles.SliderCategoryContainer}>
           {/* Slider Container */}
           <View style={{ paddingTop: rh(5) }}>
-            <HomeSlider />
+            <HomeSlider sliderData={sliderData} />
           </View>
           {/* Bestsellers Category Container */}
           <View style={{marginTop:rh(2)}}>
-            <BestSellers />
+            <BestSellers  />
           </View>
           {/* Shop By Category Container */}
           <View>

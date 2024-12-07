@@ -5,15 +5,8 @@ import { rw, rh } from '../../Service/responsive';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const HomeSlider = () => {
-    const sliderData = [
-        require('../../assets/Slider/Banner1.png'),
-        require('../../assets/Slider/Banner1.png'),
-        require('../../assets/Slider/Banner1.png'),
-        require('../../assets/Slider/Banner1.png'),
-        require('../../assets/Slider/Banner1.png'),
-    ];
-
+const HomeSlider = ({ sliderData }) => {
+ 
     const renderItem = ({ item }) => (
         <View style={styles.slide}>
             <Image source={item} style={styles.image} resizeMode="cover" />
@@ -25,9 +18,9 @@ const HomeSlider = () => {
             data={sliderData}
             renderItem={renderItem}
             sliderWidth={screenWidth}
-            itemWidth={rw(80)} // Make item width smaller to show adjacent slides
-            inactiveSlideScale={0.9} // Slightly shrink inactive slides
-            inactiveSlideOpacity={0.7} // Make inactive slides slightly transparent
+            itemWidth={rw(80)}  
+            inactiveSlideScale={0.9}  
+            inactiveSlideOpacity={0.7}  
             autoplay={true}
             autoplayInterval={2000}
             loop={true}
@@ -37,7 +30,7 @@ const HomeSlider = () => {
 
 const styles = StyleSheet.create({
     slide: {
-        width: rw(80), // Same as itemWidth
+        width: rw(80),  
         height: rh(17),
         justifyContent: 'center',
         alignItems: 'center',
@@ -45,7 +38,7 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
-        borderRadius: 10, // Optional: Rounded corners
+        borderRadius: 10,  
     },
 });
 

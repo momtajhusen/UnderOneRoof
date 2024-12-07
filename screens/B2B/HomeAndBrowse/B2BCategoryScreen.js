@@ -8,7 +8,7 @@ import { rw, rh, rf } from '../../../Service/responsive';
 import Header from '../../../components/header';
 
 // create a component
-const CategoryScreen  = ({navigation}) => {
+const B2BCategoryScreen  = ({navigation}) => {
 
         // Categories array define karte hain
         const categories = [
@@ -53,14 +53,14 @@ const CategoryScreen  = ({navigation}) => {
             {categories.map((category, index) => (
                     <Animatable.View
                     key={category.id}
-                    animation="fadeInUp" // Animation type
-                    duration={800} // Duration of each animation
-                    delay={index * 20} // Delay based on the index
+                    animation="fadeInUp"  
+                    duration={800}  
+                    delay={index * 20}  
                 >
                 <CategoryList
-                    image={category.image} // Image prop
-                    text={category.text}   // Text prop
-                    onPress={() => navigation.navigate('ProductListing', { selectCategoryId: category.id, selectCategoryName: category.text })}
+                    image={category.image} 
+                    text={category.text} 
+                    onPress={() => navigation.navigate('B2BProductListing', { selectCategoryId: category.id, selectCategoryName: category.text })}
                 />
                 </Animatable.View>
                 ))}
@@ -70,7 +70,7 @@ const CategoryScreen  = ({navigation}) => {
 };
 
 //make this component available to the app
-export default CategoryScreen;
+export default B2BCategoryScreen;
 
 
 const styles = StyleSheet.create({

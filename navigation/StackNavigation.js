@@ -23,12 +23,15 @@ import Orders from '../screens/B2C/Accounts/AccountComponents/Orders';
 import Wishlist from '../screens/B2C/Accounts/AccountComponents/Wishlist';
 import MyProfile from '../screens/B2C/Accounts/AccountComponents/MyProfile';
 import ProductListing from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductListing';
+import B2BProductListing from '../screens/B2B/HomeAndBrowse/B2BProductList';
 import ProductDetail from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductDetail';
 import AllRating from '../screens/B2C/HomeAndBrowse/HomeComponents/AllRating';
 import OrderDetails from '../screens/B2C/Accounts/AccountComponents/OrdersDetail';
 import RatingAndReviews from '../screens/B2C/Accounts/AccountComponents/RatingAndReviews';
 import EditAddress from '../screens/B2C/Accounts/AccountComponents/EditAddress';
 import FAQs from '../screens/B2C/Accounts/AccountComponents/FAQs';
+import B2BBottomNavigator from './B2BBottomNavigation'; 
+import B2BSearchScreen from '../screens/B2B/HomeAndBrowse/B2BSearchScreen';
 
 // B2B Navigation 
 import RegistrationOwnerScreen from '../screens/B2B/Registration/RegistrationOwnerScreen';
@@ -46,6 +49,8 @@ const StackNavigation = () => {
         <Stack.Navigator> 
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BBottomNavigator" component={B2BBottomNavigator} options={{ headerShown: false }} />
+
         {/* Screen navigation  */}
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
@@ -79,13 +84,10 @@ const StackNavigation = () => {
         <Stack.Screen name="RegistrationOwnerScreen" component={RegistrationOwnerScreen} options={{ headerShown: false }} />
         <Stack.Screen name="OutletDetailsScreen" component={OutletDetailsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="BusinessDetails" component={BusinessDetails} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BProductListing" component={B2BProductListing} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BSearchScreen" component={B2BSearchScreen} options={{ headerShown: false }} />
 
         
-
-
-
-
-
      </Stack.Navigator>
     );
 };
