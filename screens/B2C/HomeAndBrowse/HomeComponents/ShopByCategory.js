@@ -2,8 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CategoryList from '../../../../components/List/CategoryList';  // Import CategoryList
 import { rw, rf, rh } from '../../../../Service/responsive';
+import { useNavigation } from '@react-navigation/native';
 
 const ShopByCategory = () => {
+
+    const navigation = useNavigation();
+
 
     // Categories array define karte hain
     const categories = [
@@ -27,6 +31,7 @@ const ShopByCategory = () => {
                         key={category.id}
                         image={category.image} // Image prop
                         text={category.text}   // Text prop
+                        onPress={() => navigation.navigate('ProductListing', { selectCategoryId: category.id, selectCategoryName: category.text })}
                     />
                 ))}
             </View>

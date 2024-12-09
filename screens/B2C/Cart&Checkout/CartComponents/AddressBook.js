@@ -12,7 +12,7 @@ const AddressBook = ({navigation}) => {
         <View>
             {/* Back Container */}
             <Header
-              Title="Address Book"
+              title="Address Book"
             />
  
             <View style={styles.container}>

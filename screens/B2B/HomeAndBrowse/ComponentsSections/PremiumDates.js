@@ -7,7 +7,7 @@ import { rw, rh, rf } from '../../../../Service/themes/responsive';
 const DateCard = ({ name, image }) => (
   <View style={styles.dateCard}>
     <Image source={image} style={styles.dateImage} />
-    <Text style={styles.dateName}>{name}</Text>
+    <Text style={styles.dateName} numberOfLines={2}>{name}</Text>
   </View>
 );
 
@@ -41,7 +41,6 @@ const PremiumDates = ({ data }) => {
 const styles = StyleSheet.create({
   premiumDatesContainer: {
     paddingHorizontal: rw(5),
-    marginBottom: rh(2),
   },
   gradientContainer: {
     padding: rw(3),
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
   dateCard: {
     backgroundColor: '#FFFFFF',
     paddingVertical: rh(1),
-    width: rw(23),
+    width: rw(19.5),
     justifyContent: 'center',
     borderRadius: 10,
     alignItems: 'center',
@@ -79,6 +78,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: rf(1.8),
     color: '#333',
+    flexWrap: 'wrap',
+    width:"95%" 
   },
 });
 

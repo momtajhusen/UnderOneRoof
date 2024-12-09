@@ -13,6 +13,7 @@ import { rw, rh, rf } from '../../../Service/responsive';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import B2BProductCard from '../../../components/List/B2BProductCard';
+import B2BSimilarProducts from './ComponentsSections/B2BSimilarProducts';
  
 
 
@@ -250,39 +251,13 @@ const ProductDetail = ({ route, navigation }) => {
             </View>
 
         {/* Horizontal Product List */}
-        <View style={styles.horizontalListContainer}>
-            <Text style={styles.listTitle}>Similar Products</Text>
-            <FlatList
-                data={productList}
-                keyExtractor={(item) => item.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: rw(4) }}
-                renderItem={({ item }) => (
-                <B2BProductCard
-                    items={item}
-                    name={item.name}
-                    image={item.image}
-                    price={item.price}
-                    discountedPrice={item.discountedPrice}
-                    sizes={item.sizes}
-                    packets={item.packets}
-                    onAdd={() => console.log('Add pressed')}
-                    onIncrement={() => console.log('Increment pressed')}
-                    onDecrement={() => console.log('Decrement pressed')}
-                    styleCardContainer={{marginRight:10}}
-                />
-                )}
-            />
-            </View>
-
- 
+         <B2BSimilarProducts />
 
         </View>
       </ScrollView>
 
       <View style={{width:rw(100), height:rh(9), backgroundColor:"white", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingVertical:rh(1), paddingHorizontal:rw(5)}}>
-           <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')} style={{backgroundColor:"#DFDFDF", paddingVertical:rh(1.5), paddingHorizontal:rw(13), borderRadius:10}}>
+           <TouchableOpacity  onPress={() => navigation.navigate('B2BBottomNavigator', { screen: 'B2BCart' })}  style={{backgroundColor:"#DFDFDF", paddingVertical:rh(1.5), paddingHorizontal:rw(13), borderRadius:10}}>
               <Text style={{color:"black", fontWeight:"bold"}}>Buy Now</Text>
            </TouchableOpacity>
            <TouchableOpacity style={{backgroundColor:"#FF3131", paddingVertical:rh(1.5), paddingHorizontal:rw(13), borderRadius:10}}>

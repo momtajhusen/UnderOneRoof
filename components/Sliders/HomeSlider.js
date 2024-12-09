@@ -5,11 +5,11 @@ import { rw, rh } from '../../Service/responsive';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const HomeSlider = ({ sliderData }) => {
+const HomeSlider = ({ sliderData, sliderStyle }) => {
  
     const renderItem = ({ item }) => (
-        <View style={styles.slide}>
-            <Image source={item} style={styles.image} resizeMode="cover" />
+        <View style={[styles.slide, sliderStyle]}>
+            <Image source={item} style={[styles.image]} resizeMode="cover" />
         </View>
     );
 
@@ -31,7 +31,7 @@ const HomeSlider = ({ sliderData }) => {
 const styles = StyleSheet.create({
     slide: {
         width: rw(80),  
-        height: rh(17),
+        height: rh(19),
         justifyContent: 'center',
         alignItems: 'center',
     },

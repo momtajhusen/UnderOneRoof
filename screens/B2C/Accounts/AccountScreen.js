@@ -45,5 +45,6 @@ export default AccountScreen;
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: rw(4),   
+        marginTop:rh(1)
     },
 });

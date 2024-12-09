@@ -71,7 +71,7 @@ const B2BCheckOutScreen = ({ navigation }) => {
                 }
             />
 
-            <ScrollView contentContainerStyle={{ paddingBottom: rh(10) }}>
+            <ScrollView contentContainerStyle={{ paddingBottom: rh(10), marginTop:rh(1) }}>
                 <View style={styles.container}>
                     <UserDetails addresType="Outlet" type="show" />
                 </View>

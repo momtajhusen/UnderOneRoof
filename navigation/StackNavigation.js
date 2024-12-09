@@ -4,14 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomNavigator from './BottomNavigation';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import SplashScreen from '../screens/Auth/splash';
+import SplashScreen from '../screens/B2C/Auth/splash';
 import HomeScreen from '../screens/B2C/HomeAndBrowse/HomeScreen';
 import CategoryScreen from '../screens/B2C/Categorys/CategorysScreen';
 import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
 import AccountScreen from '../screens/B2C/Accounts/AccountScreen';
-import SignupOrLogin from '../screens/Auth/SignupOrLogin';
-import VerifyOtp from '../screens/Auth/VerifyOtp';
-import ShoppingMode from '../screens/Auth/ShoppingMode';
+import SignupOrLogin from '../screens/B2C/Auth/SignupOrLogin';
+import VerifyOtp from '../screens/B2C/Auth/VerifyOtp';
+import ShoppingMode from '../screens/B2C/Auth/ShoppingMode';
 import AddressBook from '../screens/B2C/Cart&Checkout/CartComponents/AddressBook';
 import HelpSupport from '../screens/B2C/Accounts/AccountComponents/HelpSupport';
 import TermsConditions from '../screens/B2C/Accounts/AccountComponents/TermsConditions';
@@ -63,9 +63,12 @@ const StackNavigation = () => {
   
     return (
         <Stack.Navigator> 
+
+
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="B2BBottomNavigator" component={B2BBottomNavigator} options={{ headerShown: false }} />
+
 
         {/* Screen navigation  */}
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />

@@ -35,7 +35,7 @@ const B2BBottomNavigator = () => {
       })}
     >
       <Tab.Screen
-        name="Home"
+        name="B2BHome"
         component={B2BHomeScreen}
         options={{
           tabBarLabel: 'Home',
@@ -61,7 +61,7 @@ const B2BBottomNavigator = () => {
       />
 
       <Tab.Screen
-        name="Category"
+        name="B2BCategory"
         component={B2BCategoryScreen}
         options={{
           tabBarLabel: 'Category',
@@ -87,7 +87,7 @@ const B2BBottomNavigator = () => {
       />
 
       <Tab.Screen
-        name="Cart"
+        name="B2BCart"
         component={B2BCartScreen}
         options={{
           tabBarLabel: 'Cart',
@@ -113,7 +113,7 @@ const B2BBottomNavigator = () => {
       />
 
       <Tab.Screen
-        name="Account"
+        name="B2BAccount"
         component={B2BAccountScreen}
         options={{
           tabBarLabel: 'Account',

@@ -71,7 +71,7 @@ const CartScreen = ({ navigation }) => {
                 }
             />
 
-            <ScrollView contentContainerStyle={{ paddingBottom: rh(10) }}>
+            <ScrollView contentContainerStyle={{ paddingBottom: rh(10), marginTop:rh(1.5) }}>
                 <View style={styles.container}>
                     <UserDetails type="show" />
                 </View>

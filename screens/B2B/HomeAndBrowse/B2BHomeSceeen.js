@@ -1,19 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, StatusBar, FlatList} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
 import SearchDesigne from '../../../components/Search/searchDesigne';
 import HomeSlider from '../../../components/Sliders/HomeSlider';
-import ExploreMoreSlider from '../../../components/Sliders/ExploreMoreSlider';
 import B2BBestSellers from './ComponentsSections/B2BBestSellers';
 import B2BShopByCategory from './ComponentsSections/B2BShopByCategory';
-import RefreshYourDay from '../../B2C/HomeAndBrowse/HomeComponents/RefreshYourDay';
-import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from "@react-navigation/native";
 import Essentials from './ComponentsSections/Essentials';
 import PremiumDates from './ComponentsSections/PremiumDates';
-import B2BProductCard from '../../../components/List/B2BProductCard';
 import { useNavigation } from '@react-navigation/native';
+import B2BSimilarProducts from './ComponentsSections/B2BSimilarProducts';
 
 
 const B2BHomeScreen = () => {
@@ -26,9 +23,9 @@ const B2BHomeScreen = () => {
   });
 
   const sliderData = [
-    require('../../../assets/Slider/Rectangle31.png'),
-    require('../../../assets/Slider/Rectangle31.png'),
-    require('../../../assets/Slider/Rectangle31.png'),
+    require('../../../assets/Slider/B2BBanner1.png'),
+    require('../../../assets/Slider/B2BBanner2.png'),
+    require('../../../assets/Slider/B2BBanner3.png'),
   ];
 
   const sliderData2 = [
@@ -61,27 +58,6 @@ const dateItems = [
     },
 ];
 
-const productList = [
-    {
-      id: '1',
-      name: 'Premium Roasted Almonds',
-      image: require('../../../assets/items/image343002.png'),
-      price: '999',
-      discountedPrice: '699',
-      sizes: '1kg, 5kg, 10kg',
-      packets: ['₹679/kg for 5 kg packet', '₹659/kg for 10 kg packet'],
-    },
-    {
-      id: '2',
-      name: 'Organic Cashews',
-      image: require('../../../assets/items/image343002.png'),
-      price: '1299',
-      discountedPrice: '1099',
-      sizes: '500g, 1kg',
-      packets: ['₹999/kg for 1 kg packet'],
-    },
-  ];
-
 
   return (
       <View style={styles.container}>
@@ -107,7 +83,7 @@ const productList = [
             <View style={styles.SliderCategoryContainer}>
             {/* Slider Container */}
             <View style={{ paddingTop: rh(5) }}>
-                <HomeSlider sliderData={sliderData} />
+                <HomeSlider sliderData={sliderData} sliderStyle={{width: rw(80), height: rh(20)}} />
             </View>
             {/* Bestsellers Category Container */}
             <View style={{marginTop:rh(2)}}>
@@ -119,7 +95,7 @@ const productList = [
             </View>
             {/* Explore More Slider Container */}
             <View>
-                <HomeSlider sliderData={sliderData2} />
+                <HomeSlider sliderData={sliderData2} sliderStyle={{width: rw(80), height: rh(17)}} />
             </View>
             {/* Refresh Your Day Container */}
             <View style={{marginVertical:rh(2)}}>
@@ -129,31 +105,9 @@ const productList = [
             {/* Savor the Sweetness of Premium Dates!  */}
             <PremiumDates data={dateItems} />
 
-            {/* Horizontal Product List */}
-            <View style={styles.horizontalListContainer}>
-            <Text style={styles.listTitle}>Similar Products</Text>
-            <FlatList
-                data={productList}
-                keyExtractor={(item) => item.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: rw(4) }}
-                renderItem={({ item }) => (
-                <B2BProductCard
-                    items={item}
-                    name={item.name}
-                    image={item.image}
-                    price={item.price}
-                    discountedPrice={item.discountedPrice}
-                    sizes={item.sizes}
-                    packets={item.packets}
-                    onAdd={() => console.log('Add pressed')}
-                    onIncrement={() => console.log('Increment pressed')}
-                    onDecrement={() => console.log('Decrement pressed')}
-                    styleCardContainer={{marginRight:10}}
-                />
-                )}
-            />
+            {/* B2BSimilarProducts */}
+            <View style={{marginHorizontal:rw(4)}}>
+              <B2BSimilarProducts />
             </View>
 
             </View>

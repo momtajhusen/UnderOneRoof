@@ -60,7 +60,7 @@ const B2BOrders = ({navigation}) => {
              <Header title="Orders" />
 
              <View style={styles.container}>
-                <View style={{ flexDirection: "row", gap:3, width:rw(70)}}>
+                <View style={{ flexDirection: "row", gap:3, width:rw(70), marginTop:rh(1)}}>
                     <SearchInput placeholder="Search here.." autoFocus={false} />
                     <SortByBtn onPress={toggleModal} />
                 </View>

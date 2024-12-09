@@ -21,7 +21,6 @@ const CategoryItem = ({ id, image, text, onPress }) => {
     );
 };
 
-//make this component available to the app
 export default CategoryItem;
 
 const styles = StyleSheet.create({
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: rw(20),
         height: rh(8),
-        backgroundColor: '#FFF4E6', // Light background color for image container
+        backgroundColor: '#FFF4E6',
         overflow: 'hidden',
         borderRadius: rw(2),
     },
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: rf(1.8),
         width:rw(12),
-        color: '#555555', // Slightly lighter text color as per the design
+        color: '#555555',
         textAlign: 'center',
     },
 });

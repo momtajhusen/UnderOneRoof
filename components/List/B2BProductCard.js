@@ -15,15 +15,16 @@ const B2BProductCard = ({
   onAdd,
   onIncrement,
   onDecrement,
+  styleCardContainer
 }) => {
 
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity  onPress={() => navigation.navigate('B2BProceedDetails', { item: items })} style={styles.cardContainer}>
+    <TouchableOpacity  onPress={() => navigation.navigate('B2BProceedDetails', { item: items })} style={[styles.cardContainer, styleCardContainer ]}>
       {/* Product Information */}
       <View style={styles.infoContainer}>
-        <View style={{ width: rw(55) }}>
+        <View style={{ width: "70%"}}>
           <Text style={styles.productName}>{name}</Text>
           <Text style={styles.productSizes}>{sizes}</Text>
         </View>

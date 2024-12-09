@@ -1,13 +1,18 @@
 //import liraries
 import React, { useEffect } from 'react';
-import { View, Text,  Image, StyleSheet } from 'react-native';
+import { View, Text,  Image, StyleSheet, StatusBar } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
-import { rw, rh } from '../../Service/responsive';
+import { rw, rh } from '../../../Service/responsive';
+import { useFocusEffect } from "@react-navigation/native";
 
 // create a component
 const SplashScreen = () => {
     const navigation = useNavigation();
+
+    useFocusEffect(() => {
+      StatusBar.setBackgroundColor("yellow");
+    });
 
     useEffect(() => {
         setTimeout(() => {
@@ -20,7 +25,7 @@ const SplashScreen = () => {
             <Animatable.Image
                 animation="zoomIn"
                 delay={20}
-                source={require('../../assets/auth/logo.png')}
+                source={require('../../../assets/auth/logo.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />

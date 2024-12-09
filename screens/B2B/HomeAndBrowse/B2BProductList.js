@@ -62,6 +62,24 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
       sizes: '500g, 1kg',
       packets: ['₹999/kg for 1 kg packet'],
     },
+    {
+      id: '3',
+      name: 'Premium Roasted Almonds',
+      image: require('../../../assets/items/image343002.png'),
+      price: '999',
+      discountedPrice: '699',
+      sizes: '1kg, 5kg, 10kg',
+      packets: ['₹679/kg for 5 kg packet', '₹659/kg for 10 kg packet'],
+    },
+    {
+      id: '4',
+      name: 'Organic Cashews',
+      image: require('../../../assets/items/image343002.png'),
+      price: '1299',
+      discountedPrice: '1099',
+      sizes: '500g, 1kg',
+      packets: ['₹999/kg for 1 kg packet'],
+    },
   ];
 
   // Sort By Options 
@@ -189,35 +207,30 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
                 </View>
             </View>
 
-            {/* <Text style={styles.productTitle}>
-              {categories.find((c) => c.id === selectedCategory)?.name}
-            </Text> */}
-
-            <View style={{  backgroundColor:"red", flexDirection:"row"}}>
-            <FlatList
-            data={productList}
-            keyExtractor={(item) => item.id}
-            numColumns={2} // Set number of columns to wrap items
-            contentContainerStyle={{ paddingHorizontal: rw(1), paddingVertical: rh(1) }}
-            columnWrapperStyle={{ justifyContent: "space-between", marginBottom: rh(2) }} // Adjust spacing between columns
-            renderItem={({ item }) => (
-              <B2BProductCard
-              items={item}
-                name={item.name}
-                image={item.image}
-                price={item.price}
-                discountedPrice={item.discountedPrice}
-                sizes={item.sizes}
-                packets={item.packets}
-                onAdd={() => console.log("Add pressed")}
-                onIncrement={() => console.log("Increment pressed")}
-                onDecrement={() => console.log("Decrement pressed")}
-                styleCardContainer={{ marginRight: 10 }}
-              />
-            )}
-           />
-
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <ScrollView contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", paddingVertical: rh(1), paddingBottom:rh(5) }}>
+                {productList.map((item) => (
+                  <B2BProductCard
+                    key={item.id}
+                    items={item}
+                    name={item.name}
+                    image={item.image}
+                    price={item.price}
+                    discountedPrice={item.discountedPrice}
+                    sizes={item.sizes}
+                    packets={item.packets}
+                    onAdd={() => console.log("Add pressed")}
+                    onIncrement={() => console.log("Increment pressed")}
+                    onDecrement={() => console.log("Decrement pressed")}
+                    styleCardContainer={{
+                      width: rw(77),
+                      marginBottom: rh(0.5),
+                    }}
+                  />
+                ))}
+              </ScrollView>
             </View>
+
 
           </View>
 

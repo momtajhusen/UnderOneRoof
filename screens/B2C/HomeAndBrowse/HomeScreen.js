@@ -53,7 +53,7 @@ const HomeScreen = () => {
         <View style={styles.SliderCategoryContainer}>
           {/* Slider Container */}
           <View style={{ paddingTop: rh(5) }}>
-            <HomeSlider sliderData={sliderData} />
+            <HomeSlider sliderData={sliderData} sliderStyle={{width: rw(80), height: rh(17)}}/>
           </View>
           {/* Bestsellers Category Container */}
           <View style={{marginTop:rh(2)}}>

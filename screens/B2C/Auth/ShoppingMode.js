@@ -1,13 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { rw, rh, rf } from '../../Service/responsive';
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import { rw, rh, rf } from '../../../Service/responsive';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Animatable from 'react-native-animatable';
+import { useFocusEffect } from "@react-navigation/native";
+import { Header } from 'react-native/Libraries/NewAppScreen';
+
 
 
 
 const ShoppingMode = ({ navigation }) => {
+
+  useFocusEffect(() => {
+    StatusBar.setBackgroundColor('#f3f3f3');  ;  
+  });
+
   return (
     <View style={styles.container}>
       {/* Back Button */}
@@ -113,6 +121,7 @@ const styles = StyleSheet.create({
   backButton: {
     fontSize: rf(3),
     marginBottom: rh(1.5),
+    marginTop:rh(2)
   },
   titleText: {
     fontWeight: 'bold',

@@ -41,6 +41,7 @@ export default B2BAccountScreen;
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: rw(4),   
+        paddingHorizontal: rw(4), 
+        marginTop:rh(1)
     },
 });

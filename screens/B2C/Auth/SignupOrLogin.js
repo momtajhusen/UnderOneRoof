@@ -1,15 +1,21 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, Image } from 'react-native';
-import CustomInput from '../../components/Inputs/CustomInput';
-import CustomButtons from '../../components/Buttons/CustomButtons';
+import { View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import CustomInput from '../../../components/Inputs/CustomInput';
+import CustomButtons from '../../../components/Buttons/CustomButtons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Animatable from 'react-native-animatable';
-import { rw, rh, rf } from '../../Service/responsive';
+import { rw, rh, rf } from '../../../Service/responsive';
+import { useFocusEffect } from "@react-navigation/native";
 
 
 // create a component
 const SignupOrLogin = ({navigation}) => {
+
+  useFocusEffect(() => {
+    StatusBar.setBackgroundColor("#FF6D6D");
+  });
+
     return (
         <>
         <ScrollView>
@@ -24,7 +30,7 @@ const SignupOrLogin = ({navigation}) => {
               <Text style={{fontSize:rf(3), fontWeight:"bold", color:"white", position:"absolute", top:rh(3)}}>Under One Roof</Text>
               <Animatable.Image
                 animation="fadeInUp"
-                source={require('../../assets/auth/image34.png')}
+                source={require('../../../assets/auth/image34.png')}
                 style={{width:rh(40), height:rh(40)}}
                 resizeMode="contain"
               />
