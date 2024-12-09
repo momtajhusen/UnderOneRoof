@@ -43,7 +43,7 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
   ];
 
   // Items List array define
-  const productItems = [
+  const productList = [
     {
       id: '1',
       name: 'Premium Roasted Almonds',
@@ -193,15 +193,16 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
               {categories.find((c) => c.id === selectedCategory)?.name}
             </Text> */}
 
-            <View style={{paddingTop:rh(1), flexDirection:"row", paddingBottom:rh(5)}}>
+            <View style={{  backgroundColor:"red", flexDirection:"row"}}>
             <FlatList
-            data={productItems}
+            data={productList}
             keyExtractor={(item) => item.id}
             numColumns={2} // Set number of columns to wrap items
-            contentContainerStyle={{ paddingHorizontal: rw(4), paddingVertical: rh(2) }}
+            contentContainerStyle={{ paddingHorizontal: rw(1), paddingVertical: rh(1) }}
             columnWrapperStyle={{ justifyContent: "space-between", marginBottom: rh(2) }} // Adjust spacing between columns
             renderItem={({ item }) => (
               <B2BProductCard
+              items={item}
                 name={item.name}
                 image={item.image}
                 price={item.price}
@@ -213,8 +214,8 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
                 onDecrement={() => console.log("Decrement pressed")}
                 styleCardContainer={{ marginRight: 10 }}
               />
-  )}
-/>
+            )}
+           />
 
             </View>
 

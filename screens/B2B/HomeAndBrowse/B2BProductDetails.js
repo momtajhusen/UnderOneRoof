@@ -8,23 +8,19 @@ import {
   ScrollView,
   FlatList
 } from 'react-native';
-import Header from '../../../../components/header';
-import { rw, rh, rf } from '../../../../Service/responsive';
+import Header from '../../../components/header';
+import { rw, rh, rf } from '../../../Service/responsive';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
-import { LinearGradient } from 'expo-linear-gradient';
-import Collapsible from 'react-native-collapsible';
-import ReviewCard from '../../../../components/List/ReviewCard';
-import RatingProductCard from '../../../../components/List/RatingProductCard';
-import SimilarProducts from '../../Cart&Checkout/CartComponents/SimilarProducts';
-
+import B2BProductCard from '../../../components/List/B2BProductCard';
+ 
 
 
 const ProductDetail = ({ route, navigation }) => {
 
   const { item } = route.params;
 
-  console.log(item);
+  console.log(item.name);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
@@ -32,51 +28,52 @@ const ProductDetail = ({ route, navigation }) => {
   
 
   const images = [
-    require('../../../../assets/items/image1.png'),
-    require('../../../../assets/items/image2.png'),
-    require('../../../../assets/items/image3.png'),
-    require('../../../../assets/items/image4.png'),
-    require('../../../../assets/items/image5.png'),
+    require('../../../assets/items/image45543.png'),
+    require('../../../assets/items/image2.png'),
+    require('../../../assets/items/image3.png'),
+    require('../../../assets/items/image4.png'),
+    require('../../../assets/items/image5.png'),
   ];
 
-  const reviews = [
+  const qualities = [
+    { weight: 'A' },
+    { weight: 'B' },
+    { weight: 'C' },
+    { weight: 'D' }, // Additional items if needed
+  ];
+
+  const productList = [
     {
-        image: require('../../../../assets/RatingImage/image5.png'),
-        rating: 4,
-        reviewText: 'Taste is very good.',
-        reviewer: 'Mr. Aman Shukla',
-        date: '24/March/2024',
+      id: '1',
+      name: 'Premium Roasted Almonds',
+      image: require('../../../assets/items/image343002.png'),
+      price: '999',
+      discountedPrice: '699',
+      sizes: '1kg, 5kg, 10kg',
+      packets: ['₹679/kg for 5 kg packet', '₹659/kg for 10 kg packet'],
     },
     {
-        image: require('../../../../assets/RatingImage/image9.png'),
-        rating: 5,
-        reviewText: 'Value for money product',
-        reviewer: 'Mr. Aman Shukla',
-        date: '24/March/2024',
+      id: '2',
+      name: 'Organic Cashews',
+      image: require('../../../assets/items/image343002.png'),
+      price: '1299',
+      discountedPrice: '1099',
+      sizes: '500g, 1kg',
+      packets: ['₹999/kg for 1 kg packet'],
     },
   ];
 
-  const reviewData = {
-      rating: 4.5,
-      reviewCount: 22500,
-      images: [
-          require('../../../../assets/RatingImage/image.png'),
-          require('../../../../assets/RatingImage/image-1.png'),
-          require('../../../../assets/RatingImage/image-2.png'),
-          require('../../../../assets/RatingImage/image5.png'),
-      ],
-  };
 
   const renderItem = ({ item }) => (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <Image source={item} style={{ width: rw(70), height: rw(70), borderRadius: 10 }} />
+      <Image source={item} style={{ width: rw(65), height: rw(70), borderRadius: 10 }} />
     </View>
   );
 
   return (
     <View style={styles.container}>
       <Header
-        title={item.name}
+      title={item.name}
         leftContent={
           <TouchableOpacity>
             <MaterialIcons name="arrow-back" size={rf(3.5)} color="black" />
@@ -85,7 +82,7 @@ const ProductDetail = ({ route, navigation }) => {
         rightContent={
           <View style={{ flexDirection: 'row', gap: rw(4) }}>
             <TouchableOpacity>
-              <Image source={require('../../../../assets/Cart.png')} style={{width:rw(5.5), height:rw(5.5)}} />
+              <Image source={require('../../../assets/Cart.png')} style={{width:rw(5.5), height:rw(5.5)}} />
             </TouchableOpacity>
           </View>
         }
@@ -115,9 +112,6 @@ const ProductDetail = ({ route, navigation }) => {
               />
             ))}
           </View>
-          <TouchableOpacity style={{position:"absolute", bottom:rh(1), right:rw(5), width:rw(10), height:rh(5), justifyContent:"center", alignItems:"center"}}>
-             <MaterialIcons name="favorite-border" size={rf(3.5)} color="#888" />
-          </TouchableOpacity>
           </View>
          
         </View>
@@ -125,9 +119,34 @@ const ProductDetail = ({ route, navigation }) => {
         <View style={styles.detailsContainer}>
           <Text style={styles.discountText}>25% OFF</Text>
           <Text style={styles.productTitle}>{item.name}</Text>
-          <Text style={styles.ratingText}>
-            ★★★★☆ <Text style={styles.reviewCount}>(22,500)</Text>
-          </Text>
+          <View style={{marginTop:rh(1.5)}}>
+            <Text style={styles.selectText}>Select Quality:</Text>
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContainer}
+            >
+                {qualities.map((item, index) => (
+                <TouchableOpacity
+                    key={index}
+                    onPress={() => setActiveIndex(index)} // Update the active index on press
+                    style={[
+                    styles.button,
+                    activeIndex === index && styles.activeButton, // Apply active styles if selected
+                    ]}
+                >
+                    <Text
+                    style={[
+                        styles.priceText,
+                        activeIndex === index && styles.activePriceText, // Apply active text style if selected
+                    ]}
+                    >
+                    {item.weight}
+                    </Text>
+                </TouchableOpacity>
+                ))}
+            </ScrollView>
+          </View>
 
           <Text style={styles.selectText}>Select Quantity:</Text>
           <ScrollView 
@@ -230,30 +249,34 @@ const ProductDetail = ({ route, navigation }) => {
             
             </View>
 
-            <View style={{backgroundColor:"white", borderRadius:10}}>
-              <FlatList
-                  data={reviews}
-                  renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
-                  keyExtractor={(item, index) => index.toString()}
-                  ListHeaderComponent={
-                       <View>
-                          <RatingProductCard
-                              rating={reviewData.rating}
-                              reviewCount={reviewData.reviewCount}
-                              images={reviewData.images}
-                          />
-                          <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(20), height:rh(4.5), borderRadius:10, alignItems:"center", justifyContent:"center", position:"absolute", right:"2%", top:"4%"}}>
-                              <Text style={{color:"white", textAlign:"center"}}>View All</Text>
-                          </TouchableOpacity>
-                       </View>
-                  }
-              />
+        {/* Horizontal Product List */}
+        <View style={styles.horizontalListContainer}>
+            <Text style={styles.listTitle}>Similar Products</Text>
+            <FlatList
+                data={productList}
+                keyExtractor={(item) => item.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingHorizontal: rw(4) }}
+                renderItem={({ item }) => (
+                <B2BProductCard
+                    items={item}
+                    name={item.name}
+                    image={item.image}
+                    price={item.price}
+                    discountedPrice={item.discountedPrice}
+                    sizes={item.sizes}
+                    packets={item.packets}
+                    onAdd={() => console.log('Add pressed')}
+                    onIncrement={() => console.log('Increment pressed')}
+                    onDecrement={() => console.log('Decrement pressed')}
+                    styleCardContainer={{marginRight:10}}
+                />
+                )}
+            />
             </View>
-           
-           <View style={{backgroundColor:"white", marginTop:rh(1), marginBottom:rh(1), padding:rw(3), borderRadius:5, overflow:"hidden"}}>
-              <SimilarProducts />
-           </View>
 
+ 
 
         </View>
       </ScrollView>
@@ -328,6 +351,41 @@ const styles = StyleSheet.create({
     paddingVertical:rh(0.5)
   },
   deliveryText: { fontSize: rf(1.8), marginBottom: rh(0.5) },
+
+  button: {
+    backgroundColor:"#F3F3F3",
+    borderRadius: 10,
+    paddingHorizontal: rw(8),
+    paddingVertical: rh(1),
+    marginRight: rw(1.5),
+  },
+
+  activeButton: {
+    borderWidth: 1,
+    borderColor: '#FF3131', 
+    backgroundColor:"#FFEAEA",
+  },
+  priceText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  activePriceText: {
+    fontWeight: 'bold', // Highlight text for the active button
+  },
+  horizontalListContainer: {
+    paddingTop:rh(1),
+    marginVertical: rh(2),
+    backgroundColor:"#FFFFFF",
+    borderRadius:10,
+    overflow:"hidden"
+  },
+  listTitle: {
+    fontSize: rf(2),
+    fontWeight: 'bold',
+    color: '#272727',
+    marginLeft: rw(4),
+    marginBottom: rh(1),
+  },
 });
 
 export default ProductDetail;

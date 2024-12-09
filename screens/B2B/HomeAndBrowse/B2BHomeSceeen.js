@@ -61,7 +61,7 @@ const dateItems = [
     },
 ];
 
-const productItems = [
+const productList = [
     {
       id: '1',
       name: 'Premium Roasted Almonds',
@@ -133,13 +133,14 @@ const productItems = [
             <View style={styles.horizontalListContainer}>
             <Text style={styles.listTitle}>Similar Products</Text>
             <FlatList
-                data={productItems}
+                data={productList}
                 keyExtractor={(item) => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: rw(4) }}
                 renderItem={({ item }) => (
                 <B2BProductCard
+                    items={item}
                     name={item.name}
                     image={item.image}
                     price={item.price}

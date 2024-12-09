@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from "react-native";
-import { rw, rh, rf } from "../../Service/themes/responsive";
+import { rw, rh, rf } from "../../Service/responsive";
+import { useNavigation } from '@react-navigation/native';
+
 
 const B2BProductCard = ({
+  items,
   name,
   image,
   price,
@@ -13,8 +16,11 @@ const B2BProductCard = ({
   onIncrement,
   onDecrement,
 }) => {
+
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.cardContainer}>
+    <TouchableOpacity  onPress={() => navigation.navigate('B2BProceedDetails', { item: items })} style={styles.cardContainer}>
       {/* Product Information */}
       <View style={styles.infoContainer}>
         <View style={{ width: rw(55) }}>
@@ -46,7 +52,7 @@ const B2BProductCard = ({
           </View>
         ))}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
