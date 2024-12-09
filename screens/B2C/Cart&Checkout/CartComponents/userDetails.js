@@ -6,7 +6,7 @@ import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 
 // create a component
-const UserDetails = ({type}) => {
+const UserDetails = ({type, addresType="Home"}) => {
 
   const navigation = useNavigation();
 
@@ -16,7 +16,7 @@ const UserDetails = ({type}) => {
                 <View style={styles.locationContainer}>
                     <Image source={require('../../../../assets/location-tick.png')} style={{width:rw(6), height:rw(6), marginRight:rw(2)}} />
                     <Text style={{fontWeight:"bold", marginRight:rw(1)}}>Delivery To:</Text>
-                    <Text style={styles.locationText}>Home</Text>
+                    <Text style={styles.locationText}>{addresType}</Text>
                 </View>
                 {type=="show" && (
                   <TouchableOpacity

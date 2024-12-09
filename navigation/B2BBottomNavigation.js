@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Pressable, Image } from 'react-native';
 
 import B2BHomeScreen from '../screens/B2B/HomeAndBrowse/B2BHomeSceeen';
-import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
+import B2BCartScreen from '../screens/B2B/CartAndCheckout/B2BCartScreen';
 import B2BAccountScreen from '../screens/B2B/Accounts/B2BAccountScreen';
 import B2BCategoryScreen from '../screens/B2B/HomeAndBrowse/B2BCategoryScreen';
 import { rw, rh, rf } from '../Service/responsive';
@@ -88,7 +88,7 @@ const B2BBottomNavigator = () => {
 
       <Tab.Screen
         name="Cart"
-        component={CartScreen}
+        component={B2BCartScreen}
         options={{
           tabBarLabel: 'Cart',
           tabBarIcon: ({ focused }) => (

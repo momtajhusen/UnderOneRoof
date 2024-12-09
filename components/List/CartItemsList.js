@@ -30,6 +30,7 @@ const CartItemsList = ({
             <Image
                 source={itemImage ? { uri: itemImage } : require('../../assets/location-tick.png')}
                 style={styles.image}
+                resizeMode="cover"
             />
             <View style={styles.details}>
                 <View style={styles.header}>

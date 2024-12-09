@@ -4,13 +4,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 
 // create a component
-const ProceedDetails = ({btnText, onPress}) => {
+const ProceedDetails = ({btnText, onPress, weight="100g", price="199", mrpprice="250" }) => {
     return (
         <View style={styles.container}>
             <View style={styles.priceDetails}>
-                <Text style={styles.weightText}>100g</Text>
+                <Text style={styles.weightText}>{weight}</Text>
                 <Text style={styles.priceText}>
-                    ₹199 <Text style={styles.mrpText}> MRP </Text><Text style={styles.mrpPrice}> ₹250</Text>
+                    ₹{price} <Text style={styles.mrpText}> MRP </Text><Text style={styles.mrpPrice}> ₹{mrpprice}</Text>
                 </Text>
             </View>
             <TouchableOpacity onPress={onPress} style={styles.btn}>

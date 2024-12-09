@@ -5,9 +5,11 @@ import Header from '../../../components/header';
 import { rw, rh, rf } from '../../../Service/responsive';
 import LinearStepIndicator from '../../../components/Stepper/LinearIndicatorStepper';
 import TextInputField from '../../../components/Inputs/TextInputField';
+import TextAreaField from '../../../components/Inputs/TextAreaField';
+ 
+
 
 const B2BRequestProductsScreen = ({navigation}) => {
- 
  
     return (
         <View style={styles.container}>
@@ -44,6 +46,8 @@ const B2BRequestProductsScreen = ({navigation}) => {
                             <TextInputField placeholder="Enter the product name" />
                             <TextInputField placeholder="Product Category" />
                             <TextInputField placeholder="Email" />
+                            <TextAreaField placeholder="Description" />
+              
                         </View>
                     </View>
  
@@ -70,6 +74,7 @@ const styles = StyleSheet.create({
         paddingVertical: rh(1),
         paddingHorizontal: rw(4),
         backgroundColor: '#F3F3F3',
+        paddingBottom:rh(8)
     },
     scrollContainer: {
         paddingBottom: rh(20), // Prevent content overlap with the button

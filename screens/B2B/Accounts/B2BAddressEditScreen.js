@@ -8,11 +8,8 @@ import TextInputField from "../../../components/Inputs/TextInputField";
 // Create a component
 const B2BEditAddress = () => {
   const saveOptions = [
-    { id: 1, label: "Home", isActive: true },
-    { id: 2, label: "Work", isActive: false },
-    { id: 3, label: "Office", isActive: false },
-    { id: 4, label: "Hotel", isActive: false },
-    { id: 5, label: "Other", isActive: false },
+    { id: 1, label: "Outlet", isActive: true },
+    { id: 2, label: "Other", isActive: false },
   ];
 
   const renderSaveOption = ({ item }) => (

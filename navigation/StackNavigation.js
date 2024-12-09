@@ -49,6 +49,9 @@ import B2BHelpAndSupport from '../screens/B2B/Accounts/B2BHelpAndSupportScreen';
 import B2BPrivacyPolicy from '../screens/B2B/Accounts/B2BPrivacyPolicy';
 import B2BTermsConditions from '../screens/B2B/Accounts/B2BTermsConditions';
 import B2BRequestProductsScreen from '../screens/B2B/Accounts/B2BRequestProductsScreen';
+import B2BSelectAddressScreen from '../screens/B2B/CartAndCheckout/B2BSelectAddressScreen';
+import B2BCheckOutScreen from '../screens/B2B/CartAndCheckout/B2BCheckOutScreen';
+import B2BOrderPlaced from '../screens/B2B/CartAndCheckout/B2BOrderPlacedScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -108,8 +111,12 @@ const StackNavigation = () => {
         <Stack.Screen name="B2BPrivacyPolicy" component={B2BPrivacyPolicy} options={{ headerShown: false }} />
         <Stack.Screen name="B2BTermsConditions" component={B2BTermsConditions} options={{ headerShown: false }} />
         <Stack.Screen name="B2BRequestProductsScreen" component={B2BRequestProductsScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BSelectAddressScreen" component={B2BSelectAddressScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BCheckOutScreen" component={B2BCheckOutScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="B2BOrderPlaced" component={B2BOrderPlaced} options={{ headerShown: false }} />
 
-    
+
+        
      </Stack.Navigator>
     );
 };
