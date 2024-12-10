@@ -62,8 +62,7 @@ const OrderPlaced = () => {
                   </View>
 
 
-
-                  <View style={{marginBottom:rh(1)}}>
+                  <View style={{marginVertical:rh(1)}}>
                      <PriceDetails promoCode={false} style={{backgroundColor:"blue"}} />
                   </View>
 

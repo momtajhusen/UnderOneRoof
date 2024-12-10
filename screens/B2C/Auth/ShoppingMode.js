@@ -18,15 +18,6 @@ const ShoppingMode = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity onPress={() => navigation.replace('SignupOrLogin')}>
-        <MaterialIcons 
-          name="arrow-back" 
-          size={22} 
-          style={styles.backButton} 
-        />
-      </TouchableOpacity>
-
       {/* Title and Description */}
       <View>
         <Text style={styles.titleText}>Choose Your Shopping Mode</Text>
@@ -117,6 +108,7 @@ export default ShoppingMode;
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    paddingTop:rh(5)
   },
   backButton: {
     fontSize: rf(3),

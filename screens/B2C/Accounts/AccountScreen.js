@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
 import OrderOrWishlist from './AccountComponents/OrderOrWishlist';
@@ -13,6 +13,7 @@ const AccountScreen = ({navigation}) => {
         <View>
             {/* Back Container */}
              <Header />
+             <ScrollView>
             <View style={styles.container}>
                 {/* Account Profile  */}
                 <View style={{flexDirection:"row", alignItems:"center"}}>
@@ -33,8 +34,8 @@ const AccountScreen = ({navigation}) => {
                     <AccountMenuList />
                      <Text style={{textAlign:"center", marginTop:rh(3), fontSize:rf(2), color:"#717171"}}>V5.54</Text>
                 </View>
-
             </View>
+            </ScrollView>
         </View>
     );
 };

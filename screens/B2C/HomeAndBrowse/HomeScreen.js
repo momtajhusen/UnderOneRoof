@@ -10,9 +10,13 @@ import ShopByCategory from './HomeComponents/ShopByCategory';
 import RefreshYourDay from './HomeComponents/RefreshYourDay';
 import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from '@react-navigation/native';
 
 
 const HomeScreen = () => {
+
+  const navigation = useNavigation();
+
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FF6D6D");
