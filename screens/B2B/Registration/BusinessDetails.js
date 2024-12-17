@@ -2,99 +2,187 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   ScrollView,
   Modal,
-  Image
+  Image,
 } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import Header from '../../../components/header';
-import { rw, rh, rf } from '../../../Service/responsive';
 import LinearStepIndicator from '../../../components/Stepper/LinearIndicatorStepper';
 import TextInputField from '../../../components/Inputs/TextInputField';
 import FileUploadField from '../../../components/Inputs/FileUploadField';
+import apiClient from '../../../Service/apiClient';
+import CustomButtons from '../../../components/Buttons/CustomButtons';
 
-const BusinessDetails = ({navigation}) => {
+const BusinessDetails = ({ navigation, route }) => {
+  const { mobile } = route.params;
+
   const [isGstRegistered, setIsGstRegistered] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFileSelection = (file) => {
+  const [panNumber, setPanNumber] = useState('');
+  const [firmName, setFirmName] = useState('');
+  const [gstNumber, setGstNumber] = useState('');
+  const [gstDoc, setGstDoc] = useState(null);
+  const [panDoc, setPanDoc] = useState(null);
+  const [fssai, setFssai] = useState('');
+
+  const [formErrors, setFormErrors] = useState({});
+
+  const handleFileSelection = (type, file) => {
+    if (type === 'pan') {
+      setPanDoc(file);
+    } else if (type === 'gst') {
+      setGstDoc(file);
+    }
     console.log('Selected file: ', file);
   };
 
-  const handleSubmit = () => {
-    // Show the modal on submit
-    setIsModalVisible(true);
+  const validateForm = () => {
+    const errors = {};
+    if (!panNumber) errors.panNumber = 'PAN Number is required';
+    if (!firmName) errors.firmName = 'Firm Name is required';
+    if (!gstNumber) errors.gstNumber = 'GST Number is required';
+    if (!gstDoc) errors.gstDoc = 'GST document is required';
+    if (!panDoc) errors.panDoc = 'PAN document is required';
+    if (!fssai) errors.fssai = 'FSSAI Number is required if not GST registered';
+    if (!isGstRegistered) errors.isGstRegistered = 'You must check if you are GST registered or not'; // Add validation for checkbox
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('mobile', mobile);
+    formData.append('pan_number', panNumber);
+    formData.append('firm_name', firmName);
+    formData.append('gst_number', gstNumber);
+    formData.append('gst_registered', isGstRegistered ? '1' : '0');
+    formData.append('fssai', fssai); 
+    formData.append('pan_doc', {
+      uri: panDoc.uri,
+      type: panDoc.type,
+      name: panDoc.name,
+    });
+    formData.append('gst_doc', {
+      uri: gstDoc.uri,
+      type: gstDoc.type,
+      name: gstDoc.name,
+    });
+
+    try {
+      const response = await apiClient.post('/registerBusiness', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.success) {
+        setIsModalVisible(true);
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    } catch (error) {
+      alert('Error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleModalClose = () => {
     setIsModalVisible(false);
-    // Add navigation logic if needed
-    console.log('Continue Shopping');
   };
 
   const handleContinueShopping = () => {
     handleModalClose();
-    navigation.navigate('B2BBottomNavigator'); 
+    navigation.navigate('B2BBottomNavigator');
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
       <Header title="Business details" />
-      <View style={styles.ContentContainer}>
+      <View style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 16, backgroundColor: '#F3F3F3' }}>
         <LinearStepIndicator steps={[1, 2, 3]} currentStep={2} />
+        <ScrollView style={{ marginBottom: 60 }} showsVerticalScrollIndicator={false}>
+          <View style={{ marginTop: 16 }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, color: '#272727' }}>
+              Enter Your Business Details
+            </Text>
+            <View style={{ paddingVertical: 10 }}>
+              <TextInputField
+                placeholder="Enter PAN Number"
+                value={panNumber}
+                onChange={setPanNumber}
+                errorMessage={formErrors.panNumber}
+              />
 
-        <ScrollView
-          style={styles.scrollContainer}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>Enter Your Business Details</Text>
-            <View style={styles.inputGroup}>
-              <TextInputField placeholder="Enter PAN Number" />
-              <TextInputField placeholder="Firm Name" />
-              <TextInputField placeholder="Enter GST Number" />
-              <View style={{ marginTop: rh(1.5) }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: rw(2),
-                    marginBottom: rh(1),
-                  }}
-                >
+              <TextInputField
+                placeholder="Firm Name"
+                value={firmName}
+                onChange={setFirmName}
+                errorMessage={formErrors.firmName}
+              />
+
+              <TextInputField
+                placeholder="Enter GST Number"
+                value={gstNumber}
+                onChange={setGstNumber}
+                errorMessage={formErrors.gstNumber}
+              />
+
+              <View style={{ marginTop: 12 }}>
+                <View style={{ flexDirection: 'row', gap: 16, marginBottom: 8 }}>
                   <Checkbox
                     value={isGstRegistered}
                     onValueChange={setIsGstRegistered}
                     color={isGstRegistered ? '#FF3131' : undefined}
-                    style={styles.checkbox}
+                    style={{ borderRadius: 5 }}
                   />
-                  <Text style={styles.checkboxLabel}>
-                    I am not GST registered?
-                  </Text>
+                  <Text style={{ fontSize: 16, color: '#272727' }}>I am not GST registered?</Text>
                 </View>
-                <TextInputField placeholder="Enter GST Number" />
+                {formErrors.isGstRegistered && <Text style={{ color: 'red', fontSize: 14 }}>{formErrors.isGstRegistered}</Text>}
+
+                {isGstRegistered ? null : (
+                  <TextInputField
+                    placeholder="Enter FSSAI Number"
+                    value={fssai}
+                    onChange={setFssai}
+                    errorMessage={formErrors.fssai}
+                  />
+                )}
               </View>
 
               <View>
                 <FileUploadField
                   title="Upload PAN Document"
-                  onFileSelect={handleFileSelection}
+                  onFileSelect={(file) => handleFileSelection('pan', file)}
                 />
+                {formErrors.panDoc && <Text style={{ color: 'red', fontSize: 14 }}>{formErrors.panDoc}</Text>}
+
                 <FileUploadField
                   title="Upload GST/FSSAI Document"
-                  onFileSelect={handleFileSelection}
+                  onFileSelect={(file) => handleFileSelection('gst', file)}
                 />
+                {formErrors.gstDoc && <Text style={{ color: 'red', fontSize: 14 }}>{formErrors.gstDoc}</Text>}
               </View>
             </View>
           </View>
         </ScrollView>
 
-        {/* Fixed Footer with Button */}
-        <View style={[styles.footer, { width: rw(100) }]}>
-          <TouchableOpacity style={styles.nextButton} onPress={handleSubmit}>
-            <Text style={styles.nextButtonText}>Submit</Text>
-          </TouchableOpacity>
+        {/* Floating Button */}
+        <View style={{ width: '100%', padding: 16, backgroundColor: 'white', position: 'absolute', bottom: 0 }}>
+          <CustomButtons
+            onPress={handleSubmit}
+            title="Submit"
+            disabled={isLoading}
+            loading={isLoading}
+          />
         </View>
       </View>
 
@@ -105,22 +193,17 @@ const BusinessDetails = ({navigation}) => {
         visible={isModalVisible}
         onRequestClose={handleModalClose}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            {/* <View style={styles.modalIcon}>
-              <Text style={styles.iconText}>✓</Text>
-            </View> */}
-            <Image source={require('../../../assets/SuccessTick.png')} style={{width:rw(10), height:rw(10)}} />
-            <Text style={styles.modalTitle}>Registration Successful!</Text>
-            <Text style={styles.modalMessage}>
-              You're all set! Start exploring and make the most of your new
-              account.
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View style={{ width: '80%', backgroundColor: 'white', borderRadius: 10, padding: 20, alignItems: 'center' }}>
+            <Image source={require('../../../assets/SuccessTick.png')} style={{ width: 40, height: 40 }} />
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#272727', marginBottom: 8, textAlign: 'center' }}>
+              Registration Successful!
             </Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={handleContinueShopping}
-            >
-              <Text style={styles.modalButtonText}>Continue Shopping</Text>
+            <Text style={{ fontSize: 16, color: '#9D9D9D', textAlign: 'center', marginBottom: 16 }}>
+              You're all set! Start exploring and make the most of your new account.
+            </Text>
+            <TouchableOpacity style={{ width: '90%', backgroundColor: '#FF3131', paddingVertical: 12, borderRadius: 10 }} onPress={handleContinueShopping}>
+              <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>Continue Shopping</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -161,24 +244,17 @@ const styles = StyleSheet.create({
     fontSize: rf(2),
     color: '#272727',
   },
+  errorText: {
+    color: 'red',
+    fontSize: rf(1.6),
+    marginTop: rh(0.5),
+  },
   footer: {
     padding: rw(2),
     paddingBottom: rh(2),
     backgroundColor: '#FFFFFF',
     position: 'absolute',
     bottom: 0,
-  },
-  nextButton: {
-    width: '90%',
-    alignSelf: 'center',
-    backgroundColor: 'red',
-    paddingVertical: rh(1.7),
-    borderRadius: 10,
-  },
-  nextButtonText: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'white',
   },
   modalOverlay: {
     flex: 1,
@@ -192,20 +268,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: rw(5),
     alignItems: 'center',
-  },
-  modalIcon: {
-    width: rw(10),
-    height: rw(10),
-    backgroundColor: '#4CAF50',
-    borderRadius: rw(7.5),
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: rh(2),
-  },
-  iconText: {
-    color: 'white',
-    fontSize: rf(3),
-    fontWeight: 'bold',
   },
   modalTitle: {
     fontSize: rf(2),

@@ -3,7 +3,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiClient = axios.create({
-  baseURL: 'https://finance.scriptqube.com/api',
+  baseURL: 'https://u1rfoods.com/api',
 });
 
 // Intercept requests to add token to headers
