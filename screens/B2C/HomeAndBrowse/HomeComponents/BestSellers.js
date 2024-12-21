@@ -13,14 +13,14 @@ const BestSellers = () => {
 
     // Categories array define karte hain
     const categories = [
-        { id: 1, image: require('../../../../assets/CategorIcon/image1.png'), text: 'Dry Fruits' },
-        { id: 2, image: require('../../../../assets/CategorIcon/image2.png'), text: 'Spices' },
-        { id: 3, image: require('../../../../assets/CategorIcon/image3.png'), text: 'Kesar' },
-        { id: 4, image: require('../../../../assets/CategorIcon/image4.png'), text: 'Spices' },
-        { id: 5, image: require('../../../../assets/CategorIcon/image5.png'), text: 'Herbal Teas' },
-        { id: 6, image: require('../../../../assets/CategorIcon/image6.png'), text: 'Herbal Teas' },
-        { id: 7, image: require('../../../../assets/CategorIcon/image7.png'), text: 'Herbal Teas' },
-        { id: 8, image: require('../../../../assets/CategorIcon/image1.png'), text: 'Herbal Teas' },
+        { id: 1, cimage: require('../../../../assets/CategorIcon/image1.png'), text: 'Dry Fruits' },
+        { id: 2, cimage: require('../../../../assets/CategorIcon/image2.png'), text: 'Spices' },
+        { id: 3, cimage: require('../../../../assets/CategorIcon/image3.png'), text: 'Kesar' },
+        { id: 4, cimage: require('../../../../assets/CategorIcon/image4.png'), text: 'Spices' },
+        { id: 5, cimage: require('../../../../assets/CategorIcon/image5.png'), text: 'Herbal Teas' },
+        { id: 6, cimage: require('../../../../assets/CategorIcon/image6.png'), text: 'Herbal Teas' },
+        { id: 7, cimage: require('../../../../assets/CategorIcon/image7.png'), text: 'Herbal Teas' },
+        { id: 8, cimage: require('../../../../assets/CategorIcon/image1.png'), text: 'Herbal Teas' },
     ];
 
     return (

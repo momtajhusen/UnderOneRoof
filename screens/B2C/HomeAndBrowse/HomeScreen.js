@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
@@ -19,33 +19,27 @@ const HomeScreen = () => {
 
   const navigation = useNavigation();
 
+  const [HomeSliderData, setHomeSliderData] = useState([]);
+
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FF6D6D");
   });
-
-  const sliderData = [
-    require('../../../assets/Slider/Banner1.png'),
-    require('../../../assets/Slider/Banner1.png'),
-    require('../../../assets/Slider/Banner1.png'),
-  ];
-
-      // Fetch categories from API
+      // Fetch slider image from API
       useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await apiClient.get('/home');  
-                const slider = response.data.data.slider;
-                console.log(slider);
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            } finally {
-                setLoading(false);  
-            }
+        const fetchHomeSliderData = async () => {
+          try {
+            const response = await apiClient.get('/home');
+            const slider = response.data.data.slider; // API se slider data
+            setHomeSliderData(slider);
+          } catch (error) {
+            console.error('Error fetching slider data:', error);
+          } finally {
+            setLoading(false);
+          }
         };
-
-        fetchCategories();
-    }, []);
+        fetchHomeSliderData();
+      }, []);
 
   return (
     <ScrollView>
@@ -76,7 +70,7 @@ const HomeScreen = () => {
         <View style={styles.SliderCategoryContainer}>
           {/* Slider Container */}
           <View style={{ paddingTop: rh(5) }}>
-            <HomeSlider sliderData={sliderData} sliderStyle={{width: rw(80), height: rh(17)}}/>
+            <HomeSlider sliderData={HomeSliderData} sliderStyle={{width: rw(80), height: rh(17)}}/>
           </View>
           {/* Bestsellers Category Container */}
           <View style={{marginTop:rh(2)}}>

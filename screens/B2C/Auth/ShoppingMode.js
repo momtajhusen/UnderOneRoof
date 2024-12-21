@@ -21,7 +21,6 @@ const ShoppingMode = ({ navigation, route }) => {
     setLoadingType(type); // Set the loading state for the selected type
     try {
       const response = await apiClient.post('/selectFlow', { mobile, type });
-      console.log(response.data);
       if (response.data.status === 1) {
         if (type === 'wholesale') {
           await AsyncStorage.setItem('ShoppingMode',  'wholesale');

@@ -1,94 +1,38 @@
 //import liraries
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { rw, rf, rh } from '../../../../Service/responsive';
 import ItemsList from '../../../../components/List/ItemsList';
+import apiClient from '../../../../Service/apiClient';
+
 
 // create a component
 const RefreshYourDay = () => {
 
-    // Items List array define
-    const productList = [
-        {
-            id:1,
-            name: "Premium Roasted Almonds",
-            weight: "500g",
-            type: "Roasted",
-            price: 299,
-            mpr: 399,
-            discount: "25% OFF",
-            rating: 5,
-            likes: 22500,
-            image: require('../../../../assets/items/image1.png'), // Corrected path
-        },
-        {
-            id:2,
-            name: "Honey Almond Energy Bars",
-            weight: "500g",
-            type: "Natural",
-            price: 299,
-            mpr: 399,
-            discount: "25% OFF",
-            rating: 5,
-            likes: 22500,
-            image: require('../../../../assets/items/image3.png'), // Corrected path
-        },
-        {
-            id:3,
-            name: "Organic Green Tea",
-            weight: "500g",
-            type: "Organic",
-            price: 299,
-            mpr: 399,
-            discount: "25% OFF",
-            rating: 5,
-            likes: 22500,
-            image: require('../../../../assets/items/image2.png'), // Corrected path
-        },
-        {
-            id:4,
-            name: "Premium Roasted Almonds",
-            weight: "500g",
-            type: "Roasted",
-            price: 299,
-            mpr: 399,
-            discount: "25% OFF",
-            rating: 5,
-            likes: 22500,
-            image: require('../../../../assets/items/image4.png'), // Corrected path
-        },
-        {
-            id:5,
-            name: "Honey Almond Energy Bars",
-            weight: "500g",
-            type: "Natural",
-            price: 299,
-            mpr: 399,
-            discount: "25% OFF",
-            rating: 5,
-            likes: 22500,
-            image: require('../../../../assets/items/image1.png'), // Corrected path
-        },
-        {
-            id:6,
-            name: "Organic Green Tea",
-            weight: "500g",
-            type: "Organic",
-            price: 299,
-            mpr: 399,
-            discount: "25% OFF",
-            rating: 5,
-            likes: 22500,
-            image: require('../../../../assets/items/image2.png'), // Corrected path
-        }
-    ];
+      const [productData, setProductData] = useState([]);
+
+          // Fetch slider image from API
+          useEffect(() => {
+            const fetchHomeSliderData = async () => {
+              try {
+                const response = await apiClient.get('/home');
+                const productData = response.data.data.section1;  
+                setProductData(productData);
+              } catch (error) {
+                console.error('Error fetching slider data:', error);
+              } finally {
+                setLoading(false);
+              }
+            };
+            fetchHomeSliderData();
+          }, [])
 
     return (
         <View style={{ padding: rw(4) }}>
             <Text style={styles.headerText}>Refresh Your Day</Text>
             <View>
                 {/* Passing productList as props */}
-                <ItemsList items={productList} />
+                <ItemsList items={productData} />
             </View>
         </View>
     );

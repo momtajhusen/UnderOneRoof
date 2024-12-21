@@ -5,14 +5,14 @@ import { rw, rh, rf } from '../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 
 // create a reusable component
-const CategoryItem = ({ id, image, text, onPress }) => {
+const CategoryItem = ({ id, cimage, text, onPress }) => {
 
   const navigation = useNavigation();
 
     return (
         <TouchableOpacity  onPress={onPress} style={styles.listContainer}>
             <View style={styles.imageContainer}>
-                <Image source={image} style={styles.image} resizeMode="cover" />
+                <Image source={{uri: cimage}} style={styles.image} resizeMode="cover" />
             </View>
             <View style={styles.textContainer}>
                 <Text style={styles.text}>{text}</Text>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: rw(1),
         alignItems: 'center',
         justifyContent:"center",
-        height:rh(5.5),
+        height:rh(4.8),
     },
     text: {
         fontWeight: '600',

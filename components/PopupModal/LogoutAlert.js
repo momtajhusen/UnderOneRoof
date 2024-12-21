@@ -27,13 +27,13 @@ const LogOutAlert = ({ isModalVisible, toggleModal }) => {
             transparent={true}
             animationType="fade"
             visible={isModalVisible}
-            onRequestClose={toggleModal} // This is for Android back button
+            onRequestClose={toggleModal}  
         >
             <View style={styles.modalContainer}>
                 <ImageBackground
-                    source={require('../../assets/Rectangle31.png')} // Update with your image path
+                    source={require('../../assets/Rectangle31.png')}  
                     style={styles.modalContent}
-                    imageStyle={styles.frameImage} // Styles to control the frame image shape
+                    imageStyle={styles.frameImage}  
                 >
                     {/* Icon at the top */}
                     <View style={styles.iconContainer}>

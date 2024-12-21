@@ -18,12 +18,12 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
    // State to manage wishlist status for each item (using their IDs)
    const [wishlist, setWishlist] = useState({});
 
-  const onWishlistedToggle = (id) => {
-    setWishlist((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id], // Toggle wishlist status for the item with the correct ID
-    }));
-  };
+  // const onWishlistedToggle = (id) => {
+  //   setWishlist((prevState) => ({
+  //     ...prevState,
+  //     [id]: !prevState[id], // Toggle wishlist status for the item with the correct ID
+  //   }));
+  // };
   
 
   const handleAdd = (id) => {
@@ -66,6 +66,44 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
     });
   };
 
+  const onWishlistedToggle = async (id) => {
+    try {
+      // Toggle wishlist state locally
+      const updatedWishlist = {
+        ...wishlist,
+        [id]: !wishlist[id], // Toggle the wishlist status
+      };
+      // setWishlist(updatedWishlist);
+  
+      // Make an API call to add/remove the item from the wishlist in the database
+      // const response = await fetch('YOUR_API_ENDPOINT', {
+      //   method: 'POST', // or 'PUT' depending on your API
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     product_id: id,
+      //     is_wishlist: updatedWishlist[id], // Send the updated status
+      //   }),
+      // });
+  
+      if (!response.ok) {
+        throw new Error('Error updating wishlist on server');
+      }
+  
+      // Optionally, handle the response from the API (e.g., show success or error message)
+    } catch (error) {
+      console.log('Error toggling wishlist:', error);
+  
+      // Revert wishlist state in case of error
+      setWishlist((prevState) => ({
+        ...prevState,
+        [id]: !prevState[id], // Revert the change
+      }));
+    }
+  };
+  
+
   return (
     <FlatList
       data={items}
@@ -82,27 +120,29 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
           style={[styles.itemContainer, listContainerStyle, item.stock === 0 && styles.disabledItem]}
         >
           <View style={styles.ImageContainer}>
-            {wishlist[item.id] ? (
-                <TouchableOpacity onPress={() => onWishlistedToggle(item.id)} style={styles.likeIcon}>
-                    <MaterialIcons name="favorite" size={rf(3)} style={{ color: "#DC3545" }} />
-                </TouchableOpacity>
-                ) : (
-                <TouchableOpacity onPress={() => onWishlistedToggle(item.id)} style={styles.likeIcon}>
-                    <MaterialIcons name="favorite-border" size={rf(3)} style={{ color: "#BCBCBC" }} />
-                </TouchableOpacity>
-            )}
+          {wishlist[item.pid] ? (
+            <TouchableOpacity onPress={() => onWishlistedToggle(item.pid)} style={styles.likeIcon}>
+              <MaterialIcons name="favorite" size={rf(3)} style={{ color: "#DC3545" }} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => onWishlistedToggle(item.pid)} style={styles.likeIcon}>
+              <MaterialIcons name="favorite-border" size={rf(3)} style={{ color: "#BCBCBC" }} />
+            </TouchableOpacity>
+          )}
 
-            {showIncreaseDecrease !== item.id && (
+
+
+            {showIncreaseDecrease !== item.pid && (
               <TouchableOpacity
                 disabled={item.stock === 0}
-                onPress={() => handleAdd(item.id)}
+                onPress={() => handleAdd(item.pid)}
                 style={styles.addbtn}
               >
                 <Text style={styles.btntext}>Add</Text>
               </TouchableOpacity>
             )}
 
-            {showIncreaseDecrease === item.id && (
+            {showIncreaseDecrease === item.pid && (
               <Animated.View
                 style={[
                   styles.IncreaseAurDecreaseContener,
@@ -119,18 +159,18 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
                 ]}
               >
                 <View style={{ flexDirection: "row", alignItems: "center", width: "100%" }}>
-                  <TouchableOpacity style={{ width: "45%", height: "100%" }} onPress={() => handleIncrease(item.id)}>
+                  <TouchableOpacity style={{ width: "45%", height: "100%" }} onPress={() => handleIncrease(item.pid)}>
                     <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: rf(2), color: "white" }}>+</Text>
                   </TouchableOpacity>
-                  <Text style={{ color: "white", fontWeight: "bold" }}>{itemQuantity[item.id] || 0}</Text>
-                  <TouchableOpacity style={{ width: "45%", height: "100%" }} onPress={() => handleDecrease(item.id)}>
+                  <Text style={{ color: "white", fontWeight: "bold" }}>{itemQuantity[item.pid] || 0}</Text>
+                  <TouchableOpacity style={{ width: "45%", height: "100%" }} onPress={() => handleDecrease(item.pid)}>
                     <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: rf(2), color: "white" }}>-</Text>
                   </TouchableOpacity>
                 </View>
               </Animated.View>
             )}
 
-            <Image source={item.image} style={styles.image} />
+            <Image source={{uri:item.itemimage}} style={styles.image} />
           </View>
           <View style={styles.details}>
             <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: rw(2) }}>
@@ -142,12 +182,16 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
                 {item.name}
               </Text>
               <View style={{ flexDirection: "row" }}>
-                <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon} />
-                <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon} />
-                <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon} />
-                <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon} />
-                <MaterialIcons name="star-rate" size={rf(2)} style={styles.starIcon} />
-                <Text style={{ fontSize: rf(1.5), marginLeft:rw(1) }}>({item.likes})</Text>
+                  {/* Stars for Rating */}
+                  {Array.from({ length: item.rating || 5 }, (_, index) => (
+                    <MaterialIcons
+                      key={index}
+                      name="star-rate"
+                      size={rf(2)}
+                      style={styles.starIcon}
+                    />
+                  ))}
+                  <Text style={{ fontSize: rf(1.5), marginLeft:rw(1) }}>({item.rating})</Text>
 
                 {/* "Out of Stock" Message */}
                 {item.stock === 0 ? (
@@ -156,9 +200,9 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
                   </View>
                 ) : null}
               </View>
-              <Text style={styles.discount}>{item.discount}</Text>
+              <Text style={styles.discount}>{item.discount} % OFF</Text>
               <Text style={styles.price}>
-                ₹{item.price} <Text style={styles.mpr}>MPR <Text style={styles.mprPrice}>₹{item.mpr}</Text></Text>
+                ₹{item.selling_price} <Text style={styles.mpr}>MPR <Text style={styles.mprPrice}>₹{item.mrp_price}</Text></Text>
               </Text>
             </View>
           </View>
@@ -206,6 +250,7 @@ const styles = StyleSheet.create({
     left: rw(1),
     top: rh(0.5),
     padding: rw(1),
+    zIndex:100,
   },
   addbtn: {
     position: "absolute",

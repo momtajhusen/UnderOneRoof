@@ -41,10 +41,6 @@ const SignupOrLogin = ({ navigation }) => {
 
     try {
       const response = await apiClient.post('/signupLogin', { mobile }); 
-      
-      // Log response for debugging
-      console.log("API Response: ", response.data);
-
       const { status, msg, data, userid } = response.data;
 
       if (status === 1) {

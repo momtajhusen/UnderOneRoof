@@ -39,7 +39,7 @@ const ShopByCategory = () => {
                     {categories.map((category) => (
                         <CategoryList
                             key={category.id}
-                            image={{ uri: category.image }}  
+                            cimage={category.image}  
                             text={category.cname}
                             onPress={() =>
                                 navigation.navigate('ProductListing', {
