@@ -6,6 +6,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import CustomButtons from '../../../components/Buttons/CustomButtons';
 import apiClient from '../../../Service/apiClient';
 import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // create a component
 const VerifyOtp = ({ navigation, route }) => {
@@ -31,32 +33,33 @@ const VerifyOtp = ({ navigation, route }) => {
     }
   }, [timer]);
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (code.join('').length === 4) {
       setIsLoading(true);
       const otpCode = code.join('');
-
-      apiClient
-        .post('/loginOtp', { mobile, otp: otpCode })
-        .then((response) => {
-          setIsLoading(false);
-          const { status, msg, data } = response.data;
-
-          if (status === 1 && msg === "OTP Verify") {
-            navigation.navigate('ShoppingMode', {mobile: mobile, userId: data.userid });
-          } else {
-            setError('Invalid OTP. Please try again.');
-          }
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          setError('An error occurred. Please try again.');
-        });
+      
+      try {
+        const response = await apiClient.post('/loginOtp', { mobile, otp: otpCode });
+        setIsLoading(false);
+  
+        const { status, msg, data } = response.data;
+        const token = response.data.data.token.token;
+        await AsyncStorage.setItem('authToken', token);
+  
+        if (status === 1 && msg === "OTP Verify") {
+          navigation.navigate('ShoppingMode', { mobile: mobile, userId: data.userid });
+        } else {
+          setError('Invalid OTP. Please try again.');
+        }
+      } catch (error) {
+        setIsLoading(false);
+        setError('An error occurred. Please try again.');
+      }
     } else {
       setError('Please enter the 4-digit verification code');
     }
   };
-
+  
   const handleChange = (text, index) => {
     if (text.length > 1) text = text.slice(-1);
     const newCode = [...code];

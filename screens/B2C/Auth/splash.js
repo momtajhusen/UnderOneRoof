@@ -1,27 +1,47 @@
-//import liraries
+//import libraries
 import React, { useEffect } from 'react';
-import { View, Text,  Image, StyleSheet, StatusBar } from 'react-native';
+import { View, StatusBar, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { rw, rh } from '../../../Service/responsive';
-import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // create a component
 const SplashScreen = () => {
     const navigation = useNavigation();
 
-    useFocusEffect(() => {
-      StatusBar.setBackgroundColor("yellow");
-    });
+    useEffect(() => {
+        const checkAuthToken = async () => {
+            try {
+                const token = await AsyncStorage.getItem('authToken');
+                const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
+                setTimeout(() => {
+                    if (token) {
+                        if (ShoppingMode === 'wholesale') {
+                            navigation.replace('B2BBottomNavigator');
+                        } else if (ShoppingMode === 'retail') {
+                            navigation.replace('BottomNavigator');
+                        } else {
+                            navigation.replace('ShoppingMode');
+                        }
+                    } else {
+                        navigation.replace('SignupOrLogin');
+                    }
+                }, 3000);
+            } catch (error) {
+                console.error("Error reading token:", error);
+            }
+        };
+
+        checkAuthToken();
+    }, [navigation]);
 
     useEffect(() => {
-        setTimeout(() => {
-            navigation.replace('SignupOrLogin');
-          }, 3000);
+        StatusBar.setBackgroundColor("yellow");
     }, []);
 
     return (
-        <View  style={styles.container}>
+        <View style={styles.container}>
             <Animatable.Image
                 animation="zoomIn"
                 delay={20}
@@ -32,19 +52,19 @@ const SplashScreen = () => {
         </View>
     );
 };
- 
+
 //make this component available to the app
 export default SplashScreen;
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor:"yellow",
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "yellow",
     },
     logo: {
-      width: rw(60),  // Adjusted width for responsiveness
-      height: rh(30), // Adjusted height for responsiveness
+        width: rw(60),
+        height: rh(30),
     },
-  });
+});

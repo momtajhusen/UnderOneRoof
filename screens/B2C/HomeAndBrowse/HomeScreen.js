@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
@@ -11,6 +11,8 @@ import RefreshYourDay from './HomeComponents/RefreshYourDay';
 import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
+import apiClient from '../../../Service/apiClient';
+
 
 
 const HomeScreen = () => {
@@ -27,6 +29,23 @@ const HomeScreen = () => {
     require('../../../assets/Slider/Banner1.png'),
     require('../../../assets/Slider/Banner1.png'),
   ];
+
+      // Fetch categories from API
+      useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await apiClient.get('/home');  
+                const slider = response.data.data.slider;
+                console.log(slider);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            } finally {
+                setLoading(false);  
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
   return (
     <ScrollView>

@@ -31,7 +31,7 @@ const AccountScreen = ({navigation}) => {
                 </View>
                 {/* Account Menu List */}
                 <View>
-                    <AccountMenuList />
+                     <AccountMenuList />
                      <Text style={{textAlign:"center", marginTop:rh(3), fontSize:rf(2), color:"#717171"}}>V5.54</Text>
                 </View>
             </View>

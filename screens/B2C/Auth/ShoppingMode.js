@@ -6,6 +6,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from "@react-navigation/native";
 import apiClient from '../../../Service/apiClient';  
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const ShoppingMode = ({ navigation, route }) => {
   const { mobile } = route.params;
@@ -19,11 +21,13 @@ const ShoppingMode = ({ navigation, route }) => {
     setLoadingType(type); // Set the loading state for the selected type
     try {
       const response = await apiClient.post('/selectFlow', { mobile, type });
-
+      console.log(response.data);
       if (response.data.status === 1) {
         if (type === 'wholesale') {
+          await AsyncStorage.setItem('ShoppingMode',  'wholesale');
           navigation.navigate('RegistrationOwnerScreen', {mobile: mobile});
         } else if (type === 'retail') {
+          await AsyncStorage.setItem('ShoppingMode',  'retail');
           navigation.navigate('BottomNavigator');
         }
       } else {

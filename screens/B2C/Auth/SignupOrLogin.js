@@ -26,10 +26,10 @@ const SignupOrLogin = ({ navigation }) => {
 
   // Function to handle API call
   const handleSignupLogin = async () => {
-    if (!mobile) {
-      setErrorMessage("Mobile number is required");
-      return;
-    }
+    // if (!mobile) {
+    //   setErrorMessage("Mobile number is required");
+    //   return;
+    // }
 
     if (!validateMobile(mobile)) {
       setErrorMessage("Please enter a valid 10-digit mobile number.");
@@ -43,7 +43,7 @@ const SignupOrLogin = ({ navigation }) => {
       const response = await apiClient.post('/signupLogin', { mobile }); 
       
       // Log response for debugging
-      console.log("API Response: ", response);
+      console.log("API Response: ", response.data);
 
       const { status, msg, data, userid } = response.data;
 

@@ -6,7 +6,9 @@ import {
   ScrollView,
   Modal,
   Image,
+  StyleSheet,
 } from 'react-native';
+import { rw, rh, rf } from '../../../Service/responsive';
 import Checkbox from 'expo-checkbox';
 import Header from '../../../components/header';
 import LinearStepIndicator from '../../../components/Stepper/LinearIndicatorStepper';
@@ -33,11 +35,11 @@ const BusinessDetails = ({ navigation, route }) => {
 
   const handleFileSelection = (type, file) => {
     if (type === 'pan') {
-      setPanDoc(file);
+      console.log(file.assets[0]);
+      setPanDoc(file.assets[0]); 
     } else if (type === 'gst') {
-      setGstDoc(file);
+      setGstDoc(file.assets[0]);
     }
-    console.log('Selected file: ', file);
   };
 
   const validateForm = () => {
@@ -75,20 +77,21 @@ const BusinessDetails = ({ navigation, route }) => {
       type: gstDoc.type,
       name: gstDoc.name,
     });
-
+ 
     try {
       const response = await apiClient.post('/registerBusiness', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
+       console.log(response);
       if (response.data.success) {
         setIsModalVisible(true);
       } else {
         alert('Registration failed. Please try again.');
       }
     } catch (error) {
+      console.log(error);
       alert('Error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -148,14 +151,14 @@ const BusinessDetails = ({ navigation, route }) => {
                 </View>
                 {formErrors.isGstRegistered && <Text style={{ color: 'red', fontSize: 14 }}>{formErrors.isGstRegistered}</Text>}
 
-                {isGstRegistered ? null : (
+             
                   <TextInputField
                     placeholder="Enter FSSAI Number"
                     value={fssai}
                     onChange={setFssai}
                     errorMessage={formErrors.fssai}
                   />
-                )}
+               
               </View>
 
               <View>
@@ -176,7 +179,7 @@ const BusinessDetails = ({ navigation, route }) => {
         </ScrollView>
 
         {/* Floating Button */}
-        <View style={{ width: '100%', padding: 16, backgroundColor: 'white', position: 'absolute', bottom: 0 }}>
+        <View style={{ width: '100%', padding: 16, backgroundColor: 'white', position: 'absolute', bottom: 0, justifyContent:"center" }}>
           <CustomButtons
             onPress={handleSubmit}
             title="Submit"

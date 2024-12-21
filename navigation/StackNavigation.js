@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomNavigator from './BottomNavigation';
-import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SplashScreen from '../screens/B2C/Auth/splash';
 import HomeScreen from '../screens/B2C/HomeAndBrowse/HomeScreen';
