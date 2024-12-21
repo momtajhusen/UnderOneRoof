@@ -157,23 +157,21 @@ const ProductListing = ({ route }) => {
         const [selectedCategoryName, setSelectedCategoryName] = useState(selectCategoryName);
         const [selectedCategorySlug, setSelectedCategorySlug] = useState(selectCategorySlug);
 
-
         const [productListing, setProductListing] = useState([]);
         const [categoryData, setCategory] = useState([]);
 
         
-
-
         // Function to toggle modal visibility
         const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
         const toggleModal = () => {
             setModalVisible(!isModalVisible);
         };
 
-        const SelectedCategoryHandle = (id, cslug, name) => {
+        const SelectedCategoryHandle = (id, slug, name) => {
           setSelectedCategoryId(id);
           setSelectedCategoryName(name);
-          setSelectedCategorySlug(cslug);
+          setSelectedCategorySlug(slug);
+          fetchProduct();
         };
 
         const fetchSubCategory = async () => {
@@ -181,6 +179,7 @@ const ProductListing = ({ route }) => {
           try {
               // Pass params in the API request
               const response = await apiClient.get(`/subCategoryList/${selectedCategorySlug}`);
+              console.log(response.data);
               setCategory(response.data.data.catlist); 
             
           } catch (error) {
@@ -244,7 +243,7 @@ const ProductListing = ({ route }) => {
                     styles.categoryItem,
                     item.pid === selectedCategoryId && styles.activeCategory,
                   ]}
-                  onPress={() => SelectedCategoryHandle(item.sid, item.cslug, item.cname)}
+                  onPress={() => SelectedCategoryHandle(item.sid, item.slug, item.cname)}
               >
                 <View style={styles.categoryWrapper}>
                   <View
@@ -313,9 +312,9 @@ const ProductListing = ({ route }) => {
             {categories.find((c) => c.id === selectedCategory)?.name}
           </Text> */}
 
-            <View style={{ paddingTop: rh(1), flexDirection: "row", paddingBottom: rh(5), flex: 1, justifyContent: "center" }}>
+            <View style={{ paddingTop: rh(1), flexDirection: "row", flex:1, paddingBottom: rh(5), paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0), justifyContent: "center" }}>
               {productListing.length != 0 ? (
-                   <ItemsList items={productListing} layout="vertical" listContainerStyle={{ width: rw(37.3), marginBottom: rh(1) }} />
+                   <ItemsList items={productListing} layout="vertical" listContainerStyle={{ width: categoryData.length === 0 ? rw(45) : rw(37.3), marginBottom: rh(1) }} />
               ) : (
                 <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
                   <Text style={{ fontSize: rf(2), color: '#555', textAlign: 'center' }}>
@@ -346,14 +345,13 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex: 1,
-    paddingVertical:rh(1)
+    paddingTop:rh(1),
   },
   sideContainer:{
     position:"relative",
     borderRightWidth:1,
     borderColor:"#E9E9E9",
-    marginBottom:rh(2),
-    // backgroundColor:"blue"
+    // marginBottom:rh(2),
   },
   categoryItem: {
     marginVertical: rh(0.5),

@@ -45,12 +45,12 @@ const SignupOrLogin = ({ navigation }) => {
 
       if (status === 1) {
         // Navigate if success
-        navigation.navigate('VerifyOtp', { mobile: data.mobile, userid });
+        navigation.navigate('VerifyOtp', { mobile: data.mobile });
       } else {
         setErrorMessage(msg || "Something went wrong. Please try again.");  
       }
     } catch (error) {
-      console.error("API Error: ", error);  // Log error for debugging
+      console.error("API Error: ", error);
       setErrorMessage("Failed to connect to the server. Please try again later."); 
     } finally {
       setLoading(false);  

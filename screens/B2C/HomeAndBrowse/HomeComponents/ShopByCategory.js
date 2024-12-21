@@ -17,6 +17,7 @@ const ShopByCategory = () => {
                 const response = await apiClient.get('/home');  
                 const category = response.data.data.category;
                 setCategories(category);
+                console.log('Shop Category');
                 console.log(category);
             } catch (error) {
                 console.error('Error fetching categories:', error);
