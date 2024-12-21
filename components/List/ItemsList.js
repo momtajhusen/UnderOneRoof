@@ -170,7 +170,11 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
               </Animated.View>
             )}
 
-            <Image source={{uri:item.itemimage}} style={styles.image} />
+          <Image 
+              source={{ uri: item.itemimage ? item.itemimage : 'https://via.placeholder.com/150' }} 
+              style={styles.image} 
+          />
+
           </View>
           <View style={styles.details}>
             <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: rw(2) }}>

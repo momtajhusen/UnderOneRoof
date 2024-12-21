@@ -81,7 +81,12 @@ const CategoryScreen  = ({navigation}) => {
                 <CategoryList
                     cimage={category.image}  
                     text={category.cname}  
-                    onPress={() => navigation.navigate('ProductListing', { selectCategoryId: category.sid, selectCategoryName: category.cname })}
+                    onPress={() => navigation.navigate('ProductListing', 
+                    { 
+                        selectCategoryId: category.sid,
+                        selectCategoryName: category.cname,
+                        selectCategorySlug: category.cslug, 
+                    })}
                 />
                 </Animatable.View>
                 ))}

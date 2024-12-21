@@ -16,23 +16,23 @@ import SortByBtn from '../../../../components/Buttons/SortByBtn';
 import SortByModal from '../../../../components/Modals/SortbyModal';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import ItemsList from '../../../../components/List/ItemsList';
+import apiClient from '../../../../Service/apiClient';
 
 
   // Dummy data for side navigation
   const categories = [
-    { id: 1, name: 'Dry Fruits', icon: require('../../../../assets/CategorIcon/image1.png') },
-    { id: 2, name: 'Spices', icon: require('../../../../assets/CategorIcon/image2.png') },
-    { id: 3, name: 'Kesar', icon: require('../../../../assets/CategorIcon/image3.png') },
-    { id: 4, name: 'Energy Bars', icon: require('../../../../assets/CategorIcon/image4.png') },
-    { id: 5, name: 'Edible Oils', icon: require('../../../../assets/CategorIcon/image5.png') },
-    { id: 6, name: 'Dry Fruits', icon: require('../../../../assets/CategorIcon/image6.png') },
-    { id: 7, name: 'Spices', icon: require('../../../../assets/CategorIcon/image7.png') },
-    { id: 8, name: 'Kesar', icon: require('../../../../assets/CategorIcon/image1.png') },
-    { id: 9, name: 'Energy Bars', icon: require('../../../../assets/CategorIcon/image2.png') },
-    { id: 10, name: 'Edible Oils', icon: require('../../../../assets/CategorIcon/image3.png') },
-    { id: 11, name: 'Dry Fruits', icon: require('../../../../assets/CategorIcon/image4.png') },
-    { id: 12, name: 'Spices', icon: require('../../../../assets/CategorIcon/image5.png') },
+    { sid: 1, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 2, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 3, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 4, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 5, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 6, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 7, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 8, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+    { sid: 9, cname: 'Dry Fruits', image: 'https://u1rfoods.com/categoryImage/27-07-2024-21-55-021722097502.png' },
+
   ];
+
 
   // Filter list array
   const filters = [
@@ -150,23 +150,67 @@ import ItemsList from '../../../../components/List/ItemsList';
 
 const ProductListing = ({ route }) => {
 
-  // Receive the selectCategory prop from the route params
-  const { selectCategoryName } = route.params;
+        // Receive the selectCategory prop from the route params
+        const { selectCategoryId, selectCategoryName, selectCategorySlug } = route.params;
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState(1);
-  const [selectedCategoryName, setSelectedCategoryName] = useState(selectCategoryName);
+        const [selectedCategoryId, setSelectedCategoryId] = useState(selectCategoryId);
+        const [selectedCategoryName, setSelectedCategoryName] = useState(selectCategoryName);
+        const [selectedCategorySlug, setSelectedCategorySlug] = useState(selectCategorySlug);
 
 
-  // Function to toggle modal visibility
-  const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
-  const toggleModal = () => {
-      setModalVisible(!isModalVisible);
-  };
+        const [productListing, setProductListing] = useState([]);
+        const [categoryData, setCategory] = useState([]);
 
-  const SelectedCategoryHandle = (id, name) => {
-    setSelectedCategoryId(id);
-    setSelectedCategoryName(name);
-  };
+        
+
+
+        // Function to toggle modal visibility
+        const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
+        const toggleModal = () => {
+            setModalVisible(!isModalVisible);
+        };
+
+        const SelectedCategoryHandle = (id, cslug, name) => {
+          setSelectedCategoryId(id);
+          setSelectedCategoryName(name);
+          setSelectedCategorySlug(cslug);
+        };
+
+        const fetchSubCategory = async () => {
+
+          try {
+              // Pass params in the API request
+              const response = await apiClient.get(`/subCategoryList/${selectedCategorySlug}`);
+              setCategory(response.data.data.catlist); 
+            
+          } catch (error) {
+              console.error('Error fetching category:', error);
+          } finally {
+              setLoading(false);
+          }
+      };
+      
+
+        const fetchProduct = async () => {
+          try { 
+              const postResponse = await apiClient.post('/listing', {
+                cid: selectedCategoryId,
+            });
+              const product = postResponse.data.data.listingProduct;
+              setProductListing(product);
+          } catch (error) {
+              console.error('Error fetching product:', error);
+          } finally {
+              setLoading(false);  
+          }
+        };
+
+        // Fetch select category product from API
+        useEffect(() => {
+          fetchProduct();
+          fetchSubCategory();
+      }, []);
+  
   
   return (
     <View style={styles.screen}>
@@ -191,16 +235,16 @@ const ProductListing = ({ route }) => {
 
         <View style={styles.sideContainer}>
             <FlatList
-                data={categories}
-                keyExtractor={(item) => item.id.toString()}
+                data={categoryData}
+                keyExtractor={(item) => item.sid.toString()}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                 <TouchableOpacity
                   style={[
                     styles.categoryItem,
-                    item.id === selectedCategoryId && styles.activeCategory,
+                    item.pid === selectedCategoryId && styles.activeCategory,
                   ]}
-                  onPress={() => SelectedCategoryHandle(item.id, item.name)}
+                  onPress={() => SelectedCategoryHandle(item.sid, item.cslug, item.cname)}
               >
                 <View style={styles.categoryWrapper}>
                   <View
@@ -208,12 +252,12 @@ const ProductListing = ({ route }) => {
                       styles.categoryIconWrapper,
                       {
                         transitionDelay: 2,
-                        borderColor: item.id === selectedCategoryId ? '#FF3131' : '#DFDFDF',
-                        backgroundColor: item.id === selectedCategoryId ? '#fce6e6' : '#FFFFFF',
+                        borderColor: item.sid === selectedCategoryId ? '#FF3131' : '#DFDFDF',
+                        backgroundColor: item.sid === selectedCategoryId ? '#fce6e6' : '#FFFFFF',
                       },
                     ]}
                   >
-                    <Image source={item.icon} style={styles.categoryIcon} />
+                    <Image source={{uri: item.image}} style={styles.categoryIcon} />
                   </View>
                   <Text
                     style={[
@@ -221,8 +265,9 @@ const ProductListing = ({ route }) => {
                       item.id === selectedCategoryId && styles.activeText,
                     ]}
                   >
-                    {item.name}
+                    {item.cname.length > 10 ? `${item.cname.slice(0, 15)}...` : item.cname}
                   </Text>
+
                 </View>
               </TouchableOpacity>
 
@@ -268,9 +313,18 @@ const ProductListing = ({ route }) => {
             {categories.find((c) => c.id === selectedCategory)?.name}
           </Text> */}
 
-          <View style={{paddingTop:rh(1), flexDirection:"row", paddingBottom:rh(5)}}>
-               <ItemsList items={productList} layout="vertical" listContainerStyle={{width:rw(37.3), marginBottom:rh(1)}} />
-          </View>
+            <View style={{ paddingTop: rh(1), flexDirection: "row", paddingBottom: rh(5), flex: 1, justifyContent: "center" }}>
+              {productListing.length != 0 ? (
+                   <ItemsList items={productListing} layout="vertical" listContainerStyle={{ width: rw(37.3), marginBottom: rh(1) }} />
+              ) : (
+                <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+                  <Text style={{ fontSize: rf(2), color: '#555', textAlign: 'center' }}>
+                    No products available
+                  </Text>
+                </View>
+              )}
+            </View>
+
 
         </View>
 

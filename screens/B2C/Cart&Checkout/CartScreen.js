@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
@@ -10,6 +10,8 @@ import SimilarProducts from './CartComponents/SimilarProducts';
 import Header from '../../../components/header';
 import ProceedDetails from './CartComponents/ProceedDetails';
 import { useNavigation } from '@react-navigation/native';
+import apiClient from '../../../Service/apiClient';
+
 
 const cartItemsData = [
     // Sample cart data
@@ -42,6 +44,8 @@ const cartItemsData = [
     },
 ];
 
+
+
 const CartScreen = ({ navigation }) => {
     
     const handleIncrease = (id) => {
@@ -55,6 +59,23 @@ const CartScreen = ({ navigation }) => {
     const handleRemove = (id) => {
         console.log(`Remove item ${id}`);
     };
+
+    // Fetch product data from API
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await apiClient.get('/viewCart');  
+                const cartProduct = response.data.data.cartProduct;  // cartProduct ko access karna
+                console.log(cartProduct);  // cartProduct ka data console me dekho
+                // Ab tum cartProduct ko state me store ya kisi aur kaam me use kar sakte ho
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+    
+        fetchCategories();
+    }, []);
+    
 
     return (
         <View style={styles.screenContainer}>

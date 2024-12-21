@@ -12,7 +12,11 @@ const CategoryItem = ({ id, cimage, text, onPress }) => {
     return (
         <TouchableOpacity  onPress={onPress} style={styles.listContainer}>
             <View style={styles.imageContainer}>
-                <Image source={{uri: cimage}} style={styles.image} resizeMode="cover" />
+            <Image 
+                source={{ uri: cimage ? cimage : 'https://via.placeholder.com/150' }} 
+                style={styles.image} 
+                resizeMode="cover" 
+            />
             </View>
             <View style={styles.textContainer}>
                 <Text style={styles.text}>{text}</Text>

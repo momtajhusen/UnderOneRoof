@@ -17,6 +17,7 @@ const ShopByCategory = () => {
                 const response = await apiClient.get('/home');  
                 const category = response.data.data.category;
                 setCategories(category);
+                console.log(category);
             } catch (error) {
                 console.error('Error fetching categories:', error);
             } finally {
@@ -38,13 +39,14 @@ const ShopByCategory = () => {
                 <View style={styles.categoryListContainer}>
                     {categories.map((category) => (
                         <CategoryList
-                            key={category.id}
+                            key={category.sid}
                             cimage={category.image}  
                             text={category.cname}
                             onPress={() =>
                                 navigation.navigate('ProductListing', {
-                                    selectCategoryId: category.id,
+                                    selectCategoryId: category.sid,
                                     selectCategoryName: category.cname,
+                                    selectCategorySlug: category.cslug,
                                 })
                             }
                         />
