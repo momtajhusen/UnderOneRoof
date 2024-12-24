@@ -159,7 +159,6 @@ const ProductListing = ({ route }) => {
 
         const [productListing, setProductListing] = useState([]);
         const [categoryData, setCategory] = useState([]);
-
         
         // Function to toggle modal visibility
         const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
@@ -171,7 +170,7 @@ const ProductListing = ({ route }) => {
           setSelectedCategoryId(id);
           setSelectedCategoryName(name);
           setSelectedCategorySlug(slug);
-          fetchProduct();
+          fetchProductListing();
         };
 
         const fetchSubCategory = async () => {
@@ -179,7 +178,7 @@ const ProductListing = ({ route }) => {
           try {
               // Pass params in the API request
               const response = await apiClient.get(`/subCategoryList/${selectedCategorySlug}`);
-              console.log(response.data);
+ 
               setCategory(response.data.data.catlist); 
             
           } catch (error) {
@@ -190,24 +189,25 @@ const ProductListing = ({ route }) => {
       };
       
 
-        const fetchProduct = async () => {
+        const fetchProductListing = async () => {
           try { 
-              const postResponse = await apiClient.post('/listing', {
-                cid: selectedCategoryId,
-            });
-              const product = postResponse.data.data.listingProduct;
+              const postResponse = await apiClient.get(`/category?slug=${selectedCategorySlug}`);
+              console.log("Product Listing");
+              const product = postResponse.data.data.category;
               setProductListing(product);
           } catch (error) {
+              console.log(error);
               console.error('Error fetching product:', error);
           } finally {
               setLoading(false);  
           }
         };
+        
 
         // Fetch select category product from API
         useEffect(() => {
-          fetchProduct();
           fetchSubCategory();
+          fetchProductListing();
       }, []);
   
   
@@ -243,7 +243,7 @@ const ProductListing = ({ route }) => {
                     styles.categoryItem,
                     item.pid === selectedCategoryId && styles.activeCategory,
                   ]}
-                  onPress={() => SelectedCategoryHandle(item.sid, item.slug, item.cname)}
+                  onPress={() => SelectedCategoryHandle(item.sid, item.cslug, item.cname)}
               >
                 <View style={styles.categoryWrapper}>
                   <View

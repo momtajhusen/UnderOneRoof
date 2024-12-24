@@ -17,27 +17,83 @@ import Collapsible from 'react-native-collapsible';
 import ReviewCard from '../../../../components/List/ReviewCard';
 import RatingProductCard from '../../../../components/List/RatingProductCard';
 import SimilarProducts from '../../Cart&Checkout/CartComponents/SimilarProducts';
-
+import apiClient from '../../../../Service/apiClient';
+import parse from 'html-react-parser';
 
 
 const ProductDetail = ({ route, navigation }) => {
 
   const { item } = route.params;
 
-  console.log(item);
+  console.log(item.short_desc);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
   const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
-  
 
-  const images = [
-    require('../../../../assets/items/image1.png'),
-    require('../../../../assets/items/image2.png'),
-    require('../../../../assets/items/image3.png'),
-    require('../../../../assets/items/image4.png'),
-    require('../../../../assets/items/image5.png'),
-  ];
+  const [selectedVarientId, setSelectedVarientId] = useState(item.varient[0].psid);
+  const [selectedSlug, setSelectedSlug] = useState(item.slug);
+
+  const [multiProductImage, setMultiProductImage] = useState([]);
+  const [productDetails, setProductDetails] = useState([]);
+  const [relatedProduct, setRelatedProduct] = useState([]);
+  const [ProductReview, setReview] = useState([]);
+  const [ProductVarient, setProductVarient] = useState([]);
+
+  const [cartQuantity, setCartQuantity] = useState(0);  
+
+  // Function to handle increment
+  const increment = () => {
+    setCartQuantity(prevQuantity => prevQuantity + 1);
+  };
+
+  // Function to handle decrement
+  const decrement = () => {
+    if (cartQuantity > 1) {
+      setCartQuantity(prevQuantity => prevQuantity - 1);  
+    }
+  };
+
+    // Function to handle adding product to cart
+    const addToCart = () => {
+      if (cartQuantity > 0) {
+        // Logic to add the item to the cart
+        // For example, you could save the cart to the global state or AsyncStorage
+        console.log(`Added ${cartQuantity} item(s) to the cart`);
+        setCartQuantity(prevQuantity => prevQuantity + 1);
+  
+        // After adding to cart, you could reset the quantity if necessary
+        // setCartQuantity(0);  // Optional: Reset the quantity after adding to the cart
+      } else {
+        console.log("Please select a quantity greater than 0.");
+      }
+    };
+
+ 
+
+      // Fetch product from API
+      useEffect(() => {
+        const ProductDetails = async () => {
+          try {
+            const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
+            const product = response.data;
+    
+            const multiImage = product.data.productDetails[0]?.multi_image || [];
+
+            setMultiProductImage(multiImage);
+            setProductDetails(product.data.productDetails[0]);
+            setRelatedProduct(product.data.relatedProduct);
+            setProductVarient(product.data.varient);
+            setCartQuantity(product.data.productDetails[0].added_to_cart);
+
+          } catch (error) {
+            console.error('Error fetching product:', error);
+          }
+        };
+      
+        ProductDetails();
+      }, []);
+      
 
   const reviews = [
     {
@@ -69,7 +125,7 @@ const ProductDetail = ({ route, navigation }) => {
 
   const renderItem = ({ item }) => (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <Image source={item} style={{ width: rw(70), height: rw(70), borderRadius: 10 }} />
+      <Image source={{ uri: item.img }} style={{ width: rw(70), height: rw(70), borderRadius: 10 }} />
     </View>
   );
 
@@ -95,7 +151,7 @@ const ProductDetail = ({ route, navigation }) => {
         <View contentContainerStyle={styles.scrollContainer}>
           <View>
           <Carousel
-            data={images}
+            data={multiProductImage}
             renderItem={renderItem}
             sliderWidth={rw(100)}
             itemWidth={rw(70)}
@@ -105,7 +161,7 @@ const ProductDetail = ({ route, navigation }) => {
           />
 
           <View style={styles.indicatorContainer}>
-            {images.map((_, index) => (
+            {multiProductImage.map((_, index) => (
               <View
                 key={index}
                 style={[
@@ -115,16 +171,35 @@ const ProductDetail = ({ route, navigation }) => {
               />
             ))}
           </View>
-          <TouchableOpacity style={{position:"absolute", bottom:rh(1), right:rw(5), width:rw(10), height:rh(5), justifyContent:"center", alignItems:"center"}}>
-             <MaterialIcons name="favorite-border" size={rf(3.5)} color="#888" />
-          </TouchableOpacity>
+
+          {/* Conditionally render the favorite icon based on wishlist status */}
+          <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  bottom: rh(1),
+                  right: rw(5),
+                  width: rw(10),
+                  height: rh(5),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                   console.log();
+                }}
+              >
+                <MaterialIcons
+                  name={productDetails.added_to_wishlist === 1 ? 'favorite' : 'favorite-border'}
+                  size={rf(3.5)}
+                  color={productDetails.added_to_wishlist === 1 ? '#FF6347' : '#888'}
+                />
+              </TouchableOpacity>
           </View>
          
         </View>
 
         <View style={styles.detailsContainer}>
           <Text style={styles.discountText}>25% OFF</Text>
-          <Text style={styles.productTitle}>{item.name}</Text>
+          <Text style={styles.productTitle}>{productDetails.name}</Text>
           <Text style={styles.ratingText}>
             ★★★★☆ <Text style={styles.reviewCount}>(22,500)</Text>
           </Text>
@@ -135,29 +210,28 @@ const ProductDetail = ({ route, navigation }) => {
             showsHorizontalScrollIndicator={false} 
             contentContainerStyle={styles.scrollContainer}
             >
-            {[{ weight: '100g', price: '₹199', mrp: '₹250', save: 'Save ₹51' },
-                { weight: '250g', price: '₹299', mrp: '₹350', save: 'Save ₹55' },
-                { weight: '500g', price: '₹499', mrp: '₹550', save: 'Save ₹51' },
-                { weight: '1kg', price: '₹899', mrp: '₹1000', save: 'Save ₹101' }, // Additional items if needed
-            ].map((item, index) => (
+            {
+              ProductVarient.map((item, index) => (
                 <TouchableOpacity
-                key={index}
-                style={[styles.quantityBox, { backgroundColor: "#fed8a9", marginRight: rw(1.5) }]}
+                  key={index}
+                  style={[styles.quantityBox, { backgroundColor: "#fed8a9", marginRight: rw(1.5) }]}
                 >
-                <View style={{ backgroundColor: "white", borderRadius: 10, padding: rw(1) }}>
-                    <Text style={styles.weightText}>{item.weight}</Text>
+                  <View style={{ backgroundColor: "white", borderRadius: 10, padding: rw(1) }}>
+                    <Text style={styles.weightText}>{item.pmeasurement} {item.punit}</Text>
                     <View style={{ flexDirection: "row", alignItems: "center", gap: rw(1) }}>
-                    <Text style={styles.priceText}>{item.price}</Text>
-                    <View style={{ flexDirection: "row", gap: rw(1) }}>
+                      <Text style={styles.priceText}>₹{item.pselling_price}</Text>
+                      <View style={{ flexDirection: "row", gap: rw(1) }}>
                         <Text style={styles.mrpText}>MRP</Text>
-                        <Text style={styles.mrpTextPrice}>{item.mrp}</Text>
+                        <Text style={styles.mrpTextPrice}>₹{item.pmrp_price}</Text>
+                      </View>
                     </View>
-                    </View>
-                </View>
+                  </View>
 
-                <Text style={styles.saveText}>{item.save}</Text>
+                  <Text style={styles.saveText}>Save ₹{item.pdiscount}</Text>
                 </TouchableOpacity>
-            ))}
+              ))
+            }
+
             </ScrollView>
 
         </View>
@@ -165,24 +239,24 @@ const ProductDetail = ({ route, navigation }) => {
         {/* New Content Section */}
         <View style={styles.newContentContainer}>
 
-            <View style={styles.DescriptionContainer}>
-              <TouchableOpacity
-                onPress={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
-                style={styles.CollapsedHeader}
-              >
-                <Text style={styles.sectionTitle}>Description:</Text>
-                <MaterialIcons name={isDescriptionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
-              </TouchableOpacity>
-              {/* <Collapsible collapsed={isDescriptionCollapsed}> */}
-              <View style={styles.textContainer}>
-                <Text style={styles.descriptionText}>
-                  Indulge in the deliciously crunchy and nutritious Roasted Almonds. Sourced from the finest farms, these almonds are lightly roasted to bring out their natural flavor, making them a perfect snack for any time of the day. Rich in nutrients, they are a great source of healthy fats, protein, and vitamins that promote overall well-being.
-                </Text>
-              </View>
-              {/* </Collapsible> */}
+        <View style={productDetails.short_desc ? styles.DescriptionContainer : { display: 'none' }}>
+            <TouchableOpacity
+              onPress={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
+              style={styles.CollapsedHeader}
+            >
+              <Text style={styles.sectionTitle}>Description:</Text>
+              <MaterialIcons name={isDescriptionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
+            </TouchableOpacity>
+            
+            <View style={styles.textContainer}>
+              <Text style={styles.descriptionText}>
+                {productDetails.short_desc}
+              </Text>
             </View>
+          </View>
 
-            <View style={styles.DescriptionContainer}>
+
+          <View style={productDetails.full_desc ? styles.DescriptionContainer : { display: 'none' }}>
               <TouchableOpacity
                 onPress={() => setIsNutritionCollapsed(!isNutritionCollapsed)}
                 style={styles.CollapsedHeader}
@@ -202,8 +276,9 @@ const ProductDetail = ({ route, navigation }) => {
                     { label: "Sodium", value: "5g" },
                   ].map((item, index) => (
                     <View key={index} style={{flexDirection:"row", justifyContent:"space-between", paddingRight:rw(30)}}>
-                      <Text style={styles.nutritionText}>{item.label}:</Text>
-                      <Text style={styles.nutritionText}>{item.value}</Text>
+                      {/* <Text style={styles.nutritionText}>{item.label}:</Text>
+                      <Text style={styles.nutritionText}>{item.value}</Text> */}
+                      {productDetails.full_desc}
                     </View>
                   ))}
               </View>
@@ -230,42 +305,73 @@ const ProductDetail = ({ route, navigation }) => {
             
             </View>
 
-            <View style={{backgroundColor:"white", borderRadius:10}}>
-              <FlatList
-                  data={reviews}
-                  renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
-                  keyExtractor={(item, index) => index.toString()}
-                  ListHeaderComponent={
-                       <View>
-                          <RatingProductCard
-                              rating={reviewData.rating}
-                              reviewCount={reviewData.reviewCount}
-                              images={reviewData.images}
-                          />
-                          <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(20), height:rh(4.5), borderRadius:10, alignItems:"center", justifyContent:"center", position:"absolute", right:"2%", top:"4%"}}>
-                              <Text style={{color:"white", textAlign:"center"}}>View All</Text>
-                          </TouchableOpacity>
-                       </View>
-                  }
-              />
-            </View>
-           
-           <View style={{backgroundColor:"white", marginTop:rh(1), marginBottom:rh(1), padding:rw(3), borderRadius:5, overflow:"hidden"}}>
-              <SimilarProducts />
-           </View>
+            {
+              Array.isArray(ProductReview) && ProductReview.length > 0 ? (
+                <View style={{backgroundColor:"white", borderRadius:10}}>
+                      <FlatList
+                          data={reviews}
+                          renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
+                          keyExtractor={(item, index) => index.toString()}
+                          ListHeaderComponent={
+                              <View>
+                                  <RatingProductCard
+                                      rating={reviewData.rating}
+                                      reviewCount={reviewData.reviewCount}
+                                      images={reviewData.images}
+                                  />
+                                  <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(20), height:rh(4.5), borderRadius:10, alignItems:"center", justifyContent:"center", position:"absolute", right:"2%", top:"4%"}}>
+                                      <Text style={{color:"white", textAlign:"center"}}>View All</Text>
+                                  </TouchableOpacity>
+                              </View>
+                          }
+                      />
+                    </View>
+              ) : null 
+            }
 
+              {
+                Array.isArray(relatedProduct) && relatedProduct.length > 0 ? (
+                  <View style={{ backgroundColor: "white", marginTop: rh(1), marginBottom: rh(1), padding: rw(3), borderRadius: 5, overflow: "hidden" }}>
+                  <SimilarProducts data={relatedProduct} />
+                  </View>
 
+                ) : null 
+              }
         </View>
       </ScrollView>
 
-      <View style={{width:rw(100), height:rh(9), backgroundColor:"white", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingVertical:rh(1), paddingHorizontal:rw(5)}}>
-           <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')} style={{backgroundColor:"#DFDFDF", paddingVertical:rh(1.5), paddingHorizontal:rw(13), borderRadius:10}}>
-              <Text style={{color:"black", fontWeight:"bold"}}>Buy Now</Text>
-           </TouchableOpacity>
-           <TouchableOpacity style={{backgroundColor:"#FF3131", paddingVertical:rh(1.5), paddingHorizontal:rw(13), borderRadius:10}}>
-              <Text style={{color:"white", fontWeight:"bold"}}>Add to Cart</Text>
-           </TouchableOpacity>
+      <View style={{width: rw(100), height: rh(9), backgroundColor: "white", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
+  <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={{backgroundColor: "#DFDFDF", paddingVertical: rh(1.5), paddingHorizontal: rw(13), borderRadius: 10}}>
+    <Text style={{color: "black", fontWeight: "bold"}}>Buy Now</Text>
+  </TouchableOpacity>
+
+  <View style={{flexDirection: "row"}}>
+    {/* Quantity Control */}
+    {cartQuantity > 0 && (
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "#FF3131", overflow: "hidden", borderRadius: 10 }}>
+        <TouchableOpacity onPress={decrement} style={{paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
+          <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>-</Text>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>{cartQuantity}</Text>
+        <TouchableOpacity onPress={increment} style={{paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
+          <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>+</Text>
+        </TouchableOpacity>
       </View>
+    )}
+
+    {/* Add to Cart Button */}
+    <TouchableOpacity 
+      style={{backgroundColor: "#FF3131", paddingVertical: rh(1.5), paddingHorizontal: rw(13), borderRadius: 10}} 
+      onPress={addToCart}
+      // disabled={cartQuantity <= 0} // Disable if cartQuantity is 0
+    >
+      <Text style={{color: "white", fontWeight: "bold"}}>{cartQuantity > 0 ? "Add to Cart" : "Add to Cart"}</Text>
+    </TouchableOpacity>
+  </View>
+</View>
+
+
+
     </View>
   );
 };

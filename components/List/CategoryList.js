@@ -5,7 +5,7 @@ import { rw, rh, rf } from '../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 
 // create a reusable component
-const CategoryItem = ({ id, cimage, text, onPress }) => {
+const CategoryItem = ({ id, cimage, text, onPress, loading }) => {
 
   const navigation = useNavigation();
 
