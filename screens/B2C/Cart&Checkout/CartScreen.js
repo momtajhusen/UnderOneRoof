@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
@@ -60,19 +60,24 @@ const CartScreen = ({ navigation }) => {
         console.log(`Remove item ${id}`);
     };
 
+    const [cartData, setCartData] = useState({});
+    const [cartProduct, setCartProduct] = useState({});
+
+
+
     // Fetch product data from API
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const response = await apiClient.get('/viewCart');  
-                const cartProduct = response.data.data.cartProduct;  // cartProduct ko access karna
-                console.log(cartProduct);  // cartProduct ka data console me dekho
-                // Ab tum cartProduct ko state me store ya kisi aur kaam me use kar sakte ho
+                const cartProduct = response.data.data.cartProduct; 
+                setCartProduct(cartProduct);
+                setCartData(response.data.data);
+                
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
         };
-    
         fetchCategories();
     }, []);
     
@@ -100,7 +105,7 @@ const CartScreen = ({ navigation }) => {
                 {/* Cart Items */}
                 <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
                     <FlatList
-                        data={cartItemsData}
+                        data={cartProduct}
                         vertical={false}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item, index }) => (
@@ -111,11 +116,12 @@ const CartScreen = ({ navigation }) => {
                                 delay={index * 20}
                             >
                                 <CartItemsList
-                                    itemImage={item.itemImage}
-                                    itemName={item.itemName}
-                                    itemWeight={item.itemWeight}
-                                    itemPrice={item.itemPrice}
-                                    itemMRP={item.itemMRP}
+                                    itemId={item.id}
+                                    itemImage={item.itemimage}
+                                    itemName={item.name}
+                                    itemWeight={item.measurement}
+                                    itemPrice={item.selling_price}
+                                    itemMRP={item.mrp_price}
                                     itemQuantity={item.itemQuantity}
                                     onIncrease={() => handleIncrease(item.id)}
                                     onDecrease={() => handleDecrease(item.id)}
@@ -128,7 +134,7 @@ const CartScreen = ({ navigation }) => {
 
                 {/* Price Details */}
                 <View style={[styles.container, { marginBottom: rh(6) }]}>
-                    <PriceDetails style={{backgroundColor:"green"}} />
+                    <PriceDetails data={cartData} style={{backgroundColor:"green"}} />
                 </View>
 
                 {/* Similar Products */}
@@ -139,7 +145,11 @@ const CartScreen = ({ navigation }) => {
 
             {/* Fixed Proceed Details at the bottom */}
             <View style={styles.proceedDetails}>
-                <ProceedDetails btnText="Proceed" onPress={()=>navigation.navigate('Checkout')} />
+                <ProceedDetails 
+                  price={cartData.grand_total}
+                  btnText="Proceed" 
+                  onPress={()=>navigation.navigate('Checkout')} 
+                />
             </View>
         </View>
     );
@@ -171,3 +181,6 @@ const styles = StyleSheet.create({
         borderTopColor: "#e0e0e0",
     },
 });
+
+ 
+ 

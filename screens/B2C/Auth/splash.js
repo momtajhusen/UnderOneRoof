@@ -1,19 +1,24 @@
 //import libraries
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { View, StatusBar, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { rw, rh } from '../../../Service/responsive';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppContext } from '../../../context/AppContext';
 
 // create a component
 const SplashScreen = () => {
     const navigation = useNavigation();
 
+    const {state, dispatch } = useContext(AppContext);
+    
+
     useEffect(() => {
         const checkAuthToken = async () => {
             try {
                 const token = await AsyncStorage.getItem('authToken');
+                const userId = await AsyncStorage.getItem('userId');
                 const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
                 setTimeout(() => {
                     if (token) {
@@ -24,6 +29,15 @@ const SplashScreen = () => {
                         } else {
                             navigation.replace('ShoppingMode');
                         }
+
+                        dispatch({
+                            type: 'SET_USER',
+                            payload: {
+                              userId: userId,
+                              userNumber:  null,
+                            },
+                          });
+
                     } else {
                         navigation.replace('SignupOrLogin');
                     }

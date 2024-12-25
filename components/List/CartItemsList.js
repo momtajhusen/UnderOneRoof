@@ -4,6 +4,7 @@ import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const CartItemsList = ({
+    itemId,
     itemImage,
     itemName,
     itemWeight,

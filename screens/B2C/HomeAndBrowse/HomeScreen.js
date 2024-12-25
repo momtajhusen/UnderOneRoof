@@ -13,8 +13,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../../Service/apiClient';
 
-
-
 const HomeScreen = () => {
 
   const navigation = useNavigation();

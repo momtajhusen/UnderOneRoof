@@ -1,14 +1,15 @@
 //import libraries
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 
 
 // Create a component
-const PriceDetails = ({style, promoCode="true", saveMessage="true"}) => {
+const PriceDetails = ({style, data, promoCode="true", saveMessage="true"}) => {
 
   const navigation = useNavigation();
+
 
 
             return (
@@ -38,31 +39,31 @@ const PriceDetails = ({style, promoCode="true", saveMessage="true"}) => {
 
             {/* Price Breakdown */}
             <View style={styles.textListSection}>
-                <Text style={styles.label}>Price (3 items)</Text>
-                <Text style={styles.value}>₹1050</Text>
+                <Text style={styles.label}>Price ({data.totalitems} items)</Text>
+                <Text style={styles.value}>₹{data.total} </Text>
             </View>
             <View style={styles.textListSection}>
                 <Text style={styles.label}>Discount</Text>
-                <Text style={[styles.value, styles.discount]}>-₹300</Text>
+                <Text style={[styles.value, styles.discount]}>-₹{data.saving}</Text>
             </View>
             <View style={styles.textListSection}>
                 <Text style={styles.label}>Shipping Fee</Text>
-                <Text style={[styles.value, styles.value]}>₹50</Text>
+                <Text style={[styles.value, styles.value]}>₹{data.shipping_charges}</Text>
             </View>
             <View style={styles.textListSection}>
                 <Text style={styles.label}>Delivery Fee</Text>
-                <Text style={[styles.value, styles.value]}>₹60</Text>
+                <Text style={[styles.value, styles.value]}>₹ 0</Text>
             </View>
 
             {/* Total Payment */}
             <View style={[styles.textListSection, styles.totalSection]}>
                 <Text style={styles.totalLabel}>Total Payment</Text>
-                <Text style={styles.totalValue}>₹820</Text>
+                <Text style={styles.totalValue}>₹{data.grand_total}</Text>
             </View>
 
             {saveMessage && (
             <View style={styles.savedMessageContainer}>
-                <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹350</Text> in this order</Text>
+                <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹{data.saving}</Text> in this order</Text>
                 </View>
             )}
 

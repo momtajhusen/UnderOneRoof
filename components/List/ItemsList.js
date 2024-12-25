@@ -18,13 +18,6 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
    // State to manage wishlist status for each item (using their IDs)
    const [wishlist, setWishlist] = useState({});
 
-  // const onWishlistedToggle = (id) => {
-  //   setWishlist((prevState) => ({
-  //     ...prevState,
-  //     [id]: !prevState[id], // Toggle wishlist status for the item with the correct ID
-  //   }));
-  // };
-  
 
   const handleAdd = (id) => {
     if (showIncreaseDecrease === id) {

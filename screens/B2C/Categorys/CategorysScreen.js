@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import CategoryList from '../../../components/List/CategoryList';
-import { rw, rh, rf } from '../../../Service/responsive';
+import { rw, rh } from '../../../Service/responsive';
 import Header from '../../../components/header';
 import apiClient from '../../../Service/apiClient';
+import CategoryListLoader from '../../../components/ShimmerLoader/CategoryListLoader';
 
 const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true); // loading state
+  const [loading, setLoading] = useState(true);
 
   // Fetch categories from API
   useEffect(() => {
@@ -21,7 +21,7 @@ const CategoryScreen = ({ navigation }) => {
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
-        setLoading(false); // set loading to false after fetching
+        setLoading(false);
       }
     };
 
@@ -29,62 +29,64 @@ const CategoryScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View>
-      {/* Back Container */}
+    <View style={styles.container}>
+      {/* Header Component */}
       <Header
         title="Categories"
         rightContent={
-          <View style={{ flexDirection: "row", gap: rw(4) }}>
+          <View style={styles.headerIcons}>
             <TouchableOpacity>
-              <Image source={require('../../../assets/Search.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
+              <Image
+                source={require('../../../assets/Search.png')}
+                style={styles.icon}
+              />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Image source={require('../../../assets/Cart.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
+              <Image
+                source={require('../../../assets/Cart.png')}
+                style={styles.icon}
+              />
             </TouchableOpacity>
           </View>
         }
       />
 
-      {/* Loading indicator */}
-      {loading ? (
-        <View style={styles.categoryListContainer}>
-          {/* Dummy loading card */}
-          <CategoryList
-            cimage='' 
-            text='Loading...'
-          />
-          <CategoryList
-            cimage='' 
-            text='Loading...'
-          />
-          <CategoryList
-            cimage='' 
-            text='Loading...'
-          />
-        </View>
-      ) : (
-        <View style={styles.categoryListContainer}>
-          {categories.map((category, index) => (
-            <Animatable.View
-              key={category.sid}
-              animation="fadeInUp"
-              duration={800}
-              delay={index * 20}
-            >
-              <CategoryList
-                cimage={category.image}
-                text={category.cname}
-                onPress={() => navigation.navigate('ProductListing',
-                  {
-                    selectCategoryId: category.sid,
-                    selectCategoryName: category.cname,
-                    selectCategorySlug: category.cslug,
-                  })}
-              />
-            </Animatable.View>
-          ))}
-        </View>
-      )}
+      <View style={{justifyContent:"center", alignItems:"center", paddingHorizontal:rw(3.9)}}>
+        {/* Main Content */}
+        {loading ? (
+          // Shimmer Loaders while data is being fetched
+          <View style={styles.categoryListContainer}>
+            {Array.from({ length: 16 }).map((_, index) => (
+              <CategoryListLoader key={index} />
+            ))}
+          </View>
+        ) : (
+          // Categories List after data is loaded
+          <View style={styles.categoryListContainer}>
+            {categories.map((category, index) => (
+              <Animatable.View
+                key={category.sid}
+                animation="fadeInUp"
+                duration={800}
+                delay={index * 20}
+              >
+                <CategoryList
+                  cimage={category.image}
+                  text={category.cname}
+                  onPress={() =>
+                    navigation.navigate('ProductListing', {
+                      selectCategoryId: category.sid,
+                      selectCategoryName: category.cname,
+                      selectCategorySlug: category.cslug,
+                    })
+                  }
+                />
+              </Animatable.View>
+            ))}
+          </View>
+        )}
+      </View>
+
     </View>
   );
 };
@@ -92,15 +94,20 @@ const CategoryScreen = ({ navigation }) => {
 export default CategoryScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    gap: rw(4),
+  },
+  icon: {
+    width: rw(5.5),
+    height: rw(5.5),
+  },
   categoryListContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingLeft: rw(5),
     marginTop: rh(2),
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 18,
-    color: '#0000ff',
   },
 });

@@ -1,5 +1,5 @@
 //import liraries
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, StatusBar } from 'react-native';
 import { rw, rh, rf } from '../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import CustomButtons from '../../../components/Buttons/CustomButtons';
 import apiClient from '../../../Service/apiClient';
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { AppContext } from '../../../context/AppContext';
 
 // create a component
 const VerifyOtp = ({ navigation, route }) => {
@@ -18,6 +18,9 @@ const VerifyOtp = ({ navigation, route }) => {
   const [error, setError] = useState('');
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [timer, setTimer] = useState(59);
+
+  const { dispatch } = useContext(AppContext);
+
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor('#f3f3f3');
@@ -43,11 +46,24 @@ const VerifyOtp = ({ navigation, route }) => {
         setIsLoading(false);
   
         const { status, msg, data } = response.data;
+
         const token = response.data.data.token.token;
+        const userid = response.data.data.userid;
+
         await AsyncStorage.setItem('authToken', token);
+        await AsyncStorage.setItem('userId', String(userid));
+     
   
         if (status === 1 && msg === "OTP Verify") {
           navigation.navigate('ShoppingMode', { mobile: mobile, userId: data.userid });
+          dispatch({
+            type: 'SET_USER',
+            payload: {
+              userId: data.userid,
+              userNumber: mobile,
+            },
+          });
+
         } else {
           setError('Invalid OTP. Please try again.');
         }

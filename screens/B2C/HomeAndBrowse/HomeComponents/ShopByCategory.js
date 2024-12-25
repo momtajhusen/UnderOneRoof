@@ -4,6 +4,8 @@ import CategoryList from '../../../../components/List/CategoryList';
 import { rw, rf, rh } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../../../Service/apiClient';  
+import CategoryListLoader from '../../../../components/ShimmerLoader/CategoryListLoader';
+
 
 const ShopByCategory = () => {
     const navigation = useNavigation();
@@ -25,17 +27,19 @@ const ShopByCategory = () => {
                 setLoading(false);  
             }
         };
-
         fetchCategories();
     }, []);
 
     return (
         <View style={styles.container}>
             <Text style={styles.headerText}>Shop By Category</Text>
-            
             {/* Show loading indicator while data is being fetched */}
             {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
+                <View style={styles.categoryListContainer}>
+                    {Array.from({ length: 8 }).map((_, index) => (
+                        <CategoryListLoader key={index} />
+                    ))}
+                </View>
             ) : (
                 <View style={styles.categoryListContainer}>
                     {categories.map((category) => (

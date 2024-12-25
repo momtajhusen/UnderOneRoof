@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  FlatList
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import Header from '../../../../components/header';
 import { rw, rh, rf } from '../../../../Service/responsive';
@@ -19,17 +20,21 @@ import RatingProductCard from '../../../../components/List/RatingProductCard';
 import SimilarProducts from '../../Cart&Checkout/CartComponents/SimilarProducts';
 import apiClient from '../../../../Service/apiClient';
 import parse from 'html-react-parser';
+import { AppContext } from '../../../../context/AppContext';
+
 
 
 const ProductDetail = ({ route, navigation }) => {
 
-  const { item } = route.params;
+    const {state, dispatch } = useContext(AppContext);
 
-  console.log(item.short_desc);
-
+    const { item } = route.params;
+ 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
   const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
+  const [isLoading, setIsLoading] = useState(false);  
+
 
   const [selectedVarientId, setSelectedVarientId] = useState(item.varient[0].psid);
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
@@ -40,88 +45,151 @@ const ProductDetail = ({ route, navigation }) => {
   const [ProductReview, setReview] = useState([]);
   const [ProductVarient, setProductVarient] = useState([]);
 
-  const [cartQuantity, setCartQuantity] = useState(0);  
-
-  // Function to handle increment
-  const increment = () => {
-    setCartQuantity(prevQuantity => prevQuantity + 1);
-  };
-
-  // Function to handle decrement
-  const decrement = () => {
-    if (cartQuantity > 1) {
-      setCartQuantity(prevQuantity => prevQuantity - 1);  
-    }
-  };
-
-    // Function to handle adding product to cart
-    const addToCart = () => {
-      if (cartQuantity > 0) {
-        // Logic to add the item to the cart
-        // For example, you could save the cart to the global state or AsyncStorage
-        console.log(`Added ${cartQuantity} item(s) to the cart`);
-        setCartQuantity(prevQuantity => prevQuantity + 1);
+  const [cartQuantity, setCartQuantity] = useState(0);
   
-        // After adding to cart, you could reset the quantity if necessary
-        // setCartQuantity(0);  // Optional: Reset the quantity after adding to the cart
-      } else {
-        console.log("Please select a quantity greater than 0.");
-      }
-    };
+  const [isInWishlist, setIsInWishlist] = useState(0);
+
+      // Function to handle adding product to cart
+      const addToCart = async () => {
+        try {
+          setIsLoading(true);
+          const payload = {
+              pid: productDetails.pid,
+              qty: 1,
+              var_id: ProductVarient[0].psid
+          };
+
+          const response = await apiClient.post('/addCart', payload);
+          const product = response.data;
+
+          if (product.status === 1) {
+              setCartQuantity(product.cartcount);
+              ProductDetails();
+          } else {
+              console.error('Failed to update cart');
+          }
+        } catch (error) {
+          console.error('Error while adding to cart:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      // Function to handle removing product from cart
+      const removeFromCart = async () => {
+        try {
+          setIsLoading(true);
+
+          const payload = {
+              pid: productDetails.pid,
+          };
 
  
+          const response = await apiClient.post('/deleteCart', payload);
+          const product = response.data;
+
+          if (product.status === 1) {
+              setCartQuantity(0);
+          } else {
+              console.error('Failed to remove product:', product.message);
+          }
+        } catch (error) {
+          console.error('An error occurred:', error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      const ProductDetails = async () => {
+        try {
+          const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
+          const product = response.data;
+
+          const multiImage = product.data.productDetails[0]?.multi_image || [];
+
+          setMultiProductImage(multiImage);
+          setProductDetails(product.data.productDetails[0]);
+          setRelatedProduct(product.data.relatedProduct);
+          setProductVarient(product.data.varient);
+          setCartQuantity(product.data.productDetails[0].added_to_cart);
+          setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
+
+        } catch (error) {
+          console.error('Error fetching product:', error);
+        }
+      };
+
+      const wishlistHandle = async () => {
+        const payloadAddWishlist = {
+          pid: productDetails.pid,
+          uid: state.userId,
+        };
+
+        const payloadDeleteWishlist = {
+          pid: productDetails.pid,
+        };
+
+        try {
+          let response;
+          
+          if (isInWishlist) {
+            setIsInWishlist(false); // Update state to reflect removal
+            response = await apiClient.post('/deleteWishlist', payloadDeleteWishlist);
+          } else {
+            setIsInWishlist(true); // Update state to reflect addition
+            response = await apiClient.post('/addWishlist', payloadAddWishlist);
+          }
+
+          if (response.data.status === 1) {
+            console.log('Success');
+          } else {
+            console.error('Failed to update wishlist:', response.data.title);
+            setIsInWishlist(!isInWishlist);
+          }
+        } catch (error) {
+          console.error('Error handling wishlist:', error);
+          setIsInWishlist(!isInWishlist);
+        }
+      };
+
+      const varentHandle = async (item) => {
+        setSelectedVarientId(item.psid);
+        ProductDetails();
+      }
+  
 
       // Fetch product from API
       useEffect(() => {
-        const ProductDetails = async () => {
-          try {
-            const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
-            const product = response.data;
-    
-            const multiImage = product.data.productDetails[0]?.multi_image || [];
-
-            setMultiProductImage(multiImage);
-            setProductDetails(product.data.productDetails[0]);
-            setRelatedProduct(product.data.relatedProduct);
-            setProductVarient(product.data.varient);
-            setCartQuantity(product.data.productDetails[0].added_to_cart);
-
-          } catch (error) {
-            console.error('Error fetching product:', error);
-          }
-        };
-      
         ProductDetails();
       }, []);
       
+      const reviews = [
+        {
+            image: require('../../../../assets/RatingImage/image5.png'),
+            rating: 4,
+            reviewText: 'Taste is very good.',
+            reviewer: 'Mr. Aman Shukla',
+            date: '24/March/2024',
+        },
+        {
+            image: require('../../../../assets/RatingImage/image9.png'),
+            rating: 5,
+            reviewText: 'Value for money product',
+            reviewer: 'Mr. Aman Shukla',
+            date: '24/March/2024',
+        },
+      ];
 
-  const reviews = [
-    {
-        image: require('../../../../assets/RatingImage/image5.png'),
-        rating: 4,
-        reviewText: 'Taste is very good.',
-        reviewer: 'Mr. Aman Shukla',
-        date: '24/March/2024',
-    },
-    {
-        image: require('../../../../assets/RatingImage/image9.png'),
-        rating: 5,
-        reviewText: 'Value for money product',
-        reviewer: 'Mr. Aman Shukla',
-        date: '24/March/2024',
-    },
-  ];
-
-  const reviewData = {
-      rating: 4.5,
-      reviewCount: 22500,
-      images: [
-          require('../../../../assets/RatingImage/image.png'),
-          require('../../../../assets/RatingImage/image-1.png'),
-          require('../../../../assets/RatingImage/image-2.png'),
-          require('../../../../assets/RatingImage/image5.png'),
-      ],
-  };
+      const reviewData = {
+          rating: 4.5,
+          reviewCount: 22500,
+          images: [
+              require('../../../../assets/RatingImage/image.png'),
+              require('../../../../assets/RatingImage/image-1.png'),
+              require('../../../../assets/RatingImage/image-2.png'),
+              require('../../../../assets/RatingImage/image5.png'),
+          ],
+      };
 
   const renderItem = ({ item }) => (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -149,56 +217,54 @@ const ProductDetail = ({ route, navigation }) => {
 
       <ScrollView>
         <View contentContainerStyle={styles.scrollContainer}>
-          <View>
-          <Carousel
-            data={multiProductImage}
-            renderItem={renderItem}
-            sliderWidth={rw(100)}
-            itemWidth={rw(70)}
-            onSnapToItem={(index) => setActiveIndex(index)}
-            activeSlideAlignment="center"
-            loop
-          />
+          <View style={{height:rh(35)}}>
+            <Carousel
+              data={multiProductImage}
+              renderItem={renderItem}
+              sliderWidth={rw(100)}
+              itemWidth={rw(70)}
+              onSnapToItem={(index) => setActiveIndex(index)}
+              activeSlideAlignment="center"
+              loop
+            />
 
-          <View style={styles.indicatorContainer}>
-            {multiProductImage.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.indicator,
-                  activeIndex === index && styles.activeIndicator,
-                ]}
-              />
-            ))}
-          </View>
-
-          {/* Conditionally render the favorite icon based on wishlist status */}
-          <TouchableOpacity
-                style={{
-                  position: 'absolute',
-                  bottom: rh(1),
-                  right: rw(5),
-                  width: rw(10),
-                  height: rh(5),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                   console.log();
-                }}
-              >
-                <MaterialIcons
-                  name={productDetails.added_to_wishlist === 1 ? 'favorite' : 'favorite-border'}
-                  size={rf(3.5)}
-                  color={productDetails.added_to_wishlist === 1 ? '#FF6347' : '#888'}
+            <View style={styles.indicatorContainer}>
+              {multiProductImage.map((_, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.indicator,
+                    activeIndex === index && styles.activeIndicator,
+                  ]}
                 />
-              </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Conditionally render the favorite icon based on wishlist status */}
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                bottom: rh(1),
+                right: rw(5),
+                width: rw(10),
+                height: rh(5),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={wishlistHandle}
+            >
+              <MaterialIcons
+                name={isInWishlist ? 'favorite' : 'favorite-border'}
+                size={rf(3.5)}
+                color={isInWishlist ? '#FF6347' : '#888'}
+              />
+            </TouchableOpacity>
           </View>
          
         </View>
 
         <View style={styles.detailsContainer}>
-          <Text style={styles.discountText}>25% OFF</Text>
+          <Text style={styles.discountText}>{productDetails.discount}% OFF</Text>
           <Text style={styles.productTitle}>{productDetails.name}</Text>
           <Text style={styles.ratingText}>
             ★★★★☆ <Text style={styles.reviewCount}>(22,500)</Text>
@@ -211,25 +277,33 @@ const ProductDetail = ({ route, navigation }) => {
             contentContainerStyle={styles.scrollContainer}
             >
             {
-              ProductVarient.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[styles.quantityBox, { backgroundColor: "#fed8a9", marginRight: rw(1.5) }]}
-                >
-                  <View style={{ backgroundColor: "white", borderRadius: 10, padding: rw(1) }}>
-                    <Text style={styles.weightText}>{item.pmeasurement} {item.punit}</Text>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: rw(1) }}>
-                      <Text style={styles.priceText}>₹{item.pselling_price}</Text>
-                      <View style={{ flexDirection: "row", gap: rw(1) }}>
-                        <Text style={styles.mrpText}>MRP</Text>
-                        <Text style={styles.mrpTextPrice}>₹{item.pmrp_price}</Text>
+                ProductVarient.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.quantityBox,
+                      {
+                        padding: index === 0 ? 2 : 0,
+                        backgroundColor: "#fed8a9",
+                        marginRight: rw(1.5),
+                      },
+                    ]}
+                    onPress={() => varentHandle(item)}
+                  >
+                    <View style={{ backgroundColor: "white", borderRadius: 10, padding: rw(1) }}>
+                      <Text style={styles.weightText}>{item.pmeasurement} {item.punit}</Text>
+                      <View style={{ flexDirection: "row", alignItems: "center", gap: rw(1) }}>
+                        <Text style={styles.priceText}>₹{item.pselling_price}</Text>
+                        <View style={{ flexDirection: "row", gap: rw(1) }}>
+                          <Text style={styles.mrpText}>MRP</Text>
+                          <Text style={styles.mrpTextPrice}>₹{item.pmrp_price}</Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
 
-                  <Text style={styles.saveText}>Save ₹{item.pdiscount}</Text>
-                </TouchableOpacity>
-              ))
+                    <Text style={styles.saveText}>Save ₹{item.pdiscount}</Text>
+                  </TouchableOpacity>
+                ))
             }
 
             </ScrollView>
@@ -261,7 +335,7 @@ const ProductDetail = ({ route, navigation }) => {
                 onPress={() => setIsNutritionCollapsed(!isNutritionCollapsed)}
                 style={styles.CollapsedHeader}
               >
-                <Text style={styles.sectionTitle}>Nutritional Information (Per 100g):</Text>
+                <Text style={styles.sectionTitle}>Nutritional Information :</Text>
                 <MaterialIcons name={isNutritionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
               </TouchableOpacity>
               {/* <Collapsible collapsed={isNutritionCollapsed}> */}
@@ -278,7 +352,7 @@ const ProductDetail = ({ route, navigation }) => {
                     <View key={index} style={{flexDirection:"row", justifyContent:"space-between", paddingRight:rw(30)}}>
                       {/* <Text style={styles.nutritionText}>{item.label}:</Text>
                       <Text style={styles.nutritionText}>{item.value}</Text> */}
-                      {productDetails.full_desc}
+                      <Text>{productDetails.full_desc}</Text>
                     </View>
                   ))}
               </View>
@@ -305,29 +379,29 @@ const ProductDetail = ({ route, navigation }) => {
             
             </View>
 
-            {
-              Array.isArray(ProductReview) && ProductReview.length > 0 ? (
-                <View style={{backgroundColor:"white", borderRadius:10}}>
-                      <FlatList
-                          data={reviews}
-                          renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
-                          keyExtractor={(item, index) => index.toString()}
-                          ListHeaderComponent={
-                              <View>
-                                  <RatingProductCard
-                                      rating={reviewData.rating}
-                                      reviewCount={reviewData.reviewCount}
-                                      images={reviewData.images}
-                                  />
-                                  <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(20), height:rh(4.5), borderRadius:10, alignItems:"center", justifyContent:"center", position:"absolute", right:"2%", top:"4%"}}>
-                                      <Text style={{color:"white", textAlign:"center"}}>View All</Text>
-                                  </TouchableOpacity>
-                              </View>
-                          }
-                      />
-                    </View>
-              ) : null 
-            }
+              {
+                Array.isArray(ProductReview) && ProductReview.length > 0 ? (
+                  <View style={{backgroundColor:"white", borderRadius:10}}>
+                        <FlatList
+                            data={reviews}
+                            renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
+                            keyExtractor={(item, index) => index.toString()}
+                            ListHeaderComponent={
+                                <View>
+                                    <RatingProductCard
+                                        rating={reviewData.rating}
+                                        reviewCount={reviewData.reviewCount}
+                                        images={reviewData.images}
+                                    />
+                                    <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(20), height:rh(4.5), borderRadius:10, alignItems:"center", justifyContent:"center", position:"absolute", right:"2%", top:"4%"}}>
+                                        <Text style={{color:"white", textAlign:"center"}}>View All</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            }
+                        />
+                      </View>
+                ) : null 
+              }
 
               {
                 Array.isArray(relatedProduct) && relatedProduct.length > 0 ? (
@@ -339,38 +413,56 @@ const ProductDetail = ({ route, navigation }) => {
               }
         </View>
       </ScrollView>
-
+      
+      {/* Buy aur Add to Cart aur Remove Btn   */}
       <View style={{width: rw(100), height: rh(9), backgroundColor: "white", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
-  <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={{backgroundColor: "#DFDFDF", paddingVertical: rh(1.5), paddingHorizontal: rw(13), borderRadius: 10}}>
-    <Text style={{color: "black", fontWeight: "bold"}}>Buy Now</Text>
-  </TouchableOpacity>
+          <TouchableOpacity 
+              onPress={() => navigation.navigate('CartScreen')} 
+              style={{backgroundColor: "#DFDFDF", paddingVertical: rh(1.5), paddingHorizontal: rw(13), borderRadius: 10}}
+          >
+              <Text style={{color: "black", fontWeight: "bold"}}>Buy Now</Text>
+          </TouchableOpacity>
 
-  <View style={{flexDirection: "row"}}>
-    {/* Quantity Control */}
-    {cartQuantity > 0 && (
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "#FF3131", overflow: "hidden", borderRadius: 10 }}>
-        <TouchableOpacity onPress={decrement} style={{paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
-          <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>-</Text>
-        </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>{cartQuantity}</Text>
-        <TouchableOpacity onPress={increment} style={{paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
-          <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>+</Text>
-        </TouchableOpacity>
+         {/* Add to Cart Button - Show only if cartQuantity is 0 */}
+          {cartQuantity === 0 ? (
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#FF3131",
+                paddingVertical: rh(1.5),
+                paddingHorizontal: rw(13),
+                borderRadius: 10,
+              }}
+              onPress={addToCart}
+              disabled={isLoading} // Disable button when loading
+            >
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" /> // Display loading indicator
+              ) : (
+                <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
+              )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#FF3131",
+                paddingVertical: rh(1.5),
+                paddingHorizontal: rw(13),
+                borderRadius: 10,
+              }}
+              onPress={removeFromCart}
+              disabled={isLoading} // Disable button when loading
+            >
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={{ color: "white", fontWeight: "bold" }}>Remove</Text>
+              )}
+            </TouchableOpacity>
+          )}
+
+
+
       </View>
-    )}
-
-    {/* Add to Cart Button */}
-    <TouchableOpacity 
-      style={{backgroundColor: "#FF3131", paddingVertical: rh(1.5), paddingHorizontal: rw(13), borderRadius: 10}} 
-      onPress={addToCart}
-      // disabled={cartQuantity <= 0} // Disable if cartQuantity is 0
-    >
-      <Text style={{color: "white", fontWeight: "bold"}}>{cartQuantity > 0 ? "Add to Cart" : "Add to Cart"}</Text>
-    </TouchableOpacity>
-  </View>
-</View>
-
-
 
     </View>
   );

@@ -1,87 +1,69 @@
-//import liraries
-import React, { Component } from 'react';
+// Import libraries
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import Header from '../../../../components/header';
 import WishlistCard from '../../../../components/List/WishlistCard';
+import ItemsList from '../../../../components/List/ItemsList';
+import apiClient from '../../../../Service/apiClient';
 
+// Create a component
+const Wishlist = ({ navigation }) => {
+    // State for loading and wishlist data
+    const [isLoading, setIsLoading] = useState(true);
+    const [wishlistProduct, setWishlistProduct] = useState([]);
 
-// create a component
-const Wishlist = ({navigation}) => {
+    // Fetch wishlist data from API
+    const wishlistData = async () => {
+        try {
+            const response = await apiClient.get('/viewWishlist');
+            setWishlistProduct(response.data.data.wishlistProduct);
+        } catch (error) {
+            console.error('Error while fetching wishlist:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-        // Items List array define
-        const productList = [
-            {
-                name: "Premium Roasted Almonds",
-                weight: "500g",
-                type: "Roasted",
-                price: 299,
-                mpr: 399,
-                discount: "25% OFF",
-                rating: 5,
-                likes: 22500,
-                image: require('../../../../assets/items/image1.png'), // Corrected path
-            },
-            {
-                name: "Honey Almond Energy Bars",
-                weight: "500g",
-                type: "Natural",
-                price: 299,
-                mpr: 399,
-                discount: "25% OFF",
-                rating: 5,
-                likes: 22500,
-                image: require('../../../../assets/items/image2.png'), // Corrected path
-            },
-            {
-                name: "Organic Green Tea",
-                weight: "500g",
-                type: "Organic",
-                price: 299,
-                mpr: 399,
-                discount: "25% OFF",
-                rating: 5,
-                likes: 22500,
-                image: require('../../../../assets/items/image1.png'), // Corrected path
-            },
-            {
-                name: "Premium Roasted Almonds",
-                weight: "500g",
-                type: "Roasted",
-                price: 299,
-                mpr: 399,
-                discount: "25% OFF",
-                rating: 5,
-                likes: 22500,
-                image: require('../../../../assets/items/image1.png'), // Corrected path
-            }
-        ];
+    // Fetch wishlist data on component mount
+    useEffect(() => {
+        wishlistData();
+    }, []);  // Empty dependency array ensures this runs only once when the component mounts
 
     return (
         <View>
-             <Header title="Wishlist" 
-                    rightContent={
-                    <View style={{flexDirection:"row", gap: rw(4)}}>
+            <Header 
+                title="Wishlist" 
+                rightContent={
+                    <View style={{ flexDirection: "row", gap: rw(4) }}>
                         <TouchableOpacity>
-                            <MaterialCommunityIcons  name="cart-outline" size={rf(3)} color="black" />
+                            <MaterialCommunityIcons name="cart-outline" size={rf(3)} color="black" />
                         </TouchableOpacity>
                     </View>
-                }
-             />
+                } 
+            />
             <View style={styles.container}>
-                <Text style={{marginTop:rh(1.5), marginBottom:rh(0.5), marginLeft:rw(2),  fontWeight:"bold", fontSize:rf(2)}}>23 items added</Text>
-                <WishlistCard items={productList}  />
+                <Text style={{ marginTop: rh(1.5), marginBottom: rh(0.5), marginLeft: rw(2), fontWeight: "bold", fontSize: rf(2) }}>
+                    {isLoading ? 'Loading...' : `${wishlistProduct.length} items added`}
+                </Text>
+                {/* Conditionally render wishlist data or loading message */}
+                {isLoading ? (
+                    <Text>Loading your wishlist...</Text>
+                ) : (
+                    <ItemsList items={wishlistProduct} layout="vertical" listContainerStyle={{width:rw(45), marginLeft:rw(1), marginBottom:rh(1)}}/>
+                )}
             </View>
         </View>
     );
 };
 
-//make this component available to the app
+// Make this component available to the app
 export default Wishlist;
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: rw(2),   
+        paddingHorizontal: rw(2),
+        paddingLeft:rw(2.5),
     },
 });
