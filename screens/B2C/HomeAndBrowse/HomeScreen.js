@@ -1,5 +1,5 @@
-import React,{useEffect, useState} from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, StatusBar} from 'react-native';
+import React,{useEffect, useState, useContext} from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, StatusBar, ActivityIndicator, RefreshControl} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
 import SearchDesigne from '../../../components/Search/searchDesigne';
@@ -12,10 +12,15 @@ import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../../Service/apiClient';
+import { AppContext } from '../../../context/AppContext';
+
 
 const HomeScreen = () => {
+    const {state, dispatch } = useContext(AppContext);
 
   const navigation = useNavigation();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
 
   const [HomeSliderData, setHomeSliderData] = useState([]);
 
@@ -23,6 +28,16 @@ const HomeScreen = () => {
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FF6D6D");
   });
+
+    const onRefresh = async () => {
+        dispatch({
+          type: 'GLOBAL_REFRESH',
+          payload: {
+            reFresh: Math.ceil(Math.random() * 100),
+          },
+        });
+    };
+
       // Fetch slider image from API
       useEffect(() => {
         const fetchHomeSliderData = async () => {
@@ -40,7 +55,11 @@ const HomeScreen = () => {
       }, []);
 
   return (
-    <ScrollView>
+    <ScrollView
+        refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+    >
      <StatusBar barStyle="dark-content" backgroundColor="#FF6D6D" />
 
       <View style={styles.container}>

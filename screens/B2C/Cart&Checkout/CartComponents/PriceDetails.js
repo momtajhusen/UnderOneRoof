@@ -6,11 +6,9 @@ import { useNavigation } from '@react-navigation/native';
 
 
 // Create a component
-const PriceDetails = ({style, data, promoCode="true", saveMessage="true"}) => {
+const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
 
   const navigation = useNavigation();
-
-
 
             return (
             <View style={[styles.container, {style}]}>
@@ -62,8 +60,8 @@ const PriceDetails = ({style, data, promoCode="true", saveMessage="true"}) => {
             </View>
 
             {saveMessage && (
-            <View style={styles.savedMessageContainer}>
-                <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹{data.saving}</Text> in this order</Text>
+                <View style={styles.savedMessageContainer}>
+                  <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹{data.saving}</Text> in this order</Text>
                 </View>
             )}
 

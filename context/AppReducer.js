@@ -4,6 +4,14 @@ const CLEAR_USER = 'CLEAR_USER';
 
 const GLOBAL_REFRESH = 'GLOBAL_REFRESH';
 
+const VIEW_CART_DATA = 'VIEW_CART_DATA';
+
+const VIEW_ADDRESS_DATA = 'VIEW_ADDRESS_DATA';
+
+const SELECT_ADDRESS_DATA = 'SELECT_ADDRESS_DATA';
+
+
+
 
 // Reducer
 export default (state, action) => {
@@ -28,6 +36,26 @@ export default (state, action) => {
           ...state,
           reFresh: action.payload,
         };
+
+
+        case VIEW_CART_DATA:
+          return {
+            ...state,
+            viewCartData: action.payload.viewCartData, 
+          };
+
+          case VIEW_ADDRESS_DATA:
+            return {
+              ...state,
+              viewAddressData: action.payload.viewAddressData, 
+            };
+
+            case SELECT_ADDRESS_DATA:
+              return {
+                ...state,
+                selectAddressData: [action.payload.selectAddressData],  
+              };
+            
 
     default:
       return state;

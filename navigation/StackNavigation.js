@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomNavigator from './BottomNavigation';
-import { useNavigation } from '@react-navigation/native';
 import SplashScreen from '../screens/B2C/Auth/splash';
 import HomeScreen from '../screens/B2C/HomeAndBrowse/HomeScreen';
 import CategoryScreen from '../screens/B2C/Categorys/CategorysScreen';
@@ -53,12 +52,14 @@ import B2BCheckOutScreen from '../screens/B2B/CartAndCheckout/B2BCheckOutScreen'
 import B2BOrderPlaced from '../screens/B2B/CartAndCheckout/B2BOrderPlacedScreen';
 import B2BProceedDetails from '../screens/B2B/HomeAndBrowse/B2BProductDetails';
 
-const Stack = createNativeStackNavigator();
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+const Stack = createSharedElementStackNavigator();
+
 
 // create a component
 const StackNavigation = () => {
 
-    const navigation = useNavigation();
+ 
   
     return (
         <Stack.Navigator> 
@@ -91,7 +92,19 @@ const StackNavigation = () => {
         <Stack.Screen name="Wishlist" component={Wishlist} options={{ headerShown: false }} />
         <Stack.Screen name="MyProfile" component={MyProfile} options={{ headerShown: false }} />
         <Stack.Screen name="ProductListing" component={ProductListing} options={{ headerShown: false }} />
-        <Stack.Screen name="ProductDetail" component={ProductDetail} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="ProductDetail" component={ProductDetail} options={{ headerShown: false }} /> */}
+        <Stack.Screen
+        name="ProductDetail"
+        component={ProductDetail}
+        options={{ headerShown: false }}
+        sharedElements={(route) => {
+            const { item } = route.params;
+            return [
+              `item.${item.pid}.image`, 
+              `item.${item.pid}.name`
+            ];
+          }}
+      />
         <Stack.Screen name="AllRating" component={AllRating} options={{ headerShown: false }} />
         <Stack.Screen name="OrderDetails" component={OrderDetails} options={{ headerShown: false }} />
         <Stack.Screen name="RatingAndReviews" component={RatingAndReviews} options={{ headerShown: false }} />

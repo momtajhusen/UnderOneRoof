@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, StatusBar, ScrollView, Image, TouchableOpacity} from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -8,10 +8,13 @@ import PriceDetails from './PriceDetails';
 import { useNavigation } from '@react-navigation/native';
 import OrderItems from '../../../../components/List/OrderItems';
 import { useFocusEffect } from "@react-navigation/native";
+import { AppContext } from '../../../../context/AppContext';
 
 
 // create a component
 const OrderPlaced = () => {
+
+     const { state } = useContext(AppContext);
 
    useFocusEffect(() => {
       StatusBar.setBackgroundColor("green");
@@ -46,7 +49,7 @@ const OrderPlaced = () => {
                   </View>
 
                   <View style={{marginVertical:rh(1)}}>
-                    <UserDetails type="change" />
+                    <UserDetails  userData={state.selectAddressData} />
                   </View>
 
                   <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
@@ -63,7 +66,7 @@ const OrderPlaced = () => {
 
 
                   <View style={{marginVertical:rh(1)}}>
-                     <PriceDetails promoCode={false} style={{backgroundColor:"blue"}} />
+                         <PriceDetails data={state.viewCartData} style={{ backgroundColor: "green" }} />
                   </View>
 
                   <View style={{marginBottom:rh(1), padding:rw(3), backgroundColor:"white", borderRadius:10}}>

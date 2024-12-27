@@ -17,6 +17,7 @@ import SortByModal from '../../../../components/Modals/SortbyModal';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import ItemsList from '../../../../components/List/ItemsList';
 import apiClient from '../../../../Service/apiClient';
+import { SharedElement } from 'react-navigation-shared-element';
 
 
   // Dummy data for side navigation
@@ -192,7 +193,6 @@ const ProductListing = ({ route }) => {
         const fetchProductListing = async () => {
           try { 
               const postResponse = await apiClient.get(`/category?slug=${selectedCategorySlug}`);
-              console.log("Product Listing");
               const product = postResponse.data.data.category;
               setProductListing(product);
           } catch (error) {

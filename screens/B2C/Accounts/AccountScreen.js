@@ -1,14 +1,34 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
 import OrderOrWishlist from './AccountComponents/OrderOrWishlist';
 import AccountMenuList from './AccountComponents/AccountMenuList';
 import Header from '../../../components/header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // create a component
 const AccountScreen = ({navigation}) => {
+
+
+    useEffect(() => {
+        const checkAuthToken = async () => {
+            try {
+                const token = await AsyncStorage.getItem('authToken');
+                const userId = await AsyncStorage.getItem('userId');
+                const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
+
+                console.log("User Token");
+                console.log(token);
+
+            } catch (error) {
+                console.error("Error reading token:", error);
+            }
+        };
+        checkAuthToken();
+    }, [navigation]);
+
     return (
         <View>
             {/* Back Container */}

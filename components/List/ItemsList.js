@@ -1,25 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Animated } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { SharedElement } from 'react-native-shared-element';
+import { useToggleWishlist } from '../../utility/toggleWishlistUtils';
+import { AppContext } from '../../context/AppContext';
+
 
 const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
   const navigation = useNavigation();
   const [selectedCategoryId, setSelectedCategoryId] = useState(1);
+
+  const {state, dispatch } = useContext(AppContext);
   
+
   // State to manage the visibility of IncreaseAurDecreaseContener for each item
   const [showIncreaseDecrease, setShowIncreaseDecrease] = useState(null);
-  const [itemQuantity, setItemQuantity] = useState({});  // Store quantity for each item
+  const [itemQuantity, setItemQuantity] = useState({}); // Store quantity for each item
 
   // Animated value for sliding animation
   const slideAnim = useRef(new Animated.Value(0)).current;
 
-   // State to manage wishlist status for each item (using their IDs)
-   const [wishlist, setWishlist] = useState({});
+  // State to manage wishlist status for each item (using their IDs)
+  const [wishlist, setWishlist] = useState({});
 
+  const { isWishlistLoading, toggleWishlist } = useToggleWishlist();
 
-  const handleAdd = (id) => {
+  const handleAdd = (item) => {
+    const id = item.pid;
     if (showIncreaseDecrease === id) {
       // Close the container by resetting the animated value
       Animated.timing(slideAnim, {
@@ -59,76 +68,76 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
     });
   };
 
-  const onWishlistedToggle = async (id) => {
-    try {
-      // Toggle wishlist state locally
-      const updatedWishlist = {
-        ...wishlist,
-        [id]: !wishlist[id], // Toggle the wishlist status
-      };
-      // setWishlist(updatedWishlist);
+  const handleWishlistToggle = async (item) => {
+    const id = item.pid;
+    const pid = item.pid;
+    const uid = state.userId;
+    
+    // Default value set karna
+    const isInWishlist = item.added_to_wishlist ?? 1;
   
-      // Make an API call to add/remove the item from the wishlist in the database
-      // const response = await fetch('YOUR_API_ENDPOINT', {
-      //   method: 'POST', // or 'PUT' depending on your API
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     product_id: id,
-      //     is_wishlist: updatedWishlist[id], // Send the updated status
-      //   }),
-      // });
+    // Toggle wishlist state
+    setWishlist((prevWishlist) => ({
+      ...prevWishlist,
+      [id]: !prevWishlist[id],
+    }));
   
-      if (!response.ok) {
-        throw new Error('Error updating wishlist on server');
-      }
-  
-      // Optionally, handle the response from the API (e.g., show success or error message)
-    } catch (error) {
-      console.log('Error toggling wishlist:', error);
-  
-      // Revert wishlist state in case of error
-      setWishlist((prevState) => ({
-        ...prevState,
-        [id]: !prevState[id], // Revert the change
-      }));
-    }
+    // API call to update the wishlist
+    const result = await toggleWishlist(pid, isInWishlist, uid);
+    console.log(result);
   };
+  
+
+  // useEffect to initialize wishlist state based on items
+  useEffect(() => {
+    const initialWishlist = {};
+    items.forEach((item) => {
+      // Default value 1 if added_to_wishlist is not present
+      initialWishlist[item.pid] = item.added_to_wishlist ?? 1;
+    });
+    setWishlist(initialWishlist);
+  }, [items]);
   
 
   return (
     <FlatList
       data={items}
-      keyExtractor={(item, index) => index.toString()}
-      horizontal={layout === 'horizontal' ? true : false}
-      vertical={true}
+      keyExtractor={(item) => item.pid.toString()}
+      horizontal={layout === 'horizontal'}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.listContainer} 
+      contentContainerStyle={styles.listContainer}
       renderItem={({ item }) => (
         <TouchableOpacity
-          onPress={() => navigation.navigate('ProductDetail', { item: item })}
+          onPress={() =>
+            navigation.navigate('ProductDetail', {
+              item: item,
+              itemImage: item.itemimage,
+            })
+          }
           disabled={item.stock === 0}
-          style={[styles.itemContainer, listContainerStyle, item.stock === 0 && styles.disabledItem]}
+          style={[
+            styles.itemContainer,
+            listContainerStyle,
+            item.stock === 0 && styles.disabledItem,
+          ]}
         >
           <View style={styles.ImageContainer}>
-          {wishlist[item.pid] ? (
-            <TouchableOpacity onPress={() => onWishlistedToggle(item.pid)} style={styles.likeIcon}>
-              <MaterialIcons name="favorite" size={rf(3)} style={{ color: "#DC3545" }} />
+            <TouchableOpacity
+              onPress={() => handleWishlistToggle(item)}
+              style={styles.likeIcon}
+            >
+              <MaterialIcons
+                name={wishlist[item.pid] ? 'favorite' : 'favorite-border'}
+                size={24} // Adjust size as needed
+                style={{ color: wishlist[item.pid] ? '#DC3545' : '#BCBCBC' }}
+              />
             </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => onWishlistedToggle(item.pid)} style={styles.likeIcon}>
-              <MaterialIcons name="favorite-border" size={rf(3)} style={{ color: "#BCBCBC" }} />
-            </TouchableOpacity>
-          )}
-
-
 
             {showIncreaseDecrease !== item.pid && (
               <TouchableOpacity
                 disabled={item.stock === 0}
-                onPress={() => handleAdd(item.pid)}
+                onPress={() => handleAdd(item)}
                 style={styles.addbtn}
               >
                 <Text style={styles.btntext}>Add</Text>
@@ -144,62 +153,69 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
                       {
                         translateX: slideAnim.interpolate({
                           inputRange: [0, 1],
-                          outputRange: [rw(20), 0], // Slide in from right
+                          outputRange: [rw(20), 0],
                         }),
                       },
                     ],
                   },
                 ]}
               >
-                <View style={{ flexDirection: "row", alignItems: "center", width: "100%" }}>
-                  <TouchableOpacity style={{ width: "45%", height: "100%" }} onPress={() => handleIncrease(item.pid)}>
-                    <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: rf(2), color: "white" }}>+</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                  <TouchableOpacity
+                    style={{ width: '45%', height: '100%' }}
+                    onPress={() => handleIncrease(item.pid)}
+                  >
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2), color: 'white' }}>
+                      +
+                    </Text>
                   </TouchableOpacity>
-                  <Text style={{ color: "white", fontWeight: "bold" }}>{itemQuantity[item.pid] || 0}</Text>
-                  <TouchableOpacity style={{ width: "45%", height: "100%" }} onPress={() => handleDecrease(item.pid)}>
-                    <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: rf(2), color: "white" }}>-</Text>
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>{itemQuantity[item.pid] || 0}</Text>
+                  <TouchableOpacity
+                    style={{ width: '45%', height: '100%' }}
+                    onPress={() => handleDecrease(item.pid)}
+                  >
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2), color: 'white' }}>
+                      -
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </Animated.View>
             )}
 
-          <Image 
-              source={{ uri: item.itemimage ? item.itemimage : 'https://via.placeholder.com/150' }} 
-              style={styles.image} 
-          />
-
+            <SharedElement id={`item.${item.pid}.image`}>
+              <Image
+                source={{ uri: item.itemimage || 'https://via.placeholder.com/150' }}
+                style={styles.image}
+              />
+            </SharedElement>
           </View>
           <View style={styles.details}>
-            <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: rw(2) }}>
-              <Text style={styles.weight}>{item.weight}</Text>
-              <Text style={styles.type}>{item.type}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: rw(2) }}>
+              <Text style={styles.weight}>
+                {item.measurement} {item.unit}
+              </Text>
             </View>
             <View style={{ paddingHorizontal: rw(2), paddingVertical: rh(0.5) }}>
               <Text style={styles.name} numberOfLines={2}>
                 {item.name}
               </Text>
-              <View style={{ flexDirection: "row" }}>
-                  {/* Stars for Rating */}
-                  {Array.from({ length: item.rating || 5 }, (_, index) => (
-                    <MaterialIcons
-                      key={index}
-                      name="star-rate"
-                      size={rf(2)}
-                      style={styles.starIcon}
-                    />
-                  ))}
-                  <Text style={{ fontSize: rf(1.5), marginLeft:rw(1) }}>({item.rating})</Text>
-
-                {/* "Out of Stock" Message */}
-                {item.stock === 0 ? (
-                  <View style={styles.OutOfStock}>
-                    <Text style={{ color: "white", textAlign: "center" }}>Out Of Stock</Text>
-                  </View>
-                ) : null}
+              <View style={{ flexDirection: 'row' }}>
+                {Array.from({ length: item.avg || 5 }, (_, index) => (
+                  <MaterialIcons key={index} name="star-rate" size={rf(2)} style={styles.starIcon} />
+                ))}
+                <Text style={{ fontSize: rf(1.5), marginLeft: rw(1) }}>({item.rating})</Text>
               </View>
-              <Text style={styles.discount}>{item.discount} % OFF</Text>
+              {item.stock === 0 && (
+                <View style={styles.OutOfStock}>
+                  <Text style={{ color: 'white', textAlign: 'center' }}>Out Of Stock</Text>
+                </View>
+              )}
+              <Text style={styles.discount}>{item.discount || 0} % OFF</Text>
               <Text style={styles.price}>
-                ₹{item.selling_price} <Text style={styles.mpr}>MPR <Text style={styles.mprPrice}>₹{item.mrp_price}</Text></Text>
+                ₹{item.selling_price || 'N/A'}{' '}
+                <Text style={styles.mpr}>
+                  MPR <Text style={styles.mprPrice}>₹{item.mrp_price || 'N/A'}</Text>
+                </Text>
               </Text>
             </View>
           </View>
@@ -210,6 +226,7 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
 };
 
 export default ItemsList;
+ 
 
 
 const styles = StyleSheet.create({

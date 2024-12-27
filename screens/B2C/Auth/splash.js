@@ -1,4 +1,3 @@
-//import libraries
 import React, { useEffect, useContext } from 'react';
 import { View, StatusBar, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
@@ -7,12 +6,9 @@ import { rw, rh } from '../../../Service/responsive';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppContext } from '../../../context/AppContext';
 
-// create a component
 const SplashScreen = () => {
     const navigation = useNavigation();
-
-    const {state, dispatch } = useContext(AppContext);
-    
+    const { state, dispatch } = useContext(AppContext);
 
     useEffect(() => {
         const checkAuthToken = async () => {
@@ -33,10 +29,10 @@ const SplashScreen = () => {
                         dispatch({
                             type: 'SET_USER',
                             payload: {
-                              userId: userId,
-                              userNumber:  null,
+                                userId: userId,
+                                userNumber: null,
                             },
-                          });
+                        });
 
                     } else {
                         navigation.replace('SignupOrLogin');
@@ -52,7 +48,25 @@ const SplashScreen = () => {
 
     useEffect(() => {
         StatusBar.setBackgroundColor("yellow");
-    }, []);
+        // Retrieve selected address from AsyncStorage
+        const getSelectedAddress = async () => {
+            try {
+                const storedAddress = await AsyncStorage.getItem('selectedAddress');
+                if (storedAddress) {
+                    const item = JSON.parse(storedAddress);
+                    // Dispatch the selected address data to the app context
+                    dispatch({
+                        type: 'SELECT_ADDRESS_DATA',
+                        payload: { selectAddressData: item },
+                    });
+                }
+            } catch (error) {
+                console.error("Error retrieving selected address:", error);
+            }
+        };
+
+        getSelectedAddress();
+    }, [dispatch]);
 
     return (
         <View style={styles.container}>
@@ -67,7 +81,6 @@ const SplashScreen = () => {
     );
 };
 
-//make this component available to the app
 export default SplashScreen;
 
 const styles = StyleSheet.create({

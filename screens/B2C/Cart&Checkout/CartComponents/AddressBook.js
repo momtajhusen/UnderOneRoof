@@ -1,93 +1,105 @@
-//import liraries
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import UserDetails from './userDetails';
 import Header from '../../../../components/header';
-import apiClient from '../../../../Service/apiClient';
+import { useViewAddressData } from '../../../../utility/viewaddressUtils';
 
+const AddressBook = ({ navigation }) => {
+  const { isViewAddressLoading, viewAddressData } = useViewAddressData();
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-// create a component
-const AddressBook = ({navigation}) => {
+  useEffect(() => {
+    const fetchAddress = async () => {
+      setLoading(true);
+      try {
+        const result = await viewAddressData();
+        if (result.success) {
+          setAddresses(result.addressData);
+        } else {
+          console.error(result.error);
+        }
+      } catch (error) {
+        console.error('Failed to fetch addresses:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAddress();
+  }, []);
 
-    
+  return (
+    <View style={styles.wrapper}>
+      <Header title="Address Book" />
 
-    const [addressData, setAddressData] = useState([]);
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EditAddress')}
+          style={styles.addAddressBtn}
+        >
+          <MaterialIcons name="add" size={rf(4)} style={styles.addIcon} />
+          <Text style={styles.addAddressText}>Add Address</Text>
+        </TouchableOpacity>
 
-    // Fetch product data from API
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await apiClient.get('/viewaddress');  
-                setAddressData(response.data);
-            } catch (error) {
-                console.error('Error fetching address:', error);
-            }
-        };
-        fetchCategories();
-    }, []);
-    
-    return (
-        <View>
-            {/* Back Container */}
-            <Header
-              title="Address Book"
-            />
+        {loading ? (
+          <ActivityIndicator size="large" color="#FF3131" style={styles.loader} />
+        ) : addresses && addresses.length > 0 ? (
  
-            <View style={styles.container}>
-                <TouchableOpacity onPress={()=>navigation.navigate('EditAddress')} style={styles.addaddressbtn}>
-                    <MaterialIcons name="add" size={rf(4)} style={{ fontSize: rf(3), color:"#FF3131" }} />
-                    <Text style={{color:"#FF3131", fontWeight:"bold", marginLeft:rw(1)}}>Add Address</Text>
-                </TouchableOpacity>
-                <View style={{ gap: rh(1) }}>
-                    {addressData && addressData.length > 0 ? (
-                        addressData.map((address, index) => (
-                            <UserDetails
-                                key={index} // Unique key for each item
-                                name={address.name} // Replace 'name' with the actual field
-                                address={address.address} // Replace 'address' with the actual field
-                                phone={address.phone} // Replace 'phone' with the actual field
-                            />
-                        ))
-                    ) : (
-                        <View style={{justifyContent:"center", alignItems:"center", height:rh(85), width:rw(93)}}>
-                            <Text style={{textAlign:"center"}}>No addresses found</Text>
-                        </View>
-                    )}
-                </View>
-
-            </View>
-        </View>
-    );
+            <UserDetails userData={addresses} style={{marginBottom:rh(0.5)}} type="view_all" />
+     
+        ) : (
+          <View style={styles.noAddressContainer}>
+            <Text style={styles.noAddressText}>No addresses found</Text>
+          </View>
+        )}
+      </View>
+    </View>
+  );
 };
 
-//make this component available to the app
-export default AddressBook;
-
 const styles = StyleSheet.create({
-    backHeader: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        paddingTop: rh(4),
-        paddingBottom:rh(2),
-        paddingLeft:rw(3),
-        justifyContent:"space-between",
-        marginRight:rw(5),
-    },
-    container: {
-        paddingHorizontal: rw(4),
-        paddingVertical:rh(2),   
-    },
-    addaddressbtn:{
-     alignItems:"center",
-     flexDirection:"row",
-     borderWidth:1,
-     borderColor:"#FF3131",
-     backgroundColor:"#FFEAEA",
-     paddingLeft:rw(2),
-     paddingVertical:rh(1),
-     borderRadius:10,
-     marginBottom:rh(1)
-    }
+  wrapper: {
+    flex: 1,
+  },
+  container: {
+    paddingHorizontal: rw(4),
+    paddingVertical: rh(2),
+    flex: 1,
+  },
+  addAddressBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#FF3131',
+    backgroundColor: '#FFEAEA',
+    padding: rw(2),
+    borderRadius: 10,
+    marginBottom: rh(1),
+  },
+  addIcon: {
+    fontSize: rf(3),
+    color: '#FF3131',
+  },
+  addAddressText: {
+    color: '#FF3131',
+    fontWeight: 'bold',
+    marginLeft: rw(1),
+  },
+  loader: {
+    marginTop: rh(10),
+  },
+  noAddressContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noAddressText: {
+    textAlign: 'center',
+    fontSize: rf(2),
+    color: '#717171',
+  },
 });
+
+export default AddressBook;

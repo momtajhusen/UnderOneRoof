@@ -11,6 +11,11 @@ const SimilarProducts = ({ data }) => {
     // Use data from props directly for productList
     const productList = data || []; // Default empty array if data is not provided
 
+    // Only render if productList has items
+    if (productList.length === 0) {
+        return null; // Return null if there's no data
+    }
+
     return (
         <View>
             <Text style={styles.headerText}>Similar Products</Text>

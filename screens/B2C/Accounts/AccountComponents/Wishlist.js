@@ -1,5 +1,5 @@
 // Import libraries
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
@@ -7,12 +7,16 @@ import Header from '../../../../components/header';
 import WishlistCard from '../../../../components/List/WishlistCard';
 import ItemsList from '../../../../components/List/ItemsList';
 import apiClient from '../../../../Service/apiClient';
+import { AppContext } from '../../../../context/AppContext';
 
 // Create a component
 const Wishlist = ({ navigation }) => {
     // State for loading and wishlist data
     const [isLoading, setIsLoading] = useState(true);
     const [wishlistProduct, setWishlistProduct] = useState([]);
+
+        const {state, dispatch } = useContext(AppContext);
+    
 
     // Fetch wishlist data from API
     const wishlistData = async () => {
@@ -29,7 +33,7 @@ const Wishlist = ({ navigation }) => {
     // Fetch wishlist data on component mount
     useEffect(() => {
         wishlistData();
-    }, []);  // Empty dependency array ensures this runs only once when the component mounts
+    }, [state.reFresh]);
 
     return (
         <View>

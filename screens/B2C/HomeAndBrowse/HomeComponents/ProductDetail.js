@@ -21,22 +21,38 @@ import SimilarProducts from '../../Cart&Checkout/CartComponents/SimilarProducts'
 import apiClient from '../../../../Service/apiClient';
 import parse from 'html-react-parser';
 import { AppContext } from '../../../../context/AppContext';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import { SharedElement } from 'react-native-shared-element';  
+
+import { useAddFromCart } from '../../../../utility/addCartProductUtils';
+import { useRemoveFromCart } from '../../../../utility/deleteCartProductUtils';
 
 
+// Shimmer Placeholder component
+const Shimmer = createShimmerPlaceholder(LinearGradient);
 
 const ProductDetail = ({ route, navigation }) => {
 
     const {state, dispatch } = useContext(AppContext);
 
-    const { item } = route.params;
+    const item = route?.params?.item || {};
+    const itemImage = route?.params?.itemImage || '';
+
+ 
  
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
   const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
-  const [isLoading, setIsLoading] = useState(false);  
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCartBtnLoading, setCartBtnLoading] = useState(false);  
+  
 
 
-  const [selectedVarientId, setSelectedVarientId] = useState(item.varient[0].psid);
+  const [selectedVarientId, setSelectedVarientId] = useState(
+    Array.isArray(item.varient) && item.varient.length > 0
+      ? item.varient[0].psid
+      : item.varient_id || null
+  );
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
 
   const [multiProductImage, setMultiProductImage] = useState([]);
@@ -49,119 +65,81 @@ const ProductDetail = ({ route, navigation }) => {
   
   const [isInWishlist, setIsInWishlist] = useState(0);
 
-      // Function to handle adding product to cart
-      const addToCart = async () => {
-        try {
-          setIsLoading(true);
-          const payload = {
-              pid: productDetails.pid,
-              qty: 1,
-              var_id: ProductVarient[0].psid
-          };
+   const { isCartAddLoading, addFromCart } = useAddFromCart();
+   const { isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
 
-          const response = await apiClient.post('/addCart', payload);
-          const product = response.data;
+    const addToCart = async () => {
+      const result = await addFromCart(productDetails.pid, ProductVarient[0].psid);
+    };
 
-          if (product.status === 1) {
-              setCartQuantity(product.cartcount);
-              ProductDetails();
-          } else {
-              console.error('Failed to update cart');
-          }
-        } catch (error) {
-          console.error('Error while adding to cart:', error);
-        } finally {
-          setIsLoading(false);
-        }
+    const removeToCart = async () => {
+      const result = await removeFromCart(productDetails.pid);
+    };
+    
+    const ProductDetails = async () => {
+      setIsLoading(true);
+      try {
+        const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
+        const product = response.data;
+
+        const multiImage = product.data.productDetails[0]?.multi_image || [];
+
+        setMultiProductImage(multiImage);
+        setProductDetails(product.data.productDetails[0]);
+        setRelatedProduct(product.data.relatedProduct);
+        setProductVarient(product.data.varient);
+        setCartQuantity(product.data.productDetails[0].added_to_cart);
+        setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
+
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const wishlistHandle = async () => {
+      const payloadAddWishlist = {
+        pid: productDetails.pid,
+        uid: state.userId,
       };
 
-      // Function to handle removing product from cart
-      const removeFromCart = async () => {
-        try {
-          setIsLoading(true);
-
-          const payload = {
-              pid: productDetails.pid,
-          };
-
- 
-          const response = await apiClient.post('/deleteCart', payload);
-          const product = response.data;
-
-          if (product.status === 1) {
-              setCartQuantity(0);
-          } else {
-              console.error('Failed to remove product:', product.message);
-          }
-        } catch (error) {
-          console.error('An error occurred:', error.message);
-        } finally {
-          setIsLoading(false);
-        }
+      const payloadDeleteWishlist = {
+        pid: productDetails.pid,
       };
 
-      const ProductDetails = async () => {
-        try {
-          const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
-          const product = response.data;
-
-          const multiImage = product.data.productDetails[0]?.multi_image || [];
-
-          setMultiProductImage(multiImage);
-          setProductDetails(product.data.productDetails[0]);
-          setRelatedProduct(product.data.relatedProduct);
-          setProductVarient(product.data.varient);
-          setCartQuantity(product.data.productDetails[0].added_to_cart);
-          setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
-
-        } catch (error) {
-          console.error('Error fetching product:', error);
+      try {
+        let response;
+        
+        if (isInWishlist) {
+          setIsInWishlist(false); // Update state to reflect removal
+          response = await apiClient.post('/deleteWishlist', payloadDeleteWishlist);
+        } else {
+          setIsInWishlist(true); // Update state to reflect addition
+          response = await apiClient.post('/addWishlist', payloadAddWishlist);
         }
-      };
 
-      const wishlistHandle = async () => {
-        const payloadAddWishlist = {
-          pid: productDetails.pid,
-          uid: state.userId,
-        };
-
-        const payloadDeleteWishlist = {
-          pid: productDetails.pid,
-        };
-
-        try {
-          let response;
-          
-          if (isInWishlist) {
-            setIsInWishlist(false); // Update state to reflect removal
-            response = await apiClient.post('/deleteWishlist', payloadDeleteWishlist);
-          } else {
-            setIsInWishlist(true); // Update state to reflect addition
-            response = await apiClient.post('/addWishlist', payloadAddWishlist);
-          }
-
-          if (response.data.status === 1) {
-            console.log('Success');
-          } else {
-            console.error('Failed to update wishlist:', response.data.title);
-            setIsInWishlist(!isInWishlist);
-          }
-        } catch (error) {
-          console.error('Error handling wishlist:', error);
+        if (response.data.status === 1) {
+          console.log('Success');
+        } else {
+          console.error('Failed to update wishlist:', response.data.title);
           setIsInWishlist(!isInWishlist);
         }
-      };
-
-      const varentHandle = async (item) => {
-        setSelectedVarientId(item.psid);
-        ProductDetails();
+      } catch (error) {
+        console.error('Error handling wishlist:', error);
+        setIsInWishlist(!isInWishlist);
       }
-  
+    };
 
+    const varentHandle = async (item) => {
+      setSelectedVarientId(item.psid);
+      ProductDetails();
+    }
+  
       // Fetch product from API
       useEffect(() => {
         ProductDetails();
-      }, []);
+      }, [state.reFresh]);
       
       const reviews = [
         {
@@ -218,15 +196,24 @@ const ProductDetail = ({ route, navigation }) => {
       <ScrollView>
         <View contentContainerStyle={styles.scrollContainer}>
           <View style={{height:rh(35)}}>
-            <Carousel
-              data={multiProductImage}
-              renderItem={renderItem}
-              sliderWidth={rw(100)}
-              itemWidth={rw(70)}
-              onSnapToItem={(index) => setActiveIndex(index)}
-              activeSlideAlignment="center"
-              loop
-            />
+
+            {isLoading ? (
+               <View>
+                  <SharedElement id={`item.${item.pid}.image`}>
+                    <Image source={{ uri: itemImage }} style={{marginHorizontal:rw(15), width: rw(70), height: rw(70)}} />
+                  </SharedElement>
+               </View>
+            ) : (
+              <Carousel
+                data={multiProductImage}
+                renderItem={renderItem}
+                sliderWidth={rw(100)}
+                itemWidth={rw(70)}
+                onSnapToItem={(index) => setActiveIndex(index)}
+                activeSlideAlignment="center"
+                loop
+              />
+            )}
 
             <View style={styles.indicatorContainer}>
               {multiProductImage.map((_, index) => (
@@ -433,10 +420,10 @@ const ProductDetail = ({ route, navigation }) => {
                 borderRadius: 10,
               }}
               onPress={addToCart}
-              disabled={isLoading} // Disable button when loading
+              disabled={isCartAddLoading} // Disable button when loading
             >
-              {isLoading ? (
-                <ActivityIndicator size="small" color="white" /> // Display loading indicator
+              {isCartAddLoading ? (
+                <ActivityIndicator size="small" color="white" />
               ) : (
                 <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
               )}
@@ -449,10 +436,10 @@ const ProductDetail = ({ route, navigation }) => {
                 paddingHorizontal: rw(13),
                 borderRadius: 10,
               }}
-              onPress={removeFromCart}
-              disabled={isLoading} // Disable button when loading
+              onPress={removeToCart}
+              disabled={isCartDeleteLoading}
             >
-              {isLoading ? (
+              {isCartDeleteLoading ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
                 <Text style={{ color: "white", fontWeight: "bold" }}>Remove</Text>
@@ -526,6 +513,14 @@ const styles = StyleSheet.create({
     paddingVertical:rh(0.5)
   },
   deliveryText: { fontSize: rf(1.8), marginBottom: rh(0.5) },
+
+  shimmer: {
+    width: rw(80),
+    height: "100%",
+    borderRadius: 10,
+    justifyContent:"center",
+    marginLeft:rw(10)
+},
 });
 
 export default ProductDetail;

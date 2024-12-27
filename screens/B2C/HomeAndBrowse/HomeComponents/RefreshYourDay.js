@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import ItemsList from '../../../../components/List/ItemsList';
 import apiClient from '../../../../Service/apiClient';
 import ItemsListLoader from '../../../../components/ShimmerLoader/ItemsListLoader';
+import { AppContext } from '../../../../context/AppContext';
+
 
 // create a component
 const RefreshYourDay = () => {
   const [productData, setProductData] = useState([]);
   const [loading, setLoading] = useState(true); // Adding loading state
+
+  const {state, dispatch } = useContext(AppContext);
+  
 
   // Fetch slider image from API
   useEffect(() => {
@@ -20,17 +25,17 @@ const RefreshYourDay = () => {
       } catch (error) {
         console.error('Error fetching slider data:', error);
       } finally {
-        setLoading(false); // Set loading to false once data is fetched
+        setLoading(false);
       }
     };
     fetchHomeSliderData();
-  }, []);
+  }, [state.reFresh]);
 
   return (
     <View style={{ padding: rw(4) }}>
       <Text style={styles.headerText}>Refresh Your Day</Text>
       <View>
-        {/* Show multiple loading spinners (8 times) until data is loaded */}
+ 
         {loading ? (
           [...Array(8)].map((_, index) => (
             <View style={{ flexDirection: 'row', marginBottom: rh(1) }} key={index}>

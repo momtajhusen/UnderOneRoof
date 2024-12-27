@@ -1,39 +1,42 @@
-// cartUtils.js
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import apiClient from '../Service/apiClient';
+import { AppContext } from '../context/AppContext';
 
-export const useAddToCart = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [cartQuantity, setCartQuantity] = useState(0);
+export const useRemoveFromCart = () => {
+  const [isCartDeleteLoading, setIsLoading] = useState(false);
+  const { dispatch } = useContext(AppContext);
 
-  const addToCart = async (productDetails, ProductVarient, ProductDetails) => {
+  const removeFromCart = async (pid) => {
     try {
       setIsLoading(true);
-      const payload = {
-        pid: productDetails.pid,
-        qty: 1,
-        var_id: ProductVarient[0].psid,
-      };
+      const payload = { pid }; // Duplicate key hata diya
+      const response = await apiClient.post('/deleteCart', payload);
 
-      const response = await apiClient.post('/addCart', payload);
-      const product = response.data;
+      console.log(response.data);
 
-      if (product.status === 1) {
-        setCartQuantity(product.cartcount);
-        ProductDetails();
+      if (response.data.status === 1) {  
+        dispatch({
+          type: 'GLOBAL_REFRESH',
+          payload: {
+            reFresh: Math.floor(Math.random() * 100) + 1,  
+          },
+        });
+
+        return { success: true };
       } else {
-        console.error('Failed to update cart');
+        console.error('Failed to remove item from cart');
+        return { success: false, error: 'Failed to remove item from cart' };
       }
     } catch (error) {
-      console.error('Error while adding to cart:', error);
+      console.error('Error while removing from cart:', error);
+      return { success: false, error: error.message }; // Error status return kar raha hai
     } finally {
       setIsLoading(false);
     }
   };
 
   return {
-    isLoading,
-    cartQuantity,
-    addToCart,
+    isCartDeleteLoading,
+    removeFromCart,
   };
 };

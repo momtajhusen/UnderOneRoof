@@ -1,55 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useRemoveFromCart } from '../../utility/deleteCartProductUtils';
+import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
 
-const CartItemsList = ({
-    itemId,
-    itemImage,
-    itemName,
-    itemWeight,
-    itemPrice,
-    itemMRP,
-    initialQuantity, // Initial quantity as a prop
-    onRemove,
-    deleteIconStyle,
-}) => {
-    const [itemQuantity, setItemQuantity] = useState(initialQuantity || 1); // State to track item quantity
+const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }) => {
 
-    const handleIncrease = () => {
-        setItemQuantity((prevQuantity) => prevQuantity + 1);
+
+    const { pid, itemimage, name, measurement, selling_price, mrp_price, qty } = item;
+ 
+    const [itemQuantity, setItemQuantity] = useState(qty);
+    const [isUpdatingQty, setIsUpdatingQty] = useState(false);
+
+    const { isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
+    const { qtyUpdate } = useQtyUpdate();
+
+    const handleIncrease = async () => {
+        setIsUpdatingQty(true);
+        setItemQuantity(prevQuantity => {
+            const newQty = prevQuantity + 1;
+            qtyUpdate(pid, newQty).finally(() => setIsUpdatingQty(false)); 
+            return newQty;
+        });
     };
 
-    const handleDecrease = () => {
+    const handleDecrease = async () => {
         if (itemQuantity > 1) {
-            setItemQuantity((prevQuantity) => prevQuantity - 1);
+            setIsUpdatingQty(true);
+            setItemQuantity(prevQuantity => {
+                const newQty = prevQuantity - 1;
+                qtyUpdate(pid, newQty).finally(() => setIsUpdatingQty(false)); // Update quantity
+                return newQty;
+            });
         }
+    };
+
+    const onRemove = async () => {
+        await removeFromCart(pid);
     };
 
     return (
         <View style={styles.container}>
             <Image
-                source={itemImage ? { uri: itemImage } : require('../../assets/location-tick.png')}
+                source={itemimage ? { uri: itemimage } : require('../../assets/location-tick.png')}
                 style={styles.image}
                 resizeMode="cover"
             />
             <View style={styles.details}>
                 <View style={styles.header}>
-                    <Text style={styles.itemName} numberOfLines={1}>
-                        {itemName}
-                    </Text>
+                    <Text style={styles.itemName} numberOfLines={1}>{name}</Text>
                     <TouchableOpacity onPress={onRemove} style={[styles.removeButton, deleteIconStyle]}>
-                        <Image
-                            source={require('../../assets/trash.png')}
-                            style={{ width: rw(5), height: rw(5) }}
-                        />
+                        {isCartDeleteLoading ? (
+                            <ActivityIndicator size="small" color="#888" />
+                        ) : (
+                            <Image
+                                source={require('../../assets/trash.png')}
+                                style={{ width: rw(5), height: rw(5) }}
+                            />
+                        )}
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.itemWeight}>{itemWeight}</Text>
+                <Text style={styles.itemWeight}>{measurement} × {qty}</Text>
                 <View style={styles.priceContainer}>
-                    <Text style={styles.itemPrice}>₹{itemPrice}</Text>
+                    <Text style={styles.itemPrice}>₹{selling_price * qty}</Text>
                     <Text style={styles.itemMRP}>
-                        MRP <Text style={styles.itemMrpPrice}>₹{itemMRP}</Text>
+                        MRP <Text style={styles.itemMrpPrice}>₹{mrp_price}</Text>
                     </Text>
                 </View>
             </View>
@@ -65,6 +81,7 @@ const CartItemsList = ({
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -126,7 +143,7 @@ const styles = StyleSheet.create({
         marginTop: rh(3),
         backgroundColor: '#E9E9E9',
         borderRadius: rw(2),
-        padding:rw(1),
+        padding: rw(1),
     },
     button: {
         width: rw(8.5),
@@ -151,6 +168,18 @@ const styles = StyleSheet.create({
     removeIcon: {
         fontSize: rf(2.5),
         color: '#888',
+    },
+    addToCartButton: {
+        marginTop: rh(2),
+        backgroundColor: '#1E90FF',
+        paddingVertical: rh(1),
+        paddingHorizontal: rw(3),
+        borderRadius: rw(2),
+    },
+    addToCartText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: rf(2),
     },
 });
 
