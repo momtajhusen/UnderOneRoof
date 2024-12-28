@@ -1,83 +1,128 @@
-//import liraries
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { MaterialIcons, MaterialCommunityIcons , } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, RefreshControl, FlatList } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import CategoryList from '../../../components/List/CategoryList';
-import { rw, rh, rf } from '../../../Service/responsive';
+import { rw, rh } from '../../../Service/responsive';
 import Header from '../../../components/header';
+import apiClient from '../../../Service/apiClient';
+import CategoryListLoader from '../../../components/ShimmerLoader/CategoryListLoader';
 
-// create a component
-const B2BCategoryScreen  = ({navigation}) => {
+const CategoryScreen = ({ navigation }) => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-        // Categories array define karte hain
-        const categories = [
-            { id: 1, image: require('../../../assets/CategorIcon/image1.png'), text: 'Dry Fruits' },
-            { id: 2, image: require('../../../assets/CategorIcon/image2.png'), text: 'Spices' },
-            { id: 3, image: require('../../../assets/CategorIcon/image3.png'), text: 'Kesar' },
-            { id: 4, image: require('../../../assets/CategorIcon/image4.png'), text: 'Spices' },
-            { id: 5, image: require('../../../assets/CategorIcon/image5.png'), text: 'Herbal Teas' },
-            { id: 6, image: require('../../../assets/CategorIcon/image6.png'), text: 'Herbal Teas' },
-            { id: 7, image: require('../../../assets/CategorIcon/image7.png'), text: 'Herbal Teas' },
-            { id: 8, image: require('../../../assets/CategorIcon/image1.png'), text: 'Herbal Teas' },
-            { id: 9, image: require('../../../assets/CategorIcon/image2.png'), text: 'Dry Fruits' },
-            { id: 10, image: require('../../../assets/CategorIcon/image3.png'), text: 'Spices' },
-            { id: 11, image: require('../../../assets/CategorIcon/image4.png'), text: 'Kesar' },
-            { id: 12, image: require('../../../assets/CategorIcon/image5.png'), text: 'Spices' },
-            { id: 13, image: require('../../../assets/CategorIcon/image6.png'), text: 'Herbal Teas' },
-            { id: 14, image: require('../../../assets/CategorIcon/image7.png'), text: 'Herbal Teas' },
-            { id: 15, image: require('../../../assets/CategorIcon/image1.png'), text: 'Herbal Teas' },
-            { id: 16, image: require('../../../assets/CategorIcon/image2.png'), text: 'Herbal Teas' },
-        ];
+  // Fetch categories from API
+  const fetchCategories = async () => {
+    try {
+      const response = await apiClient.get('/allcategory');
+      const category = response.data.data.category;
+      setCategories(category);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false); // Stop refresh animation
+    }
+  };
 
-    return (
-        <View>
-             {/* Back Container  */}
-             <Header
-                title="Categories"
-                rightContent={
-                    <View style={{flexDirection:"row", gap: rw(4)}}>
-                      <TouchableOpacity>
-                         <Image source={require('../../../assets/Search.png')} style={{width:rw(5.5), height:rw(5.5)}} />
-                      </TouchableOpacity>
-                      <TouchableOpacity>
-                        <Image source={require('../../../assets/Cart.png')} style={{width:rw(5.5), height:rw(5.5)}} />
-                      </TouchableOpacity>
-                    </View>
-                }
-            />
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchCategories();
+  };
 
-             {/* Category List Container  */}
-             <View style={styles.categoryListContainer}>
-            {categories.map((category, index) => (
-                    <Animatable.View
-                    key={category.id}
-                    animation="fadeInUp"  
-                    duration={800}  
-                    delay={index * 20}  
-                >
-                <CategoryList
-                    image={category.image} 
-                    text={category.text} 
-                    onPress={() => navigation.navigate('B2BProductListing', { selectCategoryId: category.id, selectCategoryName: category.text })}
-                />
-                </Animatable.View>
-                ))}
-            </View>
-        </View>
-    );
+  const renderCategory = ({ item, index }) => (
+    <Animatable.View
+      key={item.sid}
+      animation="fadeInUp"
+      duration={800}
+      delay={index * 20}
+    >
+      <CategoryList
+        cimage={item.image}
+        text={item.cname}
+        onPress={() =>
+          navigation.navigate('B2BProductListing', {
+            selectCategoryId: item.sid,
+            selectCategoryName: item.cname,
+            selectCategorySlug: item.cslug,
+          })
+        }
+      />
+    </Animatable.View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Header Component */}
+      <Header
+        title="Categories"
+        rightContent={
+          <View style={styles.headerIcons}>
+            <TouchableOpacity>
+              <Image
+                source={require('../../../assets/Search.png')}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                source={require('../../../assets/Cart.png')}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          </View>
+        }
+      />
+
+      <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: rw(3.9) }}>
+        {/* FlatList for Categories */}
+        {loading ? (
+          <View style={styles.categoryListContainer}>
+            {Array.from({ length: 16 }).map((_, index) => (
+              <CategoryListLoader key={index} />
+            ))}
+          </View>
+        ) : (
+          <FlatList
+            data={categories}
+            renderItem={renderCategory}
+            keyExtractor={(item) => item.sid.toString()}
+            numColumns={2}
+            contentContainerStyle={styles.categoryListContainer}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
+            showsVerticalScrollIndicator={false} 
+            showsHorizontalScrollIndicator={false}  
+          />
+        )}
+      </View>
+    </View>
+  );
 };
 
-//make this component available to the app
-export default B2BCategoryScreen;
-
+export default CategoryScreen;
 
 const styles = StyleSheet.create({
-    categoryListContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        paddingLeft:rw(5),
-        marginTop:rh(2),
-    },
-});
+  container: {
+    flex: 1,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    gap: rw(4),
+  },
+  icon: {
+    width: rw(5.5),
+    height: rw(5.5),
+  },
+  categoryListContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: rh(2),
+  },
+});  

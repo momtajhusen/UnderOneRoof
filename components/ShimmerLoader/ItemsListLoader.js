@@ -1,116 +1,178 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { rw, rh } from '../../Service/responsive';
 import { LinearGradient } from 'expo-linear-gradient';
-import { rw, rh, rf } from '../../Service/responsive';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
-
-const ItemsListLoader = ({ layout = 'horizontal' }) => {
-  return (
-    <View style={[styles.itemContainer, layout === 'horizontal' && { flexDirection: 'row', marginRight: rw(1.5) }]}>
+const ItemsListLoader = ({ count = 4, itemContainerStyle, layout = 'vertical' }) => {
+  const renderLoaderItem = () => (
+    <View style={[styles.itemContainer, itemContainerStyle]}>
       {/* Image Placeholder */}
-      <View style={styles.ImageContainer}>
+      <ShimmerPlaceholder
+        style={styles.image}
+        shimmerColors={['#f0f0f0', '#e0e0e0', '#f0f0f0']}  
+        shimmerStyle={{ borderRadius: rw(4) }}
+        LinearGradient={(props) => (
+          <LinearGradient
+            {...props}
+            colors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+            start={[0, 0]}
+            end={[1, 0]}
+          />
+        )}
+      />
+
+      {/* Text Placeholder */}
+      <View style={styles.textContainer}>
         <ShimmerPlaceholder
-          style={styles.image}
-          shimmerColors={['#e0e0e0', '#f0f0f0', '#e0e0e0']}
+          style={styles.title}
+          shimmerColors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+          LinearGradient={(props) => (
+            <LinearGradient
+              {...props}
+              colors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+              start={[0, 0]}
+              end={[1, 0]}
+            />
+          )}
         />
         <ShimmerPlaceholder
-          style={styles.likeIcon}
-          shimmerColors={['#e0e0e0', '#f0f0f0', '#e0e0e0']}
-        />
-      </View>
-      {/* Product Details Placeholder */}
-      <View style={styles.detailsContainer}>
-        <ShimmerPlaceholder
-          style={styles.weightPlaceholder}
-          shimmerColors={['#e0e0e0', '#f0f0f0', '#e0e0e0']}
-        />
-        <ShimmerPlaceholder
-          style={styles.textPlaceholder}
-          shimmerColors={['#e0e0e0', '#f0f0f0', '#e0e0e0']}
+          style={styles.subtitle}
+          shimmerColors={['#f0f0f0', '#e0e0e0', '#f0f0f0']}
+          LinearGradient={(props) => (
+            <LinearGradient
+              {...props}
+              colors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+              start={[0, 0]}
+              end={[1, 0]}
+            />
+          )}
         />
         <ShimmerPlaceholder
-          style={styles.ratingPlaceholder}
-          shimmerColors={['#e0e0e0', '#f0f0f0', '#e0e0e0']}
+          style={styles.subtitle}
+          shimmerColors={['#f0f0f0', '#e0e0e0', '#f0f0f0']}
+          LinearGradient={(props) => (
+            <LinearGradient
+              {...props}
+              colors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+              start={[0, 0]}
+              end={[1, 0]}
+            />
+          )}
         />
         <ShimmerPlaceholder
-          style={styles.discountPlaceholder}
-          shimmerColors={['#e0e0e0', '#f0f0f0', '#e0e0e0']}
+          style={styles.start}
+          shimmerColors={['#f0f0f0', '#e0e0e0', '#f0f0f0']}
+          LinearGradient={(props) => (
+            <LinearGradient
+              {...props}
+              colors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+              start={[0, 0]}
+              end={[1, 0]}
+            />
+          )}
         />
         <ShimmerPlaceholder
-          style={styles.pricePlaceholder}
-          shimmerColors={['#e0e0e0', '#f0f0f0', '#e0e0e0']}
+          style={styles.offer}
+          shimmerColors={['#f0f0f0', '#e0e0e0', '#f0f0f0']}
+          LinearGradient={(props) => (
+            <LinearGradient
+              {...props}
+              colors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+              start={[0, 0]}
+              end={[1, 0]}
+            />
+          )}
+        />
+        <ShimmerPlaceholder
+          style={styles.price}
+          shimmerColors={['#f0f0f0', '#e0e0e0', '#f0f0f0']}
+          LinearGradient={(props) => (
+            <LinearGradient
+              {...props}
+              colors={['#f0f0f0', '#e0e0e0', '#f0f0f0']} 
+              start={[0, 0]}
+              end={[1, 0]}
+            />
+          )}
         />
       </View>
     </View>
   );
+
+  return (
+    <FlatList
+      data={Array.from({ length: count })}
+      keyExtractor={(_, index) => index.toString()}
+      horizontal={layout === 'horizontal'}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={[
+        styles.listContainer, 
+        layout === 'vertical' && { flexWrap: 'wrap', flexDirection: 'row' }
+      ]}
+      renderItem={renderLoaderItem}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    width: rw(39),
-    marginBottom: rh(2),
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'white',
-  },
-  ImageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFF4E6',
+  listContainer: {
     paddingHorizontal: rw(2),
-    padding: rh(0.5),
-    borderRadius: 10,
+    justifyContent:"center",
+  },
+  itemContainer: {
+    width: rw(41),
+    marginRight: rw(1.5),
+    marginLeft: rw(1.5),
+    rowGap: 3,
+    backgroundColor: '#FFF',
+    borderRadius: rw(2),
+    padding: rw(1),
+    marginBottom:rw(3),
   },
   image: {
     width: '100%',
-    height: 110,
-    borderRadius: 10,
-    resizeMode: 'cover',
+    height: rh(15),
+    borderRadius: rw(2),
+    overflow: 'hidden',
+    backgroundColor: '#F0F0F0',
   },
-  likeIcon: {
-    position: 'absolute',
-    left: rw(1),
-    top: rh(0.5),
-    width: rf(3),
-    height: rf(3),
-    borderRadius: rf(1.5),
-  },
-  detailsContainer: {
+  textContainer: {
     marginTop: rh(1),
-    paddingHorizontal: rw(2),
-    paddingBottom:rh(1),
   },
-  weightPlaceholder: {
+  title: {
+    width: '30%',
     height: rh(2),
-    width: rw(20),
-    borderRadius: 5,
-    marginBottom: rh(0.5),
+    borderRadius: rw(1),
+    backgroundColor: '#F0F0F0',
   },
-  textPlaceholder: {
-    height: rh(2.5),
-    width: rw(35),
-    borderRadius: 5,
-    marginBottom: rh(0.5),
+  subtitle: {
+    width: '90%',
+    height: rh(1.5),
+    marginTop: rh(0.5),
+    borderRadius: rw(1),
+    backgroundColor: '#F0F0F0',
   },
-  ratingPlaceholder: {
-    height: rh(2),
-    width: rw(20),
-    borderRadius: 5,
-    marginBottom: rh(0.5),
+  start: {
+    width: '50%',
+    height: rh(1.2),
+    marginTop: rh(0.5),
+    borderRadius: rw(2),
+    backgroundColor: '#F0F0F0',
   },
-  discountPlaceholder: {
-    height: rh(2),
-    width: rw(15),
-    borderRadius: 5,
-    marginBottom: rh(0.5),
+  offer: {
+    width: '35%',
+    height: rh(1.2),
+    borderRadius: rw(2),
+    backgroundColor: '#F0F0F0',
+    marginTop: rh(0.5),
   },
-  pricePlaceholder: {
-    height: rh(2.5),
-    width: rw(30),
-    borderRadius: 5,
+  price: {
+    width: '60%',
+    height: rh(1.2),
+    borderRadius: rw(2),
+    backgroundColor: '#F0F0F0',
+    marginVertical: rh(0.5),
   },
 });
 

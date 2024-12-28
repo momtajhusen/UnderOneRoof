@@ -6,7 +6,10 @@ import { AppContext } from '../../../../context/AppContext';
 
 // create a component
 const ProceedDetails = ({ data, btnText, onPress }) => {
-  const { grand_total } = data;
+  const { grand_total, total } = data;
+  console.log("Process");
+  console.log(data);
+
   const navigation = useNavigation();
   const { state, dispatch } = useContext(AppContext);
 
@@ -21,7 +24,7 @@ const ProceedDetails = ({ data, btnText, onPress }) => {
             <Text style={styles.weightText}></Text>
             <Text style={styles.priceText}>
               ₹{grand_total} <Text style={styles.mrpText}> MRP </Text>
-              <Text style={styles.mrpPrice}> ₹</Text>
+              <Text style={styles.mrpPrice}> ₹ {total}</Text>
             </Text>
           </View>
           <TouchableOpacity onPress={onPress} style={styles.btn}>

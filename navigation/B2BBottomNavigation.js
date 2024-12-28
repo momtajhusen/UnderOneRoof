@@ -6,6 +6,8 @@ import B2BHomeScreen from '../screens/B2B/HomeAndBrowse/B2BHomeSceeen';
 import B2BCartScreen from '../screens/B2B/CartAndCheckout/B2BCartScreen';
 import B2BAccountScreen from '../screens/B2B/Accounts/B2BAccountScreen';
 import B2BCategoryScreen from '../screens/B2B/HomeAndBrowse/B2BCategoryScreen';
+import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
+
 import { rw, rh, rf } from '../Service/responsive';
 
 const Tab = createBottomTabNavigator();
@@ -88,7 +90,7 @@ const B2BBottomNavigator = () => {
 
       <Tab.Screen
         name="B2BCart"
-        component={B2BCartScreen}
+        component={CartScreen}
         options={{
           tabBarLabel: 'Cart',
           tabBarIcon: ({ focused }) => (

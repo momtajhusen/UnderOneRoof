@@ -35,13 +35,8 @@ const RefreshYourDay = () => {
     <View style={{ padding: rw(4) }}>
       <Text style={styles.headerText}>Refresh Your Day</Text>
       <View>
- 
         {loading ? (
-          [...Array(8)].map((_, index) => (
-            <View style={{ flexDirection: 'row', marginBottom: rh(1) }} key={index}>
-              <ItemsListLoader layout="horizontal" />
-            </View>
-          ))
+            <ItemsListLoader layout="horizontal" />
         ) : (
           <ItemsList items={productData} />
         )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, RefreshControl, ActivityIndicator } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import UserDetails from './CartComponents/userDetails';
 import CartItemsList from '../../../components/List/CartItemsList';
@@ -10,7 +10,6 @@ import ProceedDetails from './CartComponents/ProceedDetails';
 import { AppContext } from '../../../context/AppContext';
 import { useViewCartData } from '../../../utility/viewCardDataUtils';
 import { rw, rh } from '../../../Service/responsive';
-
 
 const CartScreen = ({ navigation }) => {
     const [cartData, setCartData] = useState({});
@@ -70,27 +69,46 @@ const CartScreen = ({ navigation }) => {
                 </View>
 
                 {/* Cart Items */}
-                <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
-                    <FlatList
-                        data={cartProduct}
-                        keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
-                        renderItem={({ item, index }) => (
-                            <Animatable.View
-                                key={item.id || Math.random().toString()}
-                                animation="fadeInUp"
-                                duration={800}
-                                delay={index * 20}
-                            >
-                                <CartItemsList item={item} />
-                            </Animatable.View>
-                        )}
-                    />
-                </View>
+                {
+                    isViewCartLoading ? (
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator size="large" color="#0000ff" />
+                        </View>
+                    ) : (
+                        <>
+                            {cartProduct.length > 0 ? (
+                                <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
+                                    <FlatList
+                                        data={cartProduct}
+                                        keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+                                        renderItem={({ item, index }) => (
+                                            <Animatable.View
+                                                key={item.id || Math.random().toString()}
+                                                animation="fadeInUp"
+                                                duration={800}
+                                                delay={index * 20}
+                                            >
+                                                <CartItemsList item={item} />
+                                            </Animatable.View>
+                                        )}
+                                    />
+                                </View>
+                            ) : (
+                                <View style={styles.noCartDataMessage}>
+                                    <Text style={styles.noCartDataText}>Your cart is currently empty. {'\n'} Add some items to proceed.</Text>
+                                </View>
+                            )}
+                        </>
+                    )
+                }
+
 
                 {/* Price Details */}
-                <View style={[styles.container, { marginBottom: rh(6) }]}>
-                    <PriceDetails data={state.viewCartData} style={{ backgroundColor: "green" }} />
-                </View>
+                {!isViewCartLoading && cartProduct.length > 0 && (
+                    <View style={[styles.container, { marginBottom: rh(6) }]}>
+                        <PriceDetails data={state.viewCartData} style={{ backgroundColor: "green" }} />
+                    </View>
+                )}
 
                 {/* Similar Products */}
                 <View style={[styles.similarProducts, { marginBottom: rh(6) }]}>
@@ -99,19 +117,20 @@ const CartScreen = ({ navigation }) => {
             </ScrollView>
 
             {/* Fixed Proceed Details at the bottom */}
-            <View style={styles.proceedDetails}>
-                <ProceedDetails
-                    onPress={()=>navigation.navigate('Checkout')}
-                    data={state.viewCartData}
-                    btnText="Proceed"
-                />
-            </View>
+            {!isViewCartLoading && cartProduct.length > 0 && (
+                <View style={styles.proceedDetails}>
+                    <ProceedDetails
+                        onPress={() => navigation.navigate('Checkout')}
+                        data={state.viewCartData}
+                        btnText="Proceed"
+                    />
+                </View>
+            )}
         </View>
     );
 };
 
 export default CartScreen;
-
 
 const styles = StyleSheet.create({
     screenContainer: {
@@ -134,5 +153,24 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderTopWidth: 1,
         borderTopColor: "#e0e0e0",
+    },
+    noCartDataMessage: {
+        marginTop: rh(3),
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: rh(65),
+    },
+    noCartDataText: {
+        width: rw(80),
+        fontSize: rw(4),
+        fontWeight: 'bold',
+        color: '#ccc',
+        textAlign: "center"
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: rh(70),
     },
 });

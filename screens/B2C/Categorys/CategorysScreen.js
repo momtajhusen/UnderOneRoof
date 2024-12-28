@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, RefreshControl, FlatList } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import CategoryList from '../../../components/List/CategoryList';
 import { rw, rh } from '../../../Service/responsive';
@@ -10,23 +10,51 @@ import CategoryListLoader from '../../../components/ShimmerLoader/CategoryListLo
 const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Fetch categories from API
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await apiClient.get('/allcategory');
-        const category = response.data.data.category;
-        setCategories(category);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchCategories = async () => {
+    try {
+      const response = await apiClient.get('/allcategory');
+      const category = response.data.data.category;
+      setCategories(category);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false); // Stop refresh animation
+    }
+  };
 
+  useEffect(() => {
     fetchCategories();
   }, []);
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchCategories();
+  };
+
+  const renderCategory = ({ item, index }) => (
+    <Animatable.View
+      key={item.sid}
+      animation="fadeInUp"
+      duration={800}
+      delay={index * 20}
+    >
+      <CategoryList
+        cimage={item.image}
+        text={item.cname}
+        onPress={() =>
+          navigation.navigate('ProductListing', {
+            selectCategoryId: item.sid,
+            selectCategoryName: item.cname,
+            selectCategorySlug: item.cslug,
+          })
+        }
+      />
+    </Animatable.View>
+  );
 
   return (
     <View style={styles.container}>
@@ -51,42 +79,29 @@ const CategoryScreen = ({ navigation }) => {
         }
       />
 
-      <View style={{justifyContent:"center", alignItems:"center", paddingHorizontal:rw(3.9)}}>
-        {/* Main Content */}
+      <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: rw(3.9) }}>
+        {/* FlatList for Categories */}
         {loading ? (
-          // Shimmer Loaders while data is being fetched
           <View style={styles.categoryListContainer}>
             {Array.from({ length: 16 }).map((_, index) => (
               <CategoryListLoader key={index} />
             ))}
           </View>
         ) : (
-          // Categories List after data is loaded
-          <View style={styles.categoryListContainer}>
-            {categories.map((category, index) => (
-              <Animatable.View
-                key={category.sid}
-                animation="fadeInUp"
-                duration={800}
-                delay={index * 20}
-              >
-                <CategoryList
-                  cimage={category.image}
-                  text={category.cname}
-                  onPress={() =>
-                    navigation.navigate('ProductListing', {
-                      selectCategoryId: category.sid,
-                      selectCategoryName: category.cname,
-                      selectCategorySlug: category.cslug,
-                    })
-                  }
-                />
-              </Animatable.View>
-            ))}
-          </View>
+          <FlatList
+            data={categories}
+            renderItem={renderCategory}
+            keyExtractor={(item) => item.sid.toString()}
+            numColumns={2}
+            contentContainerStyle={styles.categoryListContainer}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
+            showsVerticalScrollIndicator={false} 
+            showsHorizontalScrollIndicator={false}  
+          />
         )}
       </View>
-
     </View>
   );
 };
@@ -110,4 +125,4 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginTop: rh(2),
   },
-});
+});  

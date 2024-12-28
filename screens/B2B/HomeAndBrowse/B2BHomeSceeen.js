@@ -1,16 +1,19 @@
-import React from 'react';
+import React,{ useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
 import SearchDesigne from '../../../components/Search/searchDesigne';
 import HomeSlider from '../../../components/Sliders/HomeSlider';
-import B2BBestSellers from './ComponentsSections/B2BBestSellers';
-import B2BShopByCategory from './ComponentsSections/B2BShopByCategory';
+import BestSellers from '../../B2C/HomeAndBrowse/HomeComponents/BestSellers';
+import ShopByCategory from '../../B2C/HomeAndBrowse/HomeComponents/ShopByCategory';
 import { useFocusEffect } from "@react-navigation/native";
 import Essentials from './ComponentsSections/Essentials';
 import PremiumDates from './ComponentsSections/PremiumDates';
 import { useNavigation } from '@react-navigation/native';
 import B2BSimilarProducts from './ComponentsSections/B2BSimilarProducts';
+import { AppContext } from '../../../context/AppContext';
+import apiClient from '../../../Service/apiClient';
+
 
 
 const B2BHomeScreen = () => {
@@ -22,41 +25,49 @@ const B2BHomeScreen = () => {
     StatusBar.setBackgroundColor("#FBDFDF");
   });
 
-  const sliderData = [
-    require('../../../assets/Slider/B2BBanner1.png'),
-    require('../../../assets/Slider/B2BBanner2.png'),
-    require('../../../assets/Slider/B2BBanner3.png'),
-  ];
-
-  const sliderData2 = [
-    require('../../../assets/Slider/Banner 4.png'),
-    require('../../../assets/Slider/Banner 4.png'),
-    require('../../../assets/Slider/Banner 4.png'),
-  ];
+  const [HomeSliderData, setHomeSliderData] = useState([]);
+    
+ 
 
   // Dummy data for items
-const dateItems = [
-    {
-        id: '1',
-        name: 'Medjool Dates',
-        image: require('../../../assets/items/image1345.png'),
-    },
-    {
-        id: '2',
-        name: 'Ajwa Dates',
-        image: require('../../../assets/items/image23323.png'),
-    },
-    {
-        id: '3',
-        name: 'Barhi Dates',
-        image: require('../../../assets/items/image3432.png'),
-    },
-    {
-        id: '4',
-        name: 'Deglet Noor',
-        image: require('../../../assets/items/image3ww23.png'),
-    },
-];
+    const dateItems = [
+        {
+            id: '1',
+            name: 'Medjool Dates',
+            image: require('../../../assets/items/image1345.png'),
+        },
+        {
+            id: '2',
+            name: 'Ajwa Dates',
+            image: require('../../../assets/items/image23323.png'),
+        },
+        {
+            id: '3',
+            name: 'Barhi Dates',
+            image: require('../../../assets/items/image3432.png'),
+        },
+        {
+            id: '4',
+            name: 'Deglet Noor',
+            image: require('../../../assets/items/image3ww23.png'),
+        },
+    ];
+
+      // Fetch slider image from API
+      useEffect(() => {
+        const fetchHomeSliderData = async () => {
+          try {
+            const response = await apiClient.get('/home');
+            const slider = response.data.data.slider; // API se slider data
+            setHomeSliderData(slider);
+          } catch (error) {
+            console.error('Error fetching slider data:', error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchHomeSliderData();
+      }, []);
 
 
   return (
@@ -83,19 +94,19 @@ const dateItems = [
             <View style={styles.SliderCategoryContainer}>
             {/* Slider Container */}
             <View style={{ paddingTop: rh(5) }}>
-                <HomeSlider sliderData={sliderData} sliderStyle={{width: rw(80), height: rh(20)}} />
+                <HomeSlider sliderData={HomeSliderData} sliderStyle={{width: rw(80), height: rh(20)}} />
             </View>
             {/* Bestsellers Category Container */}
             <View style={{marginTop:rh(2)}}>
-                <B2BBestSellers />
+                <BestSellers />
             </View>
             {/* Shop By Category Container */}
             <View>
-                <B2BShopByCategory />
+                <ShopByCategory />
             </View>
             {/* Explore More Slider Container */}
             <View>
-                <HomeSlider sliderData={sliderData2} sliderStyle={{width: rw(80), height: rh(17)}} />
+                <HomeSlider sliderData={HomeSliderData} sliderStyle={{width: rw(80), height: rh(17)}} />
             </View>
             {/* Refresh Your Day Container */}
             <View style={{marginVertical:rh(2)}}>

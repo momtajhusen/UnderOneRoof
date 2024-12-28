@@ -31,7 +31,6 @@ import EditAddress from '../screens/B2C/Accounts/AccountComponents/EditAddress';
 import FAQs from '../screens/B2C/Accounts/AccountComponents/FAQs';
 
 
-
 // B2B Navigation 
 import RegistrationOwnerScreen from '../screens/B2B/Registration/RegistrationOwnerScreen';
 import OutletDetailsScreen from '../screens/B2B/Registration/OutletDetailsScreen';

@@ -3,57 +3,63 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from "react
 import { rw, rh, rf } from "../../Service/responsive";
 import { useNavigation } from '@react-navigation/native';
 
-
-const B2BProductCard = ({
-  items,
-  name,
-  image,
-  price,
-  discountedPrice,
-  sizes,
-  packets,
-  onAdd,
-  onIncrement,
-  onDecrement,
-  styleCardContainer
-}) => {
-
+const B2BProductCard = ({ items, styleCardContainer, layout="vertical" }) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity  onPress={() => navigation.navigate('B2BProceedDetails', { item: items })} style={[styles.cardContainer, styleCardContainer ]}>
-      {/* Product Information */}
-      <View style={styles.infoContainer}>
-        <View style={{ width: "70%"}}>
-          <Text style={styles.productName}>{name}</Text>
-          <Text style={styles.productSizes}>{sizes}</Text>
-        </View>
-        <Image source={image} style={styles.productImage} />
-      </View>
+  <View style={{flexDirection:"row"}}>
+    <FlatList
+      data={items}
+      keyExtractor={(item) => item.pid.toString()}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false} 
+      contentContainerStyle={{ paddingHorizontal: 10 }} // Optional for spacing
+      renderItem={({ item }) => (
+        <View
+          style={[styles.cardContainer, styleCardContainer, { marginRight: 10 }]} // Added margin between items
+        >
+          <TouchableOpacity
+            onPress={() => navigation.navigate('B2BProceedDetails', { item })}
+          >
+            {/* Product Information */}
+            <View style={styles.infoContainer}>
+              <View style={{ width: "70%" }}>
+                <Text style={styles.productName}>{item.name}</Text>
+                <Text style={styles.productSizes}>{item.measurement} {item.unit}</Text>
+              </View>
+              <Image source={{ uri: item.itemimage }} style={styles.productImage} />
+            </View>
 
-      {/* Price and Add to Cart */}
-      <View style={styles.priceContainer}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: rw(2) }}>
-          <Text style={styles.originalPrice}>₹{price}</Text>
-          <Text style={styles.discountedPrice}>₹{discountedPrice}</Text>
-        </View>
-        <TouchableOpacity style={styles.cartButton}>
-          <Text style={styles.cartButtonText}>Add to Cart</Text>
-        </TouchableOpacity>
-      </View>
+            {/* Price and Add to Cart */}
+            <View style={styles.priceContainer}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: rw(2) }}>
+                <Text style={styles.originalPrice}>₹{item.selling_price}</Text>
+                <Text style={styles.discountedPrice}>₹{item.mrp_price}</Text>
+              </View>
+              <TouchableOpacity style={styles.cartButton}>
+                <Text style={styles.cartButtonText}>Add to Cart</Text>
+              </TouchableOpacity>
+            </View>
 
-      {/* Packet Prices */}
-      <View style={styles.packetContainer}>
-        {packets.map((packet, index) => (
-          <View key={index} style={styles.packetRow}>
-            <Text style={styles.packetText}>{packet}</Text>
-            <TouchableOpacity onPress={onAdd}>
-              <Text style={styles.packetAddText}>Add</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
-    </TouchableOpacity>
+            {/* Packet Prices */}
+            <View style={styles.packetContainer}>
+              {item.varient.map((variant, index) => (
+                <View key={index} style={styles.packetRow}>
+                  <Text style={styles.packetText}>
+                    {variant.pmeasurement} {variant.punit} - ₹{variant.pselling_price}
+                  </Text>
+                  <TouchableOpacity>
+                    <Text style={styles.packetAddText}>Add</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
+    />
+  </View>
+
   );
 };
 
@@ -68,6 +74,16 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     marginBottom: rh(2),
     marginRight: rw(2),
+    width:rw(75),
+    overflow:"hidden",
+  },
+
+  verticalLayout: {
+    flexDirection: "column",
+  },
+  horizontalLayout: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   infoContainer: {
     flexDirection: "row",

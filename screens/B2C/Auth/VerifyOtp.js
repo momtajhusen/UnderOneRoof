@@ -55,7 +55,7 @@ const VerifyOtp = ({ navigation, route }) => {
      
   
         if (status === 1 && msg === "OTP Verify") {
-          navigation.navigate('ShoppingMode', { mobile: mobile, userId: data.userid });
+          navigation.navigate('B2BBottomNavigator', { mobile: mobile, userId: data.userid });
           dispatch({
             type: 'SET_USER',
             payload: {

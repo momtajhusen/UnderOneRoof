@@ -36,6 +36,7 @@ export default CategoryListLoader;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    justifyContent:"center",
   },
   listContainer: {
     justifyContent: 'center',

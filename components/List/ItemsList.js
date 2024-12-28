@@ -1,3 +1,4 @@
+// ItemsList.js 
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Animated } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
@@ -8,7 +9,7 @@ import { useToggleWishlist } from '../../utility/toggleWishlistUtils';
 import { AppContext } from '../../context/AppContext';
 
 
-const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
+const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }) => {
   const navigation = useNavigation();
   const [selectedCategoryId, setSelectedCategoryId] = useState(1);
 
@@ -218,6 +219,19 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal' }) => {
                 </Text>
               </Text>
             </View>
+             
+            {/* add to cart  */}
+            {cartbtn && (
+              <View style={{paddingHorizontal:rw(2)}}>
+              <TouchableOpacity style={{borderWidth:1, paddingVertical:rh(0.5), marginBottom:rh(1), borderColor:"#FF3131", borderRadius:5}}>
+                 <Text style={{textAlign:"center", fontWeight:"400", color:"#FF3131"}}>Move to Cart</Text>
+              </TouchableOpacity>
+              </View>
+            )}
+
+        
+
+
           </View>
         </TouchableOpacity>
       )}
@@ -238,8 +252,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   itemContainer: {
-    width: rw(39), // Set fixed width for each card
-    marginRight: rw(1.5), // Space between cards
+    width: rw(39), 
+    marginRight: rw(1.5), 
     backgroundColor: '#fff',
     borderRadius: 10,
     borderWidth:2,

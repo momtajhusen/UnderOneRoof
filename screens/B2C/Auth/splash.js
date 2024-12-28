@@ -10,6 +10,7 @@ const SplashScreen = () => {
     const navigation = useNavigation();
     const { state, dispatch } = useContext(AppContext);
 
+ 
     useEffect(() => {
         const checkAuthToken = async () => {
             try {
@@ -18,13 +19,14 @@ const SplashScreen = () => {
                 const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
                 setTimeout(() => {
                     if (token) {
-                        if (ShoppingMode === 'wholesale') {
+
+                        // if (ShoppingMode === 'wholesale') {
                             navigation.replace('B2BBottomNavigator');
-                        } else if (ShoppingMode === 'retail') {
-                            navigation.replace('BottomNavigator');
-                        } else {
-                            navigation.replace('ShoppingMode');
-                        }
+                        // } else if (ShoppingMode === 'retail') {
+                        //     navigation.replace('BottomNavigator');
+                        // } else {
+                        //     navigation.replace('ShoppingMode');
+                        // }
 
                         dispatch({
                             type: 'SET_USER',

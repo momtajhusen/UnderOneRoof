@@ -1,8 +1,10 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import B2BProductCard from '../../../../components/List/B2BProductCard';
 import { rw, rf, rh } from '../../../../Service/responsive';
+import { AppContext } from '../../../../context/AppContext';
+import apiClient from '../../../../Service/apiClient';
 
 // create a component
 const B2BSimilarProducts = () => {
@@ -28,33 +30,45 @@ const B2BSimilarProducts = () => {
         },
       ];
 
+
+      const [productData, setProductData] = useState([]);
+      const [loading, setLoading] = useState(true); // Adding loading state
+    
+      const {state, dispatch } = useContext(AppContext);
+      
+    
+      // Fetch slider image from API
+      useEffect(() => {
+        const fetchHomeProductData = async () => {
+          try {
+            const response = await apiClient.get('/home');
+            const productData = response.data.data.section1;
+            setProductData(productData);
+          } catch (error) {
+            console.error('Error fetching slider data:', error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchHomeProductData();
+      }, [state.reFresh]);
+
     return (
         <View>
             {/* Horizontal Product List */}
             <View style={styles.horizontalListContainer}>
             <Text style={styles.listTitle}>Similar Products</Text>
-            <FlatList
-                data={productList}
-                keyExtractor={(item) => item.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: rw(2) }}
-                renderItem={({ item }) => (
-                <B2BProductCard
-                    items={item}
-                    name={item.name}
-                    image={item.image}
-                    price={item.price}
-                    discountedPrice={item.discountedPrice}
-                    sizes={item.sizes}
-                    packets={item.packets}
-                    onAdd={() => console.log('Add pressed')}
-                    onIncrement={() => console.log('Increment pressed')}
-                    onDecrement={() => console.log('Decrement pressed')}
-                    styleCardContainer={{ width:rw(75) }}
-                />
-                )}
-            />
+             <View style={{flexDirection:"row"}}>
+             <B2BProductCard
+                items={productData}
+                styleCardContainer={{
+                  width: rw(77),
+                  height:rh(28),
+                }}
+                layout="horizontal"
+              />
+             </View>
+
             </View>
         </View>
     );

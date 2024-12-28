@@ -8,6 +8,7 @@ import WishlistCard from '../../../../components/List/WishlistCard';
 import ItemsList from '../../../../components/List/ItemsList';
 import apiClient from '../../../../Service/apiClient';
 import { AppContext } from '../../../../context/AppContext';
+import ItemsListLoader from '../../../../components/ShimmerLoader/ItemsListLoader';
 
 // Create a component
 const Wishlist = ({ navigation }) => {
@@ -48,14 +49,11 @@ const Wishlist = ({ navigation }) => {
                 } 
             />
             <View style={styles.container}>
-                <Text style={{ marginTop: rh(1.5), marginBottom: rh(0.5), marginLeft: rw(2), fontWeight: "bold", fontSize: rf(2) }}>
-                    {isLoading ? 'Loading...' : `${wishlistProduct.length} items added`}
-                </Text>
                 {/* Conditionally render wishlist data or loading message */}
                 {isLoading ? (
-                    <Text>Loading your wishlist...</Text>
+                    <ItemsListLoader count="4" itemContainerStyle={{width:rw(42.5)}} />
                 ) : (
-                    <ItemsList items={wishlistProduct} layout="vertical" listContainerStyle={{width:rw(45), marginLeft:rw(1), marginBottom:rh(1)}}/>
+                    <ItemsList cartbtn="true" items={wishlistProduct} layout="vertical" listContainerStyle={{width:rw(45), marginLeft:rw(1), marginBottom:rh(1)}}/>
                 )}
             </View>
         </View>
