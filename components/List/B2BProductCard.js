@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from "react
 import { rw, rh, rf } from "../../Service/responsive";
 import { useNavigation } from '@react-navigation/native';
 
-const B2BProductCard = ({ items, styleCardContainer, layout="vertical" }) => {
+const B2BProductCard = ({ items, styleCardContainer, layout="horizontal" }) => {
   const navigation = useNavigation();
 
   return (
@@ -11,9 +11,8 @@ const B2BProductCard = ({ items, styleCardContainer, layout="vertical" }) => {
     <FlatList
       data={items}
       keyExtractor={(item) => item.pid.toString()}
-      horizontal={true}
+      horizontal={layout === "vertical" ? false : true}
       showsHorizontalScrollIndicator={false} 
-      contentContainerStyle={{ paddingHorizontal: 10 }} // Optional for spacing
       renderItem={({ item }) => (
         <View
           style={[styles.cardContainer, styleCardContainer, { marginRight: 10 }]} // Added margin between items
@@ -57,6 +56,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout="vertical" }) => {
           </TouchableOpacity>
         </View>
       )}
+      showsVerticalScrollIndicator={false}
     />
   </View>
 
