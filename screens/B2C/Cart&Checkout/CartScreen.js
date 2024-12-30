@@ -15,11 +15,11 @@ const CartScreen = ({ navigation }) => {
     const [cartData, setCartData] = useState({});
     const [cartProduct, setCartProduct] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [isFirstLoad, setIsFirstLoad] = useState(true);  
 
     const { isViewCartLoading, viewCartData } = useViewCartData();
-
     const { state, dispatch } = useContext(AppContext);
-    
+
     // Fetch cart data function
     const fetchCartDetails = async () => {
         const result = await viewCartData();
@@ -34,7 +34,7 @@ const CartScreen = ({ navigation }) => {
 
     useEffect(() => {
         fetchCartDetails();
-      }, [state.reFresh]); 
+    }, [state.reFresh]);
 
     // onRefresh function for pull-to-refresh
     const onRefresh = async () => {
@@ -42,6 +42,12 @@ const CartScreen = ({ navigation }) => {
         await fetchCartDetails();
         setIsRefreshing(false);
     };
+
+    useEffect(() => {
+        if (isFirstLoad && !isViewCartLoading) {
+            setIsFirstLoad(false); // After the first load, disable the first-time loading screen
+        }
+    }, [isViewCartLoading]);
 
     return (
         <View style={styles.screenContainer}>
@@ -70,7 +76,7 @@ const CartScreen = ({ navigation }) => {
 
                 {/* Cart Items */}
                 {
-                    isViewCartLoading ? (
+                    isViewCartLoading && isFirstLoad ? (
                         <View style={styles.loadingContainer}>
                             <ActivityIndicator size="large" color="#0000ff" />
                         </View>
@@ -102,9 +108,8 @@ const CartScreen = ({ navigation }) => {
                     )
                 }
 
-
                 {/* Price Details */}
-                {!isViewCartLoading && cartProduct.length > 0 && (
+                {cartProduct.length > 0 && (
                     <View style={[styles.container, { marginBottom: rh(6) }]}>
                         <PriceDetails data={state.viewCartData} style={{ backgroundColor: "green" }} />
                     </View>
@@ -117,10 +122,11 @@ const CartScreen = ({ navigation }) => {
             </ScrollView>
 
             {/* Fixed Proceed Details at the bottom */}
-            {!isViewCartLoading && cartProduct.length > 0 && (
+            {cartProduct.length > 0 && (
                 <View style={styles.proceedDetails}>
                     <ProceedDetails
                         onPress={() => navigation.navigate('Checkout')}
+                        loading={isViewCartLoading}
                         data={state.viewCartData}
                         btnText="Proceed"
                     />

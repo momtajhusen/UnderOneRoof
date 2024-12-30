@@ -50,6 +50,7 @@ import B2BSelectAddressScreen from '../screens/B2B/CartAndCheckout/B2BSelectAddr
 import B2BCheckOutScreen from '../screens/B2B/CartAndCheckout/B2BCheckOutScreen';
 import B2BOrderPlaced from '../screens/B2B/CartAndCheckout/B2BOrderPlacedScreen';
 import B2BProceedDetails from '../screens/B2B/HomeAndBrowse/B2BProductDetails';
+import AddAddress from '../screens/B2C/Accounts/AccountComponents/AddAddress';
 
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 const Stack = createSharedElementStackNavigator();
@@ -108,6 +109,10 @@ const StackNavigation = () => {
         <Stack.Screen name="OrderDetails" component={OrderDetails} options={{ headerShown: false }} />
         <Stack.Screen name="RatingAndReviews" component={RatingAndReviews} options={{ headerShown: false }} />
         <Stack.Screen name="EditAddress" component={EditAddress} options={{ headerShown: false }} />
+        <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: false }} />
+ 
+
+        
         <Stack.Screen name="FAQs" component={FAQs} options={{ headerShown: false }} />
 
         {/*  B2B Navigation  */}

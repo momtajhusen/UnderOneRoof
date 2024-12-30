@@ -1,22 +1,16 @@
 // Import libraries
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ScrollView } from "react-native";
 import Header from "../../../../components/header";
 import { rw, rh, rf } from "../../../../Service/responsive";
 import TextInputField from "../../../../components/Inputs/TextInputField";
 import SaveButton from "../../../../components/Buttons/CustomButtons";
 import apiClient from "../../../../Service/apiClient"; 
-import { AppContext } from '../../../../context/AppContext';
 
 // Create a component
-const EditAddress = ({ navigation, route }) => {
-  const item = route.params?.item || null;
-
-  const { dispatch, state } = useContext(AppContext);
-
+const AddAddress = ({ navigation }) => {
 // Add the new field in the initial state
 const [formData, setFormData] = useState({
-  aid:   null,
   fname: "",
   lname: "",
   mobile_prefix: "+91",
@@ -33,37 +27,6 @@ const [formData, setFormData] = useState({
   landmark:"",
 });
 
-// Prefill form data from item when the component mounts
-useEffect(() => {
-  if (item) {
-    setFormData({
-      aid:   item.aid,
-      fname: item.fname || "",
-      lname: item.lname || "",
-      mobile_prefix: item.mobile_prefix || "+91",
-      mobile: item.mobile || "",
-      alternative_number: item.alternative_number || "",
-      email: item.email || "",
-      address_line1: item.address_line1 || "",
-      address_line2: item.address_line2 || "",
-      country: item.country || "India",
-      state: item.state || "",
-      city: item.city || "",
-      pincode: item.pincode || "",
-      address_type: item.address_type || "Home",
-      landmark: item.landmark || "",
-    });
-
-    // Update save options based on item.address_type
-    setSaveOptions((prev) =>
-      prev.map((option) => ({
-        ...option,
-        isActive: option.label === item.address_type,
-      }))
-    );
-  }
-}, [item]);
-
   const [errors, setErrors] = useState({});
 
   const [saveOptions, setSaveOptions] = useState([
@@ -76,7 +39,7 @@ useEffect(() => {
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: "" }));
+    setErrors((prev) => ({ ...prev, [field]: "" })); // Clear error on input change
   };
 
   const validateForm = () => {
@@ -145,16 +108,10 @@ useEffect(() => {
     if (!validateForm()) return;
 
     try {
-      const response = await apiClient.post("/updateAddress", formData);
+      const response = await apiClient.post("/addAddress", formData);
       if (response.status === 200) {
-        Alert.alert("Success", "Address update successfully!");
+        Alert.alert("Success", "Address saved successfully!");
         navigation.navigate('AddressBook');
-        dispatch({
-          type: 'GLOBAL_REFRESH',
-          payload: {
-            reFresh: Math.ceil(Math.random() * 100),
-          },
-        });
       } else {
         Alert.alert("Error", "Failed to save address.");
       }
@@ -184,7 +141,7 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <Header title="Edit Address" />
+      <Header title="Add Address" />
       <ScrollView>
       <View style={styles.contentContainer}>
         <TextInputField
@@ -274,7 +231,7 @@ useEffect(() => {
         </View>
 
         <SaveButton
-          title="Update"
+          title="Save"
           onPress={handleSaveAddress}
           btnStyle={{ marginTop: rh(3) }}
         />
@@ -328,5 +285,4 @@ const styles = StyleSheet.create({
 });
 
 // Make this component available to the app
-export default EditAddress;
- 
+export default AddAddress;

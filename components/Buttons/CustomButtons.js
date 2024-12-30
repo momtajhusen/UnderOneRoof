@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import { rw, rh, rf } from '../../Service/responsive';
 
-const SaveButton = ({ onPress, loading, disabled, title = "Save" }) => {
+const SaveButton = ({ onPress, btnStyle, loading, disabled, title = "Save" }) => {
 
   return (
     <TouchableRipple
@@ -11,6 +11,7 @@ const SaveButton = ({ onPress, loading, disabled, title = "Save" }) => {
       rippleColor="rgba(0, 0, 0, .32)"
       style={[
         styles.saveButton,
+        btnStyle,
         { backgroundColor: disabled ? '#ddd' :  "#FF3131" },
       ]}
       disabled={disabled}

@@ -36,7 +36,7 @@ const AddressBook = ({ navigation }) => {
 
       <View style={styles.container}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EditAddress')}
+          onPress={() => navigation.navigate('AddAddress')}
           style={styles.addAddressBtn}
         >
           <MaterialIcons name="add" size={rf(4)} style={styles.addIcon} />

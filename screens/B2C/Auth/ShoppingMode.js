@@ -24,7 +24,10 @@ const ShoppingMode = ({ navigation, route }) => {
       if (response.data.status === 1) {
         if (type === 'wholesale') {
           await AsyncStorage.setItem('ShoppingMode',  'wholesale');
-          navigation.navigate('RegistrationOwnerScreen', {mobile: mobile});
+          // navigation.navigate('RegistrationOwnerScreen', {mobile: mobile});
+
+          navigation.navigate('B2BBottomNavigator', {mobile: mobile});
+
         } else if (type === 'retail') {
           await AsyncStorage.setItem('ShoppingMode',  'retail');
           navigation.navigate('BottomNavigator');

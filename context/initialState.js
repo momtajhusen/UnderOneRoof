@@ -5,6 +5,8 @@ const initialState = {
   // User-related state
   userId: null,
   userNumber: null,
+  shoppingMode: null,
+
 
     // Cart Data
     viewCartData: {},

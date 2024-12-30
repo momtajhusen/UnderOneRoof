@@ -16,6 +16,7 @@ import Header from '../../../components/header';
 import SortByBtn from '../../../components/Buttons/SortByBtn';
 import SortByModal from '../../../components/Modals/SortbyModal';
 import B2BProductCard from '../../../components/List/B2BProductCard';
+import B2BProductLoader from '../../../components/ShimmerLoader/b2bProductLoader';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import apiClient from '../../../Service/apiClient';
 
@@ -44,45 +45,6 @@ import apiClient from '../../../Service/apiClient';
   { id: 5, name: 'Discount' },
   ];
 
-  // Items List array define
-  const productList = [
-    {
-      id: '1',
-      name: 'Premium Roasted Almonds',
-      image: require('../../../assets/items/image343002.png'),
-      price: '999',
-      discountedPrice: '699',
-      sizes: '1kg, 5kg, 10kg',
-      packets: ['₹679/kg for 5 kg packet', '₹659/kg for 10 kg packet'],
-    },
-    {
-      id: '2',
-      name: 'Organic Cashews',
-      image: require('../../../assets/items/image343002.png'),
-      price: '1299',
-      discountedPrice: '1099',
-      sizes: '500g, 1kg',
-      packets: ['₹999/kg for 1 kg packet'],
-    },
-    {
-      id: '3',
-      name: 'Premium Roasted Almonds',
-      image: require('../../../assets/items/image343002.png'),
-      price: '999',
-      discountedPrice: '699',
-      sizes: '1kg, 5kg, 10kg',
-      packets: ['₹679/kg for 5 kg packet', '₹659/kg for 10 kg packet'],
-    },
-    {
-      id: '4',
-      name: 'Organic Cashews',
-      image: require('../../../assets/items/image343002.png'),
-      price: '1299',
-      discountedPrice: '1099',
-      sizes: '500g, 1kg',
-      packets: ['₹999/kg for 1 kg packet'],
-    },
-  ];
 
   // Sort By Options 
   const options = [
@@ -94,9 +56,6 @@ import apiClient from '../../../Service/apiClient';
   ];
 
   
-
-
-  
   const B2BProductListing = ({ route }) => {
     const { selectCategoryId, selectCategoryName, selectCategorySlug } = route.params;
   
@@ -106,7 +65,7 @@ import apiClient from '../../../Service/apiClient';
   
     const [productListing, setProductListing] = useState([]);
     const [categoryData, setCategory] = useState([]);
-    const [loading, setLoading] = useState(true);  // Loading state
+    const [loading, setLoading] = useState(true); // Loading state
   
     const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
     const toggleModal = () => {
@@ -118,16 +77,23 @@ import apiClient from '../../../Service/apiClient';
       setSelectedCategoryId(id);
       setSelectedCategoryName(name);
       setSelectedCategorySlug(slug);
-      fetchProductListing();
     };
   
     const fetchSubCategory = async () => {
       try {
+        setLoading(true);
         const response = await apiClient.get(`/subCategoryList/${selectedCategorySlug}`);
         
         // Check if 'catlist' exists in the response
         if (response.data && response.data.data && response.data.data.catlist) {
           setCategory(response.data.data.catlist);
+  
+          // Set the first subcategory slug
+          const cslug = response.data.data.catlist[0].cslug;
+          setSelectedCategorySlug(cslug);
+          setSelectedCategoryId(response.data.data.catlist[0].sid);
+          setSelectedCategoryName(response.data.data.catlist[0].cname);
+          // setSelectedCategorySlug(response.data.data.catlist[0].slug);
         } else {
           console.warn('catlist not found in the response');
         }
@@ -137,7 +103,6 @@ import apiClient from '../../../Service/apiClient';
         setLoading(false);
       }
     };
-    
   
     const fetchProductListing = async () => {
       setLoading(true);
@@ -154,8 +119,14 @@ import apiClient from '../../../Service/apiClient';
   
     useEffect(() => {
       fetchSubCategory();
-      fetchProductListing();
     }, []);
+  
+    // Fetch products whenever `selectedCategorySlug` changes
+    useEffect(() => {
+      if (selectedCategorySlug) {
+        fetchProductListing();
+      }
+    }, [selectedCategorySlug]);
   
     return (
       <View style={styles.screen}>
@@ -241,14 +212,27 @@ import apiClient from '../../../Service/apiClient';
             </View>
   
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingVertical: rh(1), paddingBottom: rh(5) }}>
-                {loading ? (  // Show loading spinner while data is being fetched
-                  <ActivityIndicator size="large" color="#FF3131" />
+              <ScrollView 
+                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingVertical: rh(1), paddingBottom: rh(5) }}
+                 showsVerticalScrollIndicator={false}
+                 showsHorizontalScrollIndicator={false}
+                 >
+                
+                {loading ? ( 
+                  <B2BProductLoader 
+                  layout="vertical" 
+                  styleCardContainer={{
+                    width: categoryData.length === 0 ? rw(90) : rw(75),
+                    marginBottom:10,
+                  }}
+                  />
                 ) : productListing?.length > 0 ? (
+
+                  // categoryData ye ayyay
                   <B2BProductCard
                       items={productListing}
                       styleCardContainer={{
-                        width: rw(75),
+                        width: categoryData.length === 0 ? rw(90) : rw(75),
                         marginBottom:10,
                       }}
                       layout="vertical"

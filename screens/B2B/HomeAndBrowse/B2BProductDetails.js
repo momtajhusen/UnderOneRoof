@@ -14,7 +14,6 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import B2BProductCard from '../../../components/List/B2BProductCard';
 import B2BSimilarProducts from './ComponentsSections/B2BSimilarProducts';
- 
 
 
 const ProductDetail = ({ route, navigation }) => {

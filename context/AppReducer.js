@@ -22,6 +22,8 @@ export default (state, action) => {
         ...state,
         userId: action.payload.userId,
         userNumber: action.payload.userNumber,
+        shoppingMode: action.payload.shoppingMode,
+
       };
 
     case CLEAR_USER:
@@ -29,6 +31,7 @@ export default (state, action) => {
         ...state,
         userId: null,
         userNumber: null,
+        shoppingMode: null,
       };
 
     case GLOBAL_REFRESH:

@@ -30,7 +30,7 @@ const B2BAccountMenuList = () => {
       <View style={styles.menuList}>
       <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/bag-2.png')} onPress={() => navigation.navigate('B2BOrders')} text="Orders" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/user.png')} onPress={() => navigation.navigate('B2BMyProfile')} text="Your Profile" />
-        <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/location.png')} onPress={() => navigation.navigate('B2BAddressBook')} text="Address Book" />
+        <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/location.png')} onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/sms-search.png')} onPress={() => navigation.navigate('B2BRequestProductsScreen')} text="Request Product" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/HelpCircle.png')} onPress={() => navigation.navigate('B2BHelpAndSupport')} text="Help & Support" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/Group26.png')} onPress={() => navigation.navigate('B2BTermsConditions')} text="Terms & Conditions" />

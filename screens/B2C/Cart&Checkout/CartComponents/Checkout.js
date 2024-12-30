@@ -1,5 +1,5 @@
 // Import necessary libraries
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, StyleSheet, FlatList, ScrollView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { rw, rh } from '../../../../Service/responsive';
@@ -18,11 +18,15 @@ const Checkout = ({ navigation }) => {
   // Modal visibility state
   const [isModalVisible, setModalVisible] = useState(false);
 
+      const [issLoading, setIsLoading] = useState(true);  
+  
+
   // Function to toggle modal visibility
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
     console.log('Modal state toggled:', !isModalVisible); 
   };
+
 
   return (
     <View style={styles.container}>
@@ -39,7 +43,7 @@ const Checkout = ({ navigation }) => {
         </View>
 
         {/* Cart Items */}
-        <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
+        <View style={{ marginHorizontal:rw(2), marginVertical:rh(1), backgroundColor: "white", borderRadius: rw(5) }}>
           <FlatList
             data={state?.viewCartData?.cartProduct || []}
             keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
@@ -64,7 +68,11 @@ const Checkout = ({ navigation }) => {
 
       {/* Fixed Proceed Details at the bottom */}
       <View style={styles.proceedDetails}>
-        <ProceedDetails data={state.viewCartData} btnText="Continue" onPress={toggleModal} />
+        <ProceedDetails 
+          data={state.viewCartData} 
+          btnText="Continue"
+          onPress={toggleModal} 
+        />
       </View>
 
       {/* Payment Method Modal */}

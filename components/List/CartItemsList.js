@@ -8,7 +8,9 @@ import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
 const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }) => {
 
 
-    const { pid, itemimage, name, measurement, selling_price, mrp_price, qty } = item;
+    console.log();
+
+    const { pid, itemimage, name, measurement, selling_price, mrp_price, qty, var_id } = item;
  
     const [itemQuantity, setItemQuantity] = useState(qty);
     const [isUpdatingQty, setIsUpdatingQty] = useState(false);
@@ -20,7 +22,7 @@ const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }
         setIsUpdatingQty(true);
         setItemQuantity(prevQuantity => {
             const newQty = prevQuantity + 1;
-            qtyUpdate(pid, newQty).finally(() => setIsUpdatingQty(false)); 
+            qtyUpdate(pid, newQty, var_id).finally(() => setIsUpdatingQty(false)); 
             return newQty;
         });
     };
@@ -30,7 +32,7 @@ const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }
             setIsUpdatingQty(true);
             setItemQuantity(prevQuantity => {
                 const newQty = prevQuantity - 1;
-                qtyUpdate(pid, newQty).finally(() => setIsUpdatingQty(false)); // Update quantity
+                qtyUpdate(pid, newQty, var_id).finally(() => setIsUpdatingQty(false)); // Update quantity
                 return newQty;
             });
         }
@@ -88,7 +90,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#F3F3F3',
-        padding: rw(4),
+        padding: rw(3),
+        paddingHorizontal: rw(2),
         borderRadius: rw(5),
         borderWidth: 4,
         borderColor: 'white',

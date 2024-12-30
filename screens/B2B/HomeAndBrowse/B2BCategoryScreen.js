@@ -124,5 +124,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: rh(2),
+    paddingBottom:rh(7)
   },
 });  

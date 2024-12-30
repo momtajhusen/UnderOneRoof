@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../../../Service/apiClient';  
 import CategoryListLoader from '../../../../components/ShimmerLoader/CategoryListLoader';
 
-
 const ShopByCategory = () => {
     const navigation = useNavigation();
     const [categories, setCategories] = useState([]);

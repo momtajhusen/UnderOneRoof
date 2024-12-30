@@ -18,7 +18,14 @@ const B2BProductCard = ({ items, styleCardContainer, layout="horizontal" }) => {
           style={[styles.cardContainer, styleCardContainer, { marginRight: 10 }]} // Added margin between items
         >
           <TouchableOpacity
-            onPress={() => navigation.navigate('B2BProceedDetails', { item })}
+            // onPress={() => navigation.navigate('B2BProceedDetails', { item })}
+
+            onPress={() =>
+              navigation.navigate('ProductDetail', {
+                item: item,
+                itemImage: item.itemimage,
+              })
+            }
           >
             {/* Product Information */}
             <View style={styles.infoContainer}>

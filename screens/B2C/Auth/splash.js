@@ -17,6 +17,7 @@ const SplashScreen = () => {
                 const token = await AsyncStorage.getItem('authToken');
                 const userId = await AsyncStorage.getItem('userId');
                 const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
+
                 setTimeout(() => {
                     if (token) {
 
@@ -33,6 +34,7 @@ const SplashScreen = () => {
                             payload: {
                                 userId: userId,
                                 userNumber: null,
+                                shoppingMode: ShoppingMode,
                             },
                         });
 

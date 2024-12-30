@@ -5,7 +5,7 @@ import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../../../../context/AppContext';
 import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
   const navigation = useNavigation();
@@ -22,12 +22,15 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
 
   // Function to handle Edit action
   const handleEdit = (item) => {
-    alert(`Editing address of ${item.fname} ${item.lname}`);
-  };
+    navigation.navigate('EditAddress', { item });
+  };  
 
   // Function to handle Delete action
   const handleDelete = (item) => {
     alert(`Deleting address of ${item.fname} ${item.lname}`);
+    alert(item.aid);
+    return false;
+    // const response = await apiClient.post("/updateAddress", formData);
   };
 
   const handleAddressSelect = async (item) => {
@@ -75,7 +78,7 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
             />
           )}
           {type !== "view_all" && <Text style={styles.boldText}>Delivery To:</Text>}
-          <Text style={styles.locationText}>{addresType}</Text>
+          <Text style={styles.locationText}>{item.address_type}</Text>
         </View>
 
         {/* More-Vert Icon and MenuTrigger */}

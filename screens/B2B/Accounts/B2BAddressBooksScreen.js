@@ -16,7 +16,7 @@ const B2BAddressBook = ({navigation}) => {
             />
  
             <View style={styles.container}>
-                <TouchableOpacity onPress={()=>navigation.navigate('B2BEditAddress')} style={styles.addaddressbtn}>
+                <TouchableOpacity onPress={()=>navigation.navigate('AddAddress')} style={styles.addaddressbtn}>
                     <MaterialIcons name="add" size={rf(4)} style={{ fontSize: rf(3), color:"#FF3131" }} />
                     <Text style={{color:"#FF3131", fontWeight:"bold", marginLeft:rw(1)}}>Add Address</Text>
                 </TouchableOpacity>

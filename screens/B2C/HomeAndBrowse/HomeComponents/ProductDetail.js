@@ -26,6 +26,7 @@ import { SharedElement } from 'react-native-shared-element';
 
 import { useAddFromCart } from '../../../../utility/addCartProductUtils';
 import { useRemoveFromCart } from '../../../../utility/deleteCartProductUtils';
+import ProductDetailsLoader from '../../../../components/ShimmerLoader/productDetailsLoader';
 
 
 // Shimmer Placeholder component
@@ -45,8 +46,8 @@ const ProductDetail = ({ route, navigation }) => {
   const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
   const [isLoading, setIsLoading] = useState(false);
   const [isCartBtnLoading, setCartBtnLoading] = useState(false);  
-  
 
+ 
 
   const [selectedVarientId, setSelectedVarientId] = useState(
     Array.isArray(item.varient) && item.varient.length > 0
@@ -68,8 +69,10 @@ const ProductDetail = ({ route, navigation }) => {
    const { isCartAddLoading, addFromCart } = useAddFromCart();
    const { isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
 
+   const [selectedVariantId, setSelectedVariantId] = useState(null);
+
     const addToCart = async () => {
-      const result = await addFromCart(productDetails.pid, ProductVarient[0].psid);
+      const result = await addFromCart(productDetails.pid, selectedVariantId);
     };
 
     const removeToCart = async () => {
@@ -88,6 +91,7 @@ const ProductDetail = ({ route, navigation }) => {
         setProductDetails(product.data.productDetails[0]);
         setRelatedProduct(product.data.relatedProduct);
         setProductVarient(product.data.varient);
+        selectedVariantId(product.data[0].psid);
         setCartQuantity(product.data.productDetails[0].added_to_cart);
         setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
 
@@ -132,14 +136,21 @@ const ProductDetail = ({ route, navigation }) => {
     };
 
     const varentHandle = async (item) => {
-      setSelectedVarientId(item.psid);
-      ProductDetails();
-    }
+      setSelectedVariantId(item.psid);  
+      ProductDetails(); 
+    };
   
       // Fetch product from API
       useEffect(() => {
         ProductDetails();
       }, [state.reFresh]);
+
+      useEffect(() => {
+        if (ProductVarient.length > 0 && selectedVariantId === null) {
+          setSelectedVariantId(ProductVarient[0].psid);
+        }
+      }, [ProductVarient, selectedVariantId]);
+      
       
       const reviews = [
         {
@@ -194,6 +205,13 @@ const ProductDetail = ({ route, navigation }) => {
       />
 
       <ScrollView>
+        
+      {isLoading ? (
+        <View style={{ position: "absolute", zIndex: 300, top: rh(35),  width: rw(100), height: rh(150) }}>
+          <ProductDetailsLoader />
+        </View>
+      ) : null}
+
         <View contentContainerStyle={styles.scrollContainer}>
           <View style={{height:rh(35)}}>
 
@@ -228,6 +246,7 @@ const ProductDetail = ({ route, navigation }) => {
             </View>
 
             {/* Conditionally render the favorite icon based on wishlist status */}
+            {state.shoppingMode === "retail" && (
             <TouchableOpacity
               style={{
                 position: 'absolute',
@@ -246,18 +265,27 @@ const ProductDetail = ({ route, navigation }) => {
                 color={isInWishlist ? '#FF6347' : '#888'}
               />
             </TouchableOpacity>
+            )}
           </View>
          
         </View>
 
         <View style={styles.detailsContainer}>
+
           <Text style={styles.discountText}>{productDetails.discount}% OFF</Text>
           <Text style={styles.productTitle}>{productDetails.name}</Text>
-          <Text style={styles.ratingText}>
-            ★★★★☆ <Text style={styles.reviewCount}>(22,500)</Text>
+
+          {state.shoppingMode === "retail" && (
+            <Text style={styles.ratingText}>
+              ★★★★☆ <Text style={styles.reviewCount}>(22,500)</Text>
+            </Text>
+          )}
+
+
+          <Text style={styles.selectText}>
+            {state.shoppingMode === "retail" ? "Select Quantity:" : "Select Packet type:"}
           </Text>
 
-          <Text style={styles.selectText}>Select Quantity:</Text>
           <ScrollView 
             horizontal 
             showsHorizontalScrollIndicator={false} 
@@ -270,8 +298,8 @@ const ProductDetail = ({ route, navigation }) => {
                     style={[
                       styles.quantityBox,
                       {
-                        padding: index === 0 ? 2 : 0,
-                        backgroundColor: "#fed8a9",
+                        padding: item.psid === selectedVariantId ? 2 : 0,
+                        backgroundColor: item.psid === selectedVariantId ? "#fed8a9" : "#fed8a9", // Highlight selected item
                         marginRight: rw(1.5),
                       },
                     ]}
@@ -287,7 +315,7 @@ const ProductDetail = ({ route, navigation }) => {
                         </View>
                       </View>
                     </View>
-
+                
                     <Text style={styles.saveText}>Save ₹{item.pdiscount}</Text>
                   </TouchableOpacity>
                 ))
@@ -400,9 +428,9 @@ const ProductDetail = ({ route, navigation }) => {
               }
         </View>
       </ScrollView>
-      
-      {/* Buy aur Add to Cart aur Remove Btn   */}
-      <View style={{width: rw(100), height: rh(9), backgroundColor: "white", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
+
+      {!isLoading && (
+        <View style={{width: rw(100), height: rh(9), backgroundColor: "white", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
           <TouchableOpacity 
               onPress={() => navigation.navigate('CartScreen')} 
               style={{backgroundColor: "#DFDFDF", paddingVertical: rh(1.5), paddingHorizontal: rw(13), borderRadius: 10}}
@@ -410,7 +438,7 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={{color: "black", fontWeight: "bold"}}>Buy Now</Text>
           </TouchableOpacity>
 
-         {/* Add to Cart Button - Show only if cartQuantity is 0 */}
+          {/* Add to Cart Button - Show only if cartQuantity is 0 */}
           {cartQuantity === 0 ? (
             <TouchableOpacity
               style={{
@@ -446,10 +474,11 @@ const ProductDetail = ({ route, navigation }) => {
               )}
             </TouchableOpacity>
           )}
+        </View>
+      )}
 
-
-
-      </View>
+      
+ 
 
     </View>
   );
@@ -468,7 +497,7 @@ const styles = StyleSheet.create({
   productTitle: { fontSize: rf(2), fontWeight: 'bold' },
   ratingText: { color: '#FF3131', fontSize: rf(2.5), fontWeight: 'bold', marginBottom: rh(1) },
   reviewCount: { color: '#A0A0A0', fontSize: rf(1.8) },
-  selectText: { fontSize: rf(1.8), color:"#717171", marginBottom:rh(1) },
+  selectText: { fontSize: rf(1.8), marginTop:rh(2), color:"#717171", marginBottom:rh(1) },
   quantityContainer: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: rh(0.5) },
   quantityBox: { 
     borderWidth: 1, 

@@ -1,17 +1,17 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../../../../context/AppContext';
 
 // create a component
-const ProceedDetails = ({ data, btnText, onPress }) => {
+const ProceedDetails = ({ data, loading, btnText, onPress }) => {
   const { grand_total, total } = data;
   console.log("Process");
   console.log(data);
 
   const navigation = useNavigation();
-  const { state, dispatch } = useContext(AppContext);
+  const { state } = useContext(AppContext);
 
   const isAddressSelected = state?.selectAddressData && Object.keys(state.selectAddressData).length > 0;
 
@@ -19,7 +19,7 @@ const ProceedDetails = ({ data, btnText, onPress }) => {
     <View style={styles.container}>
       {isAddressSelected ? (
         <>
-          {/* Process */}
+          {/* Price Details */}
           <View style={styles.priceDetails}>
             <Text style={styles.weightText}></Text>
             <Text style={styles.priceText}>
@@ -27,18 +27,32 @@ const ProceedDetails = ({ data, btnText, onPress }) => {
               <Text style={styles.mrpPrice}> ₹ {total}</Text>
             </Text>
           </View>
-          <TouchableOpacity onPress={onPress} style={styles.btn}>
-            <Text style={styles.btnText}>{btnText}</Text>
+          {/* Button */}
+          <TouchableOpacity
+            onPress={loading ? null : onPress}
+            style={[styles.btn, loading && styles.disabledBtn]}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.btnText}>{btnText}</Text>
+            )}
           </TouchableOpacity>
         </>
       ) : (
         <View>
-          {/* Select Address */}
+          {/* Select Address Button */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('AddressBook')}
-            style={[styles.btn, { width: rw(90), paddingVertical: rh(1.5) }]}
+            onPress={loading ? null : () => navigation.navigate('AddressBook')}
+            style={[styles.btn, { width: rw(90), paddingVertical: rh(1.5) }, loading && styles.disabledBtn]}
+            disabled={loading}
           >
-            <Text style={styles.btnText}>Select Address</Text>
+            {loading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.btnText}>Select Address</Text>
+            )}
           </TouchableOpacity>
         </View>
       )}

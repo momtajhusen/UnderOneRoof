@@ -6,11 +6,11 @@ export const useQtyUpdate = () => {
   const [isQtyUpdateLoading, setIsLoading] = useState(false);
   const { dispatch } = useContext(AppContext);
 
-  const qtyUpdate = async (pid, qty) => {
+  const qtyUpdate = async (pid, qty, var_id) => {
     try {
       setIsLoading(true);
 
-      const payload = { pid, qty };
+      const payload = { pid, qty, var_id};
 
       console.log(payload);
 
