@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, RefreshControl, FlatList } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import CategoryList from '../../../components/List/CategoryList';
@@ -6,11 +6,15 @@ import { rw, rh } from '../../../Service/responsive';
 import Header from '../../../components/header';
 import apiClient from '../../../Service/apiClient';
 import CategoryListLoader from '../../../components/ShimmerLoader/CategoryListLoader';
+import { AppContext } from '../../../context/AppContext';
 
 const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const { state, dispatch } = useContext(AppContext);
+  
 
   // Fetch categories from API
   const fetchCategories = async () => {
@@ -28,7 +32,7 @@ const CategoryScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [state.reFresh]);
 
   const onRefresh = async () => {
     setIsRefreshing(true);

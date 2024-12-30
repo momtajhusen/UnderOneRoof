@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../../Service/themes/responsive';
+import { AppContext } from '../../../../context/AppContext';
+import apiClient from '../../../../Service/apiClient';
 
-// Reusable Card Component
 const DateCard = ({ name, image }) => (
   <View style={styles.dateCard}>
-    <Image source={image} style={styles.dateImage} />
+    <Image source={{ uri: image }} style={styles.dateImage} accessibilityLabel={`Image of ${name}`} />
     <Text style={styles.dateName} numberOfLines={2}>{name}</Text>
   </View>
 );
 
-// Premium Dates Section
-const PremiumDates = ({ data }) => {
+const PremiumDates = () => {
+  const { state } = useContext(AppContext);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await apiClient.get('/home');  
+        const category = response.data.data.premiumcategory;
+        setCategories(category);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [state.reFresh]);
+
   return (
     <View style={styles.premiumDatesContainer}>
       <LinearGradient
@@ -25,14 +45,19 @@ const PremiumDates = ({ data }) => {
         <Text style={styles.sectionSubtitle}>
           A handpicked selection of the finest dates, perfect for every occasion.
         </Text>
-        <FlatList
-          data={data}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <DateCard name={item.name} image={item.image} />}
-          contentContainerStyle={styles.flatListContainer}
-        />
+        {loading ? (
+          <Text style={styles.loadingText}>Loading...</Text>
+        ) : (
+          <FlatList
+            data={categories}
+            ListEmptyComponent={<Text style={styles.emptyListText}>No dates available.</Text>}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.sid.toString()}
+            renderItem={({ item }) => <DateCard name={item.cname} image={item.image} />}
+            contentContainerStyle={styles.flatListContainer}
+          />
+        )}
       </LinearGradient>
     </View>
   );
@@ -79,7 +104,19 @@ const styles = StyleSheet.create({
     fontSize: rf(1.8),
     color: '#333',
     flexWrap: 'wrap',
-    width:"95%" 
+    width: "95%",
+  },
+  loadingText: {
+    fontSize: rf(2),
+    color: '#888',
+    textAlign: 'center',
+    marginTop: rh(2),
+  },
+  emptyListText: {
+    fontSize: rf(2),
+    color: '#888',
+    textAlign: 'center',
+    marginTop: rh(2),
   },
 });
 

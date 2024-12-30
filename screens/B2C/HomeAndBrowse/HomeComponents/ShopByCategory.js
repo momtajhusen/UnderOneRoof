@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import CategoryList from '../../../../components/List/CategoryList';  
 import { rw, rf, rh } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../../../Service/apiClient';  
 import CategoryListLoader from '../../../../components/ShimmerLoader/CategoryListLoader';
+import { AppContext } from '../../../../context/AppContext';
+
 
 const ShopByCategory = () => {
     const navigation = useNavigation();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true); 
+
+    const { state, dispatch } = useContext(AppContext);
+    
 
     // Fetch categories from API
     useEffect(() => {
@@ -27,7 +32,7 @@ const ShopByCategory = () => {
             }
         };
         fetchCategories();
-    }, []);
+    }, [state.reFresh]);
 
     return (
         <View style={styles.container}>

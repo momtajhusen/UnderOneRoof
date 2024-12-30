@@ -1,5 +1,5 @@
-import React,{ useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar} from 'react-native';
+import React,{ useEffect, useState, useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView, StatusBar, RefreshControl} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
 import SearchDesigne from '../../../components/Search/searchDesigne';
@@ -19,6 +19,8 @@ import apiClient from '../../../Service/apiClient';
 const B2BHomeScreen = () => {
 
   const navigation = useNavigation();
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
 
   useFocusEffect(() => {
@@ -52,6 +54,15 @@ const B2BHomeScreen = () => {
             image: require('../../../assets/items/image3ww23.png'),
         },
     ];
+
+    const onRefresh = async () => {
+      dispatch({
+        type: 'GLOBAL_REFRESH',
+        payload: {
+          reFresh: Math.ceil(Math.random() * 100),
+        },
+      });
+    };
 
       // Fetch slider image from API
       useEffect(() => {
@@ -89,7 +100,11 @@ const B2BHomeScreen = () => {
              <SearchDesigne onPress={()=>navigation.navigate('B2BSearchScreen')} />
           </View>
         </LinearGradient>
-        <ScrollView>
+        <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+                }
+        >
             {/* Slider & Categories Section */}
             <View style={styles.SliderCategoryContainer}>
             {/* Slider Container */}
