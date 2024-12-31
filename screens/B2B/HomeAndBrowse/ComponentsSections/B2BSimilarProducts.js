@@ -9,34 +9,11 @@ import apiClient from '../../../../Service/apiClient';
 // create a component
 const B2BSimilarProducts = () => {
 
-    const productList = [
-        {
-          id: '1',
-          name: 'Premium Roasted Almonds',
-          image: require('../../../../assets/items/image343002.png'),
-          price: '999',
-          discountedPrice: '699',
-          sizes: '1kg, 5kg, 10kg',
-          packets: ['₹679/kg for 5 kg packet', '₹659/kg for 10 kg packet'],
-        },
-        {
-          id: '2',
-          name: 'Organic Cashews',
-          image: require('../../../../assets/items/image343002.png'),
-          price: '1299',
-          discountedPrice: '1099',
-          sizes: '500g, 1kg',
-          packets: ['₹999/kg for 1 kg packet'],
-        },
-      ];
-
-
       const [productData, setProductData] = useState([]);
       const [loading, setLoading] = useState(true); // Adding loading state
     
       const {state, dispatch } = useContext(AppContext);
       
-    
       // Fetch slider image from API
       useEffect(() => {
         const fetchHomeProductData = async () => {
@@ -63,7 +40,7 @@ const B2BSimilarProducts = () => {
                 items={productData}
                 styleCardContainer={{
                   width: rw(77),
-                  height:rh(28),
+                  height:rh(30),
                 }}
                 layout="horizontal"
               />

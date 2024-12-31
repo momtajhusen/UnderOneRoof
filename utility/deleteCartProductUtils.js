@@ -6,10 +6,11 @@ export const useRemoveFromCart = () => {
   const [isCartDeleteLoading, setIsLoading] = useState(false);
   const { dispatch } = useContext(AppContext);
 
-  const removeFromCart = async (pid) => {
+  const removeFromCart = async (pid, var_id) => {
+
     try {
       setIsLoading(true);
-      const payload = { pid }; // Duplicate key hata diya
+      const payload = { pid, vid: var_id};
       const response = await apiClient.post('/deleteCart', payload);
 
       console.log(response.data);

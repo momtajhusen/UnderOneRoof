@@ -38,9 +38,12 @@ const CartScreen = ({ navigation }) => {
 
     // onRefresh function for pull-to-refresh
     const onRefresh = async () => {
-        setIsRefreshing(true);
-        await fetchCartDetails();
-        setIsRefreshing(false);
+        dispatch({
+            type: 'GLOBAL_REFRESH',
+            payload: {
+              reFresh: Math.ceil(Math.random() * 100),
+            },
+          });
     };
 
     useEffect(() => {
@@ -56,7 +59,7 @@ const CartScreen = ({ navigation }) => {
                 title="Your Cart"
                 rightContent={
                     <View style={{ flexDirection: "row", gap: rw(4) }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
                             <Image source={require('../../../assets/Search.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
                         </TouchableOpacity>
                     </View>

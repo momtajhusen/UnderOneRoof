@@ -1,18 +1,40 @@
-import React from 'react';
+import React,{useEffect, useContext} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Pressable, Image } from 'react-native';
+import {View, Text, Pressable, Image } from 'react-native';
 
 import B2BHomeScreen from '../screens/B2B/HomeAndBrowse/B2BHomeSceeen';
 import B2BCartScreen from '../screens/B2B/CartAndCheckout/B2BCartScreen';
 import B2BAccountScreen from '../screens/B2B/Accounts/B2BAccountScreen';
 import B2BCategoryScreen from '../screens/B2B/HomeAndBrowse/B2BCategoryScreen';
 import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
+import { AppContext } from '../context/AppContext';
+import { useViewCartData } from '../utility/viewCardDataUtils';
+
 
 import { rw, rh, rf } from '../Service/responsive';
 
 const Tab = createBottomTabNavigator();
 
+
+
 const B2BBottomNavigator = () => {
+
+
+  const { state, dispatch } = useContext(AppContext);
+
+  const cartCount = state.viewCartData?.cartProduct?.length ?? 0;
+
+  const { isViewCartLoading, viewCartData } = useViewCartData();
+
+  const fetchCartDetails = async () => {
+      const result = await viewCartData();
+  };
+
+  useEffect(() => {
+      fetchCartDetails();
+  }, [state.reFresh]);
+
+ 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -94,19 +116,36 @@ const B2BBottomNavigator = () => {
         options={{
           tabBarLabel: 'Cart',
           tabBarIcon: ({ focused }) => (
-            focused ? (
+            <View>
               <Image
-                source={require('../assets/navigation-icon/cart-1.png')}
+                source={
+                  focused
+                    ? require('../assets/navigation-icon/cart-1.png')
+                    : require('../assets/navigation-icon/cart-2.png')
+                }
                 resizeMode="cover"
                 style={{ width: rf(3.5), height: rf(3.5) }}
               />
-            ) : (
-              <Image
-                source={require('../assets/navigation-icon/cart-2.png')}
-                resizeMode="cover"
-                style={{ width: rf(3.5), height: rf(3.5) }}
-              />
-            )
+              {cartCount > 0 && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    right: -10,
+                    top: -5,
+                    backgroundColor: 'red',
+                    borderRadius: 10,
+                    width: 20,
+                    height: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: rf(1.2) }}>
+                    {cartCount}
+                  </Text>
+                </View>
+              )}
+            </View>
           ),
           tabBarButton: (props) => (
             <Pressable {...props} android_ripple={null} />

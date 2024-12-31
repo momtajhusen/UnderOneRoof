@@ -7,9 +7,6 @@ import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
 
 const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }) => {
 
-
-    console.log();
-
     const { pid, itemimage, name, measurement, selling_price, mrp_price, qty, var_id } = item;
  
     const [itemQuantity, setItemQuantity] = useState(qty);
@@ -39,7 +36,7 @@ const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }
     };
 
     const onRemove = async () => {
-        await removeFromCart(pid);
+        await removeFromCart(pid, var_id);
     };
 
     return (

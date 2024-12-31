@@ -27,6 +27,9 @@ import { SharedElement } from 'react-native-shared-element';
 import { useAddFromCart } from '../../../../utility/addCartProductUtils';
 import { useRemoveFromCart } from '../../../../utility/deleteCartProductUtils';
 import ProductDetailsLoader from '../../../../components/ShimmerLoader/productDetailsLoader';
+import RenderHtml from 'react-native-render-html';
+import { useWindowDimensions } from 'react-native';
+
 
 
 // Shimmer Placeholder component
@@ -46,6 +49,10 @@ const ProductDetail = ({ route, navigation }) => {
   const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
   const [isLoading, setIsLoading] = useState(false);
   const [isCartBtnLoading, setCartBtnLoading] = useState(false);  
+
+  const { width: contentWidth } = useWindowDimensions();
+
+
 
  
 
@@ -76,7 +83,7 @@ const ProductDetail = ({ route, navigation }) => {
     };
 
     const removeToCart = async () => {
-      const result = await removeFromCart(productDetails.pid);
+      const result = await removeFromCart(productDetails.pid, selectedVariantId);
     };
     
     const ProductDetails = async () => {
@@ -180,6 +187,11 @@ const ProductDetail = ({ route, navigation }) => {
           ],
       };
 
+      
+  const hasDescription = !!productDetails.short_desc;
+  const hasDescriptionFull = !!productDetails.full_desc;
+
+
   const renderItem = ({ item }) => (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <Image source={{ uri: item.img }} style={{ width: rw(70), height: rw(70), borderRadius: 10 }} />
@@ -197,7 +209,7 @@ const ProductDetail = ({ route, navigation }) => {
         }
         rightContent={
           <View style={{ flexDirection: 'row', gap: rw(4) }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')}>
               <Image source={require('../../../../assets/Cart.png')} style={{width:rw(5.5), height:rw(5.5)}} />
             </TouchableOpacity>
           </View>
@@ -337,11 +349,13 @@ const ProductDetail = ({ route, navigation }) => {
               <MaterialIcons name={isDescriptionCollapsed ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="black" />
             </TouchableOpacity>
             
-            <View style={styles.textContainer}>
-              <Text style={styles.descriptionText}>
-                {productDetails.short_desc}
-              </Text>
-            </View>
+            {!isDescriptionCollapsed && hasDescription && (
+              <View style={styles.textContainer}>
+                <RenderHtml
+                  source={{ html: productDetails.short_desc }}
+                />
+              </View>
+            )}
           </View>
 
 
@@ -355,21 +369,15 @@ const ProductDetail = ({ route, navigation }) => {
               </TouchableOpacity>
               {/* <Collapsible collapsed={isNutritionCollapsed}> */}
               <View style={styles.textContainer}>
-    
-                  {[
-                    { label: "Calories", value: "579 kcal" },
-                    { label: "Protein", value: "21g" },
-                    { label: "Total Fat", value: "50g" },
-                    { label: "Saturated Fat", value: "4g" },
-                    { label: "Carbohydrates", value: "22g" },
-                    { label: "Sodium", value: "5g" },
-                  ].map((item, index) => (
-                    <View key={index} style={{flexDirection:"row", justifyContent:"space-between", paddingRight:rw(30)}}>
-                      {/* <Text style={styles.nutritionText}>{item.label}:</Text>
-                      <Text style={styles.nutritionText}>{item.value}</Text> */}
-                      <Text>{productDetails.full_desc}</Text>
-                    </View>
-                  ))}
+
+
+                {!isNutritionCollapsed && hasDescriptionFull && (
+                  <View style={styles.textContainer}>
+                    <RenderHtml
+                      source={{ html: productDetails.full_desc }}
+                    />
+                  </View>
+                )}
               </View>
 
               {/* </Collapsible> */}

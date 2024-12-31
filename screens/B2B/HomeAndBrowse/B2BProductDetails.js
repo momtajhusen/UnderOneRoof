@@ -39,28 +39,7 @@ const ProductDetail = ({ route, navigation }) => {
     { weight: 'A' },
     { weight: 'B' },
     { weight: 'C' },
-    { weight: 'D' }, // Additional items if needed
-  ];
-
-  const productList = [
-    {
-      id: '1',
-      name: 'Premium Roasted Almonds',
-      image: require('../../../assets/items/image343002.png'),
-      price: '999',
-      discountedPrice: '699',
-      sizes: '1kg, 5kg, 10kg',
-      packets: ['₹679/kg for 5 kg packet', '₹659/kg for 10 kg packet'],
-    },
-    {
-      id: '2',
-      name: 'Organic Cashews',
-      image: require('../../../assets/items/image343002.png'),
-      price: '1299',
-      discountedPrice: '1099',
-      sizes: '500g, 1kg',
-      packets: ['₹999/kg for 1 kg packet'],
-    },
+    { weight: 'D' },
   ];
 
 

@@ -1,10 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import apiClient from '../Service/apiClient';
 import { AppContext } from '../context/AppContext';
 
 export const useQtyUpdate = () => {
   const [isQtyUpdateLoading, setIsLoading] = useState(false);
-  const { dispatch } = useContext(AppContext);
+    const { dispatch, state } = useContext(AppContext);
 
   const qtyUpdate = async (pid, qty, var_id) => {
     try {
@@ -16,8 +16,6 @@ export const useQtyUpdate = () => {
 
       const response = await apiClient.post('/qtyupdate', payload);
       const result = response.data;
-
-      console.log(result);
 
       if (result.status === 1) {
         dispatch({
@@ -39,8 +37,6 @@ export const useQtyUpdate = () => {
       setIsLoading(false);
     }
   };   
-
-  
 
   return {
     isQtyUpdateLoading,

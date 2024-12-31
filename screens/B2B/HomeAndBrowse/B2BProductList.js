@@ -54,9 +54,8 @@ import apiClient from '../../../Service/apiClient';
     'Discounts',
     'More Option',
   ];
-
   
-  const B2BProductListing = ({ route }) => {
+  const B2BProductListing = ({ navigation, route }) => {
     const { selectCategoryId, selectCategoryName, selectCategorySlug } = route.params;
   
     const [selectedCategoryId, setSelectedCategoryId] = useState(selectCategoryId);
@@ -135,10 +134,10 @@ import apiClient from '../../../Service/apiClient';
           title={selectedCategoryName}
           rightContent={
             <View style={{ flexDirection: 'row', gap: rw(4) }}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
                 <Image source={require('../../../assets/Search.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')}>
                 <Image source={require('../../../assets/Cart.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
               </TouchableOpacity>
             </View>

@@ -5,12 +5,31 @@ import Header from '../../../components/header';
 import apiClient from '../../../Service/apiClient';
 import { AppContext } from '../../../context/AppContext';
 import B2BAccountMenuList from './ComponentSections/B2BAccountMenuList';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const B2BAccountScreen = ({ navigation }) => {
   const { state } = useContext(AppContext);
 
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuthToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('authToken');
+            const userId = await AsyncStorage.getItem('userId');
+            const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
+
+            console.log("User Token");
+            console.log(token);
+
+        } catch (error) {
+            console.error("Error reading token:", error);
+        }
+    };
+    checkAuthToken();
+}, [navigation]);
 
   useEffect(() => {
     const fetchData = async () => {

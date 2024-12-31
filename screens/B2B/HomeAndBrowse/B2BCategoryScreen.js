@@ -67,13 +67,13 @@ const CategoryScreen = ({ navigation }) => {
         title="Categories"
         rightContent={
           <View style={styles.headerIcons}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
               <Image
                 source={require('../../../assets/Search.png')}
                 style={styles.icon}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')}>
               <Image
                 source={require('../../../assets/Cart.png')}
                 style={styles.icon}

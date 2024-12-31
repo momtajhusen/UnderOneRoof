@@ -1,11 +1,11 @@
 // addCartProductUtils.js
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import apiClient from '../Service/apiClient';
 import { AppContext } from '../context/AppContext';
 
 export const useAddFromCart = () => {
   const [isCartAddLoading, setIsLoading] = useState(false);
-  const { dispatch } = useContext(AppContext);
+  const { dispatch, state } = useContext(AppContext);
 
   const addFromCart = async (pid, var_id) => {
     try {
