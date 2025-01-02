@@ -1,5 +1,5 @@
 // import necessary libraries
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -19,31 +19,10 @@ import B2BProductCard from '../../../components/List/B2BProductCard';
 import B2BProductLoader from '../../../components/ShimmerLoader/b2bProductLoader';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import apiClient from '../../../Service/apiClient';
+import { AppContext } from '../../../context/AppContext';
 
-  // Dummy data for side navigation
-  const categories = [
-    { id: 1, name: 'Dry Fruits', icon: require('../../../assets/CategorIcon/image1.png') },
-    { id: 2, name: 'Spices', icon: require('../../../assets/CategorIcon/image2.png') },
-    { id: 3, name: 'Kesar', icon: require('../../../assets/CategorIcon/image3.png') },
-    { id: 4, name: 'Energy Bars', icon: require('../../../assets/CategorIcon/image4.png') },
-    { id: 5, name: 'Edible Oils', icon: require('../../../assets/CategorIcon/image5.png') },
-    { id: 6, name: 'Dry Fruits', icon: require('../../../assets/CategorIcon/image6.png') },
-    { id: 7, name: 'Spices', icon: require('../../../assets/CategorIcon/image7.png') },
-    { id: 8, name: 'Kesar', icon: require('../../../assets/CategorIcon/image1.png') },
-    { id: 9, name: 'Energy Bars', icon: require('../../../assets/CategorIcon/image2.png') },
-    { id: 10, name: 'Edible Oils', icon: require('../../../assets/CategorIcon/image3.png') },
-    { id: 11, name: 'Dry Fruits', icon: require('../../../assets/CategorIcon/image4.png') },
-    { id: 12, name: 'Spices', icon: require('../../../assets/CategorIcon/image5.png') },
-  ];
 
-  // Filter list array
-  const filters = [
-  { id: 1, name: 'Price: High to Low' },
-  { id: 2, name: 'Price: Low to High' },
-  { id: 3, name: 'Rating: High to Low' },
-  { id: 4, name: 'Newest First' },
-  { id: 5, name: 'Discount' },
-  ];
+
 
 
   // Sort By Options 
@@ -51,11 +30,11 @@ import apiClient from '../../../Service/apiClient';
     'Trending',
     'Price ( low to high )',
     'Price ( High to low )',
-    'Discounts',
-    'More Option',
+    'Discounts'
   ];
   
   const B2BProductListing = ({ navigation, route }) => {
+    const { state, dispatch } = useContext(AppContext);
     const { selectCategoryId, selectCategoryName, selectCategorySlug } = route.params;
   
     const [selectedCategoryId, setSelectedCategoryId] = useState(selectCategoryId);
@@ -68,8 +47,14 @@ import apiClient from '../../../Service/apiClient';
   
     const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
     const toggleModal = () => {
+      
       setModalVisible(!isModalVisible);
     };
+
+      // Filter list array
+      const filters = state.productFilter
+      ? [{ id: 1, name: state.productFilter }]
+      : [];
   
     // Handle category selection
     const handleCategorySelection = (id, slug, name) => {
@@ -105,16 +90,31 @@ import apiClient from '../../../Service/apiClient';
   
     const fetchProductListing = async () => {
       setLoading(true);
+    
       try {
         const postResponse = await apiClient.get(`/category?slug=${selectedCategorySlug}`);
-        const product = postResponse.data.data.category;
-        setProductListing(product);
+        const products = postResponse.data.data.category;
+    
+        let filteredProducts = [...products];
+    
+        if (state.productFilter === "Price ( low to high )") {
+          filteredProducts.sort((a, b) => a.selling_price - b.selling_price);
+        } else if (state.productFilter === "Price ( High to low )") {
+          filteredProducts.sort((a, b) => b.selling_price - a.selling_price);
+        } else if (state.productFilter === "Discounts") {
+          filteredProducts.sort((a, b) => b.discount - a.discount);
+        } else if (state.productFilter === null) {
+          filteredProducts = products;  
+        }
+    
+        setProductListing(filteredProducts);  
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
       } finally {
         setLoading(false);
       }
     };
+    
   
     useEffect(() => {
       fetchSubCategory();
@@ -125,7 +125,7 @@ import apiClient from '../../../Service/apiClient';
       if (selectedCategorySlug) {
         fetchProductListing();
       }
-    }, [selectedCategorySlug]);
+    }, [selectedCategorySlug, state.productFilter]);
   
     return (
       <View style={styles.screen}>
@@ -182,7 +182,7 @@ import apiClient from '../../../Service/apiClient';
           {/* Product Section */}
           <View style={styles.productSection}>
             <View style={{ flexDirection: 'row', gap: 3, width: rw(70) }}>
-              <SortByBtn style={{ width: rw(25), backgroundColor: '#DFDFDF' }} onPress={toggleModal} />
+              <SortByBtn style={{ width: rw(25), height:rh(4), backgroundColor: '#DFDFDF' }} onPress={toggleModal} />
               <View style={styles.filterContainer}>
                 <FlatList
                   data={filters}
@@ -199,6 +199,14 @@ import apiClient from '../../../Service/apiClient';
                             borderRadius: 10,
                             padding: 2,
                           }}
+                          onPress={()=>
+                            dispatch({
+                              type: 'SET_PRODUCT_FLITER',
+                              payload: {
+                                  productFilter: null,
+                              },
+                            })
+                          }
                         >
                           <MaterialIcons name="close" size={rf(1.8)} color="black" />
                         </TouchableOpacity>
@@ -217,30 +225,36 @@ import apiClient from '../../../Service/apiClient';
                  showsHorizontalScrollIndicator={false}
                  >
                 
-                {loading ? ( 
-                  <B2BProductLoader 
-                  layout="vertical" 
-                  styleCardContainer={{
-                    width: categoryData.length === 0 ? rw(90) : rw(75),
-                    marginBottom:10,
-                  }}
-                  />
-                ) : productListing?.length > 0 ? (
-
-                  // categoryData ye ayyay
-                  <B2BProductCard
+                {
+                  loading ? (
+                    <B2BProductLoader 
+                      layout="vertical" 
+                      styleCardContainer={{
+                        width: categoryData.length === 0 ? rw(90) : rw(75),
+                        marginBottom: 10,
+                      }}
+                    />
+                  ) : productListing?.length > 0 ? (
+                    // Agar products available hain
+                    <B2BProductCard
                       items={productListing}
                       styleCardContainer={{
                         width: categoryData.length === 0 ? rw(90) : rw(75),
-                        marginBottom:10,
+                        marginBottom: 10,
                       }}
                       layout="vertical"
                     />
-                ) : (
-                  <View style={{height:rh(70), justifyContent:"center"}}>
-                     <Text style={{textAlign:"center"}}>Products not available.</Text>
-                  </View>
-                )}
+                  ) : (
+                    // Loading complete hone ke baad aur koi product na hone par
+                    <View style={{ height: rh(70), justifyContent: "center", alignItems: "center" }}>
+                      <Image 
+                        source={require('../../../assets/product-not-avable.png')} 
+                        style={{ width: rw(50), height: rw(50) }} 
+                      />
+                    </View>
+                  )
+                }
+
               </ScrollView>
             </View>
           </View>

@@ -12,6 +12,9 @@ const SELECT_ADDRESS_DATA = 'SELECT_ADDRESS_DATA';
 
 const SET_LOADER = 'SET_LOADER';
 
+const SET_PRODUCT_FLITER = 'SET_PRODUCT_FLITER';
+
+
 
 
 
@@ -54,6 +57,14 @@ export default (state, action) => {
             ...state,
             viewCartData: action.payload.viewCartData, 
           };
+
+          case SET_PRODUCT_FLITER:
+            return {
+              ...state,
+              productFilter: action.payload.productFilter, 
+            };
+
+          
 
           case VIEW_ADDRESS_DATA:
             return {

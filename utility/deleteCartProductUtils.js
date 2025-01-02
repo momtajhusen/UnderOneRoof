@@ -1,10 +1,14 @@
 import { useState, useContext } from 'react';
 import apiClient from '../Service/apiClient';
 import { AppContext } from '../context/AppContext';
+import { useViewCartData } from './viewCardDataUtils';
+
 
 export const useRemoveFromCart = () => {
   const {state, dispatch } = useContext(AppContext);
   const [isCartDeleteLoading, setIsLoading] = useState(false);
+
+  const { isViewCartLoading, viewCartData } = useViewCartData();
 
   const removeFromCart = async (pid, var_id) => {
 
@@ -22,6 +26,15 @@ export const useRemoveFromCart = () => {
           },
         });
 
+ 
+        const result = await viewCartData();
+        if (isViewCartLoading) {
+          setTimeout(()=>{
+            setIsLoading(false);
+          },300);
+          dispatch({ type: 'SET_LOADER', payload: false });
+        } 
+        
         return { success: true };
       } else {
         console.error('Failed to remove item from cart');
@@ -30,10 +43,6 @@ export const useRemoveFromCart = () => {
     } catch (error) {
       console.error('Error while removing from cart:', error);
       return { success: false, error: error.message }; 
-    } finally {
-      setIsLoading(false);
-      dispatch({ type: 'SET_LOADER', payload: false });
-
     }
   };
 

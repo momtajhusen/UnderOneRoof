@@ -2,10 +2,15 @@
 import { useState, useContext, useEffect } from 'react';
 import apiClient from '../Service/apiClient';
 import { AppContext } from '../context/AppContext';
+import { useViewCartData } from './viewCardDataUtils';
+
 
 export const useAddFromCart = () => {
   const [isCartAddLoading, setIsLoading] = useState(false);
   const { dispatch, state } = useContext(AppContext);
+
+  const { isViewCartLoading, viewCartData } = useViewCartData();
+
 
   const addFromCart = async (pid, var_id) => {
     try {
@@ -28,6 +33,14 @@ export const useAddFromCart = () => {
           },
         });
 
+        const result = await viewCartData();
+        if (isViewCartLoading) {
+          setTimeout(()=>{
+            setIsLoading(false);
+          },300);
+          dispatch({ type: 'SET_LOADER', payload: false });
+        } 
+
         return { success: true }; // Success return kar raha hai
       } else {
         console.error('Failed to update cart');
@@ -36,8 +49,6 @@ export const useAddFromCart = () => {
     } catch (error) {
       console.error('Error while adding to cart:', error);
       return { success: false, error: error.message };
-    } finally {
-      setIsLoading(false);
     }
   };
 

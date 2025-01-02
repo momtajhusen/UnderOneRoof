@@ -83,7 +83,7 @@ const CategoryScreen = ({ navigation }) => {
         {/* FlatList for Categories */}
         {loading ? (
           <View style={styles.categoryListContainer}>
-            {Array.from({ length: 16 }).map((_, index) => (
+            {Array.from({ length: 24 }).map((_, index) => (
               <CategoryListLoader key={index} />
             ))}
           </View>

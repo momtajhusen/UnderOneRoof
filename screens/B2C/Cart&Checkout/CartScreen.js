@@ -48,7 +48,7 @@ const CartScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (isFirstLoad && !isViewCartLoading) {
-            setIsFirstLoad(false); // After the first load, disable the first-time loading screen
+            setIsFirstLoad(false);
         }
     }, [isViewCartLoading]);
 
@@ -114,7 +114,7 @@ const CartScreen = ({ navigation }) => {
                 {/* Price Details */}
                 {cartProduct.length > 0 && (
                     <View style={[styles.container, { marginBottom: rh(6) }]}>
-                        <PriceDetails data={state.viewCartData} style={{ backgroundColor: "green" }} />
+                        <PriceDetails data={state.viewCartData} saveMessage={false} style={{ backgroundColor: "green" }} />
                     </View>
                 )}
 
@@ -127,12 +127,13 @@ const CartScreen = ({ navigation }) => {
             {/* Fixed Proceed Details at the bottom */}
             {cartProduct.length > 0 && (
                 <View style={styles.proceedDetails}>
-                    <ProceedDetails
-                        onPress={() => navigation.navigate('Checkout')}
-                        loading={state.isLoader}
-                        data={state.viewCartData}
-                        btnText="Proceed"
-                    />
+                <ProceedDetails
+                    onPress={() => navigation.navigate('Checkout')}
+                    loading={isViewCartLoading || state.isLoader}
+                    data={state.viewCartData}
+                    btnText="Proceed"
+                />
+
                 </View>
             )}
         </View>

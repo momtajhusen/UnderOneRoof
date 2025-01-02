@@ -7,10 +7,10 @@ import { AppContext } from '../../../../context/AppContext';
 import apiClient from '../../../../Service/apiClient';
 
 // create a component
-const B2BSimilarProducts = () => {
+const B2BSimilarProducts = ({data}) => {
 
       const [productData, setProductData] = useState([]);
-      const [loading, setLoading] = useState(true); // Adding loading state
+      const [loading, setLoading] = useState(true);
     
       const {state, dispatch } = useContext(AppContext);
       

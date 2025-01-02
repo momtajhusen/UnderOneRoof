@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import { MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { rw, rh, rf } from '../../Service/responsive';
+import { AppContext } from '../../context/AppContext';
 
 const SortByModal = ({ isVisible, toggleModal, options }) => {
 
     const [selectedOption, setSelectedOption] = useState(options[0]);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [customDate, setCustomDate] = useState(null);
+
+    const { state, dispatch } = useContext(AppContext);
+    
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
@@ -30,12 +34,23 @@ const SortByModal = ({ isVisible, toggleModal, options }) => {
         setSelectedOption(null);
         setCustomDate(null);
         toggleModal();
+        dispatch({
+            type: 'SET_PRODUCT_FLITER',
+            payload: {
+                productFilter: null,
+            },
+          });
     };
 
     const handleApply = () => {
         // Apply logic here
-        alert(`Selected: ${selectedOption}${customDate ? ` (${customDate.toLocaleDateString()})` : ''}`);
         toggleModal();
+        dispatch({
+            type: 'SET_PRODUCT_FLITER',
+            payload: {
+                productFilter: selectedOption,
+            },
+          });
     };
 
     return (

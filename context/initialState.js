@@ -17,10 +17,11 @@ const initialState = {
     // user select address 
     selectAddressData: [],
 
+    // Refresh or Loader
+    reFresh: false,
+    isLoader: false,
 
-  // Refresh or Loader
-  reFresh: false,
-  isLoader: false,
+    productFilter: null,
 
 
 };

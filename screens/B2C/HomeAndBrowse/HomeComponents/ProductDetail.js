@@ -18,6 +18,7 @@ import Collapsible from 'react-native-collapsible';
 import ReviewCard from '../../../../components/List/ReviewCard';
 import RatingProductCard from '../../../../components/List/RatingProductCard';
 import SimilarProducts from '../../Cart&Checkout/CartComponents/SimilarProducts';
+import B2BSimilarProducts from '../../../B2B/HomeAndBrowse/ComponentsSections/B2BSimilarProducts';
 import apiClient from '../../../../Service/apiClient';
 import parse from 'html-react-parser';
 import { AppContext } from '../../../../context/AppContext';
@@ -41,7 +42,6 @@ const ProductDetail = ({ route, navigation }) => {
 
     const item = route?.params?.item || {};
     const itemImage = route?.params?.itemImage || '';
-
  
  
   const [activeIndex, setActiveIndex] = useState(0);
@@ -52,15 +52,7 @@ const ProductDetail = ({ route, navigation }) => {
 
   const { width: contentWidth } = useWindowDimensions();
 
-
-
- 
-
-  const [selectedVarientId, setSelectedVarientId] = useState(
-    Array.isArray(item.varient) && item.varient.length > 0
-      ? item.varient[0].psid
-      : item.varient_id || null
-  );
+  const [selectedVarientId, setSelectedVarientId] = useState(null);
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
 
   const [multiProductImage, setMultiProductImage] = useState([]);
@@ -85,12 +77,16 @@ const ProductDetail = ({ route, navigation }) => {
     const removeToCart = async () => {
       const result = await removeFromCart(productDetails.pid, selectedVariantId);
     };
-    
+
     const ProductDetails = async () => {
       setIsLoading(true);
       try {
+    
+
         const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
         const product = response.data;
+
+        console.log(product);
 
         const multiImage = product.data.productDetails[0]?.multi_image || [];
 
@@ -98,9 +94,11 @@ const ProductDetail = ({ route, navigation }) => {
         setProductDetails(product.data.productDetails[0]);
         setRelatedProduct(product.data.relatedProduct);
         setProductVarient(product.data.varient);
-        selectedVariantId(product.data[0].psid);
+        selectedVariantId(product.data.varient[0].psid);
         setCartQuantity(product.data.productDetails[0].added_to_cart);
         setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
+
+        alert();
 
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -429,7 +427,13 @@ const ProductDetail = ({ route, navigation }) => {
               {
                 Array.isArray(relatedProduct) && relatedProduct.length > 0 ? (
                   <View style={{ backgroundColor: "white", marginTop: rh(1), marginBottom: rh(1), padding: rw(3), borderRadius: 5, overflow: "hidden" }}>
-                  <SimilarProducts data={relatedProduct} />
+
+                  {state.shoppingMode === 'retail' && <SimilarProducts data={relatedProduct} />}
+                  {state.shoppingMode === 'wholesale' && 
+                     <B2BSimilarProducts data={relatedProduct} />
+                  }
+
+                  
                   </View>
 
                 ) : null 
@@ -447,8 +451,7 @@ const ProductDetail = ({ route, navigation }) => {
           </TouchableOpacity>
 
           {/* Add to Cart Button - Show only if cartQuantity is 0 */}
-          {cartQuantity === 0 ? (
-            <TouchableOpacity
+          <TouchableOpacity
               style={{
                 backgroundColor: "#FF3131",
                 paddingVertical: rh(1.5),
@@ -458,30 +461,8 @@ const ProductDetail = ({ route, navigation }) => {
               onPress={addToCart}
               disabled={isCartAddLoading} // Disable button when loading
             >
-              {isCartAddLoading ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
                 <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
-              )}
             </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#FF3131",
-                paddingVertical: rh(1.5),
-                paddingHorizontal: rw(13),
-                borderRadius: 10,
-              }}
-              onPress={removeToCart}
-              disabled={isCartDeleteLoading}
-            >
-              {isCartDeleteLoading ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <Text style={{ color: "white", fontWeight: "bold" }}>Remove</Text>
-              )}
-            </TouchableOpacity>
-          )}
         </View>
       )}
 

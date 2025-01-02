@@ -69,6 +69,7 @@ const Checkout = ({ navigation }) => {
       {/* Fixed Proceed Details at the bottom */}
       <View style={styles.proceedDetails}>
         <ProceedDetails 
+          loading={state.isLoader}
           data={state.viewCartData} 
           btnText="Continue"
           onPress={toggleModal} 
