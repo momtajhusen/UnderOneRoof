@@ -1,25 +1,34 @@
 //import liraries
 import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // create a component
-const SearchInput = ({autoFocus, placeholder="Search here.."}) => {
+const SearchInput = ({ autoFocus, loading, onChange, placeholder = "Search here.." }) => {
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
-                <MaterialIcons 
-                    name="search" 
-                    size={rf(3.5)} 
-                    color="#777" 
-                    style={styles.icon} 
-                />
+                {loading ? (
+                    <ActivityIndicator 
+                        size={rf(3.5)} 
+                        color="#777" 
+                        style={styles.icon} 
+                    />
+                ) : (
+                    <MaterialIcons 
+                        name="search" 
+                        size={rf(3.5)} 
+                        color="#777" 
+                        style={styles.icon} 
+                    />
+                )}
                 <TextInput 
                     style={styles.input} 
                     placeholder={placeholder}
                     placeholderTextColor="#aaa"
-                    autoFocus={autoFocus} // Automatically focuses on input
+                    autoFocus={autoFocus}
+                    onChangeText={(text) => onChange(text)}
                 />
             </View>
         </View>

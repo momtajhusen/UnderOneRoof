@@ -18,8 +18,11 @@ const initialState = {
     selectAddressData: [],
 
 
-  // Note
+  // Refresh or Loader
   reFresh: false,
+  isLoader: false,
+
+
 };
 
 export default initialState;

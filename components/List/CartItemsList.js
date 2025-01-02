@@ -1,37 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRemoveFromCart } from '../../utility/deleteCartProductUtils';
 import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
+import { AppContext } from '../../context/AppContext';
 
-const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }) => {
-
+const CartItemsList = ({ item, deleteIconStyle }) => {
     const { pid, itemimage, name, measurement, selling_price, mrp_price, qty, var_id } = item;
- 
     const [itemQuantity, setItemQuantity] = useState(qty);
     const [isUpdatingQty, setIsUpdatingQty] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false); // Local state for individual item deletion
 
-    const { isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
+    const { state } = useContext(AppContext);
+    const {isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
     const { qtyUpdate } = useQtyUpdate();
 
     const handleIncrease = async () => {
         setIsUpdatingQty(true);
-        setItemQuantity(prevQuantity => {
-            const newQty = prevQuantity + 1;
-            qtyUpdate(pid, newQty, var_id).finally(() => setIsUpdatingQty(false)); 
-            return newQty;
-        });
+        const newQty = itemQuantity + 1;
+        await qtyUpdate(pid, newQty, var_id);
+        setItemQuantity(newQty);
+        setIsUpdatingQty(false);
     };
 
     const handleDecrease = async () => {
         if (itemQuantity > 1) {
             setIsUpdatingQty(true);
-            setItemQuantity(prevQuantity => {
-                const newQty = prevQuantity - 1;
-                qtyUpdate(pid, newQty, var_id).finally(() => setIsUpdatingQty(false)); // Update quantity
-                return newQty;
-            });
+            const newQty = itemQuantity - 1;
+            await qtyUpdate(pid, newQty, var_id);
+            setItemQuantity(newQty);
+            setIsUpdatingQty(false);
         }
     };
 
@@ -69,11 +68,11 @@ const CartItemsList = ({ item, deleteIconStyle, ProductVarient, ProductDetails }
                 </View>
             </View>
             <View style={styles.quantityContainer}>
-                <TouchableOpacity onPress={handleDecrease} style={styles.button}>
+                <TouchableOpacity onPress={handleDecrease} style={styles.button} disabled={isUpdatingQty}>
                     <MaterialIcons style={styles.removeIcon} name="remove" />
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{itemQuantity}</Text>
-                <TouchableOpacity onPress={handleIncrease} style={styles.button}>
+                <TouchableOpacity onPress={handleIncrease} style={styles.button} disabled={isUpdatingQty}>
                     <MaterialIcons style={styles.removeIcon} name="add" />
                 </TouchableOpacity>
             </View>

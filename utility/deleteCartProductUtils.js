@@ -3,17 +3,16 @@ import apiClient from '../Service/apiClient';
 import { AppContext } from '../context/AppContext';
 
 export const useRemoveFromCart = () => {
+  const {state, dispatch } = useContext(AppContext);
   const [isCartDeleteLoading, setIsLoading] = useState(false);
-  const { dispatch } = useContext(AppContext);
 
   const removeFromCart = async (pid, var_id) => {
 
     try {
       setIsLoading(true);
+      dispatch({ type: 'SET_LOADER', payload: true });
       const payload = { pid, vid: var_id};
       const response = await apiClient.post('/deleteCart', payload);
-
-      console.log(response.data);
 
       if (response.data.status === 1) {  
         dispatch({
@@ -30,9 +29,11 @@ export const useRemoveFromCart = () => {
       }
     } catch (error) {
       console.error('Error while removing from cart:', error);
-      return { success: false, error: error.message }; // Error status return kar raha hai
+      return { success: false, error: error.message }; 
     } finally {
       setIsLoading(false);
+      dispatch({ type: 'SET_LOADER', payload: false });
+
     }
   };
 

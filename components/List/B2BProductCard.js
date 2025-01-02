@@ -97,9 +97,6 @@ const handleDecrease = async (psid, qty, var_id) => {
                 <View style={{ width: "70%" }}>
                   <Text style={styles.productName}>{item.name}</Text>
                   <Text style={styles.productSizes}>{item.measurement} {item.unit}</Text>
-
-                  <Text style={styles.productSizes}>pid: {item.pid}</Text>
-                  <Text style={styles.productSizes}>var_id: {item.varient_id}</Text>
                 </View>
                 <Image source={{ uri: item.itemimage }} style={styles.productImage} />
               </View>
@@ -170,13 +167,8 @@ const handleDecrease = async (psid, qty, var_id) => {
 
                   return (
                     <View key={index} style={styles.packetRow}>
-                      {/* <Text style={styles.packetText}>
-                        {variant.pmeasurement} {variant.punit} - ₹{variant.pselling_price}
-                      </Text> */}
-
                       <Text style={styles.packetText}>
-                        pid: {item.pid} var_id :{variant.psid}
-                           
+                        {variant.pmeasurement} {variant.punit} - ₹{variant.pselling_price}
                       </Text>
 
                       {isInCart ? (

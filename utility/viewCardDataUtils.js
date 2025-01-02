@@ -9,6 +9,8 @@ export const useViewCartData = () => {
   const viewCartData = async () => {
     try {
       setIsLoading(true);
+      dispatch({ type: 'SET_LOADER', payload: true });
+
 
       const response = await apiClient.get('/viewCart');
       const cartProduct = response.data?.data?.cartProduct || {};
@@ -31,6 +33,7 @@ export const useViewCartData = () => {
       return { success: false, error: error.message };
     } finally {
       setIsLoading(false);
+      dispatch({ type: 'SET_LOADER', payload: false });
     }
   };
 

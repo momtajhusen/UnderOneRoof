@@ -97,7 +97,7 @@ const B2BHomeScreen = () => {
             <Text style={styles.headerTitle}>UnderOneRoof</Text>
           </View>
           <View style={{position:"absolute", bottom:rh(8)}}>
-             <SearchDesigne onPress={()=>navigation.navigate('B2BSearchScreen')} />
+             <SearchDesigne onPress={()=>navigation.navigate('SearchScreen')} />
           </View>
         </LinearGradient>
         <ScrollView

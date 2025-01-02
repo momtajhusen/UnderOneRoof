@@ -10,6 +10,9 @@ const VIEW_ADDRESS_DATA = 'VIEW_ADDRESS_DATA';
 
 const SELECT_ADDRESS_DATA = 'SELECT_ADDRESS_DATA';
 
+const SET_LOADER = 'SET_LOADER';
+
+
 
 
 
@@ -40,6 +43,11 @@ export default (state, action) => {
           reFresh: action.payload,
         };
 
+        case SET_LOADER:
+          return {
+              ...state,
+              isLoader: action.payload,
+          };      
 
         case VIEW_CART_DATA:
           return {

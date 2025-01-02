@@ -30,7 +30,6 @@ const options = [
   'Price ( low to high )',
   'Price ( High to low )',
   'Discounts',
-  'More Option',
 ];
 
 const ProductListing = ({ route }) => {

@@ -79,7 +79,7 @@ const CartScreen = ({ navigation }) => {
 
                 {/* Cart Items */}
                 {
-                    isViewCartLoading && isFirstLoad ? (
+                   state.isLoader && isViewCartLoading && isFirstLoad ? (
                         <View style={styles.loadingContainer}>
                             <ActivityIndicator size="large" color="#0000ff" />
                         </View>
@@ -129,7 +129,7 @@ const CartScreen = ({ navigation }) => {
                 <View style={styles.proceedDetails}>
                     <ProceedDetails
                         onPress={() => navigation.navigate('Checkout')}
-                        loading={isViewCartLoading}
+                        loading={state.isLoader}
                         data={state.viewCartData}
                         btnText="Proceed"
                     />
