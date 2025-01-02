@@ -52,11 +52,16 @@ const ProductDetail = ({ route, navigation }) => {
 
   const { width: contentWidth } = useWindowDimensions();
 
-  const [selectedVarientId, setSelectedVarientId] = useState(null);
+  const [selectedVarientId, setSelectedVarientId] = useState(
+    Array.isArray(item.varient) && item.varient.length > 0
+      ? item.varient[0].psid
+      : item.varient_id || null
+  );
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
 
   const [multiProductImage, setMultiProductImage] = useState([]);
   const [productDetails, setProductDetails] = useState([]);
+  const [productId, setProductId] = useState(null);
   const [relatedProduct, setRelatedProduct] = useState([]);
   const [ProductReview, setReview] = useState([]);
   const [ProductVarient, setProductVarient] = useState([]);
@@ -71,6 +76,7 @@ const ProductDetail = ({ route, navigation }) => {
    const [selectedVariantId, setSelectedVariantId] = useState(null);
 
     const addToCart = async () => {
+      alert();
       const result = await addFromCart(productDetails.pid, selectedVariantId);
     };
 
@@ -92,13 +98,12 @@ const ProductDetail = ({ route, navigation }) => {
 
         setMultiProductImage(multiImage);
         setProductDetails(product.data.productDetails[0]);
+        setProductId(product.data.productDetails[0].pid);
         setRelatedProduct(product.data.relatedProduct);
         setProductVarient(product.data.varient);
-        selectedVariantId(product.data.varient[0].psid);
+        selectedVariantId(product.data[0].psid);
         setCartQuantity(product.data.productDetails[0].added_to_cart);
         setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
-
-        alert();
 
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -450,19 +455,51 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={{color: "black", fontWeight: "bold"}}>Buy Now</Text>
           </TouchableOpacity>
 
-          {/* Add to Cart Button - Show only if cartQuantity is 0 */}
-          <TouchableOpacity
-              style={{
-                backgroundColor: "#FF3131",
-                paddingVertical: rh(1.5),
-                paddingHorizontal: rw(13),
-                borderRadius: 10,
-              }}
-              onPress={addToCart}
-              disabled={isCartAddLoading} // Disable button when loading
-            >
-                <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
-            </TouchableOpacity>
+          {state.viewCartData.cartProduct?.some(cartItem => cartItem.pid === productId && cartItem.var_id === selectedVariantId) ? (
+                    <View
+                    style={{
+                      backgroundColor: "#FF3131", 
+                      borderRadius: 10,
+                      flexDirection:"row",
+                      justifyContent:"space-between",
+                      alignItems:"center",
+                    }}
+                    disabled={isCartAddLoading}
+                  >
+                    <TouchableOpacity
+                      style={{
+                        paddingVertical:rh(1.5),
+                        paddingHorizontal:rw(7),
+                      }}
+                    >
+                       <Text style={{color:"white", fontWeight:"bold"}}>-</Text>  
+                    </TouchableOpacity>  
+                       <Text style={{color:"white", fontWeight:"bold"}}>14</Text>    
+                    <TouchableOpacity
+                      style={{
+                        paddingVertical:rh(1.5),
+                        paddingHorizontal:rw(7),
+                      }}
+                    >
+                       <Text style={{color:"white",fontWeight:"bold"}}>+</Text>  
+                    </TouchableOpacity>    
+                  </View>
+              ) : (
+                <TouchableOpacity
+                style={{
+                  backgroundColor: "#FF3131",
+                  paddingVertical: rh(1.5),
+                  paddingHorizontal: rw(13),
+                  borderRadius: 10,
+                }}
+                onPress={addToCart}
+                disabled={isCartAddLoading}
+              >
+                  <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
+              </TouchableOpacity>
+          )}
+
+
         </View>
       )}
 
