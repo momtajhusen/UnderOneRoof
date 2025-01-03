@@ -16,27 +16,20 @@ const SplashScreen = () => {
             try {
                 const token = await AsyncStorage.getItem('authToken');
                 const userId = await AsyncStorage.getItem('userId');
+                const userNumber = await AsyncStorage.getItem('userNumber');
                 const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
 
                 setTimeout(() => {
                     if (token) {
 
                         // if (ShoppingMode === 'wholesale') {
-                            navigation.replace('B2BBottomNavigator');
+                            navigation.replace('ShoppingMode', { mobile: userNumber, userId: userId });
                         // } else if (ShoppingMode === 'retail') {
                         //     navigation.replace('BottomNavigator');
                         // } else {
                         //     navigation.replace('ShoppingMode');
                         // }
 
-                        dispatch({
-                            type: 'SET_USER',
-                            payload: {
-                                userId: userId,
-                                userNumber: null,
-                                shoppingMode: ShoppingMode,
-                            },
-                        });
 
                     } else {
                         navigation.replace('SignupOrLogin');

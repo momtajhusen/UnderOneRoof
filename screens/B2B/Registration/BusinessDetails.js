@@ -23,81 +23,96 @@ const BusinessDetails = ({ navigation, route }) => {
   const [isGstRegistered, setIsGstRegistered] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  
   const [panNumber, setPanNumber] = useState('');
   const [firmName, setFirmName] = useState('');
   const [gstNumber, setGstNumber] = useState('');
   const [gstDoc, setGstDoc] = useState(null);
   const [panDoc, setPanDoc] = useState(null);
   const [fssai, setFssai] = useState('');
-
+  
   const [formErrors, setFormErrors] = useState({});
-
+  
   const handleFileSelection = (type, file) => {
+    const selectedFile = file.assets[0];
     if (type === 'pan') {
-      console.log(file.assets[0]);
-      setPanDoc(file.assets[0]); 
+      console.log(selectedFile);
+      setPanDoc(selectedFile);
     } else if (type === 'gst') {
-      setGstDoc(file.assets[0]);
+      setGstDoc(selectedFile);
     }
   };
-
+  
   const validateForm = () => {
     const errors = {};
-    if (!panNumber) errors.panNumber = 'PAN Number is required';
-    if (!firmName) errors.firmName = 'Firm Name is required';
-    if (!gstNumber) errors.gstNumber = 'GST Number is required';
-    if (!gstDoc) errors.gstDoc = 'GST document is required';
-    if (!panDoc) errors.panDoc = 'PAN document is required';
-    if (!fssai) errors.fssai = 'FSSAI Number is required if not GST registered';
-    if (!isGstRegistered) errors.isGstRegistered = 'You must check if you are GST registered or not'; // Add validation for checkbox
+    if (!panNumber) errors.panNumber = 'PAN Number is required.';
+    if (!firmName) errors.firmName = 'Firm Name is required.';
+    if (!isGstRegistered && !fssai) {
+      errors.fssai = 'FSSAI Number is required if not GST registered.';
+    }
+    if (isGstRegistered && (!gstNumber || !gstDoc)) {
+      errors.gstNumber = 'GST Number is required if GST registered.';
+      errors.gstDoc = 'GST document is required.';
+    }
+    if (!panDoc) errors.panDoc = 'PAN document is required.';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
+  
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
-    setIsLoading(true);
-
+  
     const formData = new FormData();
     formData.append('mobile', mobile);
     formData.append('pan_number', panNumber);
     formData.append('firm_name', firmName);
     formData.append('gst_number', gstNumber);
     formData.append('gst_registered', isGstRegistered ? '1' : '0');
-    formData.append('fssai', fssai); 
+    formData.append('fssai', fssai);
+  
     formData.append('pan_doc', {
       uri: panDoc.uri,
-      type: panDoc.type,
-      name: panDoc.name,
+      type: panDoc.type || 'application/octet-stream',
+      name: panDoc.name || 'pan_doc.jpg',
     });
     formData.append('gst_doc', {
-      uri: gstDoc.uri,
-      type: gstDoc.type,
-      name: gstDoc.name,
+      uri: gstDoc?.uri,
+      type: gstDoc?.type || 'application/octet-stream',
+      name: gstDoc?.name || 'gst_doc.jpg',
     });
- 
+  
+    console.log('FormData:', formData);
+
+    // return false;
+  
+    // setIsLoading(true);
+  
     try {
       const response = await apiClient.post('/registerBusiness', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-       console.log(response);
-      if (response.data.success) {
+ 
+      if (response.data.status == 1) {
         setIsModalVisible(true);
       } else {
         alert('Registration failed. Please try again.');
       }
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        console.log('Response Error:', error.response);
+      } else if (error.request) {
+        console.log('Request Error:', error.request);
+      } else {
+        console.log('General Error:', error.message);
+      }
       alert('Error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   const handleModalClose = () => {
     setIsModalVisible(false);
   };
@@ -215,6 +230,9 @@ const BusinessDetails = ({ navigation, route }) => {
   );
 };
 
+export default BusinessDetails;
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -298,4 +316,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusinessDetails;

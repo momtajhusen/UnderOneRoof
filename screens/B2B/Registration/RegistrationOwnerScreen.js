@@ -26,7 +26,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [ownerMobile, setOwnerMobile] = useState('');
   const [selectedBusinessType, setSelectedBusinessType] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
 
 

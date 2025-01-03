@@ -1,6 +1,6 @@
 //import liraries
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, StatusBar, ScrollView, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Image, TouchableOpacity,  BackHandler} from 'react-native';
 import { rw, rh, rf } from '../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import UserDetails from '../../B2C/Cart&Checkout/CartComponents/userDetails';
@@ -8,15 +8,35 @@ import PriceDetails from '../../B2C/Cart&Checkout/CartComponents/PriceDetails';
 import { useNavigation } from '@react-navigation/native';
 import OrderItems from '../../../components/List/OrderItems';
 import { useFocusEffect } from "@react-navigation/native";
+import { AppContext } from '../../../context/AppContext';
+import * as Animatable from 'react-native-animatable';
+
 
 // create a component
-const B2BOrderPlaced = () => {
+const B2BOrderPlaced = ({route}) => {
+
+  const { data } = route.params;
+  const { state } = useContext(AppContext);
+  const navigation = useNavigation();
+  
 
    useFocusEffect(() => {
       StatusBar.setBackgroundColor("green");
     });
 
-  const navigation = useNavigation();
+ // Handle back button press
+ const handleBackPress = () => {
+  navigation.navigate("Orders"); 
+  return true; 
+};
+
+// Add event listener on mount, remove on unmount
+// useEffect(() => {
+//   const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+//   return () => {
+//     backHandler.remove();  
+//   };
+// }, []);
 
     return (
         <View style={styles.container}>
@@ -29,7 +49,12 @@ const B2BOrderPlaced = () => {
                    <MaterialIcons name="arrow-back" size={rf(3)} color="white" />
                  </TouchableOpacity>
                  <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
-                    <Image source={require('../../../assets/Frame2147224831.png')} style={{width:rw(40), height:rw(40)}} />
+                    <Animatable.Image 
+                      animation="zoomIn"
+                      delay={100}
+                      source={require('../../../assets/Frame2147224831.png')} 
+                      style={{width:rw(40), height:rw(40)}} 
+                    />
                     <View style={{flexDirection:"row", gap:rw(2), alignItems:"center"}}>
                        <Text style={{fontSize:rf(4), fontWeight:"bold", color:"#28A745"}}>Order Confirmed !</Text>
                     </View>
@@ -39,14 +64,15 @@ const B2BOrderPlaced = () => {
                  </View>
              </View>
              <View style={styles.detailsContainer}>
-                  <View style={{flexDirection:"row", marginLeft:rw(2.5)}}>
+                  <View style={{flexDirection:"row", alignItems:"center", marginLeft:rw(2.5)}}>
                       <Text style={{fontWeight:"bold", fontSize:rf(2)}}>Order ID : </Text>
-                      <Text style={{fontWeight:"normal"}}>#8912937981230</Text>
+                      <Text style={{fontWeight:"normal"}}>#{data.oid}</Text>
                   </View>
 
-                  <View style={{marginVertical:rh(1)}}>
-                    <UserDetails type="change" />
+                  <View style={{ marginVertical: rh(1) }}>
+                     <UserDetails userData={state.selectAddressData} />
                   </View>
+
 
                   <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
                      <Image source={require('../../../assets/FastTruckicon.png')} style={{width:rw(8), height:rh(3)}} />

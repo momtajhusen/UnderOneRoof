@@ -52,6 +52,7 @@ const VerifyOtp = ({ navigation, route }) => {
 
         await AsyncStorage.setItem('authToken', token);
         await AsyncStorage.setItem('userId', String(userid));
+        await AsyncStorage.setItem('userNumber', String(mobile));
      
   
         if (status === 1 && msg === "OTP Verify") {

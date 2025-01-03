@@ -95,7 +95,6 @@ const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
             <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹{data.saving}</Text> in this order</Text>
         </View>
     )}
-
     </View>
     );
 };

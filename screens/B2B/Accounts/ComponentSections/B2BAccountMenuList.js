@@ -28,7 +28,7 @@ const B2BAccountMenuList = () => {
     <View style={styles.container}>
       <Text style={styles.headerText}>Other Information</Text>
       <View style={styles.menuList}>
-      <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/bag-2.png')} onPress={() => navigation.navigate('B2BOrders')} text="Orders" />
+      <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/bag-2.png')} onPress={() => navigation.navigate('Orders')} text="Orders" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/user.png')} onPress={() => navigation.navigate('B2BMyProfile')} text="Your Profile" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/location.png')} onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/sms-search.png')} onPress={() => navigation.navigate('B2BRequestProductsScreen')} text="Request Product" />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 import { rw, rh, rf } from '../../../Service/responsive';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -7,11 +7,14 @@ import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from "@react-navigation/native";
 import apiClient from '../../../Service/apiClient';  
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { AppContext } from '../../../context/AppContext';
+import B2BBottomNavigator from '../../../navigation/B2BBottomNavigation';
 
 const ShoppingMode = ({ navigation, route }) => {
+  const { state, dispatch } = useContext(AppContext);
+
   const { mobile } = route.params;
-  const [loadingType, setLoadingType] = useState(null); // State to manage loading
+  const [loadingType, setLoadingType] = useState(null);
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor('#f3f3f3');  
@@ -21,20 +24,28 @@ const ShoppingMode = ({ navigation, route }) => {
     setLoadingType(type); // Set the loading state for the selected type
     try {
       const response = await apiClient.post('/selectFlow', { mobile, type });
-      if (response.data.status === 1) {
+      
         if (type === 'wholesale') {
-          await AsyncStorage.setItem('ShoppingMode',  'wholesale');
-          // navigation.navigate('RegistrationOwnerScreen', {mobile: mobile});
-
-          navigation.navigate('B2BBottomNavigator', {mobile: mobile});
-
+            if (response.data.status === 1) {
+              await AsyncStorage.setItem('ShoppingMode',  'wholesale');
+              navigation.navigate('B2BBottomNavigator');
+            }
+            if (response.data.status === 0) {
+              await AsyncStorage.setItem('ShoppingMode',  'wholesale');
+              navigation.navigate('RegistrationOwnerScreen', {mobile: mobile});
+            }
         } else if (type === 'retail') {
           await AsyncStorage.setItem('ShoppingMode',  'retail');
           navigation.navigate('BottomNavigator');
         }
-      } else {
-        alert(response.data.msg || 'Something went wrong!');
-      }
+
+        dispatch({
+          type: 'SET_USER',
+          payload: {
+              shoppingMode: type,
+          },
+      });
+      
     } catch (error) {
       console.error(error);
       alert('Failed to select shopping mode. Please try again.');

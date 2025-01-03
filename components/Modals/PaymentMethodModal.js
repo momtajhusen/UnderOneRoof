@@ -56,7 +56,7 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
 
                     {/* Pay Online Option */}
  
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={styles.optionContainer}
                             onPress={() => handleOptionSelect('PayOnline')}
                         >
@@ -71,7 +71,7 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
                             <View style={styles.optionIcons}>
                                 <MaterialCommunityIcons name="credit-card" size={24} color="#000" />
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         {/* Pay on Delivery Option */}
                         <TouchableOpacity

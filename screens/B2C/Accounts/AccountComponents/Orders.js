@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import Header from '../../../../components/header';
 import OrderCard from '../../../../components/List/OrderCard';
@@ -77,6 +77,9 @@ const Orders = ({ navigation }) => {
                     Recent Orders
                 </Text>
 
+                <ScrollView>
+
+
                 {isLoading ? (
                     <View style={{justifyContent:"center", height:rh(80)}}>
                       <ActivityIndicator size="large" color="#0000ff" />
@@ -96,6 +99,8 @@ const Orders = ({ navigation }) => {
                         />
                     ))
                 )}
+                </ScrollView>
+
             </View>
 
             {/* Sort By Modal */}
