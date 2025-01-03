@@ -1,81 +1,105 @@
 //import liraries
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import Header from '../../../../components/header';
 import OrderCard from '../../../../components/List/OrderCard';
 import SearchInput from '../../../../components/Search/SearchInput';
 import SortbyModal from '../../../../components/Modals/SortbyModal';
-import SortByBtn  from '../../../../components/Buttons/SortByBtn';
-
+import SortByBtn from '../../../../components/Buttons/SortByBtn';
+import apiClient from '../../../../Service/apiClient';
 
 // create a component
-const Orders = ({navigation}) => {
+const Orders = ({ navigation }) => {
+    const [orders, setOrders] = useState([]); // Orders state
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
 
-    const orders = [
-        {
-          status: 'Delivered',
-          dateTime: '01 June, 2024 | 12:00 AM',
-          totalAmount: 7485,
-          products: ['https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'],
-          ctaText: 'Get It Again',
-          onCTAClick: () => alert('Reordering...'),
-        },
-        {
-          status: 'Canceled',
-          dateTime: '01 June, 2024 | 12:00 AM',
-          totalAmount: 7485,
-          products: ['https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'],
-          ctaText: 'Get It Again',
-          onCTAClick: () => alert('Reordering canceled item...'),
-        },
-        {
-          status: 'On The Way',
-          dateTime: '01 June, 2024 | 12:00 AM',
-          totalAmount: 7485,
-          products: ['https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'],
-          ctaText: 'Cancel',
-          onCTAClick: () => alert('Cancelling order...'),
-        },
+    // API se data fetch karne ka function
+    const fetchOrders = async () => {
+        try {
+            const response = await apiClient.get('/orderList');
+
+            console.log(response.data);
+            if (response.data.status === 1) {
+                const fetchedOrders = response.data.data.order.map(order => ({
+                    status: order.order_status,
+                    dateTime: `${order.order_date} | ${order.order_time}`,
+                    totalAmount: order.grand_total,
+                    products: order.image,
+                    ctaText: order.order_status === 'Delivered' ? 'Get It Again' : 'Cancel',
+                    onCTAClick: () => {
+                        alert(order.order_status === 'Delivered' 
+                            ? 'Reordering...' 
+                            : 'Cancelling order...');
+                    },
+                }));
+                setOrders(fetchedOrders);
+            } else {
+                alert('Failed to fetch orders.');
+            }
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            alert('Something went wrong while fetching orders.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchOrders();
+    }, []);
+
+    // Toggle modal visibility
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+    const options = [
+        'All',
+        'Last 7 Days',
+        'Last 30 Days',
+        'Last 1 Year',
+        'Custom Date',
     ];
-
-      // Sort By Options 
-        const options = [
-            'All',
-            'Last 7 Days',
-            'Last 30 Days',
-            'Last 1 Year',
-            'Custom Date',
-        ];
-
-        // Function to toggle modal visibility
-        const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
-        const toggleModal = () => {
-            setModalVisible(!isModalVisible);
-        };
 
     return (
         <View>
-             <Header title="Orders" />
+            <Header title="Orders" />
 
-             <View style={styles.container}>
-                <View style={{ flexDirection: "row", gap:3, width:rw(70)}}>
+            <View style={styles.container}>
+                <View style={{ flexDirection: 'row', gap: 3, width: rw(70) }}>
                     <SearchInput placeholder="Search here.." autoFocus={false} />
                     <SortByBtn onPress={toggleModal} />
                 </View>
 
-                <Text style={{marginTop:rh(1.5), marginBottom:rh(0.5),  fontWeight:"bold", fontSize:rf(2)}}>Recent Orders</Text>
-            
-                {orders.map((order, index) => (
-                    <OrderCard onPress={()=>navigation.navigate('OrderDetails')} key={index} {...order} />
-                ))}
+                <Text style={{ marginTop: rh(1.5), marginBottom: rh(0.5), fontWeight: 'bold', fontSize: rf(2) }}>
+                    Recent Orders
+                </Text>
+
+                {isLoading ? (
+                    <View style={{justifyContent:"center", height:rh(80)}}>
+                      <ActivityIndicator size="large" color="#0000ff" />
+                    </View>
+                ) : orders.length === 0 ? (
+                    <View style={{justifyContent:"center", height:rh(80)}}>
+                        <Text style={{textAlign: 'center', marginTop: rh(2), fontSize: rf(2) }}>
+                            No Orders Found
+                        </Text>
+                    </View>
+                ) : (
+                    orders.map((order, index) => (
+                        <OrderCard
+                            onPress={() => navigation.navigate('OrderDetails')}
+                            key={index}
+                            {...order}
+                        />
+                    ))
+                )}
             </View>
 
-
-           {/* Sort By Modal Method Modal */}
-           <SortbyModal options={options} isVisible={isModalVisible} toggleModal={toggleModal} />
-
+            {/* Sort By Modal */}
+            <SortbyModal options={options} isVisible={isModalVisible} toggleModal={toggleModal} />
         </View>
     );
 };

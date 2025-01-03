@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, RefreshControl, ActivityIndicator } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import { useFocusEffect } from '@react-navigation/native';
 import UserDetails from './CartComponents/userDetails';
 import CartItemsList from '../../../components/List/CartItemsList';
 import PriceDetails from './CartComponents/PriceDetails';
@@ -32,9 +33,11 @@ const CartScreen = ({ navigation }) => {
         }
     };
 
-    useEffect(() => {
-        fetchCartDetails();
-    }, [state.reFresh]);
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchCartDetails();
+        }, [state.reFresh])
+    );
 
     // onRefresh function for pull-to-refresh
     const onRefresh = async () => {

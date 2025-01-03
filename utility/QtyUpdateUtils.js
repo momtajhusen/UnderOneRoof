@@ -14,6 +14,7 @@ export const useQtyUpdate = () => {
 
   const qtyUpdate = async (pid, qty, var_id) => {
     try {
+      console.log('Request /qtyupdate');
       setIsLoading(true);
       dispatch({ type: 'SET_LOADER', payload: true });
       const payload = { pid, qty, var_id};
@@ -22,13 +23,6 @@ export const useQtyUpdate = () => {
       const result = response.data;
 
       if (result.status === 1) {
-        dispatch({
-          type: 'GLOBAL_REFRESH',
-          payload: {
-            reFresh: Math.ceil(Math.random() * 100),
-          },
-        });
-
         const result = await viewCartData();
         if (isViewCartLoading) {
           setTimeout(()=>{
@@ -45,6 +39,8 @@ export const useQtyUpdate = () => {
     } catch (error) {
       console.error('Error while updating quantity:', error);
       return { success: false, error: error.message }; 
+    } finally {
+      setIsLoading(false);
     }
   };   
 

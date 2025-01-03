@@ -9,7 +9,8 @@ export const useViewAddressData = () => {
   const viewAddressData = async () => {
     try {
       setIsLoading(true);
-
+      console.log('Request /viewaddress');
+      
       const response = await apiClient.get('/viewaddress');
       const addressData = response.data;
       console.log("viewaddressUtils");

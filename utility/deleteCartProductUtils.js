@@ -13,6 +13,7 @@ export const useRemoveFromCart = () => {
   const removeFromCart = async (pid, var_id) => {
 
     try {
+      console.log('Request /deleteCart');
       setIsLoading(true);
       dispatch({ type: 'SET_LOADER', payload: true });
       const payload = { pid, vid: var_id};

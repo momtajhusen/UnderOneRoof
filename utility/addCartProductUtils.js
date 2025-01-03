@@ -15,6 +15,7 @@ export const useAddFromCart = () => {
   const addFromCart = async (pid, var_id) => {
     try {
       setIsLoading(true);
+      console.log('Request /addCart');
 
       const payload = {
         pid: pid,
@@ -26,12 +27,6 @@ export const useAddFromCart = () => {
       const product = response.data;
 
       if (product.status === 1) {
-        dispatch({
-          type: 'GLOBAL_REFRESH',
-          payload: {
-            reFresh: Math.ceil(Math.random() * 100),
-          },
-        });
 
         const result = await viewCartData();
         if (isViewCartLoading) {

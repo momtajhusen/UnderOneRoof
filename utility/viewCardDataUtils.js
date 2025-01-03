@@ -11,6 +11,7 @@ export const useViewCartData = () => {
       setIsLoading(true);
       dispatch({ type: 'SET_LOADER', payload: true });
 
+      console.log('Request /viewCart');
 
       const response = await apiClient.get('/viewCart');
       const cartProduct = response.data?.data?.cartProduct || {};
@@ -42,7 +43,7 @@ export const useViewCartData = () => {
       await viewCartData();
     };
     fetchData();
-  }, [state.reFresh]);  
+  }, []);  
 
   return {
     isViewCartLoading,

@@ -1,8 +1,9 @@
 //import libraries
 import React,{useEffect, useState} from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
+import apiClient from '../../../../Service/apiClient';
 
 
 // Create a component
@@ -10,64 +11,95 @@ const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
 
   const navigation = useNavigation();
 
-            return (
-            <View style={[styles.container, {style}]}>
-            {promoCode && (
-                <View style={styles.promoCodeContainer}>
-                    <TextInput 
-                        placeholder="Enter Coupon code"
-                        style={{ paddingHorizontal: rw(2.5), width: rw(54) }}
-                    />
+  const [couponCode, setCouponCode] = useState('');
+  const [discount, setDiscount] = useState(0);
+  const [grandTotal, setGrandTotal] = useState(data.grand_total);
+  const [saving, setSaving] = useState( null);
 
-                    <TouchableOpacity 
-                        style={{
-                            backgroundColor: "#FF3131", 
-                            borderRadius: 10, 
-                            width: rw(30), 
-                            justifyContent: "center"
-                        }}
-                        onPress={()=>navigation.navigate('RatingAndReviews')}
-                    >
-                        <Text style={{ textAlign: "center", color: "white" }}>Apply Code</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
-            {/* Header */}
-            <Text style={styles.header}>Price Details</Text>
+  const applyCoupon = async () => {
+    try {
+      const response = await apiClient.get(`/applyCoupon?coupon_code=${couponCode}&amount=${data.grand_total}`);
+ 
+      if (response.data.status === 1) {
+        const discountAmount =  response.data.data.discount;
+        const newSaving = saving + discountAmount;
+        const newGrandTotal = grandTotal - discountAmount;
+ 
+        setSaving(newSaving);
+        setGrandTotal(newGrandTotal);
 
-            {/* Price Breakdown */}
-            <View style={styles.textListSection}>
-                <Text style={styles.label}>Price ({data.totalitems} items)</Text>
-                <Text style={styles.value}>₹{data.total} </Text>
-            </View>
-            <View style={styles.textListSection}>
-                <Text style={styles.label}>Discount</Text>
-                <Text style={[styles.value, styles.discount]}>-₹{data.saving}</Text>
-            </View>
-            <View style={styles.textListSection}>
-                <Text style={styles.label}>Shipping Fee</Text>
-                <Text style={[styles.value, styles.value]}>₹{data.shipping_charges}</Text>
-            </View>
-            <View style={styles.textListSection}>
-                <Text style={styles.label}>Delivery Fee</Text>
-                <Text style={[styles.value, styles.value]}>₹ 0</Text>
-            </View>
+        // Alert.alert('Success', response.data.data.discount+"% Discount" );
+      } else {
+        Alert.alert('Wrong Coupon Code', response.title);
+        setGrandTotal(data.grand_total);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to apply coupon. Please try again.');
+      console.error(error);
+    }
+  };
 
-            {/* Total Payment */}
-            <View style={[styles.textListSection, styles.totalSection]}>
-                <Text style={styles.totalLabel}>Total Payment</Text>
-                <Text style={styles.totalValue}>₹{data.grand_total}</Text>
-            </View>
+    return (
+    <View style={[styles.container, {style}]}>
+    {promoCode && (
+        <View style={styles.promoCodeContainer}>
+            <TextInput 
+                placeholder="Enter Coupon code"
+                style={{ paddingHorizontal: rw(2.5), width: rw(54) }}
+                value={couponCode}
+                onChangeText={setCouponCode}
+            />
 
-            {saveMessage && (
-                <View style={styles.savedMessageContainer}>
-                  <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹{data.saving}</Text> in this order</Text>
-                </View>
-            )}
-
+            <TouchableOpacity 
+                style={{
+                    backgroundColor: "#FF3131", 
+                    borderRadius: 10, 
+                    width: rw(30), 
+                    justifyContent: "center"
+                }}
+                onPress={applyCoupon}
+            >
+                <Text style={{ textAlign: "center", color: "white" }}>Apply Code</Text>
+            </TouchableOpacity>
         </View>
+    )}
+    {/* Header */}
+    <Text style={styles.header}>Price Details</Text>
+
+    {/* Price Breakdown */}
+    <View style={styles.textListSection}>
+        <Text style={styles.label}>Price ({data.totalitems} items)</Text>
+        <Text style={styles.value}>₹{data.total} </Text>
+    </View>
+    <View style={styles.textListSection}>
+        <Text style={styles.label}>Discount</Text>
+        <Text style={[styles.value, styles.discount]}>-₹{data.saving}</Text>
+    </View>
+    <View style={styles.textListSection}>
+        <Text style={styles.label}>Shipping Fee</Text>
+        <Text style={[styles.value, styles.value]}>₹{data.shipping_charges}</Text>
+    </View>
+    <View style={styles.textListSection}>
+        <Text style={styles.label}>Delivery Fee</Text>
+        <Text style={[styles.value, styles.value]}>₹ 0</Text>
+    </View>
+
+    {/* Total Payment */}
+    <View style={[styles.textListSection, styles.totalSection]}>
+        <Text style={styles.totalLabel}>Total Payment</Text>
+        <Text style={styles.totalValue}>₹{grandTotal}</Text>
+    </View>
+
+    {saveMessage && (
+        <View style={styles.savedMessageContainer}>
+            <Text style={styles.savedMessageText}>You Saved <Text style={{fontWeight:"bold"}}>₹{data.saving}</Text> in this order</Text>
+        </View>
+    )}
+
+    </View>
     );
 };
+
 
 // Define your styles
 const styles = StyleSheet.create({

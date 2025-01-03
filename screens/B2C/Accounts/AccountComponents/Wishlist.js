@@ -67,5 +67,6 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: rw(2),
         paddingLeft:rw(2.5),
+        paddingBottom:rh(12)
     },
 });
