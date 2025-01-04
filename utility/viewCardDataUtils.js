@@ -12,7 +12,6 @@ export const useViewCartData = () => {
       dispatch({ type: 'SET_LOADER', payload: true });
 
       console.log('Request /viewCart');
-
       const response = await apiClient.get('/viewCart');
       const cartProduct = response.data?.data?.cartProduct || {};
       const cartData = response.data?.data;

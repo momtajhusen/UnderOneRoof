@@ -20,6 +20,7 @@ export const useRemoveFromCart = () => {
       const response = await apiClient.post('/deleteCart', payload);
 
       if (response.data.status === 1) {  
+        
         dispatch({
           type: 'GLOBAL_REFRESH',
           payload: {
@@ -30,6 +31,7 @@ export const useRemoveFromCart = () => {
  
         const result = await viewCartData();
         if (isViewCartLoading) {
+          alert();
           setTimeout(()=>{
             setIsLoading(false);
           },300);

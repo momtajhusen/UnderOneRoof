@@ -6,6 +6,7 @@ import { AppContext } from '../../context/AppContext';
 
 import { useAddFromCart } from '../../utility/addCartProductUtils';
 import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
+import { useRemoveFromCart } from '../../utility/deleteCartProductUtils';
 
 const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) => {
   const navigation = useNavigation();
@@ -13,14 +14,12 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
 
   const { addFromCart } = useAddFromCart();
   const { qtyUpdate, isQtyUpdateLoading } = useQtyUpdate();
+   const {isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
 
   // State to track loading for each variant (using product id and variant id as keys)
   const [loadingVariants, setLoadingVariants] = useState({});
 
   const addToCart = async (psid, var_id, moq) => {
-
-    // alert(moq);
-    // return false;
 
     // Set loading state for this variant
     setLoadingVariants((prevState) => ({
@@ -37,7 +36,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
     }));
   };
 
-  const handleIncrease = async (psid, qty, var_id) => {
+  const handleIncrease = async (psid, qty, var_id, moq) => {
     const newQty = qty + 1;
     // Update quantity and set loading state
     setLoadingVariants((prevState) => ({
@@ -45,8 +44,8 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
       [`${psid}-${var_id}-qty`]: true,
     }));
 
-    const result = await qtyUpdate(psid, newQty, var_id);
-
+    const result = await qtyUpdate(psid, newQty, var_id, moq);
+    
     // Reset loading state after quantity update
     setLoadingVariants((prevState) => ({
       ...prevState,
@@ -59,11 +58,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
     const minQuantity = moq ?? 1;
   
     if (qty <= minQuantity) {
-      Alert.alert(
-        "Minimum Quantity",
-        `You cannot decrease the quantity below the minimum of ${minQuantity}.`,
-        [{ text: "OK" }]
-      );
+          removeFromCart(psid, var_id);
       return false;
     }
   
@@ -95,7 +90,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <View
-            style={[styles.cardContainer, styleCardContainer, { marginRight: 10 }]} // Added margin between items
+            style={[styles.cardContainer, styleCardContainer, { marginRight: 10 }]}  
           >
             <TouchableOpacity
               onPress={() =>
@@ -124,28 +119,47 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                 {state.viewCartData.cartProduct?.some(cartItem => cartItem.pid === item.pid && cartItem.var_id === item.varient_id) ? (
                   // Show quantity controls if the product is in the cart
                   <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: "#FF3131", borderRadius: 5 }}>
+                    {/* Decrease Button */}
                     <TouchableOpacity
                       style={{ paddingHorizontal: rw(3), paddingVertical: rh(1) }}
-                      onPress={() => handleDecrease(item.pid, state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0, item.varient_id, item.varient[0].moq)}
+                      onPress={() =>
+                        handleDecrease(
+                          item.pid,
+                          state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0,
+                          item.varient_id,
+                          item.varient[0].moq
+                        )
+                      }
+                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]} // Disable during loading
                     >
-                      {loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
-                        <ActivityIndicator size="small" color="#fff" />
-                      ) : (
                         <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
-                      )}
                     </TouchableOpacity>
-                    <Text style={{ color: "white", fontWeight: "bold", marginHorizontal: rw(2) }}>
-                      {state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0}
-                    </Text>
-                    <TouchableOpacity
-                      style={{ paddingHorizontal: rw(3), paddingVertical: rh(1) }}
-                      onPress={() => handleIncrease(item.pid, state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0, item.varient_id)}
-                    >
+
+                    {/* Quantity or Loader */}
+                    <View style={{ justifyContent: "center", alignItems: "center", marginHorizontal: rw(2) }}>
                       {loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
                         <ActivityIndicator size="small" color="#fff" />
                       ) : (
-                        <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
+                        <Text style={{ color: "white", fontWeight: "bold" }}>
+                          {state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0}
+                        </Text>
                       )}
+                    </View>
+
+                    {/* Increase Button */}
+                    <TouchableOpacity
+                      style={{ paddingHorizontal: rw(3), paddingVertical: rh(1) }}
+                      onPress={() =>
+                        handleIncrease(
+                          item.pid,
+                          state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0,
+                          item.varient_id,
+                          item.varient[0].moq
+                        )
+                      }
+                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]} // Disable during loading
+                    >
+                      <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
                     </TouchableOpacity>
                   </View>
                 ) : (
@@ -153,6 +167,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                   <TouchableOpacity
                     style={styles.cartButton}
                     onPress={() => addToCart(item.pid, item.varient_id, item.varient[0].moq)}
+                    disabled={loadingVariants[`${item.pid}-${item.varient_id}`]} // Disable during loading
                   >
                     {loadingVariants[`${item.pid}-${item.varient_id}`] ? (
                       <ActivityIndicator size="small" color="#FF3131" />
@@ -161,6 +176,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                     )}
                   </TouchableOpacity>
                 )}
+
               </View>
 
 
@@ -185,40 +201,64 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                       </Text>
 
                       {isInCart ? (
-                        <View style={{ justifyContent: "space-between", borderRadius: 5, flexDirection: "row", backgroundColor: "#FF3131", width: "30%", paddingVertical: "2%" }}>
-                          <TouchableOpacity
-                            style={{ width: "30%", justifyContent: "center", alignItems: "center" }}
-                            onPress={() => handleDecrease(item.pid, totalQtyInCart, variant.psid, variant.moq)}
+                          <View
+                            style={{
+                              justifyContent: "space-between",
+                              borderRadius: 5,
+                              flexDirection: "row",
+                              backgroundColor: "#FF3131",
+                              width: "30%",
+                              paddingVertical: "2%",
+                            }}
                           >
-                            {loadingVariants[`${item.pid}-${variant.psid}-qty`] ? (
-                              <ActivityIndicator size="small" color="#fff" />
+                            {/* Decrease Button */}
+                            <TouchableOpacity
+                              style={{
+                                width: "30%",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                              onPress={() => handleDecrease(item.pid, totalQtyInCart, variant.psid, variant.moq)}
+                              disabled={loadingVariants[`${item.pid}-${variant.psid}-qty`]} // Disable during loading
+                            >
+                                <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
+                            </TouchableOpacity>
+
+                            {/* Quantity or Loader */}
+                            <View style={{ justifyContent: "center", alignItems: "center", width: "30%" }}>
+                              {loadingVariants[`${item.pid}-${variant.psid}-qty`] ? (
+                                <ActivityIndicator size="small" color="#fff" />
+                              ) : (
+                                <Text style={{ color: "white", fontWeight: "bold" }}>{totalQtyInCart}</Text>
+                              )}
+                            </View>
+
+                            {/* Increase Button */}
+                            <TouchableOpacity
+                              style={{
+                                width: "30%",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                              onPress={() => handleIncrease(item.pid, totalQtyInCart, variant.psid, variant.moq)}
+                              disabled={loadingVariants[`${item.pid}-${variant.psid}-qty`]} // Disable during loading
+                            >
+                              <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
+                            </TouchableOpacity>
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => addToCart(item.pid, variant.psid, variant.moq)}
+                            disabled={loadingVariants[`${item.pid}-${variant.psid}`]} // Disable during loading
+                          >
+                            {loadingVariants[`${item.pid}-${variant.psid}`] ? (
+                              <ActivityIndicator size="small" color="#0000ff" />
                             ) : (
-                              <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
+                              <Text style={styles.packetAddText}>Add</Text>
                             )}
                           </TouchableOpacity>
-                          <Text style={{ color: "white", fontWeight: "bold", paddingBottom: "3%" }}>
-                            {totalQtyInCart}
-                          </Text>
-                          <TouchableOpacity
-                            style={{ width: "30%", justifyContent: "center", alignItems: "center" }}
-                            onPress={() => handleIncrease(item.pid, totalQtyInCart, variant.psid)}
-                          >
-                            {loadingVariants[`${item.pid}-${variant.psid}-qty`] ? (
-                              <ActivityIndicator size="small" color="#fff" />
-                            ) : (
-                              <Text style={{ color: "white" }}>+</Text>
-                            )}
-                          </TouchableOpacity>
-                        </View>
-                      ) : (
-                        <TouchableOpacity onPress={() => addToCart(item.pid, variant.psid, variant.moq)}>
-                          {loadingVariants[`${item.pid}-${variant.psid}`] ? (
-                            <ActivityIndicator size="small" color="#0000ff" />
-                          ) : (
-                            <Text style={styles.packetAddText}>Add</Text>
-                          )}
-                        </TouchableOpacity>
                       )}
+
                     </View>
                   );
                 })}
