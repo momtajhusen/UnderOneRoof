@@ -7,13 +7,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 
 // create a component
-const OrderSummary = () => {
+const OrderSummary = ({ OrderData }) => {
     return (
         <View style={styles.container}>
             <View style={{gap:rh(0.5)}}>
                 <View>
                     <Text style={styles.title}>Order Summary</Text>
-                    <Text style={{fontSize:rf(1.5), color:"#9D9D9D"}}>01 June, 2024 | 12:00 AM</Text>
+                    <Text style={{fontSize:rf(1.5), color:"#9D9D9D"}}>{OrderData.order_date} |  {OrderData.order_time}</Text>
                 </View>
                 <TouchableOpacity style={{flexDirection:"row", padding:rw(1.5), borderRadius:5, gap:rw(2), alignItems:"center", borderWidth:1, borderColor:"#DFDFDF", width:rw(40) }}>
                 <Text style={{fontWeight:"600"}}>Download Invoice</Text>

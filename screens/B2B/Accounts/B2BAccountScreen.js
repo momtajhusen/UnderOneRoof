@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, BackHandler  } from 'react-native';
+
+
 import { rw, rh, rf } from '../../../Service/responsive';
 import Header from '../../../components/header';
 import apiClient from '../../../Service/apiClient';

@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
         marginBottom: rh(1.8),
         borderWidth:2,
         borderColor:"white",
+        paddingHorizontal:0,
     },
     imageContainer: {
         justifyContent: 'center',
@@ -53,10 +54,10 @@ const styles = StyleSheet.create({
         height: rw(17),
     },
     textContainer: {
-        paddingHorizontal: rw(1),
         alignItems: 'center',
         justifyContent:"center",
-        height:rh(4.8),
+        height:rh(4.6),
+        width:"100%",
     },
     text: {
         fontWeight: '600',

@@ -36,7 +36,7 @@ const CartScreen = ({ navigation }) => {
     useFocusEffect(
         React.useCallback(() => {
             fetchCartDetails();
-        }, [state.reFresh])
+        }, [])
     );
 
     // onRefresh function for pull-to-refresh

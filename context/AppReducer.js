@@ -14,6 +14,9 @@ const SET_LOADER = 'SET_LOADER';
 
 const SET_PRODUCT_FLITER = 'SET_PRODUCT_FLITER';
 
+const SET_ORDER_NAVIGATION = 'SET_ORDER_NAVIGATION';
+
+
 
 
 
@@ -77,6 +80,15 @@ export default (state, action) => {
                 ...state,
                 selectAddressData: [action.payload.selectAddressData],  
               };
+
+              case SET_ORDER_NAVIGATION:
+                return {
+                  ...state,
+                  orderNavigation: [action.payload.orderNavigation],  
+                };
+
+
+              
             
 
     default:

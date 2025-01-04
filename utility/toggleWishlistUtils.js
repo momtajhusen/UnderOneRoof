@@ -24,13 +24,6 @@ export const useToggleWishlist = () => {
       const response = await apiClient.post(endpoint, payload);
 
       if (response.data.status === 1) {
-        dispatch({
-          type: 'GLOBAL_REFRESH',
-          payload: {
-            reFresh: Math.ceil(Math.random() * 100),
-          },
-        });
-
         return { success: true, isInWishlist: !isInWishlist }; 
       } else {
         console.error('Failed to update wishlist:', response.data.title);

@@ -1,6 +1,6 @@
-//import liraries
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+// Import statements remain unchanged
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, BackHandler, Alert } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import Header from '../../../../components/header';
 import OrderCard from '../../../../components/List/OrderCard';
@@ -8,33 +8,22 @@ import SearchInput from '../../../../components/Search/SearchInput';
 import SortbyModal from '../../../../components/Modals/SortbyModal';
 import SortByBtn from '../../../../components/Buttons/SortByBtn';
 import apiClient from '../../../../Service/apiClient';
+import { AppContext } from '../../../../context/AppContext';
 
-// create a component
 const Orders = ({ navigation }) => {
-    const [orders, setOrders] = useState([]); // Orders state
-    const [isLoading, setIsLoading] = useState(true); // Loading state
-    const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
+    const [orders, setOrders] = useState([]);  
+    const [isLoading, setIsLoading] = useState(true); 
+    const [isModalVisible, setModalVisible] = useState(false); 
 
-    // API se data fetch karne ka function
+    const { state, dispatch } = useContext(AppContext);
+
     const fetchOrders = async () => {
         try {
             const response = await apiClient.get('/orderList');
-
             console.log(response.data);
+
             if (response.data.status === 1) {
-                const fetchedOrders = response.data.data.order.map(order => ({
-                    status: order.order_status,
-                    dateTime: `${order.order_date} | ${order.order_time}`,
-                    totalAmount: order.grand_total,
-                    products: order.image,
-                    ctaText: order.order_status === 'Delivered' ? 'Get It Again' : 'Cancel',
-                    onCTAClick: () => {
-                        alert(order.order_status === 'Delivered' 
-                            ? 'Reordering...' 
-                            : 'Cancelling order...');
-                    },
-                }));
-                setOrders(fetchedOrders);
+                setOrders(response.data.data.order);
             } else {
                 alert('Failed to fetch orders.');
             }
@@ -50,7 +39,7 @@ const Orders = ({ navigation }) => {
         fetchOrders();
     }, []);
 
-    // Toggle modal visibility
+
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
     };
@@ -78,27 +67,13 @@ const Orders = ({ navigation }) => {
                 </Text>
 
                 <ScrollView>
-
-
-                {isLoading ? (
-                    <View style={{justifyContent:"center", height:rh(80)}}>
-                      <ActivityIndicator size="large" color="#0000ff" />
-                    </View>
-                ) : orders.length === 0 ? (
-                    <View style={{justifyContent:"center", height:rh(80)}}>
-                        <Text style={{textAlign: 'center', marginTop: rh(2), fontSize: rf(2) }}>
-                            No Orders Found
-                        </Text>
-                    </View>
-                ) : (
-                    orders.map((order, index) => (
-                        <OrderCard
-                            onPress={() => navigation.navigate('OrderDetails')}
-                            key={index}
-                            {...order}
-                        />
-                    ))
-                )}
+                    {isLoading ? (
+                        <View style={{ justifyContent: "center", height: rh(80) }}>
+                            <ActivityIndicator size="large" color="#0000ff" />
+                        </View>
+                    ) : (
+                        <OrderCard orders={orders} />
+                    )}
                 </ScrollView>
 
             </View>
@@ -109,24 +84,21 @@ const Orders = ({ navigation }) => {
     );
 };
 
-//make this component available to the app
+ 
 export default Orders;
 
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: rw(4),   
     },
-    shortByBtn:{
-        width:rw(20),
-        flexDirection:"row",
-        justifyContent:"center",
-        alignItems:"center",
-        borderWidth:1,
-        borderColor:"#DFDFDF",
-        borderRadius:10,
-        backgroundColor:"white",
-
-    }
+    shortByBtn: {
+        width: rw(20),
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: "#DFDFDF",
+        borderRadius: 10,
+        backgroundColor: "white",
+    },
 });
-
-

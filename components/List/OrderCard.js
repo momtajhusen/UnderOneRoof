@@ -1,75 +1,89 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';  
-import { rw, rh, rf } from '../../Service/responsive'; 
+import { rw, rh, rf } from '../../Service/responsive';
+import { useNavigation } from '@react-navigation/native';
 
-const OrderCard = ({ status, dateTime, totalAmount, products, ctaText, onCTAClick, onPress }) => {
-  // Dynamic status styling based on the order status
-  const getStatusStyle = () => {
-    switch (status) {
-      case 'Delivered':
-        return { color: '#4CAF50', icon: 'check-circle' };
-      case 'Canceled':
-        return { color: '#F44336', icon: 'cancel' };
-      case 'On The Way':
-        return { color: '#FF9800', icon: 'local-shipping' };
-      default:
-        return { color: '#888', icon: 'info' };
-    }
+const OrderCard = ({ orders }) => {
+  const navigation = useNavigation();
+
+  const getStatusStyle = (status) => {
+      switch (status) {
+          case 'Delivered':
+              return { color: '#4CAF50', icon: 'check-circle' };
+          case 'Canceled':
+              return { color: '#F44336', icon: 'cancel' };
+          case 'On The Way':
+              return { color: '#FF9800', icon: 'local-shipping' };
+          default:
+              return { color: '#888', icon: 'info' };
+      }
   };
 
-  const statusStyle = getStatusStyle();
+  const renderOrder = ({ item }) => {
+      console.log('Order Item:', item);
+
+      const statusStyle = getStatusStyle(item.order_status);
+
+      return (
+          <TouchableOpacity
+              onPress={() => navigation.navigate('OrderDetails', { order_id: item.order_id })}
+              style={styles.card}
+          >
+              {/* Status Section */}
+              <View style={styles.statusContainer}>
+                  <View style={styles.statusRow}>
+                      <View style={[styles.statusIconBackground, { backgroundColor: statusStyle.color + '20' }]}>
+                          <MaterialIcons name={statusStyle.icon} size={rw(5)} color={statusStyle.color} />
+                      </View>
+                      <View style={styles.statusDetails}>
+                          <Text style={[styles.statusText, { color: statusStyle.color }]}>{item.order_status}</Text>
+                          <Text style={styles.dateTime} numberOfLines={1} ellipsizeMode="tail">
+                              {item.order_date} {item.order_time}
+                          </Text>
+                      </View>
+                  </View>
+                  <MaterialIcons name="arrow-forward-ios" size={rw(4)} style={{ alignSelf: 'center' }} />
+              </View>
+
+              {/* Product Images Section */}
+              <View style={styles.productsContainer}>
+                  {item.image.length > 0 ? (
+                      item.image.map((product, index) => (
+                          <Image key={index} source={{ uri: product }} style={styles.productImage} />
+                      ))
+                  ) : (
+                      <Text style={styles.noProductsText}>No Products Available</Text>
+                  )}
+              </View>
+
+              {/* Total Amount and CTA Section */}
+              <View style={styles.amountContainer}>
+                  <Text style={styles.totalAmount}>
+                      Total Amount: <Text style={styles.amountHighlight}>₹{item.grand_total}</Text>
+                  </Text>
+                  <TouchableOpacity onPress={item.onCTAClick} accessible accessibilityLabel={item.ctaText}>
+                      <Text style={styles.getItAgainButton}>{item.ctaText}</Text>
+                  </TouchableOpacity>
+              </View>
+          </TouchableOpacity>
+      );
+  };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.card}>
-      {/* Status Section */}
-      <View style={styles.statusContainer}>
-        <View style={styles.statusRow}>
-          <View style={[styles.statusIconBackground, { backgroundColor: statusStyle.color + '20' }]}>
-            <MaterialIcons name={statusStyle.icon} size={rw(5)} color={statusStyle.color} />
-          </View>
-          <View style={styles.statusDetails}>
-            <Text style={[styles.statusText, { color: statusStyle.color }]}>{status}</Text>
-            <Text style={styles.dateTime} numberOfLines={1} ellipsizeMode="tail">
-              {dateTime}
-            </Text>
-          </View>
-        </View>
-        <MaterialIcons name="arrow-forward-ios" size={rw(4)} style={{ alignSelf: 'center' }} />
-      </View>
-
-      {/* Product Images Section */}
-      <View style={styles.productsContainer}>
-        {products.length > 0 ? (
-          products.map((product, index) => (
-            <Image key={index} source={{ uri: product }} style={styles.productImage} />
-          ))
-        ) : (
-          <Text style={styles.noProductsText}>No Products Available</Text>
-        )}
-      </View>
-
-      {/* Total Amount and CTA Section */}
-      <View style={styles.amountContainer}>
-        <Text style={styles.totalAmount}>
-          Total Amount: <Text style={styles.amountHighlight}>₹{totalAmount}</Text>
-        </Text>
-        <TouchableOpacity onPress={onCTAClick} accessible accessibilityLabel={ctaText}>
-          <Text style={styles.getItAgainButton}>{ctaText}</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* CTA Button */}
-      {/* <TouchableOpacity onPress={onCTAClick} style={styles.ctaButton}>
-        <LinearGradient colors={['#f04e23', '#ff6f00']} style={styles.gradientBackground}>
-          <Text style={styles.ctaText}>{ctaText}</Text>
-          <MaterialIcons name="arrow-forward" size={rw(4)} color="#fff" />
-        </LinearGradient>
-      </TouchableOpacity> */}
-    </TouchableOpacity>
+    <ScrollView style={{ flex: 1}}>
+      <FlatList
+        data={orders}
+        renderItem={renderOrder}
+        keyExtractor={(item) => item.order_id.toString()}
+        showsVerticalScrollIndicator={false}
+      />
+    </ScrollView>
   );
 };
+
+export default OrderCard;
+
 
 const styles = StyleSheet.create({
   card: {
@@ -158,4 +172,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderCard;

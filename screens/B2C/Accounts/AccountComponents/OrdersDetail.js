@@ -1,21 +1,69 @@
 //import liraries
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, ActivityIndicator} from 'react-native';
 import Header from '../../../../components/header';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import OrderSummary from '../../../../components/List/OrderSummary';
-import OrderItems from '../../../../components/List/OrderItems';
+import OrderItemsDetails from '../../../../components/List/OrderItemsDetails';
 import PriceDetails from '../../Cart&Checkout/CartComponents/PriceDetails';
 import * as Clipboard from 'expo-clipboard';
+import apiClient from '../../../../Service/apiClient';
 
 // create a component
-const OrderDetails = ({navigation}) => {
+const OrderDetails = ({navigation, route }) => {
 
+    const { order_id } = route.params;
+ 
     const copyToClipboard = () => {
         const orderId = "#834982930-343";
         Clipboard.setString(orderId);
       };
+
+      const [orderData, setOrderData] = useState(null);
+      const [isLoading, setIsLoading] = useState(true);
+
+        const fetchData = async () => {
+            try {
+            const response = await apiClient.get(`/orderDetail?order_id=${order_id}`);
+
+            if (response.data.status === 1) {
+                setOrderData(response.data.data);
+            } else {
+                Alert.alert('Error', response.msg || 'Failed to fetch order details.');
+            }
+            } catch (error) {
+            console.error('Error fetching orders:', error);
+            Alert.alert('Error', 'Something went wrong while fetching orders.');
+            } finally {
+            setIsLoading(false);
+            }
+        };
+
+        useEffect(() => {
+            fetchData();
+        }, []);
+
+  
+  if (isLoading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#FF3131" />
+      </View>
+    );
+  }
+
+  if (!orderData) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.errorText}>No order data available.</Text>
+      </View>
+    );
+  }
+
+  const { order, detail, user_address } = orderData;
+
+ const orderAddress = user_address.fname+" "+user_address.lname+", "+user_address.state+", "+user_address.city+", "+user_address.address_line1+", "+user_address.country;
 
     return (
         <View style={styles.container}>
@@ -25,12 +73,12 @@ const OrderDetails = ({navigation}) => {
 
                     {/* Order Summary */}
                     <View>
-                        <OrderSummary />
+                        <OrderSummary OrderData={order[0]} />
                     </View>
 
                     {/* Order Items LIst */}
                     <View>
-                        <OrderItems />
+                        <OrderItemsDetails OrderData={detail}/>
                     </View>
 
                     <View style={{padding:rw(3), backgroundColor:"white", borderRadius:10, flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
@@ -45,7 +93,7 @@ const OrderDetails = ({navigation}) => {
 
                     {/* Price Details */}
                     <View>
-                        <PriceDetails promoCode={false} saveMessage={false} />
+                        {/* <PriceDetails promoCode={false} saveMessage={false} /> */}
                     </View>
 
                     {/* Payment Mode */}
@@ -72,7 +120,7 @@ const OrderDetails = ({navigation}) => {
                             <View>
                                 <Text style={{color:"#717171"}}>Order id:</Text>
                                 <View style={{flexDirection:"row", gap:rw(2), alignItems:"center"}}>
-                                   <Text style={{color:"#272727", fontWeight:"400"}}>#834982930-343</Text>
+                                   <Text style={{color:"#272727", fontWeight:"400"}}>#{order_id}</Text>
                                     <TouchableOpacity onPress={copyToClipboard}>
                                        {/* <MaterialIcons name="content-copy" size={15}/> */}
                                        <Image source={require('../../../../assets/CopyIcon.png')} style={{width:rw(4), height:rw(4)}} />
@@ -81,16 +129,15 @@ const OrderDetails = ({navigation}) => {
                             </View>
                             <View>
                                 <Text style={{color:"#717171"}}>Order Date:</Text>
-                                <Text style={{color:"#272727", fontWeight:"400"}}>19 October, 2024</Text>
+                                <Text style={{color:"#272727", fontWeight:"400"}}>{order[0].order_date}</Text>
                             </View>
                             <View>
                                 <Text style={{color:"#717171"}}>Delivery To:</Text>
-                                <Text style={{color:"#272727", fontWeight:"400"}}>Aman Shukla,
-                                A-123, Green Park Main, Near Hauz Khas Metro Station, New Delhi - 110016, India.</Text>
+                                <Text style={{color:"#272727", fontWeight:"400"}}>{orderAddress}</Text>
                             </View>
                             <View>
                                 <Text style={{color:"#717171"}}>Delivery Date:</Text>
-                                <Text style={{color:"#272727", fontWeight:"400"}}>24 October, 2024</Text>
+                                <Text style={{color:"#272727", fontWeight:"400"}}>{order[0].delivered_on}</Text>
                             </View>
                         </View>
                     </View>
@@ -118,6 +165,11 @@ const styles = StyleSheet.create({
         gap:rh(1),
         paddingHorizontal:rw(4),
         paddingVertical:rw(1),
+    },
+    loaderContainer:{
+        height:rh(100),
+        justifyContent:"center",
+        alignItems:"center",
     }
 });
 

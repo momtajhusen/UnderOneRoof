@@ -23,6 +23,9 @@ const initialState = {
 
     productFilter: null,
 
+    // order navigation 
+    orderNavigation: null,
+
 
 };
 

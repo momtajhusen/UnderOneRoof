@@ -10,7 +10,6 @@ import OrderItems from '../../../../components/List/OrderItems';
 import { useFocusEffect } from "@react-navigation/native";
 import { AppContext } from '../../../../context/AppContext';
 
-
 // create a component
 const OrderPlaced = () => {
 

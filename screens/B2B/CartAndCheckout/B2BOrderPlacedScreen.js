@@ -16,7 +16,7 @@ import * as Animatable from 'react-native-animatable';
 const B2BOrderPlaced = ({route}) => {
 
   const { data } = route.params;
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
   const navigation = useNavigation();
   
 
@@ -26,17 +26,23 @@ const B2BOrderPlaced = ({route}) => {
 
  // Handle back button press
  const handleBackPress = () => {
-  navigation.navigate("Orders"); 
+  navigation.navigate("B2BBottomNavigator"); 
+  dispatch({
+   type: 'SET_ORDER_NAVIGATION',
+   payload: {
+      orderNavigation: 'orderPlacedB2B',
+   },
+ });
   return true; 
 };
 
 // Add event listener on mount, remove on unmount
-// useEffect(() => {
-//   const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-//   return () => {
-//     backHandler.remove();  
-//   };
-// }, []);
+useEffect(() => {
+  const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+  return () => {
+    backHandler.remove();  
+  };
+}, []);
 
     return (
         <View style={styles.container}>

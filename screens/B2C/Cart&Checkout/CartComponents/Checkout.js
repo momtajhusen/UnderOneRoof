@@ -122,7 +122,7 @@ const Checkout = ({ navigation }) => {
       </ScrollView>
 
       {state.shoppingMode === "wholesale" && (
-        <View style={[styles.proceedDetails, {backgroundColor: "white", flexDirection: "row", justifyContent: "space-between", padding: rh(2)}]}> 
+        <View style={[styles.proceedDetails, {backgroundColor: "white", position:"absolute", bottom:rh(0), flexDirection: "row", justifyContent: "space-between", padding: rh(2)}]}> 
               <View style={{flexDirection: "row", alignItems: "center", gap: 10, width: rw(50)}}>
                 <Text style={{fontWeight: "bold", fontSize: rf(2)}}>₹ {state.viewCartData.grand_total}</Text>
                 <Text style={{fontSize: rf(1.5)}}>
@@ -174,6 +174,7 @@ export default Checkout;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: rw(2),
+    height:rh(100),
   },
   proceedDetails: {
     position: "absolute",

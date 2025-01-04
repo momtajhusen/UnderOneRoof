@@ -82,10 +82,6 @@ const BusinessDetails = ({ navigation, route }) => {
     });
   
     console.log('FormData:', formData);
-
-    // return false;
-  
-    // setIsLoading(true);
   
     try {
       const response = await apiClient.post('/registerBusiness', formData, {
