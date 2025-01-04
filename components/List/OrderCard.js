@@ -48,14 +48,17 @@ const OrderCard = ({ orders }) => {
 
               {/* Product Images Section */}
               <View style={styles.productsContainer}>
-                  {item.image.length > 0 ? (
-                      item.image.map((product, index) => (
-                          <Image key={index} source={{ uri: product }} style={styles.productImage} />
-                      ))
-                  ) : (
-                      <Text style={styles.noProductsText}>No Products Available</Text>
-                  )}
+                {item.image.length > 0 ? (
+                  <ScrollView horizontal contentContainerStyle={styles.imageScrollContainer}>
+                    {item.image.map((product, index) => (
+                      <Image key={index} source={{ uri: product }} style={styles.productImage} />
+                    ))}
+                  </ScrollView>
+                ) : (
+                  <Text style={styles.noProductsText}>No Products Available</Text>
+                )}
               </View>
+
 
               {/* Total Amount and CTA Section */}
               <View style={styles.amountContainer}>
@@ -74,6 +77,7 @@ const OrderCard = ({ orders }) => {
     <ScrollView style={{ flex: 1}}>
       <FlatList
         data={orders}
+        contentContainerStyle={{ paddingBottom:rh(10) }}
         renderItem={renderOrder}
         keyExtractor={(item) => item.order_id.toString()}
         showsVerticalScrollIndicator={false}

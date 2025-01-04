@@ -32,7 +32,7 @@ const BestSellers = () => {
             }
         };
         fetchCategories();
-    }, [state.reFresh]);
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -46,20 +46,29 @@ const BestSellers = () => {
                 </View>
             ) : (
                 <View style={styles.categoryListContainer}>
-                    {categories.map((category) => (
+                   {categories.map((category) => (
                         <CategoryList
                             key={category.sid}
-                            cimage={category.image}  
+                            cimage={category.image}
                             text={category.cname}
-                            onPress={() =>
-                                navigation.navigate('ProductListing', {
-                                    selectCategoryId: category.sid,
-                                    selectCategoryName: category.cname,
-                                    selectCategorySlug: category.cslug,
-                                })
-                            }
+                            onPress={() => {
+                                if (state.shoppingMode === 'wholesale') {
+                                    navigation.navigate('B2BProductListing', {
+                                        selectCategoryId: category.sid,
+                                        selectCategoryName: category.cname,
+                                        selectCategorySlug: category.cslug,
+                                    });
+                                } else if (state.shoppingMode === 'retail') {
+                                    navigation.navigate('ProductListing', {
+                                        selectCategoryId: category.sid,
+                                        selectCategoryName: category.cname,
+                                        selectCategorySlug: category.cslug,
+                                    });
+                                }
+                            }}
                         />
                     ))}
+
                 </View>
             )}
         </View>

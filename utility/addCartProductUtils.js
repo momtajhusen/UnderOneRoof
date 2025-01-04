@@ -12,31 +12,33 @@ export const useAddFromCart = () => {
   const { isViewCartLoading, viewCartData } = useViewCartData();
 
 
-  const addFromCart = async (pid, var_id) => {
+  const addFromCart = async (pid, var_id, moq) => {
     try {
       setIsLoading(true);
       console.log('Request /addCart');
-
+  
+      // If moq is null or undefined, set it to 1
+      const quantity = moq ?? 1;  
+  
       const payload = {
         pid: pid,
-        qty: 1,
+        qty: quantity,
         var_id: var_id,
       };
-
+  
       const response = await apiClient.post('/addCart', payload);
       const product = response.data;
-
+  
       if (product.status === 1) {
-
         const result = await viewCartData();
         if (isViewCartLoading) {
-          setTimeout(()=>{
+          setTimeout(() => {
             setIsLoading(false);
-          },300);
+          }, 300);
           dispatch({ type: 'SET_LOADER', payload: false });
-        } 
-
-        return { success: true }; // Success return kar raha hai
+        }
+  
+        return { success: true }; // Success return
       } else {
         console.error('Failed to update cart');
         return { success: false, error: 'Failed to update cart' }; // Failure status return
@@ -46,6 +48,7 @@ export const useAddFromCart = () => {
       return { success: false, error: error.message };
     }
   };
+  
 
   return {
     isCartAddLoading,

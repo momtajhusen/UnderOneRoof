@@ -28,7 +28,7 @@ const B2BSimilarProducts = ({data}) => {
           }
         };
         fetchHomeProductData();
-      }, [state.reFresh]);
+      }, []);
 
     return (
         <View>

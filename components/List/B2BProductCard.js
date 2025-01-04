@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, Alert } from "react-native";
 import { rw, rh, rf } from "../../Service/responsive";
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../../context/AppContext';
@@ -17,14 +17,18 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
   // State to track loading for each variant (using product id and variant id as keys)
   const [loadingVariants, setLoadingVariants] = useState({});
 
-  const addToCart = async (psid, var_id) => {
+  const addToCart = async (psid, var_id, moq) => {
+
+    // alert(moq);
+    // return false;
+
     // Set loading state for this variant
     setLoadingVariants((prevState) => ({
       ...prevState,
       [`${psid}-${var_id}`]: true,
     }));
 
-    const result = await addFromCart(psid, var_id);
+    const result = await addFromCart(psid, var_id, moq);
 
     // Reset loading state after the operation is complete
     setLoadingVariants((prevState) => ({
@@ -50,28 +54,37 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
     }));
   };
 
-const handleDecrease = async (psid, qty, var_id) => {
-  if (qty > 1) {
+  const handleDecrease = async (psid, qty, var_id, moq) => {
+    // If moq is null, default to 1
+    const minQuantity = moq ?? 1;
+  
+    if (qty <= minQuantity) {
+      Alert.alert(
+        "Minimum Quantity",
+        `You cannot decrease the quantity below the minimum of ${minQuantity}.`,
+        [{ text: "OK" }]
+      );
+      return false;
+    }
+  
+    // Decrease the quantity if it is greater than the minimum
     const newQty = qty - 1;
-
+  
     // Update quantity and set loading state
     setLoadingVariants((prevState) => ({
       ...prevState,
       [`${psid}-${var_id}-qty`]: true,
     }));
-
+  
     const result = await qtyUpdate(psid, newQty, var_id);
-
+  
     // Reset loading state after quantity update
     setLoadingVariants((prevState) => ({
       ...prevState,
       [`${psid}-${var_id}-qty`]: false,
     }));
-  } else {
-    alert("Quantity cannot be less than 1!");
-  }
-};
-
+  };
+  
 
   return (
     <View style={{ flexDirection: "row" }}>
@@ -104,7 +117,7 @@ const handleDecrease = async (psid, qty, var_id) => {
               {/* Price and Add to Cart */}
               <View style={styles.priceContainer}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: rw(2) }}>
-                  <Text style={styles.originalPrice}>₹{item.selling_price}</Text>
+                  <Text style={styles.originalPrice}> ₹{item.moq_price ? item.moq_price : item.selling_price} </Text>
                   <Text style={styles.discountedPrice}>₹{item.mrp_price}</Text>
                 </View>
 
@@ -113,7 +126,7 @@ const handleDecrease = async (psid, qty, var_id) => {
                   <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: "#FF3131", borderRadius: 5 }}>
                     <TouchableOpacity
                       style={{ paddingHorizontal: rw(3), paddingVertical: rh(1) }}
-                      onPress={() => handleDecrease(item.pid, state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0, item.varient_id)}
+                      onPress={() => handleDecrease(item.pid, state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0, item.varient_id, item.varient[0].moq)}
                     >
                       {loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
                         <ActivityIndicator size="small" color="#fff" />
@@ -139,7 +152,7 @@ const handleDecrease = async (psid, qty, var_id) => {
                   // Show "Add to Cart" button if the product is not in the cart
                   <TouchableOpacity
                     style={styles.cartButton}
-                    onPress={() => addToCart(item.pid, item.varient_id)}
+                    onPress={() => addToCart(item.pid, item.varient_id, item.varient[0].moq)}
                   >
                     {loadingVariants[`${item.pid}-${item.varient_id}`] ? (
                       <ActivityIndicator size="small" color="#FF3131" />
@@ -168,14 +181,14 @@ const handleDecrease = async (psid, qty, var_id) => {
                   return (
                     <View key={index} style={styles.packetRow}>
                       <Text style={styles.packetText}>
-                        {variant.pmeasurement} {variant.punit} - ₹{variant.pselling_price}
+                          {variant.pmeasurement} {variant.punit} - ₹{variant.moq_price ? variant.moq_price : variant.pselling_price}
                       </Text>
 
                       {isInCart ? (
                         <View style={{ justifyContent: "space-between", borderRadius: 5, flexDirection: "row", backgroundColor: "#FF3131", width: "30%", paddingVertical: "2%" }}>
                           <TouchableOpacity
                             style={{ width: "30%", justifyContent: "center", alignItems: "center" }}
-                            onPress={() => handleDecrease(item.pid, totalQtyInCart, variant.psid)}
+                            onPress={() => handleDecrease(item.pid, totalQtyInCart, variant.psid, variant.moq)}
                           >
                             {loadingVariants[`${item.pid}-${variant.psid}-qty`] ? (
                               <ActivityIndicator size="small" color="#fff" />
@@ -198,7 +211,7 @@ const handleDecrease = async (psid, qty, var_id) => {
                           </TouchableOpacity>
                         </View>
                       ) : (
-                        <TouchableOpacity onPress={() => addToCart(item.pid, variant.psid)}>
+                        <TouchableOpacity onPress={() => addToCart(item.pid, variant.psid, variant.moq)}>
                           {loadingVariants[`${item.pid}-${variant.psid}`] ? (
                             <ActivityIndicator size="small" color="#0000ff" />
                           ) : (
@@ -233,7 +246,6 @@ const styles = StyleSheet.create({
     width: rw(75),
     overflow: "scroll",
   },
-  
 
   verticalLayout: {
     flexDirection: "column",
