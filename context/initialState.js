@@ -6,25 +6,26 @@ const initialState = {
   userId: null,
   userNumber: null,
   shoppingMode: null,
+  // Cart Data
+  viewCartData: {},
+
+  // user address 
+  viewAddressData: [],
+
+  // user select address 
+  selectAddressData: [],
+
+  // Refresh or Loader
+  reFresh: false,
+  isLoader: false,
+
+  isCartLoader: false,
 
 
-    // Cart Data
-    viewCartData: {},
+  productFilter: null,
 
-    // user address 
-    viewAddressData: [],
-
-    // user select address 
-    selectAddressData: [],
-
-    // Refresh or Loader
-    reFresh: false,
-    isLoader: false,
-
-    productFilter: null,
-
-    // order navigation 
-    orderNavigation: null,
+  // order navigation 
+  orderNavigation: null,
 
 
 };

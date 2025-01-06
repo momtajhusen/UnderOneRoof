@@ -40,6 +40,7 @@ export const useAddFromCart = () => {
   
         return { success: true }; // Success return
       } else {
+        console.log(error);
         console.error('Failed to update cart');
         return { success: false, error: 'Failed to update cart' }; // Failure status return
       }

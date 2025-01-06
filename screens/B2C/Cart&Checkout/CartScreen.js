@@ -36,7 +36,7 @@ const CartScreen = ({ navigation }) => {
     useFocusEffect(
         React.useCallback(() => {
             fetchCartDetails();
-        }, [])
+        }, [state.isCartLoader])
     );
 
     // onRefresh function for pull-to-refresh
@@ -82,36 +82,36 @@ const CartScreen = ({ navigation }) => {
 
                 {/* Cart Items */}
                 {
-                   state.isLoader && isViewCartLoading && isFirstLoad ? (
-                        <View style={styles.loadingContainer}>
-                            <ActivityIndicator size="large" color="#0000ff" />
+                state.isLoader && isViewCartLoading ? (
+                    <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                    </View>
+                ) : (
+                    <>
+                    {cartProduct.length > 0 ? (
+                        <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
+                        <FlatList
+                            data={cartProduct}
+                            keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+                            renderItem={({ item, index }) => (
+                            <Animatable.View
+                                key={item.id || Math.random().toString()}
+                                animation="fadeInUp"
+                                duration={800}
+                                delay={index * 20}
+                            >
+                                <CartItemsList item={item} />
+                            </Animatable.View>
+                            )}
+                        />
                         </View>
                     ) : (
-                        <>
-                            {cartProduct.length > 0 ? (
-                                <View style={{ margin: rw(3.5), backgroundColor: "white", borderRadius: rw(5) }}>
-                                    <FlatList
-                                        data={cartProduct}
-                                        keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
-                                        renderItem={({ item, index }) => (
-                                            <Animatable.View
-                                                key={item.id || Math.random().toString()}
-                                                animation="fadeInUp"
-                                                duration={800}
-                                                delay={index * 20}
-                                            >
-                                                <CartItemsList item={item} />
-                                            </Animatable.View>
-                                        )}
-                                    />
-                                </View>
-                            ) : (
-                                <View style={styles.noCartDataMessage}>
-                                    <Text style={styles.noCartDataText}>Your cart is currently empty. {'\n'} Add some items to proceed.</Text>
-                                </View>
-                            )}
-                        </>
-                    )
+                        <View style={styles.noCartDataMessage}>
+                           <Text style={styles.noCartDataText}>Your cart is currently empty. {'\n'} Add some items to proceed.</Text>
+                        </View>
+                    )}
+                    </>
+                )
                 }
 
                 {/* Price Details */}

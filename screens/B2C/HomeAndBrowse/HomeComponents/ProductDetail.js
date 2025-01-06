@@ -84,18 +84,20 @@ const ProductDetail = ({ route, navigation }) => {
    const [selectedVariantId, setSelectedVariantId] = useState(null);
 
     const addToCart = async () => {
-      const result = await addFromCart(productDetails.pid, selectedVariantId);
+      const moq = productDetails.moq || 1;
+      const result = await addFromCart(productDetails.pid, selectedVariantId, moq);
+      setCartQty(moq);
     };
 
-    const handleIncrease = async (psid, qty, var_id) => {
+    const handleIncrease = async (psid, qty, var_id, moq) => {
       const newQty = qty + 1;
-      const result = await qtyUpdate(psid, newQty, var_id);
+      const result = await qtyUpdate(psid, newQty, var_id, moq);
       setCartQty(newQty);
     } 
 
-    const handleDecrease = async (psid, qty, var_id) => {
+    const handleDecrease = async (psid, qty, var_id, moq) => {
       const newQty = qty - 1;
-      const result = await qtyUpdate(psid, newQty, var_id);
+      const result = await qtyUpdate(psid, newQty, var_id, moq);
       setCartQty(newQty);
     }
 
@@ -106,7 +108,6 @@ const ProductDetail = ({ route, navigation }) => {
     const ProductDetails = async () => {
       setIsLoading(true);
       try {
-
         const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
         const product = response.data;
 
@@ -172,7 +173,7 @@ const ProductDetail = ({ route, navigation }) => {
       useEffect(() => {
         if (ProductVarient.length > 0 && selectedVariantId === null) {
           setSelectedVariantId(ProductVarient[0].psid);
-          setCartQty(productDetails.qty);
+           setCartQty(productDetails.added_to_cart);
         }
       }, [ProductVarient, selectedVariantId]);
       
@@ -336,7 +337,12 @@ const ProductDetail = ({ route, navigation }) => {
                     <View style={{ backgroundColor: "white", borderRadius: 10, padding: rw(1) }}>
                       <Text style={styles.weightText}>{item.pmeasurement} {item.punit}</Text>
                       <View style={{ flexDirection: "row", alignItems: "center", gap: rw(1) }}>
-                        <Text style={styles.priceText}>₹{item.pselling_price}</Text>
+
+                        {/* moq pice  */}
+                        <Text style={styles.priceText}>₹{item.moq_price != null ? item.moq_price : item.pselling_price}</Text>
+                        {/* pselling_price   */}
+                        {/* <Text style={styles.priceText}>₹{item.pselling_price}</Text> */}
+
                         <View style={{ flexDirection: "row", gap: rw(1) }}>
                           <Text style={styles.mrpText}>MRP</Text>
                           <Text style={styles.mrpTextPrice}>₹{item.pmrp_price}</Text>
@@ -484,7 +490,7 @@ const ProductDetail = ({ route, navigation }) => {
                     paddingVertical: rh(1.5),
                     paddingHorizontal: rw(7),
                   }}
-                  onPress={() => handleDecrease(productId, cartQty, selectedVariantId)}
+                  onPress={() => handleDecrease(productId, cartQty, selectedVariantId, productDetails.moq)}
                   disabled={isCartAddLoading}  
                 >
                   <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
@@ -492,7 +498,8 @@ const ProductDetail = ({ route, navigation }) => {
                 {isQtyUpdateLoading ? (
                   <ActivityIndicator size="small" color="white" /> 
                 ) : (
-                  <Text style={{ color: "white", fontWeight: "bold" }}>{cartQty}</Text> 
+                  <Text style={{ color: "white", fontWeight: "bold" }}>
+                    {cartQty}</Text> 
                 )}
 
                 <TouchableOpacity
@@ -500,8 +507,8 @@ const ProductDetail = ({ route, navigation }) => {
                     paddingVertical: rh(1.5),
                     paddingHorizontal: rw(7),
                   }}
-                  onPress={() => handleIncrease(productId, cartQty, selectedVariantId)}
-                  disabled={isCartAddLoading} // Disable button during loading
+                  onPress={() => handleIncrease(productId, cartQty, selectedVariantId, productDetails.moq)}
+                  disabled={isCartAddLoading}
                 >
                   <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
                 </TouchableOpacity>

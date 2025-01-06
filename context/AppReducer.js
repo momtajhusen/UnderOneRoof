@@ -12,6 +12,9 @@ const SELECT_ADDRESS_DATA = 'SELECT_ADDRESS_DATA';
 
 const SET_LOADER = 'SET_LOADER';
 
+const SET_CART_LOADER = 'SET_CART_LOADER';
+
+
 const SET_PRODUCT_FLITER = 'SET_PRODUCT_FLITER';
 
 const SET_ORDER_NAVIGATION = 'SET_ORDER_NAVIGATION';
@@ -53,7 +56,15 @@ export default (state, action) => {
           return {
               ...state,
               isLoader: action.payload,
-          };      
+          };  
+          
+          
+
+          case SET_CART_LOADER:
+            return {
+                ...state,
+                isCartLoader: action.payload,
+            };
 
         case VIEW_CART_DATA:
           return {

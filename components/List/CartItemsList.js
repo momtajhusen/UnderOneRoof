@@ -7,10 +7,11 @@ import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
 import { AppContext } from '../../context/AppContext';
 
 const CartItemsList = ({ item, deleteIconStyle }) => {
-    const { pid, itemimage, name, measurement, selling_price, mrp_price, qty, var_id } = item;
+
+    const { pid, itemimage, name, unit, measurement, selling_price, mrp_price, moq, qty, var_id } = item;
     const [itemQuantity, setItemQuantity] = useState(qty);
     const [isUpdatingQty, setIsUpdatingQty] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false); // Local state for individual item deletion
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const { state } = useContext(AppContext);
     const {isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
@@ -19,20 +20,23 @@ const CartItemsList = ({ item, deleteIconStyle }) => {
     const handleIncrease = async () => {
         setIsUpdatingQty(true);
         const newQty = itemQuantity + 1;
-        await qtyUpdate(pid, newQty, var_id);
+        await qtyUpdate(pid, newQty, var_id, moq);
         setItemQuantity(newQty);
         setIsUpdatingQty(false);
     };
 
     const handleDecrease = async () => {
-        if (itemQuantity > 1) {
-            setIsUpdatingQty(true);
-            const newQty = itemQuantity - 1;
-            await qtyUpdate(pid, newQty, var_id);
-            setItemQuantity(newQty);
-            setIsUpdatingQty(false);
+        const minimumQty = moq != null ? moq : 1;
+      
+        if (itemQuantity > minimumQty) {
+          setIsUpdatingQty(true);
+          const newQty = itemQuantity - 1;
+          await qtyUpdate(pid, newQty, var_id, moq);
+          setItemQuantity(newQty);
+          setIsUpdatingQty(false);
         }
-    };
+      };
+      
 
     const onRemove = async () => {
         await removeFromCart(pid, var_id);
@@ -59,9 +63,11 @@ const CartItemsList = ({ item, deleteIconStyle }) => {
                         )}
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.itemWeight}>{measurement} × {qty}</Text>
+                <Text style={styles.itemWeight}>{unit}{measurement} × {qty}</Text>
                 <View style={styles.priceContainer}>
-                    <Text style={styles.itemPrice}>₹{selling_price * qty}</Text>
+                    <Text style={styles.itemPrice}>
+                        ₹{item.moq_price != null ? item.moq_price : item.selling_price}
+                    </Text>
                     <Text style={styles.itemMRP}>
                         MRP <Text style={styles.itemMrpPrice}>₹{mrp_price}</Text>
                     </Text>

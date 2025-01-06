@@ -11,6 +11,11 @@ const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
 
   const navigation = useNavigation();
 
+  console.log('//////////////////////////////////////////');
+  console.log(data);
+  console.log('//////////////////////////////////////////');
+
+
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [grandTotal, setGrandTotal] = useState(data.grand_total);
@@ -87,8 +92,9 @@ const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
     {/* Total Payment */}
     <View style={[styles.textListSection, styles.totalSection]}>
         <Text style={styles.totalLabel}>Total Payment</Text>
-        <Text style={styles.totalValue}>₹{grandTotal}</Text>
+        <Text style={styles.totalValue}>₹{data.grand_total}</Text>
     </View>
+    
 
     {saveMessage && (
         <View style={styles.savedMessageContainer}>

@@ -32,7 +32,7 @@ const B2BBottomNavigator = () => {
 
   useEffect(() => {
       fetchCartDetails();
-  }, [state.reFresh]);
+  }, []);
 
  
   return (

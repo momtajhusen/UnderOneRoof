@@ -21,9 +21,10 @@ const ShoppingMode = ({ navigation, route }) => {
   });
 
   const handleModeSelect = async (type) => {
-    setLoadingType(type); // Set the loading state for the selected type
+    const mode = type === "wholesale" ? "b2b" : "b2c";
+    setLoadingType(type);
     try {
-      const response = await apiClient.post('/selectFlow', { mobile, type });
+      const response = await apiClient.post('/selectFlow', { mobile, mode });
       
         if (type === 'wholesale') {
             if (response.data.status === 1) {

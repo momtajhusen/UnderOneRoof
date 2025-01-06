@@ -41,7 +41,7 @@ export const useViewAddressData = () => {
       await viewAddressData();
     };
     fetchData();
-  }, [state.reFresh]);
+  }, []);
 
   return {
     isViewAddressLoading,

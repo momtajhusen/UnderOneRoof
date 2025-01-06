@@ -20,23 +20,23 @@ export const useRemoveFromCart = () => {
       const response = await apiClient.post('/deleteCart', payload);
 
       if (response.data.status === 1) {  
-        
-        dispatch({
-          type: 'GLOBAL_REFRESH',
-          payload: {
-            reFresh: Math.floor(Math.random() * 100) + 1,  
-          },
-        });
-
  
         const result = await viewCartData();
-        if (isViewCartLoading) {
-          alert();
-          setTimeout(()=>{
-            setIsLoading(false);
-          },300);
-          dispatch({ type: 'SET_LOADER', payload: false });
-        } 
+ 
+          if (result) {
+            setTimeout(()=>{
+              setIsLoading(false);
+            },300);
+            dispatch({ type: 'SET_LOADER', payload: false });
+
+            dispatch({
+              type: 'SET_CART_LOADER',
+              payload: {
+                isCartLoader: Math.ceil(Math.random() * 100),
+              },
+            });
+            
+          } 
         
         return { success: true };
       } else {

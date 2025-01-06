@@ -17,7 +17,6 @@ export const useToggleWishlist = () => {
         ? { pid: pid }
         : { pid: pid, uid: uid }; 
 
-        console.log(payload);
 
       const endpoint = isInWishlist ? '/deleteWishlist' : '/addWishlist';
 
