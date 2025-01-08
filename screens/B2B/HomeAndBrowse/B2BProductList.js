@@ -22,9 +22,6 @@ import apiClient from '../../../Service/apiClient';
 import { AppContext } from '../../../context/AppContext';
 
 
-
-
-
   // Sort By Options 
   const options = [
     'Trending',
@@ -43,7 +40,7 @@ import { AppContext } from '../../../context/AppContext';
   
     const [productListing, setProductListing] = useState([]);
     const [categoryData, setCategory] = useState([]);
-    const [loading, setLoading] = useState(true); // Loading state
+    const [loading, setLoading] = useState(true);
   
     const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
     const toggleModal = () => {
@@ -83,8 +80,6 @@ import { AppContext } from '../../../context/AppContext';
         }
       } catch (error) {
         console.error('Error fetching category:', error);
-      } finally {
-        setLoading(false);
       }
     };
   
@@ -168,9 +163,10 @@ import { AppContext } from '../../../context/AppContext';
                       <Image source={{ uri: item.image }} style={styles.categoryIcon} />
                     </View>
                     <Text
+                      numberOfLines={3}
                       style={[styles.categoryText, item.sid === selectedCategoryId && styles.activeText]}
                     >
-                      {item.cname.length > 10 ? `${item.cname.slice(0, 15)}...` : item.cname}
+                      {item.cname}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -224,7 +220,6 @@ import { AppContext } from '../../../context/AppContext';
                  showsVerticalScrollIndicator={false}
                  showsHorizontalScrollIndicator={false}
                  >
-                
                 {
                   loading ? (
                     <B2BProductLoader 
@@ -245,7 +240,7 @@ import { AppContext } from '../../../context/AppContext';
                       layout="vertical"
                     />
                   ) : (
-                    // Loading complete hone ke baad aur koi product na hone par
+
                     <View style={{ height: rh(70), justifyContent: "center", alignItems: "center" }}>
                       <Image 
                         source={require('../../../assets/product-not-avable.png')} 
@@ -316,7 +311,6 @@ const styles = StyleSheet.create({
     height: rw(12),
     resizeMode: 'contain',
     position:"absolute",
-    bottom:-10,
   },
   categoryIconWrapper: {
     width: rw(12),
@@ -324,17 +318,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 100, // Fully circular border
+    borderRadius: 100,
     overflow:"hidden",
-    backgroundColor:"#FFFFFF"
+    backgroundColor:"#FFFFFF",
   },
   categoryText: {
     marginTop:rh(0.5),
-    fontSize: rf(1.5),
+    fontSize: rf(1.4),
     color: '#000',
     textAlign: 'center',
     fontWeight: 'bold',
-    width:rw(10)
+    width:rw(15),
   },
   activeText: {
     color: '#FF3131',

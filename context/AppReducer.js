@@ -21,10 +21,6 @@ const SET_ORDER_NAVIGATION = 'SET_ORDER_NAVIGATION';
 
 
 
-
-
-
-
 // Reducer
 export default (state, action) => {
   switch (action.type) {

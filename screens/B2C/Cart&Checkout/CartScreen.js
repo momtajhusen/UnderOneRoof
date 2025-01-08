@@ -53,7 +53,7 @@ const CartScreen = ({ navigation }) => {
         if (isFirstLoad && !isViewCartLoading) {
             setIsFirstLoad(false);
         }
-    }, [isViewCartLoading]);
+    }, []);
 
     return (
         <View style={styles.screenContainer}>

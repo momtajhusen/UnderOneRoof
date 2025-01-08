@@ -242,8 +242,8 @@ const ProductDetail = ({ route, navigation }) => {
       ) : null}
 
         <View contentContainerStyle={styles.scrollContainer}>
-          <View style={{height:rh(35)}}>
-
+          <View
+              style={{height:rh(35), backgroundColor:"white"}}>
             {isLoading ? (
                <View>
                   <SharedElement id={`item.${item.pid}.image`}>
@@ -260,6 +260,14 @@ const ProductDetail = ({ route, navigation }) => {
                 activeSlideAlignment="center"
                 loop
               />
+
+              // onPress={() =>
+              //   navigation.navigate("ProductImageView", {
+              //     images: multiProductImage,
+              //     selectedIndex: index,
+              //   })
+              // }
+
             )}
 
             <View style={styles.indicatorContainer}>

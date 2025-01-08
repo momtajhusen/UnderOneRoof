@@ -15,11 +15,11 @@ const CategoryItem = ({ id, cimage, text, onPress, loading }) => {
             <Image 
                 source={{ uri: cimage ? cimage : 'https://via.placeholder.com/150' }} 
                 style={styles.image} 
-                resizeMode="cover" 
+                resizeMode="cover"
             />
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.text}>{text}</Text>
+                <Text style={styles.text} numberOfLines={2}>{text}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -34,11 +34,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         overflow: 'hidden',
         borderRadius: rw(3),
-        marginRight: rw(2),
+        marginHorizontal: rw(1),
         marginBottom: rh(1.8),
-        borderWidth:2,
+        borderWidth:rw(0.5),
         borderColor:"white",
-        paddingHorizontal:0,
     },
     imageContainer: {
         justifyContent: 'center',
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
         borderRadius: rw(2),
     },
     image: {
-        width: rw(22),
+        width: rw(20),
         height: rw(17),
     },
     textContainer: {
@@ -61,9 +60,14 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: '600',
-        fontSize: rf(1.8),
-        width:rw(12),
+        fontSize: rf(1.6),
+        width: rw(18),
         color: '#555555',
         textAlign: 'center',
+        textAlignVertical: 'center',
+        overflow: 'hidden',
+        textTransform: 'none',
+        whiteSpace: 'nowrap',
     },
+    
 });

@@ -51,6 +51,7 @@ import B2BCheckOutScreen from '../screens/B2B/CartAndCheckout/B2BCheckOutScreen'
 import B2BOrderPlaced from '../screens/B2B/CartAndCheckout/B2BOrderPlacedScreen';
 import B2BProceedDetails from '../screens/B2B/HomeAndBrowse/B2BProductDetails';
 import AddAddress from '../screens/B2C/Accounts/AccountComponents/AddAddress';
+import ProductImageView from '../components/ProductImageView';
 
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 const Stack = createSharedElementStackNavigator();
@@ -135,9 +136,9 @@ const StackNavigation = () => {
         <Stack.Screen name="B2BCheckOutScreen" component={B2BCheckOutScreen} options={{ headerShown: false }} />
         <Stack.Screen name="B2BOrderPlaced" component={B2BOrderPlaced} options={{ headerShown: false }} />
         <Stack.Screen name="B2BProceedDetails" component={B2BProceedDetails} options={{ headerShown: false }} />
-        
+        <Stack.Screen name="ProductImageView" component={ProductImageView} options={{ headerShown: false }} />
 
-        
+
      </Stack.Navigator>
     );
 };

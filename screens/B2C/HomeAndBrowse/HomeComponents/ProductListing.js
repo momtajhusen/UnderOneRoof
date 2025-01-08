@@ -215,7 +215,6 @@ const styles = StyleSheet.create({
     position:"relative",
     borderRightWidth:1,
     borderColor:"#E9E9E9",
-    // marginBottom:rh(2),
   },
   categoryItem: {
     marginVertical: rh(0.5),
@@ -266,7 +265,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     fontWeight: 'bold',
-    width:rw(10)
+    width:rw(10),
   },
   activeText: {
     color: '#FF3131',
