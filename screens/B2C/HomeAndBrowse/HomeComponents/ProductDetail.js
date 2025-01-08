@@ -210,9 +210,16 @@ const ProductDetail = ({ route, navigation }) => {
       const hasDescriptionFull = !!productDetails.full_desc;
 
   const renderItem = ({ item }) => (
-    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+    <TouchableOpacity 
+      onPress={() =>
+        navigation.navigate("ProductImageView", {
+          images: multiProductImage,
+          selectedIndex: activeIndex,
+        })
+      }
+     style={{ justifyContent: 'center', alignItems: 'center' }}>
       <Image source={{ uri: item.img }} style={{ width: rw(70), height: rw(70), borderRadius: 10 }} />
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -260,17 +267,9 @@ const ProductDetail = ({ route, navigation }) => {
                 activeSlideAlignment="center"
                 loop
               />
-
-              // onPress={() =>
-              //   navigation.navigate("ProductImageView", {
-              //     images: multiProductImage,
-              //     selectedIndex: index,
-              //   })
-              // }
-
             )}
 
-            <View style={styles.indicatorContainer}>
+            <TouchableOpacity style={styles.indicatorContainer}>
               {multiProductImage.map((_, index) => (
                 <View
                   key={index}
@@ -280,7 +279,7 @@ const ProductDetail = ({ route, navigation }) => {
                   ]}
                 />
               ))}
-            </View>
+            </TouchableOpacity>
 
             {/* Conditionally render the favorite icon based on wishlist status */}
             {state.shoppingMode === "retail" && (
@@ -434,7 +433,7 @@ const ProductDetail = ({ route, navigation }) => {
 
               {
                 Array.isArray(ProductReview) && ProductReview.length > 0 ? (
-                  <View style={{backgroundColor:"white", borderRadius:10}}>
+                  <View  style={{backgroundColor:"white", borderRadius:10}}>
                         <FlatList
                             data={reviews}
                             renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
