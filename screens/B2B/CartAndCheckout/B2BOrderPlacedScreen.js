@@ -65,7 +65,7 @@ useEffect(() => {
                        <Text style={{fontSize:rf(4), fontWeight:"bold", color:"#28A745"}}>Order Confirmed !</Text>
                     </View>
                     <View style={{backgroundColor:"#05940033", marginVertical:rh(1), padding:rw(3), borderRadius:10}}>
-                       <Text style={{fontSize:rf(2), color:"#28A745"}}>Our team will contact you soon for Payment</Text>
+                       <Text style={{fontSize:rf(2), color:"#28A745"}}>Our team will contact you soon</Text>
                     </View>
                  </View>
              </View>

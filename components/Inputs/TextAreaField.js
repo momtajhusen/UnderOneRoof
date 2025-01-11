@@ -8,27 +8,27 @@ const TextAreaField = ({
   value,
   style,
   onChange,
-  placeholder = 'Enter your text...', // Default placeholder
+  placeholder = 'Enter your text...', 
   keyboardType = 'default',
-  multiline = true, // Enable multiline by default
-  numberOfLines = 5, // Default number of lines for textarea
+  multiline = true,  
+  numberOfLines = 5, 
 }) => (
   <View style={styles.container}>
     {label && <Text style={styles.label}>{label}</Text>}
     <TextInput
       style={[
         styles.input,
-        multiline && styles.multilineInput, // Apply multiline styles if enabled
-        style, // Spread additional custom styles
+        multiline && styles.multilineInput,  
+        style,  
       ]}
       value={value}
       onChangeText={onChange}
       placeholder={placeholder}
       placeholderTextColor="#717171"
       keyboardType={keyboardType}
-      multiline={multiline} // Enable multiline
-      numberOfLines={multiline ? numberOfLines : 1} // Adjust lines for multiline
-      maxLength={250} // Maximum length of input text
+      multiline={multiline} 
+      numberOfLines={multiline ? numberOfLines : 1}  
+      maxLength={250}  
     />
   </View>
 );
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: rf(2),
     color: '#666',
-    marginBottom: rh(1), // Space between label and input
+    marginBottom: rh(1),  
   },
   input: {
     borderWidth: 1,
@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: rf(2),
     backgroundColor: '#FFFFFF',
-    color: '#333', // Text color
+    color: '#333',  
   },
   multilineInput: {
-    height: rh(12), // Adjust height for multiline input
-    textAlignVertical: 'top', // Align text to the top for multiline
+    height: rh(12),  
+    textAlignVertical: 'top',  
   },
 });
 

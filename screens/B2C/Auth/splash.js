@@ -22,6 +22,8 @@ const SplashScreen = () => {
                 setTimeout(() => {
                     if (token) {
 
+                        console.log(token);
+
                         // if (ShoppingMode === 'wholesale') {
                             navigation.replace('ShoppingMode', { mobile: userNumber, userId: userId });
                         // } else if (ShoppingMode === 'retail') {

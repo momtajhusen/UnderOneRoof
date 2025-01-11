@@ -64,6 +64,9 @@ const ProductDetail = ({ route, navigation }) => {
   );
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
 
+  console.log(selectedSlug);
+  console.log(selectedVarientId);
+
   const [multiProductImage, setMultiProductImage] = useState([]);
   const [productDetails, setProductDetails] = useState([]);
   const [productId, setProductId] = useState(null);
@@ -77,7 +80,7 @@ const ProductDetail = ({ route, navigation }) => {
   
   const [isInWishlist, setIsInWishlist] = useState(0);
 
-  const { qtyUpdate, isQtyUpdateLoading } = useQtyUpdate();
+   const { qtyUpdate, isQtyUpdateLoading } = useQtyUpdate();
    const { isCartAddLoading, addFromCart } = useAddFromCart();
    const { isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
 
@@ -209,18 +212,18 @@ const ProductDetail = ({ route, navigation }) => {
       const hasDescription = !!productDetails.short_desc;
       const hasDescriptionFull = !!productDetails.full_desc;
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity 
-      onPress={() =>
-        navigation.navigate("ProductImageView", {
-          images: multiProductImage,
-          selectedIndex: activeIndex,
-        })
-      }
-     style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <Image source={{ uri: item.img }} style={{ width: rw(70), height: rw(70), borderRadius: 10 }} />
-    </TouchableOpacity>
-  );
+    const renderItem = ({ item }) => (
+      <TouchableOpacity 
+        onPress={() =>
+          navigation.navigate("ProductImageView", {
+            images: multiProductImage,
+            selectedIndex: activeIndex,
+          })
+        }
+      style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <Image source={{ uri: item.img }} style={{ width: rw(70), height: rw(70), borderRadius: 10 }} />
+      </TouchableOpacity>
+    );
 
   return (
     <View style={styles.container}>

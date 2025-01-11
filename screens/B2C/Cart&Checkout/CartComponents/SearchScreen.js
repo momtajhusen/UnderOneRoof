@@ -64,13 +64,20 @@ const PrivacyPolicy = ({ navigation }) => {
 
     const renderSearchItem = ({ item }) => (
         <TouchableOpacity 
+        //   onPress={() =>
+        //     navigation.navigate('B2BProductListing', {
+        //       selectCategoryId: item.category,
+        //       selectCategoryName: item.catname,
+        //       selectCategorySlug: item.cslug,
+        //     })
+        //   }
           onPress={() =>
-            navigation.navigate('B2BProductListing', {
-              selectCategoryId: item.category,
-              selectCategoryName: item.catname,
-              selectCategorySlug: item.cslug,
+            navigation.navigate('ProductDetail', {
+              item: item,
+              itemImage: item.itemimage,
             })
           }
+
           style={styles.searchItemContainer}>
             <Image style={styles.fullWidthImage} source={{ uri: item.itemimage }} />
             <View style={styles.itemInfo}>
