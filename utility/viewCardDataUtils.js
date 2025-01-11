@@ -37,12 +37,12 @@ export const useViewCartData = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await viewCartData();
-    };
-    fetchData();
-  }, []);  
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await viewCartData();
+  //   };
+  //   fetchData();
+  // }, []);  
 
   return {
     isViewCartLoading,
