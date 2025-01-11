@@ -30,7 +30,6 @@ import RatingAndReviews from '../screens/B2C/Accounts/AccountComponents/RatingAn
 import EditAddress from '../screens/B2C/Accounts/AccountComponents/EditAddress';
 import FAQs from '../screens/B2C/Accounts/AccountComponents/FAQs';
 
-
 // B2B Navigation 
 import RegistrationOwnerScreen from '../screens/B2B/Registration/RegistrationOwnerScreen';
 import OutletDetailsScreen from '../screens/B2B/Registration/OutletDetailsScreen';
@@ -60,22 +59,19 @@ const Stack = createSharedElementStackNavigator();
 // create a component
 const StackNavigation = () => {
 
- 
-  
     return (
         <Stack.Navigator> 
-
 
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="B2BBottomNavigator" component={B2BBottomNavigator} options={{ headerShown: false }} />
-
 
         {/* Screen navigation  */}
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
         <Stack.Screen name="CartScreen" component={CartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ headerShown: false }} />
+        
         {/* Auth navigation  */}
         <Stack.Screen name="SignupOrLogin" component={SignupOrLogin} options={{ headerShown: false }} />
         <Stack.Screen name="VerifyOtp" component={VerifyOtp} options={{ headerShown: false }} />
@@ -111,9 +107,6 @@ const StackNavigation = () => {
         <Stack.Screen name="RatingAndReviews" component={RatingAndReviews} options={{ headerShown: false }} />
         <Stack.Screen name="EditAddress" component={EditAddress} options={{ headerShown: false }} />
         <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: false }} />
- 
-
-        
         <Stack.Screen name="FAQs" component={FAQs} options={{ headerShown: false }} />
 
         {/*  B2B Navigation  */}
@@ -137,8 +130,6 @@ const StackNavigation = () => {
         <Stack.Screen name="B2BOrderPlaced" component={B2BOrderPlaced} options={{ headerShown: false }} />
         <Stack.Screen name="B2BProceedDetails" component={B2BProceedDetails} options={{ headerShown: false }} />
         <Stack.Screen name="ProductImageView" component={ProductImageView} options={{ headerShown: false }} />
-
-
      </Stack.Navigator>
     );
 };

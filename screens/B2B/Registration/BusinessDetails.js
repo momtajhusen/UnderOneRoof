@@ -190,7 +190,7 @@ const BusinessDetails = ({ navigation, route }) => {
         </ScrollView>
 
         {/* Floating Button */}
-        <View style={{ width: '100%', padding: 16, backgroundColor: 'white', position: 'absolute', bottom: 0, justifyContent:"center" }}>
+        <View style={{ width: rw(100), padding: 16, backgroundColor: 'white', position: 'absolute', bottom: 0, justifyContent:"center" }}>
           <CustomButtons
             onPress={handleSubmit}
             title="Submit"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import TextInputField from '../../../components/Inputs/TextInputField';
 import SelectInputField from '../../../components/Inputs/SelectInputField';
 import DateInputField from '../../../components/Inputs/DateInputField';
@@ -15,6 +16,7 @@ const B2BMyProfile = () => {
   const [gender, setGender] = useState('');
   const [dob, setDob] = useState(null);
   const [address, setAddress] = useState('');
+  const [profileImage, setProfileImage] = useState(require('../../../assets/user.png'));
 
   const { state, dispatch } = useContext(AppContext);
 
@@ -30,6 +32,9 @@ const B2BMyProfile = () => {
         setPhone(profile.mobile || '');
         setGender(profile.gender || '');
         setAddress(profile.address || '');
+        if (profile.image) {
+          setProfileImage({ uri: profile.image });
+        }
       } catch (error) {
         console.error('Error fetching profile data:', error);
       } finally {
@@ -38,6 +43,68 @@ const B2BMyProfile = () => {
     };
     fetchData();
   }, [state.reFresh]);
+
+  const handleImagePick = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        Alert.alert('Permission Denied', 'You need to enable permissions to access the gallery.');
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        const selectedImage = result.assets[0];
+        setProfileImage({ uri: selectedImage.uri });
+        await uploadProfileImage(selectedImage.uri);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      Alert.alert('Error', 'An error occurred while selecting an image.');
+    }
+  };
+
+  const uploadProfileImage = async (imageUri) => {
+    try {
+      const formData = new FormData();
+ 
+      formData.append('itemimage', {
+        uri: imageUri, 
+        name: 'profile.jpg', 
+        type: 'image/jpeg',
+      });
+  
+      const response = await apiClient.post('/profileImageupdate', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      console.log(response);
+  
+      if (response.status === 200) {
+        Alert.alert('Success', 'Profile image updated successfully');
+        dispatch({
+          type: 'GLOBAL_REFRESH',
+          payload: {
+            reFresh: Math.ceil(Math.random() * 100),
+          },
+        });
+      } else {
+        Alert.alert('Error', 'Failed to update profile image');
+      }
+    } catch (error) {
+      console.error('Error uploading profile image:', error);
+      Alert.alert('Error', 'An error occurred while uploading the image.');
+    }
+  };
+  
 
   const handleUpdate = async () => {
     try {
@@ -79,8 +146,8 @@ const B2BMyProfile = () => {
       <Header title="My Profile" />
       <View style={styles.container}>
         <View style={styles.ImageContainer}>
-          <Image style={styles.userImage} source={require('../../../assets/user.png')} />
-          <TouchableOpacity style={styles.IconContainer}>
+          <Image style={styles.userImage} source={profileImage} />
+          <TouchableOpacity style={styles.IconContainer} onPress={handleImagePick}>
             <MaterialIcons style={styles.cameraIcon} name="photo-camera" size={18} color="black" />
           </TouchableOpacity>
           <Image style={styles.Rectangleprofile} source={require('../../../assets/Rectangleprofile.png')} />
@@ -155,6 +222,7 @@ const styles = StyleSheet.create({
     left: rw(19),
     top: rh(1),
     zIndex: 100,
+    borderRadius: rw(19) / 2,
   },
   inputContainer: {
     zIndex: 100,
