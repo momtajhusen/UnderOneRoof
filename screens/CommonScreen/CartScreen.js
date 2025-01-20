@@ -2,15 +2,15 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, RefreshControl, ActivityIndicator } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from '@react-navigation/native';
-import UserDetails from './CartComponents/userDetails';
-import CartItemsList from '../../../components/List/CartItemsList';
-import PriceDetails from './CartComponents/PriceDetails';
-import SimilarProducts from './CartComponents/SimilarProducts';
-import Header from '../../../components/header';
-import ProceedDetails from './CartComponents/ProceedDetails';
-import { AppContext } from '../../../context/AppContext';
-import { useViewCartData } from '../../../utility/viewCardDataUtils';
-import { rw, rh } from '../../../Service/responsive';
+import UserDetails from '../B2C/Cart&Checkout/CartComponents/userDetails';
+import CartItemsList from '../../components/List/CartItemsList'
+import PriceDetails from '../B2C/Cart&Checkout/CartComponents/PriceDetails';
+import SimilarProducts from '../B2C/Cart&Checkout/CartComponents/SimilarProducts';
+import Header from '../../components/header';
+import ProceedDetails from '../B2C/Cart&Checkout/CartComponents/ProceedDetails';
+import { AppContext } from '../../context/AppContext';
+import { useViewCartData } from '../../utility/viewCardDataUtils';
+import { rw, rh,rf } from '../../Service/responsive';
 
 const CartScreen = ({ navigation }) => {
     const [cartData, setCartData] = useState({});
@@ -68,7 +68,7 @@ const CartScreen = ({ navigation }) => {
                 rightContent={
                     <View style={{ flexDirection: "row", gap: rw(4) }}>
                         <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
-                            <Image source={require('../../../assets/Search.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
+                            <Image source={require('../../assets/Search.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
                         </TouchableOpacity>
                     </View>
                 }

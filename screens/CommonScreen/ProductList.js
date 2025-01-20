@@ -11,16 +11,19 @@ import {
   Animated,
   ActivityIndicator
 } from 'react-native';
-import { rw, rh, rf } from '../../../Service/responsive';
-import Header from '../../../components/header';
-import SortByBtn from '../../../components/Buttons/SortByBtn';
-import SortByModal from '../../../components/Modals/SortbyModal';
-import B2BProductCard from '../../../components/List/B2BProductCard';
-import B2BProductLoader from '../../../components/ShimmerLoader/b2bProductLoader';
+import { rw, rh, rf } from '../../Service/responsive';
+import Header from '../../components/header';
+import SortByBtn from '../../components/Buttons/SortByBtn';
+import SortByModal from '../../components/Modals/SortbyModal';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import apiClient from '../../../Service/apiClient';
-import { AppContext } from '../../../context/AppContext';
-
+import apiClient from '../../Service/apiClient';
+import { AppContext } from '../../context/AppContext';
+// B2B Product Card and Loader 
+import B2BProductCard from '../../components/List/B2BProductCard';
+import B2BProductLoader from '../../components/ShimmerLoader/b2bProductLoader';
+// B2C Product Card and Loader 
+import ItemsList from '../../components/List/ItemsList';
+import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
 
   // Sort By Options 
   const options = [
@@ -30,10 +33,10 @@ import { AppContext } from '../../../context/AppContext';
     'Discounts'
   ];
   
-  const B2BProductListing = ({ navigation, route }) => {
+  const ProductListing = ({ navigation, route }) => {
     const { state, dispatch } = useContext(AppContext);
     const { selectCategoryId, selectCategoryName, selectCategorySlug } = route.params;
-  
+
     const [selectedCategoryId, setSelectedCategoryId] = useState(selectCategoryId);
     const [selectedCategoryName, setSelectedCategoryName] = useState(selectCategoryName);
     const [selectedCategorySlug, setSelectedCategorySlug] = useState(selectCategorySlug);
@@ -130,10 +133,10 @@ import { AppContext } from '../../../context/AppContext';
           rightContent={
             <View style={{ flexDirection: 'row', gap: rw(4) }}>
               <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
-                <Image source={require('../../../assets/Search.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
+                <Image source={require('../../assets/Search.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
               </TouchableOpacity>
               <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')}>
-                <Image source={require('../../../assets/Cart.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
+                <Image source={require('../../assets/Cart.png')} style={{ width: rw(5.5), height: rw(5.5) }} />
               </TouchableOpacity>
             </View>
           }
@@ -214,44 +217,65 @@ import { AppContext } from '../../../context/AppContext';
               </View>
             </View>
   
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <ScrollView 
-                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingVertical: rh(1), paddingBottom: rh(5) }}
-                 showsVerticalScrollIndicator={false}
-                 showsHorizontalScrollIndicator={false}
-                 >
-                {
-                  loading ? (
-                    <B2BProductLoader 
-                      layout="vertical" 
-                      styleCardContainer={{
-                        width: categoryData.length === 0 ? rw(90) : rw(75),
-                        marginBottom: 10,
-                      }}
-                    />
-                  ) : productListing?.length > 0 ? (
-                    // Agar products available hain
-                    <B2BProductCard
-                      items={productListing}
-                      styleCardContainer={{
-                        width: categoryData.length === 0 ? rw(90) : rw(75),
-                        marginBottom: 10,
-                      }}
-                      layout="vertical"
-                    />
-                  ) : (
-
-                    <View style={{ height: rh(70), justifyContent: "center", alignItems: "center" }}>
-                      <Image 
-                        source={require('../../../assets/product-not-avable.png')} 
-                        style={{ width: rw(50), height: rw(50) }} 
+            {state.shoppingMode === 'wholesale' ? (
+              /* B2B container */
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <ScrollView 
+                  contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingVertical: rh(1), paddingBottom: rh(5) }}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {
+                    loading ? (
+                      <B2BProductLoader 
+                        layout="vertical" 
+                        styleCardContainer={{
+                          width: categoryData.length === 0 ? rw(90) : rw(75),
+                          marginBottom: 10,
+                        }}
                       />
-                    </View>
-                  )
-                }
+                    ) : productListing?.length > 0 ? (
+                      <B2BProductCard
+                        items={productListing}
+                        styleCardContainer={{
+                          width: categoryData.length === 0 ? rw(90) : rw(75),
+                          marginBottom: 10,
+                        }}
+                        layout="vertical"
+                      />
+                    ) : (
+                      <View style={{ height: rh(70), justifyContent: "center", alignItems: "center" }}>
+                        <Image 
+                          source={require('../../assets/product-not-avable.png')} 
+                          style={{ width: rw(50), height: rw(50) }} 
+                        />
+                      </View>
+                    )
+                  }
+                </ScrollView>
+              </View>
+            ) : (
+              /* B2C container */
+              <View style={{ paddingTop: rh(1), flexDirection: 'row', flex: 1, paddingBottom: rh(5), paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0), justifyContent: 'center' }}>
+                {loading ? (
+                  <View style={{width:rw(100), height:rh(100)}}>
+                    <ItemsListLoader count="6" layout = 'vertical' 
+                    itemContainerStyle={{
+                      width: categoryData.length === 0 ? rw(44) : rw(37),
+                      }} />
+                  </View>
+                ) : productListing.length !== 0 ? (
+                  <ItemsList items={productListing} layout="vertical" listContainerStyle={{ width: categoryData.length === 0 ? rw(45) : rw(37.3), marginBottom: rh(1) }} />
+                ) : (
+                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontSize: rf(2), color: '#555', textAlign: 'center' }}>
+                      No products available
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
 
-              </ScrollView>
-            </View>
           </View>
         </View>
          {/* Sort By Modal Method Modal */}
@@ -261,7 +285,7 @@ import { AppContext } from '../../../context/AppContext';
   };
   
 
-export default B2BProductListing;
+export default ProductListing;
 
 // Styles
 const styles = StyleSheet.create({

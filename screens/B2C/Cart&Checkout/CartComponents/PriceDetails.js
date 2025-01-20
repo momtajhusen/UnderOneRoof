@@ -10,12 +10,6 @@ import apiClient from '../../../../Service/apiClient';
 const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
 
   const navigation = useNavigation();
-
-  console.log('//////////////////////////////////////////');
-  console.log(data);
-  console.log('//////////////////////////////////////////');
-
-
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [grandTotal, setGrandTotal] = useState(data.grand_total);

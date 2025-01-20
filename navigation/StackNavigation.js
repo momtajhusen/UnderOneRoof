@@ -4,8 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomNavigator from './BottomNavigation';
 import SplashScreen from '../screens/B2C/Auth/splash';
 import HomeScreen from '../screens/B2C/HomeAndBrowse/HomeScreen';
-import CategoryScreen from '../screens/B2C/Categorys/CategorysScreen';
-import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
+import CategoryScreen from '../screens/CommonScreen/CategorysScreen';
+import CartScreen from '../screens/CommonScreen/CartScreen';
 import AccountScreen from '../screens/B2C/Accounts/AccountScreen';
 import SignupOrLogin from '../screens/B2C/Auth/SignupOrLogin';
 import VerifyOtp from '../screens/B2C/Auth/VerifyOtp';
@@ -21,8 +21,7 @@ import Orders from '../screens/B2C/Accounts/AccountComponents/Orders';
 import B2BOrders from '../screens/B2B/Accounts/B2BOrders';
 import Wishlist from '../screens/B2C/Accounts/AccountComponents/Wishlist';
 import MyProfile from '../screens/B2C/Accounts/AccountComponents/MyProfile';
-import ProductListing from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductListing';
-import B2BProductListing from '../screens/B2B/HomeAndBrowse/B2BProductList';
+import ProductListing from '../screens/CommonScreen/ProductList';
 import ProductDetail from '../screens/B2C/HomeAndBrowse/HomeComponents/ProductDetail';
 import AllRating from '../screens/B2C/HomeAndBrowse/HomeComponents/AllRating';
 import OrderDetails from '../screens/B2C/Accounts/AccountComponents/OrdersDetail';
@@ -88,7 +87,6 @@ const StackNavigation = () => {
         <Stack.Screen name="Orders" component={Orders} options={{ headerShown: false }} />
         <Stack.Screen name="Wishlist" component={Wishlist} options={{ headerShown: false }} />
         <Stack.Screen name="MyProfile" component={MyProfile} options={{ headerShown: false }} />
-        <Stack.Screen name="ProductListing" component={ProductListing} options={{ headerShown: false }} />
         {/* <Stack.Screen name="ProductDetail" component={ProductDetail} options={{ headerShown: false }} /> */}
         <Stack.Screen
         name="ProductDetail"
@@ -113,7 +111,7 @@ const StackNavigation = () => {
         <Stack.Screen name="RegistrationOwnerScreen" component={RegistrationOwnerScreen} options={{ headerShown: false }} />
         <Stack.Screen name="OutletDetailsScreen" component={OutletDetailsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="BusinessDetails" component={BusinessDetails} options={{ headerShown: false }} />
-        <Stack.Screen name="B2BProductListing" component={B2BProductListing} options={{ headerShown: false }} />
+        <Stack.Screen name="ProductListing" component={ProductListing} options={{ headerShown: false }} />
         <Stack.Screen name="B2BSearchScreen" component={B2BSearchScreen} options={{ headerShown: false }} />
         <Stack.Screen name="B2BOrders" component={B2BOrders} options={{ headerShown: false }} />
         <Stack.Screen name="B2BOrderDetails" component={B2BOrderDetails} options={{ headerShown: false }} />

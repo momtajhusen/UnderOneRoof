@@ -42,9 +42,16 @@ const Checkout = ({ navigation }) => {
         address_id: aid,
         payment_type: 'cod',
       });
+      
+
+      if (response.data.title == 'Order Successfully') {
+        const result = await viewCartData(); 
+        navigation.navigate('B2BOrderPlaced', { data: response.data.data });
+      } else {
+        alert('Error occurred. Please try again.');
+      }
   
       if (response.data.status) {
-        const result = await viewCartData(); 
         navigation.navigate('B2BOrderPlaced', { data: response.data.data });
       } else {
         alert('Error occurred. Please try again.');
@@ -86,7 +93,12 @@ const Checkout = ({ navigation }) => {
       <Header title="Checkout" />
 
       {/* Scrollable Content */}
-      <ScrollView contentContainerStyle={{ paddingBottom: rh(15) }} keyboardShouldPersistTaps="handled">
+      <ScrollView
+      contentContainerStyle={{ paddingBottom: rh(15) }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false} // Hides vertical scroll indicator
+      showsHorizontalScrollIndicator={false} // Hides horizontal scroll indicator (if needed)
+    >
         {/* Stepper */}
         {state.shoppingMode === "retail" && (
           <Stepper steps={['Address', 'Order Summary', 'Payment']} currentStep={1} />
@@ -131,9 +143,9 @@ const Checkout = ({ navigation }) => {
               </View>
               <TouchableOpacity
                 onPress={placeOrder}
-                disabled={isViewCartLoading} // Disable button if loading
+                disabled={isViewCartLoading}
                 style={{
-                  backgroundColor: isViewCartLoading ? "#D3D3D3" : "#FF3131", // Grey color when disabled
+                  backgroundColor: isViewCartLoading ? "#D3D3D3" : "#FF3131",
                   borderRadius: 10,
                   paddingHorizontal: rw(11),
                   paddingVertical: rh(1.5),
@@ -178,7 +190,7 @@ const styles = StyleSheet.create({
   },
   proceedDetails: {
     position: "absolute",
-    bottom: rh(6),
+    bottom: rh(1),
     left: 0,
     right: 0,
     backgroundColor: "white",

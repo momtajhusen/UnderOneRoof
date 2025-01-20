@@ -1,6 +1,6 @@
 //import liraries
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet, StatusBar, ScrollView, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Image, TouchableOpacity, BackHandler} from 'react-native';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import UserDetails from './userDetails';
@@ -11,9 +11,27 @@ import { useFocusEffect } from "@react-navigation/native";
 import { AppContext } from '../../../../context/AppContext';
 
 // create a component
-const OrderPlaced = () => {
+const OrderPlaced = ({route}) => {
+   const { data } = route.params;
+   const { state } = useContext(AppContext);
 
-     const { state } = useContext(AppContext);
+
+    // Handle back button press
+    const handleBackPress = () => {
+     navigation.navigate("BottomNavigator");  
+     return true; 
+   };
+   
+   // Add event listener on mount, remove on unmount
+   useEffect(() => {
+     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+     return () => {
+       backHandler.remove();  
+     };
+   }, []);
+   
+
+
 
    useFocusEffect(() => {
       StatusBar.setBackgroundColor("green");
@@ -60,7 +78,7 @@ const OrderPlaced = () => {
                   </View>
 
                   <View>
-                     <OrderItems /> 
+                     <OrderItems data={data} /> 
                   </View>
 
 

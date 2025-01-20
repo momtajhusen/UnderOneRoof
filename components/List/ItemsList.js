@@ -1,104 +1,113 @@
-// ItemsList.js 
 import React, { useState, useRef, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Animated } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  Animated,
+  ActivityIndicator,
+} from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { SharedElement } from 'react-native-shared-element';
 import { useToggleWishlist } from '../../utility/toggleWishlistUtils';
+import { useAddFromCart } from '../../utility/addCartProductUtils';
+import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
+import { useRemoveFromCart } from '../../utility/deleteCartProductUtils';
 import { AppContext } from '../../context/AppContext';
-
 
 const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }) => {
   const navigation = useNavigation();
-  const [selectedCategoryId, setSelectedCategoryId] = useState(1);
+  const { state } = useContext(AppContext);
 
-  const {state, dispatch } = useContext(AppContext);
-  
-
-  // State to manage the visibility of IncreaseAurDecreaseContener for each item
-  const [showIncreaseDecrease, setShowIncreaseDecrease] = useState(null);
-  const [itemQuantity, setItemQuantity] = useState({}); // Store quantity for each item
-
-  // Animated value for sliding animation
+  const [loadingVariants, setLoadingVariants] = useState({});
+  const [wishlist, setWishlist] = useState({});
   const slideAnim = useRef(new Animated.Value(0)).current;
 
-  // State to manage wishlist status for each item (using their IDs)
-  const [wishlist, setWishlist] = useState({});
+  const { toggleWishlist } = useToggleWishlist();
+  const { addFromCart } = useAddFromCart();
+  const { qtyUpdate } = useQtyUpdate();
+  const { removeFromCart } = useRemoveFromCart();
 
-  const { isWishlistLoading, toggleWishlist } = useToggleWishlist();
-
-  const handleAdd = (item) => {
-    const id = item.pid;
-    if (showIncreaseDecrease === id) {
-      // Close the container by resetting the animated value
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-      setShowIncreaseDecrease(null);
-    } else {
-      // Open the container with a sliding effect
-      Animated.timing(slideAnim, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-      setShowIncreaseDecrease(id);
-      setItemQuantity((prev) => ({ ...prev, [id]: 1 })); // Set initial quantity to 1
-    }
-  };
-
-  const handleIncrease = (id) => {
-    setItemQuantity((prev) => ({
-      ...prev,
-      [id]: prev[id] ? prev[id] + 1 : 1,
-    }));
-  };
-
-  const handleDecrease = (id) => {
-    setItemQuantity((prev) => {
-      if (prev[id] > 1) {
-        return { ...prev, [id]: prev[id] - 1 };
-      } else {
-        // If quantity reaches 0, reset and show "Add" button again
-        setShowIncreaseDecrease(null);
-        return { ...prev, [id]: 0 };
-      }
-    });
-  };
-
-  const handleWishlistToggle = async (item) => {
-    const id = item.pid;
-    const pid = item.pid;
-    const uid = state.userId;
-    
-    // Default value set karna
-    const isInWishlist = item.added_to_wishlist ?? 1;
-  
-    // Toggle wishlist state
-    setWishlist((prevWishlist) => ({
-      ...prevWishlist,
-      [id]: !prevWishlist[id],
-    }));
-  
-    // API call to update the wishlist
-    const result = await toggleWishlist(pid, isInWishlist, uid);
-    console.log(result);
-  };
-  
-
-  // useEffect to initialize wishlist state based on items
+  // Initialize wishlist state
   useEffect(() => {
     const initialWishlist = {};
     items.forEach((item) => {
-      // Default value 1 if added_to_wishlist is not present
-      initialWishlist[item.pid] = item.added_to_wishlist ?? 1;
+      initialWishlist[item.pid] = item.added_to_wishlist ?? false;
     });
     setWishlist(initialWishlist);
   }, [items]);
-  
+
+  const handleAddToCart = async (psid, var_id, moq) => {
+    setLoadingVariants((prevState) => ({
+      ...prevState,
+      [`${psid}-${var_id}`]: true,
+    }));
+
+    await addFromCart(psid, var_id, moq);
+
+    setLoadingVariants((prevState) => ({
+      ...prevState,
+      [`${psid}-${var_id}`]: false,
+    }));
+  };
+
+  const handleIncrease = async (psid, qty, var_id, moq) => {
+    const newQty = qty + 1;
+
+    setLoadingVariants((prevState) => ({
+      ...prevState,
+      [`${psid}-${var_id}-qty`]: true,
+    }));
+
+    await qtyUpdate(psid, newQty, var_id, moq);
+
+    setLoadingVariants((prevState) => ({
+      ...prevState,
+      [`${psid}-${var_id}-qty`]: false,
+    }));
+  };
+
+  const handleDecrease = async (psid, qty, var_id, moq) => {
+    const minQuantity = moq ?? 1;
+
+    if (qty <= minQuantity) {
+      await removeFromCart(psid, var_id);
+      return;
+    }
+
+    const newQty = qty - 1;
+
+    setLoadingVariants((prevState) => ({
+      ...prevState,
+      [`${psid}-${var_id}-qty`]: true,
+    }));
+
+    await qtyUpdate(psid, newQty, var_id);
+
+    setLoadingVariants((prevState) => ({
+      ...prevState,
+      [`${psid}-${var_id}-qty`]: false,
+    }));
+  };
+
+  const handleWishlistToggle = async (item) => {
+    const pid = item.pid;
+    const uid = state.userId;
+
+    console.log(pid);
+    console.log(pid);
+
+    setWishlist((prevWishlist) => ({
+      ...prevWishlist,
+      [pid]: !prevWishlist[pid],
+    }));
+
+    await toggleWishlist(pid, wishlist[pid] ? 0 : 1, uid);
+  };
 
   return (
     <FlatList
@@ -108,140 +117,140 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.listContainer}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('ProductDetail', {
-              item: item,
-              itemImage: item.itemimage,
-            })
-          }
-          disabled={item.stock === 0}
-          style={[
-            styles.itemContainer,
-            listContainerStyle,
-            item.stock === 0 && styles.disabledItem,
-          ]}
-        >
-          <View style={styles.ImageContainer}>
-            <TouchableOpacity
-              onPress={() => handleWishlistToggle(item)}
-              style={styles.likeIcon}
-            >
-              <MaterialIcons
-                name={wishlist[item.pid] ? 'favorite' : 'favorite-border'}
-                size={24} // Adjust size as needed
-                style={{ color: wishlist[item.pid] ? '#DC3545' : '#BCBCBC' }}
-              />
-            </TouchableOpacity>
+      renderItem={({ item }) => {
+        const cartProducts = state.viewCartData?.cartProduct || [];
+        const isInCart = cartProducts.some(
+          (cartItem) => cartItem.pid === item.pid && cartItem.var_id === item.varient_id
+        );
+        const itemQty =
+          cartProducts.find((cartItem) => cartItem.pid === item.pid)?.qty || 0;
 
-            {showIncreaseDecrease !== item.pid && (
+        return (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ProductDetail', {
+                item: item,
+                itemImage: item.itemimage,
+              })
+            }
+            disabled={item.stock === 0}
+            style={[
+              styles.itemContainer,
+              listContainerStyle,
+              item.stock === 0 && styles.disabledItem,
+            ]}
+          >
+            <View style={styles.ImageContainer}>
               <TouchableOpacity
-                disabled={item.stock === 0}
-                onPress={() => handleAdd(item)}
-                style={styles.addbtn}
+                onPress={() => handleWishlistToggle(item)}
+                style={styles.likeIcon}
               >
-                <Text style={styles.btntext}>Add</Text>
+                <MaterialIcons
+                  name={wishlist[item.pid] ? 'favorite' : 'favorite-border'}
+                  size={24}
+                  style={{ color: wishlist[item.pid] ? '#DC3545' : '#BCBCBC' }}
+                />
               </TouchableOpacity>
-            )}
 
-            {showIncreaseDecrease === item.pid && (
-              <Animated.View
-                style={[
-                  styles.IncreaseAurDecreaseContener,
-                  {
-                    transform: [
-                      {
-                        translateX: slideAnim.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [rw(20), 0],
-                        }),
-                      },
-                    ],
-                  },
-                ]}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+              {isInCart ? (
+                <View style={styles.IncreaseAurDecreaseContener}>
                   <TouchableOpacity
-                    style={{ width: '45%', height: '100%' }}
-                    onPress={() => handleIncrease(item.pid)}
+                    onPress={() =>
+                      handleDecrease(item.pid, itemQty, item.varient_id, item.moq)
+                    }
+                    disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}
                   >
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2), color: 'white' }}>
-                      +
-                    </Text>
+                    <Text style={styles.controlText}>-</Text>
                   </TouchableOpacity>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>{itemQuantity[item.pid] || 0}</Text>
+                  {loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={{color:"white", fontWeight:"bold"}}>{itemQty}</Text>
+                  )}
                   <TouchableOpacity
-                    style={{ width: '45%', height: '100%' }}
-                    onPress={() => handleDecrease(item.pid)}
+                    onPress={() =>
+                      handleIncrease(item.pid, itemQty, item.varient_id, item.moq)
+                    }
+                    disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}
                   >
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: rf(2), color: 'white' }}>
-                      -
-                    </Text>
+                    <Text style={styles.controlText}>+</Text>
                   </TouchableOpacity>
                 </View>
-              </Animated.View>
-            )}
-
-            <SharedElement id={`item.${item.pid}.image`}>
-              <Image
-                source={{ uri: item.itemimage || 'https://via.placeholder.com/150' }}
-                style={styles.image}
-              />
-            </SharedElement>
-          </View>
-          <View style={styles.details}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: rw(2) }}>
-              <Text style={styles.weight}>
-                {item.measurement} {item.unit}
-              </Text>
-            </View>
-            <View style={{ paddingHorizontal: rw(2), paddingVertical: rh(0.5) }}>
-              <Text style={styles.name} numberOfLines={2}>
-                {item.name}
-              </Text>
-              <View style={{ flexDirection: 'row' }}>
-                {Array.from({ length: item.avg || 5 }, (_, index) => (
-                  <MaterialIcons key={index} name="star-rate" size={rf(2)} style={styles.starIcon} />
-                ))}
-                <Text style={{ fontSize: rf(1.5), marginLeft: rw(1) }}>({item.rating})</Text>
-              </View>
-              {item.stock === 0 && (
-                <View style={styles.OutOfStock}>
-                  <Text style={{ color: 'white', textAlign: 'center' }}>Out Of Stock</Text>
-                </View>
+              ) : (
+                <TouchableOpacity
+                  onPress={() =>
+                    handleAddToCart(item.pid, item.varient_id, item.moq)
+                  }
+                  disabled={loadingVariants[`${item.pid}-${item.varient_id}`]}
+                  style={styles.addbtn}
+                >
+                  {loadingVariants[`${item.pid}-${item.varient_id}`] ? (
+                    <ActivityIndicator size="small" color="#FF3131" />
+                  ) : (
+                    <Text style={styles.btntext}>Add</Text>
+                  )}
+                </TouchableOpacity>
               )}
-              <Text style={styles.discount}>{item.discount || 0} % OFF</Text>
-              <Text style={styles.price}>
-                ₹{item.selling_price || 'N/A'}{' '}
-                <Text style={styles.mpr}>
-                  MPR <Text style={styles.mprPrice}>₹{item.mrp_price || 'N/A'}</Text>
-                </Text>
-              </Text>
+              <SharedElement id={`item.${item.pid}.image`}>
+                <Image
+                  source={{ uri: item.itemimage || 'https://via.placeholder.com/150' }}
+                  style={styles.image}
+                />
+              </SharedElement>
             </View>
-             
-            {/* add to cart  */}
-            {cartbtn && (
-              <View style={{paddingHorizontal:rw(2)}}>
-              <TouchableOpacity style={{borderWidth:1, paddingVertical:rh(0.5), marginBottom:rh(1), borderColor:"#FF3131", borderRadius:5}}>
-                 <Text style={{textAlign:"center", fontWeight:"400", color:"#FF3131"}}>Move to Cart</Text>
-              </TouchableOpacity>
+            <View style={styles.details}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: rw(2) }}>
+                <Text style={styles.weight}>
+                  {item.measurement} {item.unit}
+                </Text>
               </View>
-            )}
+              <View style={{ paddingHorizontal: rw(2), paddingVertical: rh(0.5) }}>
+                <Text style={styles.name} numberOfLines={2}>
+                  {item.name}
+                </Text>
+                <View style={{ flexDirection: 'row' }}>
+                  {Array.from({ length: item.avg || 5 }, (_, index) => (
+                    <MaterialIcons key={index} name="star-rate" size={rf(2)} style={styles.starIcon} />
+                  ))}
+                  <Text style={{ fontSize: rf(1.5), marginLeft: rw(1) }}>({item.rating})</Text>
+                </View>
+                {item.stock === 0 && (
+                  <View style={styles.OutOfStock}>
+                    <Text style={{ color: 'white', textAlign: 'center' }}>Out Of Stock</Text>
+                  </View>
+                )}
+                <Text style={styles.discount}>{item.discount || 0} % OFF</Text>
+                <Text style={styles.price}>
+                  ₹{item.selling_price || 'N/A'}{' '}
+                  <Text style={styles.mpr}>
+                    MPR <Text style={styles.mprPrice}>₹{item.mrp_price || 'N/A'}</Text>
+                  </Text>
+                </Text>
+              </View>
+
+            {/* add to cart  */}
+              {cartbtn && (
+                <TouchableOpacity
+                style={{borderWidth:1, paddingVertical:rh(0.5), marginHorizontal:rw(3), marginBottom:rh(1), borderColor:"#FF3131", borderRadius:5}}
+                  onPress={async () => {
+                    await handleAddToCart(item.pid, item.varient_id, item.moq);
+                    await handleWishlistToggle(item);
+                  }}
+                >
+                  <Text style={{textAlign:"center", fontWeight:"400", color:"#FF3131"}}>Move to Cart</Text>
+                </TouchableOpacity>
+              )}
 
         
-
-
-          </View>
-        </TouchableOpacity>
-      )}
+            </View>
+          </TouchableOpacity>
+        );
+      }}
     />
   );
 };
 
 export default ItemsList;
- 
-
 
 const styles = StyleSheet.create({
   listContainer: {
@@ -252,12 +261,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   itemContainer: {
-    width: rw(39), 
-    marginRight: rw(1.5), 
+    width: rw(39),
+    marginRight: rw(1.5),
     backgroundColor: '#fff',
     borderRadius: 10,
-    borderWidth:2,
-    borderColor:"white",
+    borderWidth: 2,
+    borderColor: "white",
   },
   ImageContainer: {
     justifyContent: "center",
@@ -278,7 +287,7 @@ const styles = StyleSheet.create({
     left: rw(1),
     top: rh(0.5),
     padding: rw(1),
-    zIndex:100,
+    zIndex: 100,
   },
   addbtn: {
     position: "absolute",
@@ -295,7 +304,7 @@ const styles = StyleSheet.create({
   },
   IncreaseAurDecreaseContener: {
     position: "absolute",
-    width: rw(25),
+    width: rw(23),
     height: rh(3.5),
     right: rw(1),
     bottom: rh(0.5),
@@ -305,7 +314,19 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 8,
     justifyContent: "center",
-    backgroundColor:"#FF3131",
+    backgroundColor: "#FF3131",
+    flexDirection:"row",
+    justifyContent:"space-between",
+    paddingHorizontal:rw(1),
+    alignItems:"center"
+  },
+  controlText:{
+    paddingHorizontal:rw(2.5),
+    paddingVertical:rh(0),
+    fontSize:rf(2),
+    borderRadius:5,
+    color:"white",
+    fontWeight:"bold"
   },
   OutOfStock: {
     position: "absolute",
@@ -358,7 +379,7 @@ const styles = StyleSheet.create({
   discount: {
     fontSize: rf(1.5),
     color: '#FF9100',
-    marginTop:rh(0.5)
+    marginTop: rh(0.5),
   },
   price: {
     fontSize: rf(2),
@@ -370,7 +391,7 @@ const styles = StyleSheet.create({
     fontSize: rf(1.5),
     textDecorationLine: 'none',
     color: 'grey',
-    fontWeight:"normal"
+    fontWeight: "normal",
   },
   mprPrice: {
     fontSize: rf(1.5),
@@ -378,5 +399,3 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
 });
-
-

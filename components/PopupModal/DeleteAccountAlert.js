@@ -1,22 +1,59 @@
 // import libraries
-import React from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ImageBackground, Image, Alert } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
+import apiClient from '../../Service/apiClient';
+import { useNavigation } from '@react-navigation/native';
+
 
 // create a component
 const DeleteAccountAlert = ({ isModalVisible, toggleModal }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigation = useNavigation();
+  
+
+// Function to handle account deletion
+const handleDeleteAccount = async () => {
+  setIsDeleting(true);
+  try {
+    const response = await apiClient.get('/deleteAccount');
+    if (response?.data?.status === 1) {
+      Alert.alert(
+        'Account Deleted',
+        'Your account has been successfully deleted. We’re sad to see you go! If you change your mind, you’re always welcome to join us again.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              toggleModal();
+              navigation.replace('SignupOrLogin');
+            },
+          },
+        ]
+      );
+    } else {
+      Alert.alert('Error', 'Failed to delete the account. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    Alert.alert('Error', 'Something went wrong. Please try again later.');
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
   return (
     <Modal
       transparent={true}
       animationType="fade"
       visible={isModalVisible}
-      onRequestClose={toggleModal}  // This is for Android back button
+      onRequestClose={toggleModal}
     >
       <View style={styles.modalContainer}>
-        <ImageBackground 
-          source={require('../../assets/RectangleDeleteAccount.png')} // Update with your image path
+        <ImageBackground
+          source={require('../../assets/RectangleDeleteAccount.png')}
           style={styles.modalContent}
-          imageStyle={styles.frameImage} // Styles to control the frame image shape
+          imageStyle={styles.frameImage}
         >
           {/* Icon at the top */}
           <View style={styles.iconContainer}>
@@ -25,18 +62,34 @@ const DeleteAccountAlert = ({ isModalVisible, toggleModal }) => {
 
           {/* Confirmation Text */}
           <Text style={styles.text}>Are you sure?</Text>
-          <Text style={{fontSize:rf(2), textAlign:"center", color:"#717171"}}>You want to delete your account permanently.</Text>
-
-          <Text style={{fontSize:rf(2), width:rw(75), textAlign:"center", color:"#717171", marginTop:rh(2), fontStyle: "italic"}}>All your data, including account information and preferences, will be permanently removed.</Text>
-
-
+          <Text style={{ fontSize: rf(2), textAlign: 'center', color: '#717171' }}>
+            You want to delete your account permanently.
+          </Text>
+          <Text
+            style={{
+              fontSize: rf(2),
+              width: rw(75),
+              textAlign: 'center',
+              color: '#717171',
+              marginTop: rh(2),
+              fontStyle: 'italic',
+            }}
+          >
+            All your data, including account information and preferences, will be permanently removed.
+          </Text>
 
           {/* Action Buttons */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
-              <Text style={styles.cancelButtonText}>Delete Account</Text>
+            <TouchableOpacity
+              style={[styles.cancelButton, isDeleting && { opacity: 0.7 }]}
+              onPress={handleDeleteAccount}
+              disabled={isDeleting}
+            >
+              <Text style={styles.cancelButtonText}>
+                {isDeleting ? 'Deleting...' : 'Delete Account'}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.logoutButton} onPress={() => {/* Add logout functionality here */}}>
+            <TouchableOpacity style={styles.logoutButton} onPress={toggleModal}>
               <Text style={styles.logoutButtonText}>Keep Account</Text>
             </TouchableOpacity>
           </View>
@@ -52,35 +105,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',  
   },
   modalContent: {
-    width: rw(90), // Responsive width (e.g., 80% of screen width)
-    height: rh(40), // Responsive height (e.g., 30% of screen height)
+    width: rw(90), 
+    height: rh(40), 
     alignItems: 'center',
-    padding: rw(5), // Padding based on screen width
+    padding: rw(5), 
     overflow:"hidden"
   },
   frameImage: {
-    resizeMode: 'stretch', // Stretches the frame to fit the modal content
-    borderRadius: rw(3), // Border radius based on screen width
+    resizeMode: 'stretch', 
+    borderRadius: rw(3), 
   },
   iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: rh(-1.5), // Positioned above the text
+    marginTop: rh(-1.5), 
     zIndex: 1,
   },
   icon: {
     marginRight:rw(0.5),
-    width: rw(16), // Icon size based on screen width
+    width: rw(16), 
     height: rw(16),
   },
   text: {
-    fontSize: rf(2.5), // Responsive font size
+    fontSize: rf(2.5),  
     color: '#333333',
     textAlign: 'center',
-    marginVertical: rh(1), // Vertical margin based on screen height
+    marginVertical: rh(1),  
     fontWeight:"bold",
   },
   buttonContainer: {
@@ -88,13 +141,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     position: 'absolute',
-    bottom: rh(2), // Positioned at the bottom of the frame
+    bottom: rh(2), 
   },
   cancelButton: {
     flex: 1,
     backgroundColor: '#e0e0e0',
-    paddingVertical: rh(1.5), // Padding based on screen height
-    borderRadius: rw(2), // Border radius based on screen width
+    paddingVertical: rh(1.5),  
+    borderRadius: rw(2),  
     marginRight: rw(2.5),
     alignItems: 'center',
   },
@@ -108,7 +161,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: '#333',
-    fontSize: rf(1.8), // Responsive font size
+    fontSize: rf(1.8), 
     fontWeight:"bold",
   },
   logoutButtonText: {

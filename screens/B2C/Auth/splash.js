@@ -22,7 +22,9 @@ const SplashScreen = () => {
                 setTimeout(() => {
                     if (token) {
 
+                        console.log(userId);
                         console.log(token);
+
 
                         // if (ShoppingMode === 'wholesale') {
                             navigation.replace('ShoppingMode', { mobile: userNumber, userId: userId });
@@ -32,6 +34,13 @@ const SplashScreen = () => {
                         //     navigation.replace('ShoppingMode');
                         // }
 
+                        dispatch({
+                            type: 'SET_USER',
+                            payload: {
+                                userId: userId,
+                                userNumber: userNumber,
+                            },
+                          });
 
                     } else {
                         navigation.replace('SignupOrLogin');

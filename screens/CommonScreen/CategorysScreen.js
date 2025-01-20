@@ -1,28 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, RefreshControl, FlatList } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import CategoryList from '../../../components/List/CategoryList';
-import { rw, rh } from '../../../Service/responsive';
-import Header from '../../../components/header';
-import apiClient from '../../../Service/apiClient';
-import CategoryListLoader from '../../../components/ShimmerLoader/CategoryListLoader';
+import CategoryList from '../../components/List/CategoryList';
+import { rw, rh } from '../../Service/responsive';
+import Header from '../../components/header';
+import apiClient from '../../Service/apiClient';
+import CategoryListLoader from '../../components/ShimmerLoader/CategoryListLoader';
+import { AppContext } from '../../context/AppContext';
+
 
 const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const { state, dispatch } = useContext(AppContext);
+  
+
   // Fetch categories from API
   const fetchCategories = async () => {
     try {
       const response = await apiClient.get('/allcategory');
-      const category = response.data.data.category;
-      setCategories(category);
+      const allCategories = response.data.data.category;
+
+      // Filter categories based on state.shoppingMode
+      const filteredCategories = allCategories.filter(category => {
+        if (state.shoppingMode === 'wholesale') {
+          return category.role_type === 3 || category.role_type === null;
+        } else if (state.shoppingMode === 'retail') {
+          return category.role_type === 2;
+        }
+        return false;
+      });
+
+      setCategories(filteredCategories);
     } catch (error) {
       console.error('Error fetching categories:', error);
     } finally {
       setLoading(false);
-      setIsRefreshing(false); // Stop refresh animation
+      setIsRefreshing(false);
     }
   };
 
@@ -65,13 +81,13 @@ const CategoryScreen = ({ navigation }) => {
           <View style={styles.headerIcons}>
             <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
               <Image
-                source={require('../../../assets/Search.png')}
+                source={require('../../assets/Search.png')}
                 style={styles.icon}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')}>
               <Image
-                source={require('../../../assets/Cart.png')}
+                source={require('../../assets/Cart.png')}
                 style={styles.icon}
               />
             </TouchableOpacity>
@@ -79,7 +95,7 @@ const CategoryScreen = ({ navigation }) => {
         }
       />
 
-      <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: rw(3.9) }}>
+      <View style={{ justifyContent: "center", paddingHorizontal: rw(3.9) }}>
         {/* FlatList for Categories */}
         {loading ? (
           <View style={styles.categoryListContainer}>

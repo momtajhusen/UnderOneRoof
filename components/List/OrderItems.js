@@ -3,56 +3,18 @@ import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { AppContext } from '../../context/AppContext';
 
-// Sample Data (you should pass this data from the parent component)
-const cartProduct = [
-  {
-    "id": 63,
-    "pid": 124,
-    "uid": 402,
-    "qty": 9,
-    "var_id": 434,
-    "created_at": "2024-01-14T14:19:49.000000Z",
-    "updated_at": "2024-10-15T09:42:50.000000Z",
-    "name": "देशी कपूर सरस्वती - Desi camphor",
-    "slug": "thasha-kapara-sarasavata-desi-camphor",
-    "product_code": "105",
-    "hsn": null,
-    "measurement": "50",
-    "unit": "1",
-    "pstock": 1,
-    "pstatus": 1,
-    "mrp_price": 140,
-    "selling_price": 80,
-    "discount": 43,
-    "category": "8,17,18,20,22,24",
-    "cname": null,
-    "sub_category": null,
-    "scname": null,
-    "manufacturer": null,
-    "made_in": "india",
-    "shipping_type": "Local Shipping",
-    "delivery_places": "3",
-    "pincode": "",
-    "returnable": "0",
-    "cancelable": "1",
-    "cod_allowed": "1",
-    "itemimage": "https://u1rfoods.com/productImage/14-01-2024-19-49-491705261789.jpg",
-    "multi_image": null,
-    "bookpdf": null,
-    "position": 111,
-    "short_desc": null,
-    "full_desc": null,
-    "return_condition": null,
-    "shipping": null,
-    "avg": null,
-    "total_stock": 1000
-  }
-];
+ 
+const OrderItems = ({data}) => {
 
-const OrderItems = () => {
+
+  console.log('//////////////////');
+    console.log(data);
+  console.log('//////////////////');
+
 
    const { state } = useContext(AppContext);
     
+   return false;
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>

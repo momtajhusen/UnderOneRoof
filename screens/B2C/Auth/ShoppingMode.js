@@ -13,7 +13,7 @@ import B2BBottomNavigator from '../../../navigation/B2BBottomNavigation';
 const ShoppingMode = ({ navigation, route }) => {
   const { state, dispatch } = useContext(AppContext);
 
-  const { mobile } = route.params;
+  const { mobile, userId } = route.params;
   const [loadingType, setLoadingType] = useState(null);
 
   useFocusEffect(() => {
@@ -43,9 +43,11 @@ const ShoppingMode = ({ navigation, route }) => {
         dispatch({
           type: 'SET_USER',
           payload: {
+              userId: userId,
               shoppingMode: type,
+              userNumber: mobile,
           },
-      });
+        });
       
     } catch (error) {
       console.error(error);

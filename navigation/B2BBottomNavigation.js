@@ -3,10 +3,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {View, Text, Pressable, Image } from 'react-native';
 
 import B2BHomeScreen from '../screens/B2B/HomeAndBrowse/B2BHomeSceeen';
-import B2BCartScreen from '../screens/B2B/CartAndCheckout/B2BCartScreen';
 import B2BAccountScreen from '../screens/B2B/Accounts/B2BAccountScreen';
-import B2BCategoryScreen from '../screens/B2B/HomeAndBrowse/B2BCategoryScreen';
-import CartScreen from '../screens/B2C/Cart&Checkout/CartScreen';
+import CategoryScreen from '../screens/CommonScreen/CategorysScreen';
+import CartScreen from '../screens/CommonScreen/CartScreen';
 import { AppContext } from '../context/AppContext';
 import { useViewCartData } from '../utility/viewCardDataUtils';
 
@@ -15,11 +14,7 @@ import { rw, rh, rf } from '../Service/responsive';
 
 const Tab = createBottomTabNavigator();
 
-
-
 const B2BBottomNavigator = () => {
-
-
   const { state, dispatch } = useContext(AppContext);
 
   const cartCount = state.viewCartData?.cartProduct?.length ?? 0;
@@ -86,7 +81,7 @@ const B2BBottomNavigator = () => {
 
       <Tab.Screen
         name="B2BCategory"
-        component={B2BCategoryScreen}
+        component={CategoryScreen}
         options={{
           tabBarLabel: 'Category',
           tabBarIcon: ({ focused }) => (

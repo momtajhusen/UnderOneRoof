@@ -112,9 +112,9 @@ const B2BCheckOutScreen = ({ navigation }) => {
             </ScrollView>
 
             {/* Fixed Proceed Details at the bottom */}
-            <View style={styles.proceedDetails}>
+            {/* <View style={styles.proceedDetails}>
                 <ProceedDetails price="4199" weight="1kg x 5" mrpprice="4550" btnText="Proceed" onPress={()=>navigation.navigate('B2BOrderPlaced')} />
-            </View>
+            </View> */}
         </View>
     );
 };
