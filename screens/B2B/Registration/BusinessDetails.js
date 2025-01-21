@@ -84,6 +84,7 @@ const BusinessDetails = ({ navigation, route }) => {
     console.log('FormData:', formData);
   
     try {
+      setIsLoading(true);
       const response = await apiClient.post('/registerBusiness', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

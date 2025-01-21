@@ -97,18 +97,17 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
   const handleWishlistToggle = async (item) => {
     const pid = item.pid;
     const uid = state.userId;
-
-    console.log(pid);
-    console.log(pid);
-
-    setWishlist((prevWishlist) => ({
-      ...prevWishlist,
-      [pid]: !prevWishlist[pid],
-    }));
-
-    await toggleWishlist(pid, wishlist[pid] ? 0 : 1, uid);
+  
+    setWishlist((prevWishlist) => {
+      const isInWishlist = !prevWishlist[pid];  
+      toggleWishlist(pid, isInWishlist, uid); 
+      return {
+        ...prevWishlist,
+        [pid]: isInWishlist,
+      };
+    });
   };
-
+  
   return (
     <FlatList
       data={items}
@@ -131,6 +130,7 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
               navigation.navigate('ProductDetail', {
                 item: item,
                 itemImage: item.itemimage,
+                itemQty:itemQty,
               })
             }
             disabled={item.stock === 0}
@@ -208,12 +208,24 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
                 <Text style={styles.name} numberOfLines={2}>
                   {item.name}
                 </Text>
-                <View style={{ flexDirection: 'row' }}>
-                  {Array.from({ length: item.avg || 5 }, (_, index) => (
-                    <MaterialIcons key={index} name="star-rate" size={rf(2)} style={styles.starIcon} />
-                  ))}
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {Array.from({ length: 5 }, (_, index) => {
+                    const avg = item.avg || 0;  
+                    const isHalfFilled = avg > index && avg < index + 1;  
+                    const isFilled = avg >= index + 1; 
+
+                    return (
+                      <MaterialIcons
+                        key={index}
+                        name={isFilled ? 'star' : isHalfFilled ? 'star-half' : 'star-outline'}
+                        size={rf(2)}
+                        style={styles.starIcon}
+                      />
+                    );
+                  })}
                   <Text style={{ fontSize: rf(1.5), marginLeft: rw(1) }}>({item.rating})</Text>
                 </View>
+
                 {item.stock === 0 && (
                   <View style={styles.OutOfStock}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Out Of Stock</Text>

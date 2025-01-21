@@ -19,6 +19,9 @@ const initialState = {
   reFresh: false,
   isLoader: false,
 
+  isWishlishRefresh: false,
+
+
   isCartLoader: false,
 
 

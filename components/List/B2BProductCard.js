@@ -97,6 +97,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                 navigation.navigate('ProductDetail', {
                   item: item,
                   itemImage: item.itemimage,
+                  itemQty:state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0,
                 })
               }
             >

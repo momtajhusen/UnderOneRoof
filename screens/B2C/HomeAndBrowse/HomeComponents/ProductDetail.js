@@ -47,6 +47,10 @@ const ProductDetail = ({ route, navigation }) => {
 
     const item = route?.params?.item || {};
     const itemImage = route?.params?.itemImage || '';
+    const itemQty = route?.params?.itemQty || '';
+
+
+
  
  
   const [activeIndex, setActiveIndex] = useState(0);
@@ -64,9 +68,6 @@ const ProductDetail = ({ route, navigation }) => {
   );
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
 
-  console.log(selectedSlug);
-  console.log(selectedVarientId);
-
   const [multiProductImage, setMultiProductImage] = useState([]);
   const [productDetails, setProductDetails] = useState([]);
   const [productId, setProductId] = useState(null);
@@ -74,7 +75,7 @@ const ProductDetail = ({ route, navigation }) => {
   const [ProductReview, setReview] = useState([]);
   const [ProductVarient, setProductVarient] = useState([]);
 
-  const [cartQty, setCartQty] = useState(0); 
+  const [cartQty, setCartQty] = useState(itemQty); 
 
   const [cartQuantity, setCartQuantity] = useState(0);
   
@@ -86,26 +87,50 @@ const ProductDetail = ({ route, navigation }) => {
 
    const [selectedVariantId, setSelectedVariantId] = useState(null);
 
-    const addToCart = async () => {
-      const moq = productDetails.moq || 1;
-      const result = await addFromCart(productDetails.pid, selectedVariantId, moq);
-      setCartQty(moq);
-    };
+   const addToCart = async () => {
+    const moq = productDetails.moq || 1;
+    try {
+      setCartBtnLoading(true);
+      await addFromCart(productDetails.pid, selectedVariantId, moq);
+      setCartQty(moq); // Update quantity locally
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    } finally {
+      setCartBtnLoading(false);
+    }
+  };  
 
     const handleIncrease = async (psid, qty, var_id, moq) => {
       const newQty = qty + 1;
-      const result = await qtyUpdate(psid, newQty, var_id, moq);
-      setCartQty(newQty);
-    } 
-
+      try {
+        setCartBtnLoading(true);
+        await qtyUpdate(psid, newQty, var_id, moq);
+        setCartQty(newQty);
+      } catch (error) {
+        console.error('Error increasing quantity:', error);
+      } finally {
+        setCartBtnLoading(false);
+      }
+    };
+    
     const handleDecrease = async (psid, qty, var_id, moq) => {
+      const minQuantity = moq || 1;
+      if (qty <= minQuantity) {
+        await removeFromCart(psid, var_id);
+        setCartQty(0);
+        return;
+      }
+    
       const newQty = qty - 1;
-      const result = await qtyUpdate(psid, newQty, var_id, moq);
-      setCartQty(newQty);
-    }
-
-    const removeToCart = async () => {
-      const result = await removeFromCart(productDetails.pid, selectedVariantId);
+      try {
+        setCartBtnLoading(true);
+        await qtyUpdate(psid, newQty, var_id, moq);
+        setCartQty(newQty);
+      } catch (error) {
+        console.error('Error decreasing quantity:', error);
+      } finally {
+        setCartBtnLoading(false);
+      }
     };
 
     const ProductDetails = async () => {
@@ -118,6 +143,7 @@ const ProductDetail = ({ route, navigation }) => {
 
         setMultiProductImage(multiImage);
         setProductDetails(product.data.productDetails[0]);
+        setCartQty(product.data.productDetails[0].added_to_cart);
         setProductId(product.data.productDetails[0].pid);
         setRelatedProduct(product.data.relatedProduct);
         setProductVarient(product.data.varient);
@@ -171,15 +197,21 @@ const ProductDetail = ({ route, navigation }) => {
       // Fetch product from API
       useEffect(() => {
         ProductDetails();
-      }, [state.reFresh]);
+      }, []);
 
       useEffect(() => {
         if (ProductVarient.length > 0 && selectedVariantId === null) {
-          setSelectedVariantId(ProductVarient[0].psid);
-           setCartQty(productDetails.added_to_cart);
+           setSelectedVariantId(ProductVarient[0].psid);
+           setCartQty(itemQty);
         }
       }, [ProductVarient, selectedVariantId]);
-      
+
+      // useEffect(() => {
+      //   if (productDetails && ProductVarient.length > 0) {
+      //     setSelectedVariantId(ProductVarient[0].psid);
+      //     setCartQty(productDetails.added_to_cart);
+      //   }
+      // }, [productDetails, ProductVarient]);
       
       const reviews = [
         {

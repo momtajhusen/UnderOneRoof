@@ -52,11 +52,11 @@ const CategoryScreen = ({ navigation }) => {
   };
 
   const renderCategory = ({ item, index }) => (
-    <Animatable.View
+    <View
       key={item.sid}
-      animation="fadeInUp"
-      duration={800}
-      delay={index * 20}
+      // animation="fadeInUp"
+      // duration={800}
+      // delay={index * 20}
     >
       <CategoryList
         cimage={item.image}
@@ -69,7 +69,7 @@ const CategoryScreen = ({ navigation }) => {
           })
         }
       />
-    </Animatable.View>
+    </View>
   );
 
   return (

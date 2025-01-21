@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -13,6 +13,9 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
     const navigation = useNavigation();
 
     const [selectedOption, setSelectedOption] = useState(null);
+
+    const [isLoading, setIsLoading] = useState(null);
+
 
     // Animation references
     const shakeTextRef = useRef(null);
@@ -36,6 +39,7 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
     };
 
     const placeOrder = async () => {
+        setIsLoading(true);
         try {
             const aid = state.selectAddressData[0].aid;
             const response = await apiClient.post('/checkout', {
@@ -52,6 +56,8 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
         } catch (error) {
             console.error(error);
             alert('Something went wrong. Please check your connection or try again later.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -144,18 +150,26 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
                         >
                             <Text style={{ color: '#000', fontWeight: 'bold' }}>Cancel</Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity
                             style={{
                                 flex: 1,
-                                backgroundColor: '#FF4D4D',
+                                backgroundColor: isLoading ? '#D3D3D3' : '#FF4D4D',
                                 padding: 15,
                                 borderRadius: 10,
                                 alignItems: 'center',
+                                justifyContent: 'center', 
+                                opacity: isLoading ? 0.6 : 1,  
                             }}
-                            onPress={handlePayNow}
+                            onPress={!isLoading ? handlePayNow : null} 
+                            disabled={isLoading}  
                         >
-                            <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Pay Now</Text>
-                        </TouchableOpacity>
+                            {isLoading ? ( 
+                                <ActivityIndicator size="small" color="#FF4D4D" />
+                            ) : (
+                                <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Pay Now</Text>
+                            )}
+                        </TouchableOpacity>;
                     </View>
                 </View>
             </Modal>

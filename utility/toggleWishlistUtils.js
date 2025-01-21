@@ -8,21 +8,26 @@ export const useToggleWishlist = () => {
   const { dispatch } = useContext(AppContext);
 
   const toggleWishlist = async (pid, isInWishlist, uid) => {
+
     try {
       setIsLoading(true);
-
-      console.log(isInWishlist);
 
       const payload = isInWishlist
         ? { pid: pid }
         : { pid: pid, uid: uid }; 
 
 
-      const endpoint = isInWishlist ? '/deleteWishlist' : '/addWishlist';
+      const endpoint = isInWishlist ?'/addWishlist' : '/deleteWishlist';
 
       const response = await apiClient.post(endpoint, payload);
 
       if (response.data.status === 1) {
+        dispatch({
+          type: 'WISHLISH_REFRESH',
+          payload: {
+              isWishlishRefresh: Math.ceil(Math.random() * 100),
+          },
+        });
         return { success: true, isInWishlist: !isInWishlist }; 
       } else {
         console.error('Failed to update wishlist:', response.data.title);

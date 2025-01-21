@@ -71,10 +71,19 @@ const PrivacyPolicy = ({ navigation }) => {
         //       selectCategorySlug: item.cslug,
         //     })
         //   }
+        //   onPress={() =>
+        //     navigation.navigate('ProductDetail', {
+        //       item: item,
+        //       itemImage: item.itemimage,
+        //       itemQty:state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0,
+        //     })
+        //   }
+
           onPress={() =>
             navigation.navigate('ProductDetail', {
               item: item,
               itemImage: item.itemimage,
+              itemQty:state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0,
             })
           }
 
@@ -124,12 +133,20 @@ const PrivacyPolicy = ({ navigation }) => {
                     {trendingData.map((item, index) => (
                         <TouchableOpacity 
                         onPress={() =>
-                            navigation.navigate('B2BProductListing', {
+                            navigation.navigate('ProductListing', {
                               selectCategoryId: item.cid,
                               selectCategoryName: item.catname,
                               selectCategorySlug: item.cslug,
                             })
                           }
+
+                        //   onPress={() =>
+                        //     navigation.navigate('ProductDetail', {
+                        //       item: item,
+                        //       itemImage: item.itemimage,
+                        //       itemQty:state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0,
+                        //     })
+                        //   }
                         key={index} style={styles.searhedContainer}>
                         <Image style={styles.image}  source={{ uri: item.itemimage }} />
                         <Text>{item.name}</Text>

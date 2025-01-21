@@ -19,6 +19,11 @@ const SET_PRODUCT_FLITER = 'SET_PRODUCT_FLITER';
 
 const SET_ORDER_NAVIGATION = 'SET_ORDER_NAVIGATION';
 
+const WISHLISH_REFRESH = 'WISHLISH_REFRESH';
+
+
+
+
 
 
 // Reducer
@@ -48,14 +53,18 @@ export default (state, action) => {
           reFresh: action.payload,
         };
 
+        case WISHLISH_REFRESH:
+          return {
+            ...state,
+            isWishlishRefresh: action.payload,
+          };
+
         case SET_LOADER:
           return {
               ...state,
               isLoader: action.payload,
           };  
           
-          
-
           case SET_CART_LOADER:
             return {
                 ...state,
@@ -75,7 +84,6 @@ export default (state, action) => {
             };
 
           
-
           case VIEW_ADDRESS_DATA:
             return {
               ...state,

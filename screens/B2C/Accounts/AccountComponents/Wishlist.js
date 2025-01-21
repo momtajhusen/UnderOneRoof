@@ -6,6 +6,7 @@ import {
     ScrollView,
     RefreshControl,
     TouchableOpacity,
+    Text,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
@@ -28,7 +29,16 @@ const Wishlist = ({ navigation }) => {
     const fetchWishlistData = async () => {
         try {
             const response = await apiClient.get('/viewWishlist');
-            setWishlistProduct(response.data.data.wishlistProduct);
+
+            // Add "added_to_wishlist" key with value 1 to each product
+            const updatedWishlist = response.data.data.wishlistProduct.map(product => ({
+                ...product,
+                added_to_wishlist: 1,
+            }));
+
+            setWishlistProduct(updatedWishlist);
+
+            console.log(updatedWishlist);
         } catch (error) {
             console.error('Error while fetching wishlist:', error);
         } finally {
@@ -46,7 +56,7 @@ const Wishlist = ({ navigation }) => {
     // Fetch wishlist data on component mount
     useEffect(() => {
         fetchWishlistData();
-    }, [state.reFresh]);
+    }, [state.isWishlishRefresh]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -66,9 +76,17 @@ const Wishlist = ({ navigation }) => {
                     <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
                 }
             >
-                {/* Conditionally render wishlist data or loading message */}
+                {/* Conditionally render wishlist data, empty message, or loading message */}
                 {isLoading ? (
-                    <ItemsListLoader count="4" itemContainerStyle={{ width: rw(42.5) }} />
+                    <ItemsListLoader count="6" itemContainerStyle={{ width: rw(42.5) }} />
+                ) : wishlistProduct.length === 0 ? (
+                    <View style={styles.emptyContainer}>
+                        <MaterialCommunityIcons name="heart-off-outline" size={rf(5)} color="gray" />
+                        <Text style={styles.emptyMessage}>Your Wishlist is Empty</Text>
+                        <Text style={styles.subMessage}>
+                            Add your favorite items here {'\n'} for easy access later.
+                        </Text>
+                    </View>
                 ) : (
                     <ItemsList
                         cartbtn="true"
@@ -94,5 +112,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: rw(2),
         paddingLeft: rw(2.5),
         paddingBottom: rh(12),
+    },
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height:rh(90)
+    },
+    emptyMessage: {
+        fontSize: rf(2),
+        fontWeight: 'bold',
+        color: 'black',
+        marginTop: rh(2),
+        textAlign: 'center',
+    },
+    subMessage: {
+        fontSize: rf(2),
+        color: 'gray',
+        marginTop: rh(1),
+        textAlign: 'center',
+        paddingHorizontal: rw(5),
     },
 });

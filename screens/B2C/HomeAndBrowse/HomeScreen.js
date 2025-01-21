@@ -43,7 +43,7 @@ const HomeScreen = () => {
         const fetchHomeSliderData = async () => {
           try {
             const response = await apiClient.get('/home');
-            const slider = response.data.data.slider; // API se slider data
+            const slider = response.data.data.slider;
             setHomeSliderData(slider);
           } catch (error) {
             console.error('Error fetching slider data:', error);
