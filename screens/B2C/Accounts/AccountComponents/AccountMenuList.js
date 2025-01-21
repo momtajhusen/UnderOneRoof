@@ -28,7 +28,7 @@ const AccountMenuList = () => {
     <View style={styles.container}>
       <Text style={styles.headerText}>Other Information</Text>
       <View style={styles.menuList}>
-        <IconBtnList icon={require('../../../../assets/account/user.png')} onPress={() => navigation.navigate('MyProfile')} text="Your Profile" />
+        <IconBtnList icon={require('../../../../assets/account/user.png')} onPress={() => navigation.navigate('B2BMyProfile')} text="Your Profile" />
         <IconBtnList icon={require('../../../../assets/account/location.png')} onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
         <IconBtnList icon={require('../../../../assets/account/HelpCircle.png')} onPress={() => navigation.navigate('HelpSupport')} text="Help & Support" />
         <IconBtnList icon={require('../../../../assets/account/Group26.png')} onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />

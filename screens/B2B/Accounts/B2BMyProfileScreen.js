@@ -114,9 +114,12 @@ const B2BMyProfile = () => {
         gender,
         address,
       };
-
+     
       const response = await apiClient.post('/updateProfile', payload);
-      if (response.status === 200) {
+
+      console.log(response);
+      return false;
+      if (response.status === 1) {
         Alert.alert('Success', 'Profile updated successfully');
         dispatch({
           type: 'GLOBAL_REFRESH',

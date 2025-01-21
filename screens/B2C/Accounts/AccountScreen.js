@@ -1,5 +1,5 @@
 //import liraries
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
@@ -7,10 +7,14 @@ import OrderOrWishlist from './AccountComponents/OrderOrWishlist';
 import AccountMenuList from './AccountComponents/AccountMenuList';
 import Header from '../../../components/header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppContext } from '../../../context/AppContext';
+import apiClient from '../../../Service/apiClient';
 
 // create a component
 const AccountScreen = ({navigation}) => {
+      const { state } = useContext(AppContext);
 
+      const [profileData, setProfileData] = useState(null);
 
     useEffect(() => {
         const checkAuthToken = async () => {
@@ -29,6 +33,21 @@ const AccountScreen = ({navigation}) => {
         checkAuthToken();
     }, [navigation]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await apiClient.get('/viewprofile');
+            console.log(response.data);
+            setProfileData(response.data.data.viewProfile);
+          } catch (error) {
+            console.error('Error fetching profile data:', error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchData();
+      }, [state.reFresh]);
+
     return (
         <View>
             {/* Back Container */}
@@ -38,11 +57,18 @@ const AccountScreen = ({navigation}) => {
                 {/* Account Profile  */}
                 <View style={{flexDirection:"row", alignItems:"center"}}>
                     <View style={{marginRight:rw(3)}}>
-                        <Image source={require('../../../assets/user.png')} style={{width:rw(15), height:rw(15)}} />
+                        <Image 
+                            source={
+                                profileData?.avatar
+                                    ? { uri:  profileData.avatar }
+                                    : require('../../../assets/account/user.png')
+                            }
+                          style={{width:rw(15), height:rw(15)}} 
+                        />
                     </View>
                     <View>
-                        <Text style={{fontWeight:"bold", fontSize:rf(2.5), marginBottom:rh(0.3)}}>Aman Kumar</Text>
-                        <Text style={{fontSize:rf(2), color:"#717171"}}>+91-732899374</Text>
+                        <Text style={{fontWeight:"bold", fontSize:rf(2.5), marginBottom:rh(0.3)}}>{profileData?.name || 'N/A'}</Text>
+                        <Text style={{fontSize:rf(2), color:"#717171"}}>{profileData?.mobile || 'N/A'}</Text>
                     </View>
                 </View>
                 {/* Order Or Wishlist */}

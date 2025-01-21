@@ -63,7 +63,7 @@ useEffect(() => {
                             text={category.cname}
                             onPress={() => {
                                 if (state.shoppingMode === 'wholesale') {
-                                    navigation.navigate('B2BProductListing', {
+                                    navigation.navigate('ProductListing', {
                                         selectCategoryId: category.sid,
                                         selectCategoryName: category.cname,
                                         selectCategorySlug: category.cslug,
