@@ -23,7 +23,7 @@ const Essentials = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [state.isHomeRefresh]);
 
   // Fallback check for missing data
   const getCategoryImage = (index) =>

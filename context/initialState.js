@@ -18,11 +18,11 @@ const initialState = {
   // Refresh or Loader
   reFresh: false,
   isLoader: false,
-
   isWishlishRefresh: false,
-
-
   isCartLoader: false,
+  isHomeRefresh: false,
+
+
 
 
   productFilter: null,

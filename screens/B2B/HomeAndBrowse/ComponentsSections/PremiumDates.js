@@ -31,7 +31,7 @@ const PremiumDates = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [state.isHomeRefresh]);
 
   return (
     <View style={styles.premiumDatesContainer}>

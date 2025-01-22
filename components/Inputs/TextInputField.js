@@ -13,6 +13,7 @@ const TextInputField = ({
   errorMessage = "",
   maxLength = 255, // Default maxLength
   minLength = 0,   // Default minLength
+  editable = true
 }) => (
   <View style={styles.container}>
     {label && <Text style={styles.label}>{label}</Text>}
@@ -33,6 +34,7 @@ const TextInputField = ({
       placeholderTextColor="#717171"
       keyboardType={keyboardType}
       maxLength={maxLength} // Apply maxLength
+      editable={editable}
     />
     {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
   </View>

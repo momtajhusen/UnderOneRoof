@@ -16,33 +16,34 @@ const BestSellers = () => {
     
     const { state, dispatch } = useContext(AppContext);
 
-// Fetch categories from API
-useEffect(() => {
     const fetchHomeCategories = async () => {
-      try {
-        const response = await apiClient.get('/home');  
-        const bestCategories = response.data.data.bestcategory;
+        try {
+          const response = await apiClient.get('/home');  
+          const bestCategories = response.data.data.bestcategory;
+  
+          // Filter best categories based on state.shoppingMode
+          const filteredBestCategories = bestCategories.filter(category => {
+            if (state.shoppingMode === 'wholesale') {
+              return category.role_type === 3 || category.role_type === null;
+            } else if (state.shoppingMode === 'retail') {
+              return category.role_type === 2;
+            }
+            return false;
+          });
+  
+          setCategories(filteredBestCategories);
+          console.log('Shop Best Categories:', filteredBestCategories);
+        } catch (error) {
+          console.error('Error fetching best categories:', error);
+        } finally {
+          setLoading(false);  
+        }
+      };
 
-        // Filter best categories based on state.shoppingMode
-        const filteredBestCategories = bestCategories.filter(category => {
-          if (state.shoppingMode === 'wholesale') {
-            return category.role_type === 3 || category.role_type === null;
-          } else if (state.shoppingMode === 'retail') {
-            return category.role_type === 2;
-          }
-          return false;
-        });
-
-        setCategories(filteredBestCategories);
-        console.log('Shop Best Categories:', filteredBestCategories);
-      } catch (error) {
-        console.error('Error fetching best categories:', error);
-      } finally {
-        setLoading(false);  
-      }
-    };
-    fetchHomeCategories();
-  }, []);
+    // Fetch categories from API
+    useEffect(() => {
+        fetchHomeCategories();
+    }, [state.isHomeRefresh]);
 
     return (
         <View style={styles.container}>

@@ -31,9 +31,9 @@ const HomeScreen = () => {
 
     const onRefresh = async () => {
         dispatch({
-          type: 'GLOBAL_REFRESH',
+          type: 'HOME_REFRESH',
           payload: {
-            reFresh: Math.ceil(Math.random() * 100),
+            isHomeRefresh: Math.ceil(Math.random() * 100),
           },
         });
     };
@@ -52,7 +52,7 @@ const HomeScreen = () => {
           }
         };
         fetchHomeSliderData();
-      }, []);
+      }, [state.isHomeRefresh]);
 
   return (
     <ScrollView

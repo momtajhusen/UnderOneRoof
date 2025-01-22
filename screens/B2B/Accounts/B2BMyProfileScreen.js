@@ -6,9 +6,9 @@ import SelectInputField from '../../../components/Inputs/SelectInputField';
 import DateInputField from '../../../components/Inputs/DateInputField';
 import Header from '../../../components/header';
 import { MaterialIcons } from '@expo/vector-icons';
-import { rw, rh, rf } from '../../../Service/responsive';
 import apiClient from '../../../Service/apiClient';
 import { AppContext } from '../../../context/AppContext';
+import { rh, rw, rf } from '../../../Service/responsive';
 
 const B2BMyProfile = () => {
   const [name, setName] = useState('');
@@ -16,12 +16,13 @@ const B2BMyProfile = () => {
   const [gender, setGender] = useState('');
   const [dob, setDob] = useState(null);
   const [address, setAddress] = useState('');
-  const [profileImage, setProfileImage] = useState(require('../../../assets/user.png'));
+  const [profileImage, setProfileImage] = useState(require('../../../assets/user.png')); // Placeholder image
 
   const { state, dispatch } = useContext(AppContext);
 
   const [loading, setLoading] = useState(true);
 
+  // Fetch profile data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,9 +33,10 @@ const B2BMyProfile = () => {
         setPhone(profile.mobile || '');
         setGender(profile.gender || '');
         setAddress(profile.address || '');
-        if (profile.image) {
-          setProfileImage({ uri: profile.image });
-        }
+        setDob(new Date(profile.dob || null));
+        setProfileImage({
+          uri: profile.avatar || 'https://example.com/default-avatar.png', 
+        });
       } catch (error) {
         console.error('Error fetching profile data:', error);
       } finally {
@@ -44,6 +46,7 @@ const B2BMyProfile = () => {
     fetchData();
   }, [state.reFresh]);
 
+  // Handle image selection
   const handleImagePick = async () => {
     try {
       const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -51,45 +54,47 @@ const B2BMyProfile = () => {
         Alert.alert('Permission Denied', 'You need to enable permissions to access the gallery.');
         return;
       }
-
+  
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
       });
-
+  
       if (!result.canceled) {
         const selectedImage = result.assets[0];
-        setProfileImage({ uri: selectedImage.uri });
-        await uploadProfileImage(selectedImage.uri);
+        setProfileImage({ uri: selectedImage.uri });  
+        await uploadProfileImage(selectedImage.uri);  
       }
     } catch (error) {
       console.error('Error picking image:', error);
       Alert.alert('Error', 'An error occurred while selecting an image.');
     }
   };
-
+  
+  
   const uploadProfileImage = async (imageUri) => {
     try {
       const formData = new FormData();
- 
+  
+      // Add the image to FormData
       formData.append('itemimage', {
         uri: imageUri, 
         name: 'profile.jpg', 
-        type: 'image/jpeg',
+        type: 'image/jpeg', 
       });
   
+      // Make the API call
       const response = await apiClient.post('/profileImageupdate', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
   
-      console.log(response);
+      console.log('API Response:', response.data);
   
-      if (response.status === 200) {
-        Alert.alert('Success', 'Profile image updated successfully');
+      if (response.data.status === 1) {
         dispatch({
           type: 'GLOBAL_REFRESH',
           payload: {
@@ -97,10 +102,10 @@ const B2BMyProfile = () => {
           },
         });
       } else {
-        Alert.alert('Error', 'Failed to update profile image');
+        Alert.alert('Error', response.data.title || 'Failed to update profile image');
       }
     } catch (error) {
-      console.error('Error uploading profile image:', error);
+      console.error('Error uploading profile image:', error.response?.data || error.message);
       Alert.alert('Error', 'An error occurred while uploading the image.');
     }
   };
@@ -108,18 +113,32 @@ const B2BMyProfile = () => {
 
   const handleUpdate = async () => {
     try {
+      // Convert ISO date to desired format
+      const formatDate = (isoDate) => {
+        const date = new Date(isoDate);
+        const year = dob.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}/${month}/${day}`;
+      };
+  
+      // Ensure `dob` is formatted correctly
+      const formattedDob = dob ? formatDate(dob) : '';
+  
+      // Create payload
       const payload = {
         name,
-        email: phone,
+        dob: formattedDob,
         gender,
         address,
       };
-     
+  
+      // Make API request
       const response = await apiClient.post('/updateProfile', payload);
-
-      console.log(response);
-      return false;
-      if (response.status === 1) {
+  
+      console.log(response.data);
+  
+      if (response.data.status === 1) {
         Alert.alert('Success', 'Profile updated successfully');
         dispatch({
           type: 'GLOBAL_REFRESH',
@@ -131,10 +150,11 @@ const B2BMyProfile = () => {
         Alert.alert('Error', 'Failed to update profile');
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Error updating profile:', error.response?.data || error.message);
       Alert.alert('Error', 'An error occurred while updating your profile.');
     }
   };
+  
 
   if (loading) {
     return (
@@ -149,7 +169,14 @@ const B2BMyProfile = () => {
       <Header title="My Profile" />
       <View style={styles.container}>
         <View style={styles.ImageContainer}>
-          <Image style={styles.userImage} source={profileImage} />
+        <Image
+            style={styles.userImage}
+            source={
+              profileImage.uri 
+                ? { uri: profileImage.uri } 
+                : require('../../../assets/user.png') // Placeholder image
+            }
+          />
           <TouchableOpacity style={styles.IconContainer} onPress={handleImagePick}>
             <MaterialIcons style={styles.cameraIcon} name="photo-camera" size={18} color="black" />
           </TouchableOpacity>
@@ -165,6 +192,7 @@ const B2BMyProfile = () => {
               onChange={(value) => setPhone(value)}
               placeholder="Enter your phone"
               keyboardType="phone-pad"
+              editable={false}
             />
             <SelectInputField
               selectedValue={gender}
@@ -232,6 +260,7 @@ const styles = StyleSheet.create({
     width: rw(90),
     position: 'absolute',
     top: rh(10),
+    gap:rh(1.5),
     paddingHorizontal: rw(2),
   },
   updateBtn: {

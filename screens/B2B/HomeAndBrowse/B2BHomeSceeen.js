@@ -17,6 +17,7 @@ import apiClient from '../../../Service/apiClient';
 
 
 const B2BHomeScreen = () => {
+    const { state, dispatch } = useContext(AppContext);
 
   const navigation = useNavigation();
 
@@ -57,9 +58,9 @@ const B2BHomeScreen = () => {
 
     const onRefresh = async () => {
       dispatch({
-        type: 'GLOBAL_REFRESH',
+        type: 'HOME_REFRESH',
         payload: {
-          reFresh: Math.ceil(Math.random() * 100),
+          isHomeRefresh: Math.ceil(Math.random() * 100),
         },
       });
     };
@@ -78,7 +79,7 @@ const B2BHomeScreen = () => {
           }
         };
         fetchHomeSliderData();
-      }, []);
+      }, [state.isHomeRefresh]);
 
 
   return (

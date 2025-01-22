@@ -21,27 +21,20 @@ const SplashScreen = () => {
 
                 setTimeout(() => {
                     if (token) {
-
-                        console.log(userId);
                         console.log(token);
-
-
-                        // if (ShoppingMode === 'wholesale') {
-                            navigation.replace('ShoppingMode', { mobile: userNumber, userId: userId });
-                        // } else if (ShoppingMode === 'retail') {
-                        //     navigation.replace('BottomNavigator');
-                        // } else {
-                        //     navigation.replace('ShoppingMode');
-                        // }
-
+                         if (ShoppingMode === 'wholesale') {
+                            navigation.replace('B2BBottomNavigator');
+                        } else if (ShoppingMode === 'retail') {
+                             navigation.replace('BottomNavigator');
+                        }
                         dispatch({
                             type: 'SET_USER',
                             payload: {
                                 userId: userId,
+                                shoppingMode: ShoppingMode,
                                 userNumber: userNumber,
                             },
                           });
-
                     } else {
                         navigation.replace('SignupOrLogin');
                     }
@@ -62,7 +55,6 @@ const SplashScreen = () => {
                 const storedAddress = await AsyncStorage.getItem('selectedAddress');
                 if (storedAddress) {
                     const item = JSON.parse(storedAddress);
-                    // Dispatch the selected address data to the app context
                     dispatch({
                         type: 'SELECT_ADDRESS_DATA',
                         payload: { selectAddressData: item },

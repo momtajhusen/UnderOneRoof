@@ -24,9 +24,7 @@ const ShoppingMode = ({ navigation, route }) => {
     const mode = type === "wholesale" ? "b2b" : "b2c";
     setLoadingType(type);
     try {
-
       const response = await apiClient.post('/selectFlow', { mobile, type:mode });
- 
         if (type === 'wholesale') {
             if (response.data.status === 1) {
               await AsyncStorage.setItem('ShoppingMode',  'wholesale');
@@ -40,13 +38,7 @@ const ShoppingMode = ({ navigation, route }) => {
           await AsyncStorage.setItem('ShoppingMode',  'retail');
           navigation.navigate('BottomNavigator');
         }
-
-        dispatch({
-          type: 'VIEW_CART_DATA',
-          payload: { viewCartData: {} },
-        });
-        
-
+ 
         dispatch({
           type: 'SET_USER',
           payload: {

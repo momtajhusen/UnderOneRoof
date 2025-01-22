@@ -41,25 +41,19 @@ const Shimmer = createShimmerPlaceholder(LinearGradient);
 
 const ProductDetail = ({ route, navigation }) => {
 
-  
-
     const {state, dispatch } = useContext(AppContext);
 
     const item = route?.params?.item || {};
     const itemImage = route?.params?.itemImage || '';
     const itemQty = route?.params?.itemQty || '';
 
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
+    const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
+    const [isLoading, setIsLoading] = useState(false);
+    const [isCartBtnLoading, setCartBtnLoading] = useState(false);  
 
-
- 
- 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
-  const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCartBtnLoading, setCartBtnLoading] = useState(false);  
-
-  const { width: contentWidth } = useWindowDimensions();
+    const { width: contentWidth } = useWindowDimensions();
 
   const [selectedVarientId, setSelectedVarientId] = useState(
     Array.isArray(item.varient) && item.varient.length > 0
@@ -205,13 +199,6 @@ const ProductDetail = ({ route, navigation }) => {
            setCartQty(itemQty);
         }
       }, [ProductVarient, selectedVariantId]);
-
-      // useEffect(() => {
-      //   if (productDetails && ProductVarient.length > 0) {
-      //     setSelectedVariantId(ProductVarient[0].psid);
-      //     setCartQty(productDetails.added_to_cart);
-      //   }
-      // }, [productDetails, ProductVarient]);
       
       const reviews = [
         {
@@ -493,15 +480,9 @@ const ProductDetail = ({ route, navigation }) => {
               {
                 Array.isArray(relatedProduct) && relatedProduct.length > 0 ? (
                   <View style={{ backgroundColor: "white", marginTop: rh(1), marginBottom: rh(1), padding: rw(3), borderRadius: 5, overflow: "hidden" }}>
-
-                  {state.shoppingMode === 'retail' && <SimilarProducts data={relatedProduct} />}
-                  {state.shoppingMode === 'wholesale' && 
-                     <B2BSimilarProducts data={relatedProduct} />
-                  }
-
-                  
+                    {state.shoppingMode === 'retail' && <SimilarProducts data={relatedProduct} />}
+                    {state.shoppingMode === 'wholesale' && <B2BSimilarProducts data={relatedProduct} />}
                   </View>
-
                 ) : null 
               }
         </View>

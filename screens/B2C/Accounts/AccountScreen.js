@@ -63,7 +63,7 @@ const AccountScreen = ({navigation}) => {
                                     ? { uri:  profileData.avatar }
                                     : require('../../../assets/account/user.png')
                             }
-                          style={{width:rw(15), height:rw(15)}} 
+                          style={{width:rw(15), height:rw(15), borderRadius:10}} 
                         />
                     </View>
                     <View>

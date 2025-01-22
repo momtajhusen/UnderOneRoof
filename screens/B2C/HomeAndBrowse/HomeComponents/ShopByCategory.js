@@ -14,36 +14,35 @@ const ShopByCategory = () => {
     const [loading, setLoading] = useState(true); 
 
     const { state, dispatch } = useContext(AppContext);
-    
 
- // Fetch categories from API
- useEffect(() => {
     const fetchHomeCategories = async () => {
-      try {
-        const response = await apiClient.get('/home');  
-        const category = response.data.data.category;
-
-        // Filter home categories based on state.shoppingMode
-        const filteredCategories = category.filter(category => {
-          if (state.shoppingMode === 'wholesale') {
-            return category.role_type === 3 || category.role_type === null;
-          } else if (state.shoppingMode === 'retail') {
-            return category.role_type === 2;
-          }
-          return false;
-        });
-
-        setCategories(filteredCategories);
-        console.log('Shop Category:', filteredCategories);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setLoading(false);  
-      }
-    };
-    fetchHomeCategories();
-  }, []);
-
+        try {
+          const response = await apiClient.get('/home');  
+          const category = response.data.data.category;
+  
+          // Filter home categories based on state.shoppingMode
+          const filteredCategories = category.filter(category => {
+            if (state.shoppingMode === 'wholesale') {
+              return category.role_type === 3 || category.role_type === null;
+            } else if (state.shoppingMode === 'retail') {
+              return category.role_type === 2;
+            }
+            return false;
+          });
+  
+          setCategories(filteredCategories);
+          console.log('Shop Category:', filteredCategories);
+        } catch (error) {
+          console.error('Error fetching categories:', error);
+        } finally {
+          setLoading(false);  
+        }
+      };
+    
+    // Fetch categories from API
+    useEffect(() => {
+        fetchHomeCategories();
+    }, [state.isHomeRefresh]);
 
     return (
         <View style={styles.container}>

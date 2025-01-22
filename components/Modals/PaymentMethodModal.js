@@ -158,18 +158,19 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
                                 padding: 15,
                                 borderRadius: 10,
                                 alignItems: 'center',
-                                justifyContent: 'center', 
-                                opacity: isLoading ? 0.6 : 1,  
+                                justifyContent: 'center',
+                                opacity: isLoading ? 0.6 : 1,
                             }}
-                            onPress={!isLoading ? handlePayNow : null} 
-                            disabled={isLoading}  
+                            onPress={!isLoading ? handlePayNow : null}
+                            disabled={isLoading}
                         >
-                            {isLoading ? ( 
+                            {isLoading ? (
                                 <ActivityIndicator size="small" color="#FF4D4D" />
                             ) : (
                                 <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Pay Now</Text>
                             )}
-                        </TouchableOpacity>;
+                        </TouchableOpacity>
+
                     </View>
                 </View>
             </Modal>

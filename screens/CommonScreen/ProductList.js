@@ -40,6 +40,8 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     const [selectedCategoryId, setSelectedCategoryId] = useState(selectCategoryId);
     const [selectedCategoryName, setSelectedCategoryName] = useState(selectCategoryName);
     const [selectedCategorySlug, setSelectedCategorySlug] = useState(selectCategorySlug);
+
+    console.log(selectedCategorySlug);
   
     const [productListing, setProductListing] = useState([]);
     const [categoryData, setCategory] = useState([]);
@@ -129,7 +131,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
       <View style={styles.screen}>
         {/* Header */}
         <Header
-          title={selectedCategoryName}
+          title={selectedCategoryName+' '+state.shoppingMode}
           rightContent={
             <View style={{ flexDirection: 'row', gap: rw(4) }}>
               <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>

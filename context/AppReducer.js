@@ -20,6 +20,8 @@ const SET_PRODUCT_FLITER = 'SET_PRODUCT_FLITER';
 const SET_ORDER_NAVIGATION = 'SET_ORDER_NAVIGATION';
 
 const WISHLISH_REFRESH = 'WISHLISH_REFRESH';
+const HOME_REFRESH = 'HOME_REFRESH';
+
 
 
 
@@ -58,6 +60,12 @@ export default (state, action) => {
             ...state,
             isWishlishRefresh: action.payload,
           };
+
+          case HOME_REFRESH:
+            return {
+              ...state,
+              isHomeRefresh: action.payload,
+            };
 
         case SET_LOADER:
           return {

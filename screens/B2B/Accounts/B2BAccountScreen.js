@@ -69,7 +69,7 @@ const B2BAccountScreen = ({ navigation }) => {
                   ? { uri:  profileData.avatar }
                   : require('../../../assets/account/user.png')
               }
-              style={{ width: rw(15), height: rw(15), borderRadius: rw(7.5) }}
+              style={{ width: rw(15), height: rw(15), borderRadius: rw(3) }}
             />
           </View>
           <View>

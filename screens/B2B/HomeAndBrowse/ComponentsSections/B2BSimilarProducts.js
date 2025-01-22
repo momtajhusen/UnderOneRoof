@@ -9,26 +9,13 @@ import apiClient from '../../../../Service/apiClient';
 // create a component
 const B2BSimilarProducts = ({data}) => {
 
-      const [productData, setProductData] = useState([]);
-      const [loading, setLoading] = useState(true);
-    
-      const {state, dispatch } = useContext(AppContext);
-      
-      // Fetch slider image from API
-      useEffect(() => {
-        const fetchHomeProductData = async () => {
-          try {
-            const response = await apiClient.get('/home');
-            const productData = response.data.data.section1;
-            setProductData(productData);
-          } catch (error) {
-            console.error('Error fetching slider data:', error);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchHomeProductData();
-      }, []);
+  // Use data from props directly for productList
+  const productList = data || []; 
+
+  // Only render if productList has items
+  if (productList.length === 0) {
+      return null;  
+  }
 
     return (
         <View>
@@ -37,7 +24,7 @@ const B2BSimilarProducts = ({data}) => {
             <Text style={styles.listTitle}>Similar Products</Text>
              <View style={{flexDirection:"row"}}>
              <B2BProductCard
-                items={productData}
+                items={productList}
                 styleCardContainer={{
                   width: rw(77),
                   height:rh(30),
