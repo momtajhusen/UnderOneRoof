@@ -28,7 +28,7 @@ const ShoppingMode = ({ navigation, route }) => {
         if (type === 'wholesale') {
             if (response.data.status === 1) {
               await AsyncStorage.setItem('ShoppingMode',  'wholesale');
-              navigation.navigate('B2BBottomNavigator');
+              navigation.replace('B2BBottomNavigator');
             }
             if (response.data.status === 0) {
               await AsyncStorage.setItem('ShoppingMode',  'wholesale');
@@ -36,7 +36,7 @@ const ShoppingMode = ({ navigation, route }) => {
             }
         } else if (type === 'retail') {
           await AsyncStorage.setItem('ShoppingMode',  'retail');
-          navigation.navigate('BottomNavigator');
+          navigation.replace('BottomNavigator');
         }
  
         dispatch({
