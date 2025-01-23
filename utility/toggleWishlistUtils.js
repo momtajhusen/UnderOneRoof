@@ -11,7 +11,7 @@ export const useToggleWishlist = () => {
 
     try {
       setIsLoading(true);
-
+      console.log('Request /toggleWishLisg');
       const payload = isInWishlist
         ? { pid: pid }
         : { pid: pid, uid: uid }; 

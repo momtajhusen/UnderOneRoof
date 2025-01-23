@@ -14,8 +14,7 @@ export const useViewAddressData = () => {
       const response = await apiClient.get('/viewaddress');
       const addressData = response.data;
       console.log("viewaddressUtils");
-      console.log(addressData);
-
+      
       if (addressData) {
         // Dispatch updated address data
         dispatch({

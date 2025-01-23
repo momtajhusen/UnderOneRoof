@@ -82,12 +82,14 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                 placeholder="Outlet Name"
                                 value={name}
                                 onChange={setName}
+                                maxLength={30}
                                 errorMessage={isSubmitted && !name ? 'Outlet name is required' : ''}
                             />
                             <TextInputField
                                 placeholder="Address"
                                 value={address}
                                 onChange={setAddress}
+                                maxLength={30}
                                 errorMessage={isSubmitted && !address ? 'Address is required' : ''}
                             />
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -96,6 +98,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                         placeholder="City"
                                         value={city}
                                         onChange={setCity}
+                                        maxLength={20}
                                         errorMessage={isSubmitted && !city ? 'City is required' : ''}
                                     />
                                 </View>
@@ -104,6 +107,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                         placeholder="State"
                                         value={state}
                                         onChange={setState}
+                                        maxLength={20}
                                         errorMessage={isSubmitted && !state ? 'State is required' : ''}
                                     />
                                 </View>
@@ -113,6 +117,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                 value={pincode}
                                 onChange={setPincode}
                                 keyboardType="numeric"
+                                maxLength={6}
                                 errorMessage={isSubmitted && !pincode ? 'Pincode is required' : ''}
                             />
                             <TextInputField

@@ -4,6 +4,7 @@ import Carousel from 'react-native-snap-carousel';
 import { rw, rh } from '../../Service/responsive';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -11,40 +12,50 @@ const { width: screenWidth } = Dimensions.get('window');
 const Shimmer = createShimmerPlaceholder(LinearGradient);
 
 const HomeSlider = ({ sliderData, sliderStyle }) => {
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (sliderData && sliderData.length > 0) {
-            setLoading(false); 
-        }
-    }, [sliderData]);
+  const navigation = useNavigation();
 
-    const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={()=>alert()} style={[styles.slide, sliderStyle]}>
-            <Image source={{ uri: item.image }} style={[styles.image]} resizeMode="cover" />  
-        </TouchableOpacity>
-    );
+  useEffect(() => {
+    if (sliderData && sliderData.length > 0) {
+      setLoading(false);
+    }
+  }, [sliderData]);
 
-    return (
-        <View>
+  const handleImagePress = (cname, cslug) => {
+    console.log(cslug);
+    navigation.navigate('ProductListing', {
+        selectCategoryId:  '',
+        selectCategoryName:  '',
+        selectCategorySlug: cslug,
+    });
+  };
 
-            {loading ? (
-                <Shimmer style={styles.shimmer} />
-            ) : (
-                <Carousel
-                    data={sliderData}
-                    renderItem={renderItem}
-                    sliderWidth={screenWidth}
-                    itemWidth={rw(80)}
-                    inactiveSlideScale={0.9}
-                    inactiveSlideOpacity={0.7}
-                    autoplay={true}
-                    autoplayInterval={2000}
-                    loop={true}
-                />
-            )}
-        </View>
-    );
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleImagePress(item.cname, item.link)} style={[styles.slide, sliderStyle]}>
+      <Image source={{ uri: item.image }} style={[styles.image]} resizeMode="cover" />
+    </TouchableOpacity>
+  );
+
+  return (
+    <View>
+      {loading ? (
+        <Shimmer style={styles.shimmer} />
+      ) : (
+        <Carousel
+          data={sliderData}
+          renderItem={renderItem}
+          sliderWidth={screenWidth}
+          itemWidth={rw(80)}
+          inactiveSlideScale={0.9}
+          inactiveSlideOpacity={0.7}
+          autoplay={true}
+          autoplayInterval={2000}
+          loop={true}
+        />
+      )}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

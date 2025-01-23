@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, Image, View, Text } from 'react-native';
+import { StyleSheet, Dimensions, Image, View, Text, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { rw, rh, rf } from '../../Service/responsive';
 import apiClient from '../../Service/apiClient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+
 
 const Shimmer = createShimmerPlaceholder(LinearGradient);
 const { width: screenWidth } = Dimensions.get('window');
@@ -13,6 +15,9 @@ const ExploreMoreSlider = () => {
     const [activeSlide, setActiveSlide] = useState(0); 
     const [sliderData, setHomeSliderData] = useState([]);
     const [loading, setLoading] = useState(true);
+
+      const navigation = useNavigation();
+    
 
     // Fetch slider image from API
     useEffect(() => {
@@ -30,10 +35,19 @@ const ExploreMoreSlider = () => {
         fetchSliderData();
     }, []);
 
+    const handleImagePress = (cname, cslug) => {
+        console.log(cslug);
+        navigation.navigate('ProductListing', {
+            selectCategoryId:  '',
+            selectCategoryName:  '',
+            selectCategorySlug: cslug,
+        });
+      };
+
     const renderItem = ({ item }) => (
-        <View style={styles.slide}>
+        <TouchableOpacity onPress={() => handleImagePress(item.cname, item.link)} style={styles.slide}>
             <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
-        </View>
+        </TouchableOpacity>
     );
 
     return (

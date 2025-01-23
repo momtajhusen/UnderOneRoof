@@ -38,7 +38,6 @@ const Wishlist = ({ navigation }) => {
 
             setWishlistProduct(updatedWishlist);
 
-            console.log(updatedWishlist);
         } catch (error) {
             console.error('Error while fetching wishlist:', error);
         } finally {

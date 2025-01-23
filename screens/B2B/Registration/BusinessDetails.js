@@ -45,19 +45,35 @@ const BusinessDetails = ({ navigation, route }) => {
   
   const validateForm = () => {
     const errors = {};
+  
+    // PAN और Firm Name हमेशा आवश्यक हैं
     if (!panNumber) errors.panNumber = 'PAN Number is required.';
     if (!firmName) errors.firmName = 'Firm Name is required.';
-    if (!isGstRegistered && !fssai) {
-      errors.fssai = 'FSSAI Number is required if not GST registered.';
+  
+    // GST और FSSAI में से केवल एक आवश्यक होगा
+    if (!gstNumber && !fssai) {
+      errors.gstNumber = 'Either GST Number or FSSAI Number is required.';
+      errors.fssai = 'Either FSSAI Number or GST Number is required.';
     }
-    if (isGstRegistered && (!gstNumber || !gstDoc)) {
-      errors.gstNumber = 'GST Number is required if GST registered.';
-      errors.gstDoc = 'GST document is required.';
+  
+    // GST Registered होने पर GST डिटेल्स की जांच
+    if (isGstRegistered) {
+      if (!gstNumber) {
+        errors.gstNumber = 'GST Number is required if GST registered.';
+      }
+      if (!gstDoc) {
+        errors.gstDoc = 'GST document is required.';
+      }
     }
+  
+    // PAN Document हमेशा आवश्यक है
     if (!panDoc) errors.panDoc = 'PAN document is required.';
+  
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
+  
+  
   
   const handleSubmit = async () => {
     if (!validateForm()) return;
@@ -116,7 +132,7 @@ const BusinessDetails = ({ navigation, route }) => {
 
   const handleContinueShopping = () => {
     handleModalClose();
-    navigation.navigate('B2BBottomNavigator');
+    navigation.replace('B2BBottomNavigator');
   };
 
   return (
@@ -135,6 +151,7 @@ const BusinessDetails = ({ navigation, route }) => {
                 value={panNumber}
                 onChange={setPanNumber}
                 errorMessage={formErrors.panNumber}
+                maxLength={10}
               />
 
               <TextInputField
@@ -153,38 +170,43 @@ const BusinessDetails = ({ navigation, route }) => {
 
               <View style={{ marginTop: 12 }}>
                 <View style={{ flexDirection: 'row', gap: 16, marginBottom: 8 }}>
-                  <Checkbox
+                <Checkbox
                     value={isGstRegistered}
                     onValueChange={setIsGstRegistered}
                     color={isGstRegistered ? '#FF3131' : undefined}
                     style={{ borderRadius: 5 }}
                   />
-                  <Text style={{ fontSize: 16, color: '#272727' }}>I am not GST registered?</Text>
+                  <Text style={{ fontSize: 16, color: '#272727' }}>
+                    I am not GST registered?
+                  </Text>
                 </View>
                 {formErrors.isGstRegistered && <Text style={{ color: 'red', fontSize: 14 }}>{formErrors.isGstRegistered}</Text>}
 
              
-                  <TextInputField
-                    placeholder="Enter FSSAI Number"
-                    value={fssai}
-                    onChange={setFssai}
-                    errorMessage={formErrors.fssai}
-                  />
+                <TextInputField
+                  placeholder="Enter FSSAI Number"
+                  value={fssai}
+                  onChange={setFssai}
+                  errorMessage={formErrors.fssai}
+                />
                
               </View>
 
-              <View>
-                <FileUploadField
-                  title="Upload PAN Document"
-                  onFileSelect={(file) => handleFileSelection('pan', file)}
-                />
-                {formErrors.panDoc && <Text style={{ color: 'red', fontSize: 14 }}>{formErrors.panDoc}</Text>}
-
-                <FileUploadField
-                  title="Upload GST/FSSAI Document"
-                  onFileSelect={(file) => handleFileSelection('gst', file)}
-                />
-                {formErrors.gstDoc && <Text style={{ color: 'red', fontSize: 14 }}>{formErrors.gstDoc}</Text>}
+              <View style={{gap:rh(2)}}>
+                  <View>
+                  <FileUploadField
+                    title="Upload PAN Document"
+                    onFileSelect={(file) => handleFileSelection('pan', file)}
+                  />
+                  {formErrors.panDoc && <Text style={{margin:rw(1), color: 'red', fontSize: 14 }}>{formErrors.panDoc}</Text>}
+                  </View>
+                  <View>
+                  <FileUploadField
+                    title="Upload GST/FSSAI Document"
+                    onFileSelect={(file) => handleFileSelection('gst', file)}
+                  />
+                  {formErrors.gstDoc && <Text style={{margin:rw(1), color: 'red', fontSize: 14 }}>{formErrors.gstDoc}</Text>}
+                  </View>
               </View>
             </View>
           </View>

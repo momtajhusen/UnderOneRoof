@@ -61,12 +61,6 @@ const B2BHomeScreen = () => {
         const response = await apiClient.get('/home');
         const slider = response.data.data.slider;
         setHomeSliderData(slider);
-        dispatch({
-          type: 'HOME_REFRESH',
-          payload: {
-            isHomeRefresh: Math.ceil(Math.random() * 100),
-          },
-        });
       } catch (error) {
         console.error('Error fetching slider data:', error);
       } finally {

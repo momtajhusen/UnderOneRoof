@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   Alert,
+  Animated,
 } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import Header from '../../../components/header';
@@ -16,7 +17,6 @@ import LinearStepIndicator from '../../../components/Stepper/LinearIndicatorStep
 import TextInputField from '../../../components/Inputs/TextInputField';
 import apiClient from '../../../Service/apiClient';
 import CustomButtons from '../../../components/Buttons/CustomButtons';
-
 
 const RegistrationOwnerScreen = ({ navigation, route }) => {
   const { mobile } = route.params;
@@ -27,57 +27,48 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const [ownerMobile, setOwnerMobile] = useState('');
   const [selectedBusinessType, setSelectedBusinessType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  
-
 
   const businessTypes = ['Restaurant', 'Sweet Shop', 'Catering', 'Hotel', 'Kirana Store', 'Others'];
 
-  const handleBusinessTypeSelection = (type) => {
-    setSelectedBusinessType(type); // Only one type can be selected
-  };
-  
   const [formErrors, setFormErrors] = useState({});
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+
   const validateForm = () => {
     const errors = {};
   
-    // First name and last name validation
     if (!fname) errors.fname = 'First name is required';
-    else if (fname.length < 3) errors.fname = 'First name must be at least 3 characters';
-  
     if (!lname) errors.lname = 'Last name is required';
-    else if (lname.length < 3) errors.lname = 'Last name must be at least 3 characters';
-  
-    // Email validation with proper format check
     if (!email) errors.email = 'Email is required';
-    else if (email.length < 3) errors.email = 'Email must be at least 3 characters';
-    else {
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      if (!emailRegex.test(email)) {
-        errors.email = 'Please enter a valid email address';
-      }
-    }
-  
-    // Mobile number validation (exactly 10 digits)
     if (!ownerMobile) errors.ownerMobile = 'Mobile number is required';
-    else if (ownerMobile.length !== 10) errors.ownerMobile = 'Mobile number must be exactly 10 digits';
+    if (!selectedBusinessType) {
+      errors.businessType = 'Please select a business type';
   
-    // Business type validation
-    if (!selectedBusinessType) errors.businessType = 'Please select a business type';
+      // शेक एनिमेशन ट्रिगर करें
+      Animated.sequence([
+        Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: -5, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 5, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 0, duration: 100, useNativeDriver: true }),
+      ]).start();
+    }
+
+
   
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
   
+
+  const handleBusinessTypeSelection = (type) => {
+    setSelectedBusinessType(type); // केवल एक प्रकार चयन करें
+  };
+
   const handleSubmit = async () => {
-    // Form validation
-    if (!validateForm()) {
-      return;
-    }
-  
-    // Start loading state
+    if (!validateForm()) return;
+
     setIsLoading(true);
-  
-    // Prepare owner details
+
     const ownerDetails = {
       mobile,
       fname,
@@ -86,29 +77,22 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
       business_type: selectedBusinessType,
       owner_mobile: ownerMobile,
     };
-  
+
     try {
-      console.log(ownerDetails);
-      // API request to register the owner
       const response = await apiClient.post('/registerOwner', ownerDetails);
-  
-      // Check if the registration is successful
+
       if (response.data.status === 1) {
-        // Navigate to BusinessDetails screen with response data
-        navigation.navigate('OutletDetailsScreen', { mobile: mobile });
+        navigation.navigate('OutletDetailsScreen', { mobile });
       } else {
-        // Show error alert if the status is not successful
         Alert.alert('Error', response.data.msg || 'Registration failed. Please try again.');
       }
     } catch (error) {
-      // Show error alert in case of API failure
       Alert.alert('Error', 'Something went wrong. Please try again later.');
     } finally {
-      // Stop loading state
       setIsLoading(false);
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <Header title="Register" />
@@ -143,32 +127,36 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
                 value={fname}
                 onChange={setFname}
                 errorMessage={formErrors.fname}
-                minLength={0}
+                maxLength={25}
               />
               <TextInputField
                 placeholder="Last Name"
                 value={lname}
                 onChange={setLname}
                 errorMessage={formErrors.lname}
+                maxLength={25}
               />
               <TextInputField
                 placeholder="Mobile Number"
-                keyboardType="phone-pad" 
+                keyboardType="phone-pad"
                 value={ownerMobile}
                 onChange={setOwnerMobile}
                 errorMessage={formErrors.ownerMobile}
-                maxLength={10} 
+                maxLength={10}
               />
               <TextInputField
                 placeholder="Email"
                 value={email}
                 onChange={setEmail}
                 errorMessage={formErrors.email}
+                maxLength={50}
               />
             </View>
           </View>
 
-          <View style={styles.checkboxContainer}>
+          <View
+            style={[styles.checkboxContainer]}
+          >
             <View
               style={{
                 borderBottomWidth: 1,
@@ -177,9 +165,21 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
                 paddingBottom: rh(1),
               }}
             >
-              <Text style={{fontWeight: '400', fontSize: rf(2), color: '#717171' }}>
-                Business Type
-              </Text>
+            <Animated.Text
+              style={[
+                {
+                  fontWeight: '400',
+                  fontSize: rf(2),
+                  color: '#717171',
+                },
+                {
+                  transform: [{ translateX: shakeAnimation }],
+                },
+              ]}
+            >
+              Business Type
+            </Animated.Text>
+
             </View>
 
             <FlatList
@@ -192,6 +192,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
                 >
                   <Checkbox
                     value={selectedBusinessType === item}
+                    onValueChange={() => handleBusinessTypeSelection(item)}
                     color={selectedBusinessType === item ? '#FF3131' : undefined}
                     style={{ borderRadius: 5 }}
                   />
@@ -202,22 +203,31 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
           </View>
         </ScrollView>
 
-        {/* Floating Button */}
-        <View style={{width:rw(100), padding:rw(2), paddingHorizontal:rw(5), paddingBottom:rh(2), backgroundColor:"white", position: 'absolute',bottom: rh(0)}}>
-            <CustomButtons 
-            onPress={handleSubmit} 
+        <View
+          style={{
+            width: rw(100),
+            padding: rw(2),
+            paddingHorizontal: rw(5),
+            paddingBottom: rh(2),
+            backgroundColor: 'white',
+            position: 'absolute',
+            bottom: rh(0),
+          }}
+        >
+          <CustomButtons
+            onPress={handleSubmit}
             title="Next"
-            disabled={isLoading}  
+            disabled={isLoading}
             loading={isLoading}
-            />
+          />
         </View>
-
       </View>
     </View>
   );
 };
 
 export default RegistrationOwnerScreen;
+
 
 
 const styles = StyleSheet.create({

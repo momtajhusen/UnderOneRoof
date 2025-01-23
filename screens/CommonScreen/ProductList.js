@@ -40,8 +40,6 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     const [selectedCategoryId, setSelectedCategoryId] = useState(selectCategoryId);
     const [selectedCategoryName, setSelectedCategoryName] = useState(selectCategoryName);
     const [selectedCategorySlug, setSelectedCategorySlug] = useState(selectCategorySlug);
-
-    console.log(selectedCategorySlug);
   
     const [productListing, setProductListing] = useState([]);
     const [categoryData, setCategory] = useState([]);

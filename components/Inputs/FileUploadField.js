@@ -22,17 +22,20 @@ const FileUploadField = ({ title = "Upload File", onFileSelect }) => {
     };
 
     return (
-        <View style={{ marginBottom: 16 }}>
-            <Text style={{ fontSize: 16, fontWeight: '400', color: '#272727', marginBottom: 8 }}>
+        <View>
+            <Text style={{ fontSize: 16, marginBottom:rh(1), fontWeight: '400', color: '#272727'}}>
                 {selectedFile ? selectedFile : title} {/* Dynamic title with selected file name */}
             </Text>
             <TouchableOpacity 
-                style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#F9F9F9', borderRadius: 10, padding: 12 }} 
+                style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', borderRadius: 10, padding:5 }} 
                 onPress={handleFileUpload}>
-                <Image source={require('../../assets/UploadIcon.png')} style={{ width: 16, height: 16, marginRight: 8 }} />
+                <View style={[styles.inputIcon]}>
+                   <Image source={require('../../assets/UploadIcon.png')} style={{ width: 16, height: 16, marginRight: 8 }} />
+                   <Text style={{color:"#17A2B8"}}>Upload File</Text>
+                </View>
                 <Text 
                     style={{ 
-                        color: selectedFile ? 'green' : '#272727'  // Green color if file is selected, else default color 
+                        color: selectedFile ? 'green' : '#272727', marginLeft:rw(2)  // Green color if file is selected, else default color 
                     }}
                     >
                     {selectedFile ? selectedFile : "Choose File"}
@@ -47,6 +50,15 @@ const styles = StyleSheet.create({
     container: {
         marginBottom: rh(2),
     },
+    inputIcon:{
+        backgroundColor:"#F3F3F3", 
+        height:"100%", 
+        paddingVertical:rh(1.5),
+        gap:rw(1),
+        flexDirection:"row",
+        paddingHorizontal:rw(3),
+        borderRadius:10,
+    },
     label: {
         fontSize: rf(2),
         fontWeight: '400',
@@ -56,7 +68,7 @@ const styles = StyleSheet.create({
     uploadButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F9F9F9',
+        backgroundColor: '#E9E9E9',
         borderWidth: 1,
         borderColor: '#E9E9E9',
         borderRadius: 10,
