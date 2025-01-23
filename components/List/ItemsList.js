@@ -73,26 +73,44 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
 
   const handleDecrease = async (psid, qty, var_id, moq) => {
     const minQuantity = moq ?? 1;
-
+  
     if (qty <= minQuantity) {
+      // Set loading for delete operation
+      setLoadingVariants((prevState) => ({
+        ...prevState,
+        [`${psid}-${var_id}-delete`]: true,
+      }));
+  
       await removeFromCart(psid, var_id);
+  
+      // Reset loading after delete operation
+      setTimeout(() => {
+        setLoadingVariants((prevState) => ({
+          ...prevState,
+          [`${psid}-${var_id}-delete`]: false,
+        }));
+      }, 300);
+  
       return;
     }
-
+  
+    // Set loading for quantity update
     const newQty = qty - 1;
-
     setLoadingVariants((prevState) => ({
       ...prevState,
       [`${psid}-${var_id}-qty`]: true,
     }));
-
+  
     await qtyUpdate(psid, newQty, var_id);
-
+  
+    // Reset loading for quantity update
     setLoadingVariants((prevState) => ({
       ...prevState,
       [`${psid}-${var_id}-qty`]: false,
     }));
   };
+  
+  
 
   const handleWishlistToggle = async (item) => {
     const pid = item.pid;
@@ -162,11 +180,15 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
                   >
                     <Text style={styles.controlText}>-</Text>
                   </TouchableOpacity>
-                  {loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
+                  {loadingVariants[`${item.pid}-${item.varient_id}-delete`] ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
                     <ActivityIndicator size="small" color="#fff" />
                   ) : (
-                    <Text style={{color:"white", fontWeight:"bold"}}>{itemQty}</Text>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>{itemQty}</Text>
                   )}
+
+
                   <TouchableOpacity
                     onPress={() =>
                       handleIncrease(item.pid, itemQty, item.varient_id, item.moq)

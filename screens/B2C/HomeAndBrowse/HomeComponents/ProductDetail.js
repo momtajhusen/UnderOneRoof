@@ -33,9 +33,6 @@ import { useWindowDimensions } from 'react-native';
 
 import { useQtyUpdate } from '../../../../utility/QtyUpdateUtils';
 
-
-
-
 // Shimmer Placeholder component
 const Shimmer = createShimmerPlaceholder(LinearGradient);
 
@@ -51,7 +48,9 @@ const ProductDetail = ({ route, navigation }) => {
     const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(false);
     const [isNutritionCollapsed, setIsNutritionCollapsed] = useState(false);  
     const [isLoading, setIsLoading] = useState(false);
-    const [isCartBtnLoading, setCartBtnLoading] = useState(false);  
+    // const [isCartBtnLoading, setCartBtnLoading] = useState(false);  
+    const [cartBtnLoading, setCartBtnLoading] = useState(false);
+
 
     const { width: contentWidth } = useWindowDimensions();
 
@@ -81,51 +80,89 @@ const ProductDetail = ({ route, navigation }) => {
 
    const [selectedVariantId, setSelectedVariantId] = useState(null);
 
-   const addToCart = async () => {
+    const addToCart = async () => {
     const moq = productDetails.moq || 1;
     try {
-      setCartBtnLoading(true);
+      setCartBtnLoading(true); // Set loading for Add to Cart button
       await addFromCart(productDetails.pid, selectedVariantId, moq);
-      setCartQty(moq); // Update quantity locally
+  
+      // Update cartQty immediately
+      setCartQty(moq);
+  
+      // Optionally update global cart state or trigger a re-fetch
+      dispatch({
+        type: 'UPDATE_CART',
+        payload: {
+          cartProduct: [
+            ...state.viewCartData.cartProduct,
+            { pid: productDetails.pid, var_id: selectedVariantId, qty: moq },
+          ],
+        },
+      });
     } catch (error) {
       console.error('Error adding to cart:', error);
     } finally {
-      setCartBtnLoading(false);
+      setCartBtnLoading(false); // Reset loading state
     }
-  };  
-
+    };
+    
     const handleIncrease = async (psid, qty, var_id, moq) => {
       const newQty = qty + 1;
       try {
-        setCartBtnLoading(true);
+        setCartBtnLoading(true); // Set loading for Increase button
         await qtyUpdate(psid, newQty, var_id, moq);
+    
+        // Update cartQty after the operation
         setCartQty(newQty);
       } catch (error) {
         console.error('Error increasing quantity:', error);
       } finally {
-        setCartBtnLoading(false);
+        setCartBtnLoading(false); // Reset loading state
       }
     };
     
     const handleDecrease = async (psid, qty, var_id, moq) => {
       const minQuantity = moq || 1;
+    
       if (qty <= minQuantity) {
-        await removeFromCart(psid, var_id);
-        setCartQty(0);
+        try {
+          setCartBtnLoading(true); // Set loading for Decrease button during delete
+          await removeFromCart(psid, var_id);
+    
+          // Reset cartQty to 0 after deletion
+          setCartQty(0);
+    
+          // Optionally update global cart state or trigger a re-fetch
+          dispatch({
+            type: 'UPDATE_CART',
+            payload: {
+              cartProduct: state.viewCartData.cartProduct.filter(
+                (cartItem) => cartItem.pid !== psid || cartItem.var_id !== var_id
+              ),
+            },
+          });
+        } catch (error) {
+          console.error('Error removing from cart:', error);
+        } finally {
+          setCartBtnLoading(false); // Reset loading state
+        }
         return;
       }
     
       const newQty = qty - 1;
       try {
-        setCartBtnLoading(true);
+        setCartBtnLoading(true); // Set loading for Decrease button
         await qtyUpdate(psid, newQty, var_id, moq);
+    
+        // Update cartQty after the operation
         setCartQty(newQty);
       } catch (error) {
         console.error('Error decreasing quantity:', error);
       } finally {
-        setCartBtnLoading(false);
+        setCartBtnLoading(false); // Reset loading state
       }
     };
+  
 
     const ProductDetails = async () => {
       setIsLoading(true);
@@ -191,14 +228,14 @@ const ProductDetail = ({ route, navigation }) => {
       // Fetch product from API
       useEffect(() => {
         ProductDetails();
-      }, []);
+      }, [item]);
 
       useEffect(() => {
         if (ProductVarient.length > 0 && selectedVariantId === null) {
            setSelectedVariantId(ProductVarient[0].psid);
            setCartQty(itemQty);
         }
-      }, [ProductVarient, selectedVariantId]);
+      }, [item, ProductVarient, selectedVariantId]);
       
       const reviews = [
         {
@@ -497,65 +534,64 @@ const ProductDetail = ({ route, navigation }) => {
               <Text style={{color: "black", fontWeight: "bold"}}>Buy Now</Text>
           </TouchableOpacity>
 
-          {state.viewCartData.cartProduct?.some(cartItem => cartItem.pid === productId && cartItem.var_id === selectedVariantId) ? (
-            <View
-                style={{
-                  backgroundColor: "#FF3131", 
-                  borderRadius: 10,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                disabled={isCartAddLoading}
-              >
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: rh(1.5),
-                    paddingHorizontal: rw(7),
-                  }}
-                  onPress={() => handleDecrease(productId, cartQty, selectedVariantId, productDetails.moq)}
-                  disabled={isCartAddLoading}  
-                >
-                  <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
-                </TouchableOpacity>
-                {isQtyUpdateLoading ? (
-                  <ActivityIndicator size="small" color="white" /> 
-                ) : (
-                  <Text style={{ color: "white", fontWeight: "bold" }}>
-                    {cartQty}</Text> 
-                )}
+          {cartQty > 0 ? (
+  <View
+    style={{
+      backgroundColor: "#FF3131",
+      borderRadius: 10,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}
+  >
+    <TouchableOpacity
+      style={{
+        paddingVertical: rh(1.5),
+        paddingHorizontal: rw(7),
+      }}
+      onPress={() => handleDecrease(productId, cartQty, selectedVariantId, productDetails.moq)}
+      disabled={cartBtnLoading} // Prevent multiple operations
+    >
+      <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
+    </TouchableOpacity>
+    {cartBtnLoading ? (
+      <ActivityIndicator size="small" color="white" />
+    ) : (
+      <Text style={{ color: "white", fontWeight: "bold" }}>{cartQty}</Text>
+    )}
+    <TouchableOpacity
+      style={{
+        paddingVertical: rh(1.5),
+        paddingHorizontal: rw(7),
+      }}
+      onPress={() => handleIncrease(productId, cartQty, selectedVariantId, productDetails.moq)}
+      disabled={cartBtnLoading} // Prevent multiple operations
+    >
+      <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
+    </TouchableOpacity>
+  </View>
+) : (
+  <TouchableOpacity
+    style={{
+      backgroundColor: "#FF3131",
+      paddingVertical: rh(1.5),
+      paddingHorizontal: rw(13),
+      borderRadius: 10,
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+    onPress={addToCart}
+    disabled={cartBtnLoading} // Prevent multiple operations
+  >
+    {cartBtnLoading ? (
+      <ActivityIndicator size="small" color="#FFFFFF" />
+    ) : (
+      <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
+    )}
+  </TouchableOpacity>
+)}
 
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: rh(1.5),
-                    paddingHorizontal: rw(7),
-                  }}
-                  onPress={() => handleIncrease(productId, cartQty, selectedVariantId, productDetails.moq)}
-                  disabled={isCartAddLoading}
-                >
-                  <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
-                </TouchableOpacity>
-              </View>
-              ) : (
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#FF3131",
-                    paddingVertical: rh(1.5),
-                    paddingHorizontal: rw(13),
-                    borderRadius: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={addToCart}
-                  disabled={isCartAddLoading}
-                >
-                  {isCartAddLoading ? (
-                    <ActivityIndicator size="small" color="#FFFFFF" />
-                  ) : (
-                    <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
-                  )}
-                </TouchableOpacity>
-          )}
+
 
 
         </View>

@@ -47,7 +47,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     const [categoryData, setCategory] = useState([]);
     const [loading, setLoading] = useState(true);
   
-    const [isModalVisible, setModalVisible] = useState(false); // Modal visibility state
+    const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
       
       setModalVisible(!isModalVisible);

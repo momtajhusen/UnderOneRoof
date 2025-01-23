@@ -54,31 +54,44 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
   };
 
   const handleDecrease = async (psid, qty, var_id, moq) => {
-    // If moq is null, default to 1
     const minQuantity = moq ?? 1;
   
     if (qty <= minQuantity) {
-          removeFromCart(psid, var_id);
-      return false;
+      // Set loading for delete operation
+      setLoadingVariants((prevState) => ({
+        ...prevState,
+        [`${psid}-${var_id}-delete`]: true,
+      }));
+  
+      await removeFromCart(psid, var_id);
+  
+      // Reset loading after delete operation
+      setTimeout(() => {
+        setLoadingVariants((prevState) => ({
+          ...prevState,
+          [`${psid}-${var_id}-delete`]: false,
+        }));
+      }, 300);
+  
+      return;
     }
   
-    // Decrease the quantity if it is greater than the minimum
+    // Decrease quantity logic
     const newQty = qty - 1;
   
-    // Update quantity and set loading state
     setLoadingVariants((prevState) => ({
       ...prevState,
       [`${psid}-${var_id}-qty`]: true,
     }));
   
-    const result = await qtyUpdate(psid, newQty, var_id);
+    await qtyUpdate(psid, newQty, var_id);
   
-    // Reset loading state after quantity update
     setLoadingVariants((prevState) => ({
       ...prevState,
       [`${psid}-${var_id}-qty`]: false,
     }));
   };
+  
   
 
   return (
@@ -138,13 +151,16 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
 
                     {/* Quantity or Loader */}
                     <View style={{ justifyContent: "center", alignItems: "center", marginHorizontal: rw(2) }}>
-                      {loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
-                        <ActivityIndicator size="small" color="#fff" />
-                      ) : (
-                        <Text style={{ color: "white", fontWeight: "bold" }}>
-                          {state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0}
-                        </Text>
-                      )}
+                    {loadingVariants[`${item.pid}-${item.varient_id}-delete`] ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                      <Text style={{ color: "white", fontWeight: "bold" }}>
+                        {state.viewCartData.cartProduct.find((cartItem) => cartItem.pid === item.pid)?.qty || 0}
+                      </Text>
+                    )}
+
                     </View>
 
                     {/* Increase Button */}
@@ -227,11 +243,14 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
 
                             {/* Quantity or Loader */}
                             <View style={{ justifyContent: "center", alignItems: "center", width: "30%" }}>
-                              {loadingVariants[`${item.pid}-${variant.psid}-qty`] ? (
-                                <ActivityIndicator size="small" color="#fff" />
-                              ) : (
-                                <Text style={{ color: "white", fontWeight: "bold" }}>{totalQtyInCart}</Text>
-                              )}
+                            {loadingVariants[`${item.pid}-${variant.psid}-delete`] ? (
+                              <ActivityIndicator size="small" color="#fff" />
+                            ) : loadingVariants[`${item.pid}-${variant.psid}-qty`] ? (
+                              <ActivityIndicator size="small" color="#fff" />
+                            ) : (
+                              <Text style={{ color: "white", fontWeight: "bold" }}>{totalQtyInCart}</Text>
+                            )}
+
                             </View>
 
                             {/* Increase Button */}

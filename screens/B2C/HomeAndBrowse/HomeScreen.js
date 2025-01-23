@@ -25,9 +25,9 @@ const HomeScreen = () => {
   const [HomeSliderData, setHomeSliderData] = useState([]);
 
 
-  useFocusEffect(() => {
-    StatusBar.setBackgroundColor("#FF6D6D");
-  });
+    useFocusEffect(() => {
+      StatusBar.setBackgroundColor("#FF6D6D");
+    });
 
     const onRefresh = async () => {
         dispatch({
@@ -36,29 +36,31 @@ const HomeScreen = () => {
             isHomeRefresh: Math.ceil(Math.random() * 100),
           },
         });
-       };
+    };
 
-      // Fetch slider image from API
-      useEffect(() => {
-        const fetchHomeSliderData = async () => {
-          try {
-            const response = await apiClient.get('/home');
-            const slider = response.data.data.slider;
-            setHomeSliderData(slider);
-          } catch (error) {
-            console.error('Error fetching slider data:', error);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchHomeSliderData();
+    const fetchHomeSliderData = async () => {
+      try {
+        const response = await apiClient.get('/home');
+        const slider = response.data.data.slider;
+        setHomeSliderData(slider);
         dispatch({
           type: 'HOME_REFRESH',
           payload: {
             isHomeRefresh: Math.ceil(Math.random() * 100),
           },
         });
-      }, [state.isHomeRefresh]);
+      } catch (error) {
+        console.error('Error fetching slider data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+      // Fetch slider image from API
+      useEffect(() => {
+        fetchHomeSliderData();
+      }, []);
+
 
   return (
     <ScrollView

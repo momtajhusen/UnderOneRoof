@@ -29,7 +29,7 @@ const RefreshYourDay = () => {
       }
     };
     fetchHomeSliderData();
-  }, [state.reFresh]);
+  }, [state.isHomeRefresh]);
 
   return (
     <View style={{ padding: rw(4) }}>

@@ -56,6 +56,24 @@ const B2BHomeScreen = () => {
         },
     ];
 
+    const fetchHomeSliderData = async () => {
+      try {
+        const response = await apiClient.get('/home');
+        const slider = response.data.data.slider;
+        setHomeSliderData(slider);
+        dispatch({
+          type: 'HOME_REFRESH',
+          payload: {
+            isHomeRefresh: Math.ceil(Math.random() * 100),
+          },
+        });
+      } catch (error) {
+        console.error('Error fetching slider data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     const onRefresh = async () => {
       dispatch({
         type: 'HOME_REFRESH',
@@ -67,23 +85,6 @@ const B2BHomeScreen = () => {
 
       // Fetch slider image from API
       useEffect(() => {
-        const fetchHomeSliderData = async () => {
-          try {
-            const response = await apiClient.get('/home');
-            const slider = response.data.data.slider; 
-            setHomeSliderData(slider);
-          } catch (error) {
-            console.error('Error fetching slider data:', error);
-          } finally {
-            setLoading(false);
-          }
-        };
-        dispatch({
-          type: 'HOME_REFRESH',
-          payload: {
-            isHomeRefresh: Math.ceil(Math.random() * 100),
-          },
-        });
         fetchHomeSliderData();
       }, [state.isHomeRefresh]);
 

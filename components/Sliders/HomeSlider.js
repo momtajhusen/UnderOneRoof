@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, Image, View } from 'react-native';
+import { StyleSheet, Dimensions, Image, View, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { rw, rh } from '../../Service/responsive';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
@@ -20,9 +20,9 @@ const HomeSlider = ({ sliderData, sliderStyle }) => {
     }, [sliderData]);
 
     const renderItem = ({ item }) => (
-        <View style={[styles.slide, sliderStyle]}>
+        <TouchableOpacity onPress={()=>alert()} style={[styles.slide, sliderStyle]}>
             <Image source={{ uri: item.image }} style={[styles.image]} resizeMode="cover" />  
-        </View>
+        </TouchableOpacity>
     );
 
     return (

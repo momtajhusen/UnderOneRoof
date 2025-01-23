@@ -36,14 +36,7 @@ export const useViewCartData = () => {
       dispatch({ type: 'SET_LOADER', payload: false });
     }
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await viewCartData();
-  //   };
-  //   fetchData();
-  // }, []);  
-
+  
   return {
     isViewCartLoading,
     viewCartData,

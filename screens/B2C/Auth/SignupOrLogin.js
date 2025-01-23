@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, StatusBar } from 'react-native';
 import CustomInput from '../../../components/Inputs/CustomInput';
 import CustomButtons from '../../../components/Buttons/CustomButtons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -80,6 +80,16 @@ const SignupOrLogin = ({ navigation }) => {
 
         <View style={styles.signuContainer}>
           <View>
+            {/* <View style={{flexDirection:"row", alignItems:"center", gap:5}}>
+              <Image
+                animation="fadeInUp"
+                source={require('../../../assets/auth/logo.png')}
+                style={{ width: rh(5), height: rh(5), borderRadius:10, }}
+                resizeMode="contain"
+              />
+              <Text style={{fontWeight:"bold", fontSize:20}}>UnderOneRoof</Text>
+            </View> */}
+
             <Text style={{ fontWeight: "bold", fontSize: rf(2.5), color: "#272727" }}>Sign Up or Login</Text>
             <Text style={{ marginTop: rh(1), color: "#717171" }}>Enter your mobile number to continue shopping</Text>
           </View>
@@ -88,7 +98,7 @@ const SignupOrLogin = ({ navigation }) => {
               placeholder="Enter Phone Number"
               value={mobile}
               onChangeText={(text) => setMobile(text)}  
-              keyboardType="phone-pad" 
+              keyboardType="phone-pad"
               maxLength={10} 
               errorMessage={errorMessage}  
             />

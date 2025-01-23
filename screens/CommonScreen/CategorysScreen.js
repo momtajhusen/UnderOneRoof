@@ -54,9 +54,6 @@ const CategoryScreen = ({ navigation }) => {
   const renderCategory = ({ item, index }) => (
     <View
       key={item.sid}
-      // animation="fadeInUp"
-      // duration={800}
-      // delay={index * 20}
     >
       <CategoryList
         cimage={item.image}
