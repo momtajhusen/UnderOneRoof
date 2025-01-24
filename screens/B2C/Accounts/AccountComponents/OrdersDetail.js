@@ -21,6 +21,7 @@ const OrderDetails = ({navigation, route }) => {
       };
 
       const [orderData, setOrderData] = useState(null);
+
       const [isLoading, setIsLoading] = useState(true);
 
         const fetchData = async () => {
@@ -73,7 +74,7 @@ const OrderDetails = ({navigation, route }) => {
 
                     {/* Order Summary */}
                     <View>
-                        <OrderSummary OrderData={order[0]} />
+                        <OrderSummary OrderData={orderData} />
                     </View>
 
                     {/* Order Items LIst */}
@@ -86,7 +87,7 @@ const OrderDetails = ({navigation, route }) => {
                          <Image source={require('../../../../assets/account/star.png')} style={{width:rw(6), height:rw(6)}} />
                          <Text style={{fontWeight:"bold"}}>Loved It? Let Us Know!</Text>
                        </View>
-                       <TouchableOpacity onPress={()=>navigation.navigate('RatingAndReviews')} style={{width:rw(25), paddingVertical:rh(1), borderRadius:10, backgroundColor:"#FF3131"}}>
+                       <TouchableOpacity onPress={() => navigation.navigate('RatingAndReviews', { order_id: order_id })} style={{width:rw(25), paddingVertical:rh(1), borderRadius:10, backgroundColor:"#FF3131"}}>
                           <Text style={{color:"white", textAlign:"center"}}>Rate Now</Text>
                        </TouchableOpacity>
                     </View>
@@ -137,7 +138,7 @@ const OrderDetails = ({navigation, route }) => {
                             </View>
                             <View>
                                 <Text style={{color:"#717171"}}>Delivery Date:</Text>
-                                <Text style={{color:"#272727", fontWeight:"400"}}>{order[0].delivered_on}</Text>
+                                <Text style={{color:"#272727", fontWeight:"400"}}>{order[0].expected_delivery_date}</Text>
                             </View>
                         </View>
                     </View>

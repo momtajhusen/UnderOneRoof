@@ -24,6 +24,8 @@ const ExploreMoreSlider = () => {
         const fetchSliderData = async () => {
             try {
                 const response = await apiClient.get('/home');
+
+                console.log(response.data);
                 const slider = response.data.data.slider; 
                 setHomeSliderData(slider);
             } catch (error) {

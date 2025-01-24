@@ -39,14 +39,14 @@ const [formData, setFormData] = useState({
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: "" })); // Clear error on input change
+    setErrors((prev) => ({ ...prev, [field]: "" })); 
   };
 
   const validateForm = () => {
     let isValid = true;
     const newErrors = {};
   
-    console.log(formData); // Add this line to debug formData
+    console.log(formData);  
   
     if (!formData.fname.trim()) {
       isValid = false;
@@ -56,19 +56,30 @@ const [formData, setFormData] = useState({
       isValid = false;
       newErrors.lname = "Last name is required.";
     }
-    if (!formData.mobile.trim() || formData.mobile.trim().length !== 10 || isNaN(formData.mobile.trim())) {
+    if (
+      !formData.mobile.trim() || 
+      formData.mobile.trim().length !== 10 ||
+      isNaN(formData.mobile.trim())
+    ) {
       isValid = false;
       newErrors.mobile = "Valid 10-digit mobile number is required.";
     }
     
     if (
-      formData.alternative_number.trim() &&
-      (formData.alternative_number.trim().length !== 10 || isNaN(formData.alternative_number.trim()))
+      formData.alternative_number.trim() && 
+      (
+        formData.alternative_number.trim().length !== 10 || 
+        isNaN(formData.alternative_number.trim())
+      )
     ) {
       isValid = false;
       newErrors.alternative_number = "Alternative mobile number must be 10 digits.";
-    }    
-    if (!formData.email.trim() || !/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/i.test(formData.email)) {
+    }
+  
+    if (
+      !formData.email.trim() || 
+      !/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/i.test(formData.email)
+    ) {
       isValid = false;
       newErrors.email = "Valid email address is required.";
     }
@@ -84,7 +95,11 @@ const [formData, setFormData] = useState({
       isValid = false;
       newErrors.state = "State is required.";
     }
-    if (!formData.pincode.trim() || formData.pincode.length !== 6) {
+    if (
+      !formData.pincode.trim() || 
+      formData.pincode.trim().length !== 6 || 
+      isNaN(formData.pincode.trim())
+    ) {
       isValid = false;
       newErrors.pincode = "Valid 6-digit PIN code is required.";
     }
@@ -92,6 +107,7 @@ const [formData, setFormData] = useState({
     setErrors(newErrors);
     return isValid;
   };
+  
   
 
   const handleSaveOptionClick = (selectedOption) => {

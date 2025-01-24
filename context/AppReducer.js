@@ -1,35 +1,23 @@
+import initialState from './initialState';
+
 // Action Types
 const SET_USER = 'SET_USER';
 const CLEAR_USER = 'CLEAR_USER';
 
 const GLOBAL_REFRESH = 'GLOBAL_REFRESH';
-
 const VIEW_CART_DATA = 'VIEW_CART_DATA';
-
 const VIEW_ADDRESS_DATA = 'VIEW_ADDRESS_DATA';
-
 const SELECT_ADDRESS_DATA = 'SELECT_ADDRESS_DATA';
-
 const SET_LOADER = 'SET_LOADER';
-
 const SET_CART_LOADER = 'SET_CART_LOADER';
-
-
-const SET_PRODUCT_FLITER = 'SET_PRODUCT_FLITER';
-
+const SET_PRODUCT_FILTER = 'SET_PRODUCT_FILTER';
 const SET_ORDER_NAVIGATION = 'SET_ORDER_NAVIGATION';
-
-const WISHLISH_REFRESH = 'WISHLISH_REFRESH';
+const WISHLIST_REFRESH = 'WISHLIST_REFRESH';
 const HOME_REFRESH = 'HOME_REFRESH';
-
-
-
-
-
-
+const RESET_STATE = 'RESET_STATE';
 
 // Reducer
-export default (state, action) => {
+const Reducer = (state = initialState, action) => {
   switch (action.type) {
     // User actions
     case SET_USER:
@@ -38,7 +26,6 @@ export default (state, action) => {
         userId: action.payload.userId,
         userNumber: action.payload.userNumber,
         shoppingMode: action.payload.shoppingMode,
-
       };
 
     case CLEAR_USER:
@@ -50,71 +37,71 @@ export default (state, action) => {
       };
 
     case GLOBAL_REFRESH:
-        return {
-          ...state,
-          reFresh: action.payload,
-        };
+      return {
+        ...state,
+        reFresh: action.payload,
+      };
 
-        case WISHLISH_REFRESH:
-          return {
-            ...state,
-            isWishlishRefresh: action.payload,
-          };
+    case WISHLIST_REFRESH:
+      return {
+        ...state,
+        isWishlistRefresh: action.payload,
+      };
 
-          case HOME_REFRESH:
-            return {
-              ...state,
-              isHomeRefresh: action.payload,
-            };
+    case HOME_REFRESH:
+      return {
+        ...state,
+        isHomeRefresh: action.payload,
+      };
 
-        case SET_LOADER:
-          return {
-              ...state,
-              isLoader: action.payload,
-          };  
-          
-          case SET_CART_LOADER:
-            return {
-                ...state,
-                isCartLoader: action.payload,
-            };
+    case SET_LOADER:
+      return {
+        ...state,
+        isLoader: action.payload,
+      };
 
-        case VIEW_CART_DATA:
-          return {
-            ...state,
-            viewCartData: action.payload.viewCartData, 
-          };
+    case SET_CART_LOADER:
+      return {
+        ...state,
+        isCartLoader: action.payload,
+      };
 
-          case SET_PRODUCT_FLITER:
-            return {
-              ...state,
-              productFilter: action.payload.productFilter, 
-            };
+    case VIEW_CART_DATA:
+      return {
+        ...state,
+        viewCartData: action.payload.viewCartData,
+      };
 
-          
-          case VIEW_ADDRESS_DATA:
-            return {
-              ...state,
-              viewAddressData: action.payload.viewAddressData, 
-            };
+    case SET_PRODUCT_FILTER:
+      return {
+        ...state,
+        productFilter: action.payload.productFilter,
+      };
 
-            case SELECT_ADDRESS_DATA:
-              return {
-                ...state,
-                selectAddressData: [action.payload.selectAddressData],  
-              };
+    case VIEW_ADDRESS_DATA:
+      return {
+        ...state,
+        viewAddressData: action.payload.viewAddressData,
+      };
 
-              case SET_ORDER_NAVIGATION:
-                return {
-                  ...state,
-                  orderNavigation: [action.payload.orderNavigation],  
-                };
+    case SELECT_ADDRESS_DATA:
+      return {
+        ...state,
+        selectAddressData: [action.payload.selectAddressData],
+      };
 
+    case SET_ORDER_NAVIGATION:
+      return {
+        ...state,
+        orderNavigation: [action.payload.orderNavigation],
+      };
 
-              
-            
+    case RESET_STATE:
+      return initialState;
 
     default:
       return state;
   }
 };
+
+export default Reducer;

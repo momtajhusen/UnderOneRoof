@@ -5,11 +5,7 @@ import { AppContext } from '../../context/AppContext';
 
 const OrderItems = () => {
   const { state } = useContext(AppContext);
-
-  // Debugging logs to confirm data
-  console.log('//////////////////');
-  console.log(state.viewCartData);
-  console.log('//////////////////');
+  
 
   // Render each item in the cart
   const renderItem = ({ item }) => (

@@ -1,20 +1,41 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import Header from '../../../../components/header';
 import * as Animatable from 'react-native-animatable';
 import CollapsibleReviewCard from '../../../../components/List/CollapsibleReviewCard';
+import apiClient from '../../../../Service/apiClient';
 
-const RatingAndReviews = () => {
+const RatingAndReviews = ({ route }) => {
+    const { order_id } = route.params; // Receiving order_id from navigation
     const [modalVisible, setModalVisible] = useState(false);
+    const [reviews, setReviews] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchPurchasedProducts = async () => {
+        try {
+            setLoading(true);
+            const response = await apiClient.get(`/purchasedProduct?oid=${order_id}`);
+            setReviews(response.data.data.product || []);
+
+        } catch (error) {
+            console.error('Failed to fetch purchased products:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPurchasedProducts();
+    }, []);
 
     const handleSubmit = () => {
-        setModalVisible(true);  
+        setModalVisible(true);
     };
 
     const handleModalClose = () => {
-        setModalVisible(false);  
+        setModalVisible(false);
     };
 
     return (
@@ -53,25 +74,26 @@ const RatingAndReviews = () => {
                             style={{ width: rw(30), height: rw(30) }}
                         />
                     </View>
+
                     <View style={{ gap: rh(0.5) }}>
                         <Text style={{ marginLeft: rw(3), color: "#717171" }}>
-                            Please tell us about items you have ordered.{' '}
+                            Please tell us about items you have ordered.
                         </Text>
-                        <CollapsibleReviewCard
-                            imageUri="https://plus.unsplash.com/premium_photo-1683798464819-d1376249293e?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            title="Premium Roasted Almonds"
-                            onSubmit={() => alert("Review Submitted!")}
-                        />
-                        <CollapsibleReviewCard
-                            imageUri="https://plus.unsplash.com/premium_photo-1683798464819-d1376249293e?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            title="Premium Roasted Almonds"
-                            onSubmit={() => alert("Review Submitted!")}
-                        />
-                        <CollapsibleReviewCard
-                            imageUri="https://plus.unsplash.com/premium_photo-1683798464819-d1376249293e?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            title="Premium Roasted Almonds"
-                            onSubmit={() => alert("Review Submitted!")}
-                        />
+
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#FF3131" />
+                        ) : (
+                            reviews.map((product, index) => (
+                                <CollapsibleReviewCard
+                                    key={index}
+                                    imageUri={product.pro_img}
+                                    title={product.pname}
+                                    onSubmit={() => alert(`Review submitted for ${product.pname}`)}
+                                    review={product.review}
+                                    rating={product.rating}
+                                />
+                            ))
+                        )}
                     </View>
                 </View>
             </ScrollView>
@@ -103,8 +125,7 @@ const RatingAndReviews = () => {
                             <MaterialIcons name="star" size={rf(5)} color="#DFDFDF" />
                         </View>
                         <Text style={styles.modalText}>
-                            Thanks for your review! Your feedback is invaluable to us. We're glad you're enjoying the
-                            app.
+                            Thanks for your review! Your feedback is invaluable to us. We're glad you're enjoying the app.
                         </Text>
                         <TouchableOpacity
                             style={styles.modalButton}
@@ -155,7 +176,7 @@ const styles = StyleSheet.create({
         paddingVertical: rh(1.5),
         paddingHorizontal: rw(10),
         borderRadius: 10,
-        width:"100%"
+        width: "100%",
     },
     buttonText: {
         color: 'white',

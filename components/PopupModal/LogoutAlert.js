@@ -1,19 +1,23 @@
 // import libraries
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppContext } from '../../context/AppContext';
 
 // create a component
 const LogOutAlert = ({ isModalVisible, toggleModal }) => {
     const navigation = useNavigation();
+    const { dispatch } = useContext(AppContext);
 
     const handleLogout = async () => {
         try {
-            // Remove authToken and ShoppingMode from AsyncStorage
-            await AsyncStorage.removeItem('authToken');
-            await AsyncStorage.removeItem('ShoppingMode');
+            // Remove all keys from AsyncStorage
+            await AsyncStorage.clear();
+
+            // Reset all application state
+            dispatch({ type: 'RESET_STATE' });
 
             // Navigate to the SignupOrLogin screen
             navigation.replace('SignupOrLogin');
@@ -27,13 +31,13 @@ const LogOutAlert = ({ isModalVisible, toggleModal }) => {
             transparent={true}
             animationType="fade"
             visible={isModalVisible}
-            onRequestClose={toggleModal}  
+            onRequestClose={toggleModal}
         >
             <View style={styles.modalContainer}>
                 <ImageBackground
-                    source={require('../../assets/Rectangle31.png')}  
+                    source={require('../../assets/Rectangle31.png')}
                     style={styles.modalContent}
-                    imageStyle={styles.frameImage}  
+                    imageStyle={styles.frameImage}
                 >
                     {/* Icon at the top */}
                     <View style={styles.iconContainer}>
@@ -67,11 +71,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background overlay
     },
     modalContent: {
-        width: rw(90), // Responsive width (e.g., 80% of screen width)
-        height: rh(25), // Responsive height (e.g., 30% of screen height)
+        width: rw(90), // Responsive width
+        height: rh(25), // Responsive height
         alignItems: 'center',
         padding: rw(5), // Padding based on screen width
-        overflow: "hidden"
+        overflow: 'hidden',
     },
     frameImage: {
         resizeMode: 'stretch', // Stretches the frame to fit the modal content
@@ -91,21 +95,21 @@ const styles = StyleSheet.create({
         fontSize: rf(2), // Responsive font size
         color: '#333333',
         textAlign: 'center',
-        marginVertical: rh(1), // Vertical margin based on screen height
-        fontWeight: "bold",
+        marginVertical: rh(1), // Vertical margin
+        fontWeight: 'bold',
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
         position: 'absolute',
-        bottom: rh(2), // Positioned at the bottom of the frame
+        bottom: rh(2), // Positioned at the bottom
     },
     cancelButton: {
         flex: 1,
         backgroundColor: '#e0e0e0',
         paddingVertical: rh(1.5), // Padding based on screen height
-        borderRadius: rw(2), // Border radius based on screen width
+        borderRadius: rw(2), // Border radius
         marginRight: rw(2.5),
         alignItems: 'center',
     },
@@ -119,13 +123,13 @@ const styles = StyleSheet.create({
     },
     cancelButtonText: {
         color: '#333',
-        fontSize: rf(1.8), // Responsive font size
-        fontWeight: "bold",
+        fontSize: rf(1.8), 
+        fontWeight: 'bold',
     },
     logoutButtonText: {
         color: '#ffffff',
         fontSize: rf(1.8),
-        fontWeight: "bold"
+        fontWeight: 'bold',
     },
 });
 

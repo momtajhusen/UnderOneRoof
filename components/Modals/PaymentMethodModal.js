@@ -9,6 +9,11 @@ import { AppContext } from '../../context/AppContext';
 
 const PaymentMethodModal = ({ isVisible, toggleModal }) => {
       const { state } = useContext(AppContext);
+
+
+      console.log('type '+state.shoppingMode);
+      console.log('user ID '+state.userId);
+
     
     const navigation = useNavigation();
 
@@ -47,6 +52,7 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
                 payment_type: 'cod',
             });
             
+            console.log(response.data);
             if (response.data.title == 'Order Successfully') {
                 navigation.navigate('OrderPlaced', { data: response.data.data });
                 toggleModal();

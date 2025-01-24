@@ -4,7 +4,7 @@ import Collapsible from "react-native-collapsible";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { rh, rw, rf } from "../../Service/responsive";
 
-const CollapsibleReviewCard = ({ imageUri, title, onSubmit }) => {
+const CollapsibleReviewCard = ({review, rating, imageUri, title, onSubmit }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
