@@ -1,36 +1,38 @@
-import React,{useContext} from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import { AppContext } from '../../context/AppContext';
 
- 
-const OrderItems = ({data}) => {
+const OrderItems = () => {
+  const { state } = useContext(AppContext);
 
-
+  // Debugging logs to confirm data
   console.log('//////////////////');
-    console.log(data);
+  console.log(state.viewCartData);
   console.log('//////////////////');
 
-
-   const { state } = useContext(AppContext);
-    
-   return false;
-
+  // Render each item in the cart
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Image source={{ uri: item.itemimage }} style={styles.itemImage} />
       <View style={styles.itemInfo}>
-        <Text style={styles.itemName}>{item.name} <Text style={styles.itemMeasurement}>({item.measurement}g)</Text></Text>
-        <Text style={styles.itemPrice}>₹{item.selling_price} | Qty: {item.qty}</Text>
+        <Text style={styles.itemName}>
+          {item.name} <Text style={styles.itemMeasurement}>({item.measurement}g)</Text>
+        </Text>
+        <Text style={styles.itemPrice}>
+          ₹{item.selling_price} | Qty: {item.qty}
+        </Text>
       </View>
     </View>
   );
 
+  const cartProduct = state.viewCartData?.cartProduct || [];
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Order Items({cartProduct.length})</Text>
+      <Text style={styles.title}>Order Items ({cartProduct.length})</Text>
       <FlatList
-        data={state.viewCartData.cartProduct}
+        data={cartProduct}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
       />

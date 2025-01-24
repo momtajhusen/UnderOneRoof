@@ -37,7 +37,7 @@ const ShopByCategory = () => {
         } finally {
           setLoading(false);  
         }
-      };
+    };
     
     // Fetch categories from API
     useEffect(() => {

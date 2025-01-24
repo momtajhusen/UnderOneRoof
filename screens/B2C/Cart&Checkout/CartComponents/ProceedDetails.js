@@ -7,8 +7,6 @@ import { AppContext } from '../../../../context/AppContext';
 // create a component
 const ProceedDetails = ({ data, loading, btnText, onPress }) => {
   const { grand_total, total } = data;
-  console.log("Process");
-  console.log(data);
 
   const navigation = useNavigation();
   const { state } = useContext(AppContext);
@@ -69,8 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: rh(10),
-    paddingHorizontal: rw(5),
-    backgroundColor: '',
+    paddingHorizontal: rw(4),
   },
   priceDetails: {
     justifyContent: 'center',

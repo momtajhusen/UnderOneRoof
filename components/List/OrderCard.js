@@ -7,87 +7,100 @@ import { useNavigation } from '@react-navigation/native';
 const OrderCard = ({ orders }) => {
   const navigation = useNavigation();
 
-  const getStatusStyle = (status) => {
-      switch (status) {
-          case 'Delivered':
-              return { color: '#4CAF50', icon: 'check-circle' };
-          case 'Canceled':
-              return { color: '#F44336', icon: 'cancel' };
-          case 'On The Way':
-              return { color: '#FF9800', icon: 'local-shipping' };
-          default:
-              return { color: '#888', icon: 'info' };
-      }
+  // Map status_order to style and text
+  const getStatusStyle = (statusOrder) => {
+    const statusMap = {
+      0: { text: 'Pending', color: '#FF7900', icon: 'hourglass-empty' },
+      1: { text: 'Processing', color: '#FF9800', icon: 'autorenew' },
+      2: { text: 'Packed', color: '#FF5722', icon: 'local-mall' },
+      3: { text: 'Shipment', color: '#FFC107', icon: 'local-shipping' },
+      4: { text: 'Delivered', color: '#4CAF50', icon: 'check-circle' },
+      5: { text: 'Cancel Request Accept', color: '#E91E63', icon: 'close' },
+      55: { text: 'Cancel Request', color: '#FF5722', icon: 'cancel' },
+      555: { text: 'Cancel Request Reject', color: '#795548', icon: 'close' },
+      6: { text: 'Return Request Accept', color: '#3F51B5', icon: 'reply' },
+      66: { text: 'Return Request', color: '#2196F3', icon: 'undo' },
+      666: { text: 'Return Request Reject', color: '#F44336', icon: 'cancel' },
+      6666: { text: 'Return Completed', color: '#8BC34A', icon: 'check-circle' },
+      7: { text: 'Exchange Request Accept', color: '#673AB7', icon: 'swap-horiz' },
+      77: { text: 'Exchange Request', color: '#9C27B0', icon: 'swap-horizontal-circle' },
+      777: { text: 'Exchange Request Reject', color: '#F44336', icon: 'cancel' },
+      7777: { text: 'Exchanged', color: '#4CAF50', icon: 'check-circle' },
+      8: { text: 'Confirm', color: '#4CAF50', icon: 'check-circle' },
+      9: { text: 'Order Reject', color: '#F44336', icon: 'close' },
+    };
+
+    return statusMap[statusOrder] || { text: 'Unknown', color: '#607D8B', icon: 'help-outline', bgColor: '#ECEFF1' };
   };
 
   const renderOrder = ({ item }) => {
-      console.log('Order Item:', item);
+    const statusStyle = getStatusStyle(item.status_order);
 
-      const statusStyle = getStatusStyle(item.order_status);
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('OrderDetails', { order_id: item.order_id })}
+        style={styles.card}
+      >
+        {/* Status Section */}
+        <View style={styles.statusContainer}>
+          <View style={styles.statusRow}>
+            <View style={[styles.statusIconBackground]}>
+              <MaterialIcons name={statusStyle.icon} size={rw(6)} color={statusStyle.color} />
+            </View>
+            <View style={styles.statusDetails}>
+              <Text style={[styles.statusText, { color: statusStyle.color }]}>{statusStyle.text}</Text>
+              <Text style={styles.dateTime} numberOfLines={1} ellipsizeMode="tail">
+                {item.order_date} {item.order_time}
+              </Text>
+            </View>
+          </View>
+          <MaterialIcons name="arrow-forward-ios" size={rw(4)} style={{position:"absolute", top:0, right:0}} />
+        </View>
 
-      return (
-          <TouchableOpacity
-              onPress={() => navigation.navigate('OrderDetails', { order_id: item.order_id })}
-              style={styles.card}
-          >
-              {/* Status Section */}
-              <View style={styles.statusContainer}>
-                  <View style={styles.statusRow}>
-                      <View style={[styles.statusIconBackground, { backgroundColor: statusStyle.color + '20' }]}>
-                          <MaterialIcons name={statusStyle.icon} size={rw(5)} color={statusStyle.color} />
-                      </View>
-                      <View style={styles.statusDetails}>
-                          <Text style={[styles.statusText, { color: statusStyle.color }]}>{item.order_status}</Text>
-                          <Text style={styles.dateTime} numberOfLines={1} ellipsizeMode="tail">
-                              {item.order_date} {item.order_time}
-                          </Text>
-                      </View>
-                  </View>
-                  <MaterialIcons name="arrow-forward-ios" size={rw(4)} style={{ alignSelf: 'center' }} />
-              </View>
+        {/* Product Images Section */}
+        <View style={styles.productsContainer}>
+          {item.image.length > 0 ? (
+            <ScrollView horizontal contentContainerStyle={styles.imageScrollContainer}>
+              {item.image.map((product, index) => (
+                <Image key={index} source={{ uri: product }} style={styles.productImage} />
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.noProductsText}>No Products Available</Text>
+          )}
+        </View>
 
-              {/* Product Images Section */}
-              <View style={styles.productsContainer}>
-                {item.image.length > 0 ? (
-                  <ScrollView horizontal contentContainerStyle={styles.imageScrollContainer}>
-                    {item.image.map((product, index) => (
-                      <Image key={index} source={{ uri: product }} style={styles.productImage} />
-                    ))}
-                  </ScrollView>
-                ) : (
-                  <Text style={styles.noProductsText}>No Products Available</Text>
-                )}
-              </View>
-
-
-              {/* Total Amount and CTA Section */}
-              <View style={styles.amountContainer}>
-                  <Text style={styles.totalAmount}>
-                      Total Amount: <Text style={styles.amountHighlight}>₹{item.grand_total}</Text>
-                  </Text>
-                  <TouchableOpacity onPress={item.onCTAClick} accessible accessibilityLabel={item.ctaText}>
-                      <Text style={styles.getItAgainButton}>{item.ctaText}</Text>
-                  </TouchableOpacity>
-              </View>
-          </TouchableOpacity>
-      );
+        {/* Total Amount and CTA Section */}
+        <View style={styles.amountContainer}>
+          <Text style={styles.totalAmount}>
+            Total Amount: <Text style={styles.amountHighlight}>₹{item.grand_total}</Text>
+          </Text>
+          {statusStyle.text === 'Delivered' ? (
+            <TouchableOpacity>
+              <Text style={styles.getItAgainButton}>Get It Again</Text>
+            </TouchableOpacity>
+          ) : statusStyle.text === 'Pending' || statusStyle.text === 'On The Way' ? (
+            <TouchableOpacity>
+              <Text style={styles.cancelButton}>Cancel</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </TouchableOpacity>
+    );
   };
 
   return (
-    <ScrollView style={{ flex: 1}}>
-      <FlatList
-        data={orders}
-        contentContainerStyle={{ paddingBottom:rh(10) }}
-        renderItem={renderOrder}
-        keyExtractor={(item) => item.order_id.toString()}
-        showsVerticalScrollIndicator={false}
-      />
-    </ScrollView>
+    <FlatList
+      data={orders}
+      contentContainerStyle={{ paddingBottom: rh(10) }}
+      renderItem={renderOrder}
+      keyExtractor={(item) => item.order_id.toString()}
+      showsVerticalScrollIndicator={false}
+    />
   );
 };
 
 export default OrderCard;
-
 
 const styles = StyleSheet.create({
   card: {
@@ -111,13 +124,16 @@ const styles = StyleSheet.create({
     borderRadius: rw(2),
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: rw(3),
+    backgroundColor: '#F3F3F3',
+
   },
   statusDetails: {
-    marginLeft: rw(4),
+    flex: 1,
   },
   statusText: {
     fontSize: rf(2),
-    fontWeight: '600',
+    fontWeight: '700',
   },
   dateTime: {
     fontSize: rf(1.6),
@@ -157,22 +173,8 @@ const styles = StyleSheet.create({
     color: '#FF3131',
     fontWeight: 'bold',
   },
-  ctaButton: {
-    marginTop: rh(2),
-    borderRadius: rw(4),
-    overflow: 'hidden',
-  },
-  gradientBackground: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: rh(1.5),
-  },
-  ctaText: {
-    color: '#fff',
-    fontSize: rf(2),
-    fontWeight: '600',
-    marginRight: rw(2),
+  cancelButton: {
+    color: '#F44336',
+    fontWeight: 'bold',
   },
 });
-

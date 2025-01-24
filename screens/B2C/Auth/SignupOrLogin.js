@@ -97,10 +97,10 @@ const SignupOrLogin = ({ navigation }) => {
             <CustomInput
               placeholder="Enter Phone Number"
               value={mobile}
-              onChangeText={(text) => setMobile(text)}  
+              onChangeText={(text) => setMobile(text)}
               keyboardType="phone-pad"
               maxLength={10} 
-              errorMessage={errorMessage}  
+              errorMessage={errorMessage}
             />
           </View>
           <View style={{ marginTop: rh(2) }}>

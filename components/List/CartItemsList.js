@@ -7,14 +7,13 @@ import { useQtyUpdate } from '../../utility/QtyUpdateUtils';
 import { AppContext } from '../../context/AppContext';
 
 const CartItemsList = ({ item, deleteIconStyle }) => {
-
     const { pid, itemimage, name, unit, measurement, selling_price, mrp_price, moq, qty, var_id } = item;
     const [itemQuantity, setItemQuantity] = useState(qty);
     const [isUpdatingQty, setIsUpdatingQty] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
     const { state } = useContext(AppContext);
-    const {isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
+    const { isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
     const { qtyUpdate } = useQtyUpdate();
 
     const handleIncrease = async () => {
@@ -27,19 +26,20 @@ const CartItemsList = ({ item, deleteIconStyle }) => {
 
     const handleDecrease = async () => {
         const minimumQty = moq != null ? moq : 1;
-      
+
         if (itemQuantity > minimumQty) {
-          setIsUpdatingQty(true);
-          const newQty = itemQuantity - 1;
-          await qtyUpdate(pid, newQty, var_id, moq);
-          setItemQuantity(newQty);
-          setIsUpdatingQty(false);
+            setIsUpdatingQty(true);
+            const newQty = itemQuantity - 1;
+            await qtyUpdate(pid, newQty, var_id, moq);
+            setItemQuantity(newQty);
+            setIsUpdatingQty(false);
         }
-      };
-      
+    };
 
     const onRemove = async () => {
+        setIsDeleting(true);
         await removeFromCart(pid, var_id);
+        setIsDeleting(false);
     };
 
     return (
@@ -52,8 +52,8 @@ const CartItemsList = ({ item, deleteIconStyle }) => {
             <View style={styles.details}>
                 <View style={styles.header}>
                     <Text style={styles.itemName} numberOfLines={1}>{name}</Text>
-                    <TouchableOpacity onPress={onRemove} style={[styles.removeButton, deleteIconStyle]}>
-                        {isCartDeleteLoading ? (
+                    <TouchableOpacity onPress={onRemove} style={[styles.removeButton, deleteIconStyle]} disabled={isDeleting}>
+                        {isDeleting || isCartDeleteLoading ? (
                             <ActivityIndicator size="small" color="#888" />
                         ) : (
                             <Image
@@ -77,7 +77,11 @@ const CartItemsList = ({ item, deleteIconStyle }) => {
                 <TouchableOpacity onPress={handleDecrease} style={styles.button} disabled={isUpdatingQty}>
                     <MaterialIcons style={styles.removeIcon} name="remove" />
                 </TouchableOpacity>
-                <Text style={styles.quantityText}>{itemQuantity}</Text>
+                {isUpdatingQty ? (
+                    <ActivityIndicator size="small" color="#888" />
+                ) : (
+                    <Text style={styles.quantityText}>{itemQuantity}</Text>
+                )}
                 <TouchableOpacity onPress={handleIncrease} style={styles.button} disabled={isUpdatingQty}>
                     <MaterialIcons style={styles.removeIcon} name="add" />
                 </TouchableOpacity>
@@ -85,7 +89,6 @@ const CartItemsList = ({ item, deleteIconStyle }) => {
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
@@ -143,12 +146,14 @@ const styles = StyleSheet.create({
         textDecorationLine: 'line-through',
     },
     quantityContainer: {
+        width:rw(27),
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: rh(3),
         backgroundColor: '#E9E9E9',
         borderRadius: rw(2),
         padding: rw(1),
+        justifyContent:"space-between"
     },
     button: {
         width: rw(8.5),

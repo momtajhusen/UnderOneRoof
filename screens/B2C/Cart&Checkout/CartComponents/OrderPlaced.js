@@ -81,7 +81,6 @@ const OrderPlaced = ({route}) => {
                      <OrderItems data={data} /> 
                   </View>
 
-
                   <View style={{marginVertical:rh(1)}}>
                          <PriceDetails data={state.viewCartData} promoCode={false} style={{ backgroundColor: "green" }} />
                   </View>
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor:"green",
     },
     detailsContainer:{
-      height:rh(75),
+      // height:rh(75),
       backgroundColor:"white",
       borderTopLeftRadius:30,
       borderTopRightRadius:30,
