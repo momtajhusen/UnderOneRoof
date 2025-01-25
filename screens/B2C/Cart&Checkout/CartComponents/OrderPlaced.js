@@ -15,7 +15,6 @@ const OrderPlaced = ({route}) => {
    const { data } = route.params;
    const { state } = useContext(AppContext);
 
-
     // Handle back button press
     const handleBackPress = () => {
      navigation.navigate("BottomNavigator");  
@@ -23,21 +22,18 @@ const OrderPlaced = ({route}) => {
    };
    
    // Add event listener on mount, remove on unmount
-   useEffect(() => {
-     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-     return () => {
-       backHandler.remove();  
-     };
-   }, []);
+   // useEffect(() => {
+   //   const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+   //   return () => {
+   //     backHandler.remove();  
+   //   };
+   // }, []);
    
-
-
-
    useFocusEffect(() => {
       StatusBar.setBackgroundColor("green");
     });
 
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -69,13 +65,13 @@ const OrderPlaced = ({route}) => {
                     <UserDetails  userData={state.selectAddressData} />
                   </View>
 
-                  <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
+                  {/* <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
                      <Image source={require('../../../../assets/FastTruckicon.png')} style={{width:rw(8), height:rh(3)}} />
                      <View style={{flexDirection:"row", alignItems:"center", gap:rw(2)}}> 
                         <Text>Estimated Delivery by</Text>
                         <Text style={{fontWeight:"bold"}}>24, October, 2024</Text>
                      </View>
-                  </View>
+                  </View> */}
 
                   <View>
                      <OrderItems data={data} /> 
@@ -90,13 +86,30 @@ const OrderPlaced = ({route}) => {
                          <MaterialIcons name="credit-card" size={rf(3)} color="#9D9D9D" />
                          <Text style={{color:"#9D9D9D", fontSize:rf(2)}}>Payment Mode</Text>
                       </View>
-                      <View style={{padding:rw(2), backgroundColor:"#FFEAEA", borderRadius:10, marginTop:rh(1)}}>
-                         <View style={{flexDirection:"row", gap:rw(2)}}>
-                            <Text style={{fontWeight:"bold", fontSize:18}}>Payment Completed</Text>
-                            <MaterialIcons name="check-circle" size={rf(3)} color="#44B200" />
-                         </View>
-                         <Text style={{color:"#868686"}}>Pre-Paid Order</Text>
-                      </View>
+
+                      <View
+                        style={{
+                           padding: rw(2),
+                           backgroundColor: data.title === "Online Payment" ? "#E8FFE8" : "#FFEAEA",
+                           borderRadius: 10,
+                           marginTop: rh(1),
+                        }}
+                        >
+                        <View style={{ flexDirection: "row", gap: rw(2) }}>
+                           <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+                              {data.title === "Online Payment" ? "Payment Completed" : "Payment Pending"}
+                           </Text>
+                           <MaterialIcons
+                              name="check-circle"
+                              size={rf(3)}
+                              color={data.title === "Online Payment" ? "#44B200" : "#B20000"}
+                           />
+                        </View>
+                        <Text style={{ color: "#868686" }}>
+                           {data.title === "Online Payment" ? "Pre-Paid Order" : "Cash on Delivery"}
+                        </Text>
+                     </View>
+
                   </View>
                   
              </View>

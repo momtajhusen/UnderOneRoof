@@ -8,14 +8,13 @@ import apiClient from '../../Service/apiClient';
 import CategoryListLoader from '../../components/ShimmerLoader/CategoryListLoader';
 import { AppContext } from '../../context/AppContext';
 
-
 const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isScreenLoaded, setIsScreenLoaded] = useState(false); 
 
   const { state, dispatch } = useContext(AppContext);
-  
 
   // Fetch categories from API
   const fetchCategories = async () => {
@@ -42,8 +41,19 @@ const CategoryScreen = ({ navigation }) => {
     }
   };
 
+  // Call API only after screen layout is fully loaded
   useEffect(() => {
-    fetchCategories();
+    if (isScreenLoaded) {
+      fetchCategories();
+    }
+  }, [isScreenLoaded]);
+
+  // Set isScreenLoaded to true after initial layout rendering
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsScreenLoaded(true);
+    }, 0);  
+    return () => clearTimeout(timer);
   }, []);
 
   const onRefresh = async () => {
@@ -52,9 +62,7 @@ const CategoryScreen = ({ navigation }) => {
   };
 
   const renderCategory = ({ item, index }) => (
-    <View
-      key={item.sid}
-    >
+    <View key={item.sid}>
       <CategoryList
         cimage={item.image}
         text={item.cname}
@@ -76,13 +84,13 @@ const CategoryScreen = ({ navigation }) => {
         title="Categories"
         rightContent={
           <View style={styles.headerIcons}>
-            <TouchableOpacity onPress={()=>navigation.navigate('SearchScreen')}>
+            <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
               <Image
                 source={require('../../assets/Search.png')}
                 style={styles.icon}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')}>
+            <TouchableOpacity onPress={() => navigation.navigate('CartScreen')}>
               <Image
                 source={require('../../assets/Cart.png')}
                 style={styles.icon}
@@ -92,7 +100,7 @@ const CategoryScreen = ({ navigation }) => {
         }
       />
 
-      <View style={{ justifyContent: "center", paddingHorizontal: rw(3.9) }}>
+      <View style={{ justifyContent: 'center', paddingHorizontal: rw(3.9) }}>
         {/* FlatList for Categories */}
         {loading ? (
           <View style={styles.categoryListContainer}>
@@ -110,8 +118,8 @@ const CategoryScreen = ({ navigation }) => {
             refreshControl={
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
             }
-            showsVerticalScrollIndicator={false} 
-            showsHorizontalScrollIndicator={false}  
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
           />
         )}
       </View>
@@ -120,6 +128,7 @@ const CategoryScreen = ({ navigation }) => {
 };
 
 export default CategoryScreen;
+
 
 const styles = StyleSheet.create({
   container: {

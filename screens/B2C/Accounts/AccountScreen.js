@@ -1,7 +1,5 @@
-// Import libraries
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../Service/responsive';
 import OrderOrWishlist from './AccountComponents/OrderOrWishlist';
 import AccountMenuList from './AccountComponents/AccountMenuList';
@@ -14,12 +12,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
-// Create component
 const AccountScreen = ({ navigation }) => {
   const { state } = useContext(AppContext);
 
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isScreenLoaded, setIsScreenLoaded] = useState(false); // New state to track screen load
 
   useEffect(() => {
     const checkAuthToken = async () => {
@@ -33,20 +31,33 @@ const AccountScreen = ({ navigation }) => {
     checkAuthToken();
   }, [navigation]);
 
+  // Fetch profile data from API
+  const fetchProfileData = async () => {
+    try {
+      const response = await apiClient.get('/viewprofile');
+      console.log(response.data);
+      setProfileData(response.data.data.viewProfile);
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Trigger API call only after screen is fully loaded
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get('/viewprofile');
-        console.log(response.data);
-        setProfileData(response.data.data.viewProfile);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [state.reFresh]);
+    if (isScreenLoaded) {
+      fetchProfileData();
+    }
+  }, [isScreenLoaded]);
+
+  // Set `isScreenLoaded` to true after screen rendering
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsScreenLoaded(true);
+    }, 0); // Ensure slight delay for rendering
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <View>
@@ -134,8 +145,8 @@ const AccountScreen = ({ navigation }) => {
   );
 };
 
-//make this component available to the app
 export default AccountScreen;
+
 
 const styles = StyleSheet.create({
   container: {

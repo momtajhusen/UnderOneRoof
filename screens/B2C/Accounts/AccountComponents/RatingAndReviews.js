@@ -8,7 +8,7 @@ import CollapsibleReviewCard from '../../../../components/List/CollapsibleReview
 import apiClient from '../../../../Service/apiClient';
 
 const RatingAndReviews = ({ route }) => {
-    const { order_id } = route.params; // Receiving order_id from navigation
+    const { order_id } = route.params;
     const [modalVisible, setModalVisible] = useState(false);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -18,6 +18,10 @@ const RatingAndReviews = ({ route }) => {
             setLoading(true);
             const response = await apiClient.get(`/purchasedProduct?oid=${order_id}`);
             setReviews(response.data.data.product || []);
+
+            console.log('//////////////// Review ////////////////////');
+              console.log(response.data.data.product);
+            console.log('/////////////// Review /////////////////////');
 
         } catch (error) {
             console.error('Failed to fetch purchased products:', error);
@@ -59,13 +63,13 @@ const RatingAndReviews = ({ route }) => {
                                 Help Others Shop with {'\n'}Confidence!
                             </Text>
                             <Text style={{ color: "#9D9D9D" }}>Share Your Review!</Text>
-                            <View style={{ marginTop: rh(0.5), flexDirection: "row", justifyContent: "flex-start" }}>
+                            {/* <View style={{ marginTop: rh(0.5), flexDirection: "row", justifyContent: "flex-start" }}>
                                 <MaterialIcons name="star" color="#DFDFDF" size={rf(4)} />
                                 <MaterialIcons name="star" color="#DFDFDF" size={rf(4)} />
                                 <MaterialIcons name="star" color="#DFDFDF" size={rf(4)} />
                                 <MaterialIcons name="star" color="#DFDFDF" size={rf(4)} />
                                 <MaterialIcons name="star" color="#DFDFDF" size={rf(4)} />
-                            </View>
+                            </View> */}
                         </View>
                         <Animatable.Image
                             animation="bounceInRight"
@@ -91,6 +95,7 @@ const RatingAndReviews = ({ route }) => {
                                     onSubmit={() => alert(`Review submitted for ${product.pname}`)}
                                     review={product.review}
                                     rating={product.rating}
+                                    p_id={product.p_id}
                                 />
                             ))
                         )}
@@ -98,14 +103,14 @@ const RatingAndReviews = ({ route }) => {
                 </View>
             </ScrollView>
 
-            <View style={{ backgroundColor: "white", paddingHorizontal: rw(5), paddingVertical: rh(1) }}>
+            {/* <View style={{ backgroundColor: "white", paddingHorizontal: rw(5), paddingVertical: rh(1) }}>
                 <TouchableOpacity
                     style={{ backgroundColor: "#FF3131", paddingVertical: rh(2), borderRadius: 10 }}
                     onPress={handleSubmit}
                 >
                     <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Submit</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
 
             {/* Modal Implementation */}
             <Modal

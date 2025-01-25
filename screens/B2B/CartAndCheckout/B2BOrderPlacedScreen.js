@@ -37,12 +37,12 @@ const B2BOrderPlaced = ({route}) => {
 };
 
 // Add event listener on mount, remove on unmount
-useEffect(() => {
-  const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-  return () => {
-    backHandler.remove();  
-  };
-}, []);
+// useEffect(() => {
+//   const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+//   return () => {
+//     backHandler.remove();  
+//   };
+// }, []);
 
     return (
         <View style={styles.container}>
@@ -80,15 +80,14 @@ useEffect(() => {
                   </View>
 
 
-                  <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
+                  {/* <View style={{flexDirection:"row", gap:rw(3), backgroundColor:"white", marginBottom:rh(1), padding:rw(2), paddingHorizontal:rw(5), borderRadius:10}}>
                      <Image source={require('../../../assets/FastTruckicon.png')} style={{width:rw(8), height:rh(3)}} />
                      <View style={{flexDirection:"row", alignItems:"center", gap:rw(2)}}> 
                         <Text>Estimated Delivery by</Text>
                         <Text style={{fontWeight:"bold"}}>24, October, 2024</Text>
                      </View>
-                  </View>
+                  </View> */}
  
-                  
              </View>
            </ScrollView>
         </View>

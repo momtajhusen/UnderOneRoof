@@ -27,7 +27,6 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
 
   // Sort By Options 
   const options = [
-    'Trending',
     'Price ( low to high )',
     'Price ( High to low )',
     'Discounts'
@@ -47,7 +46,6 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
   
     const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
-      
       setModalVisible(!isModalVisible);
     };
 
@@ -88,10 +86,12 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
   
     const fetchProductListing = async () => {
       setLoading(true);
-    
+       console.log(state.productFilter );
       try {
         const postResponse = await apiClient.get(`/category?slug=${selectedCategorySlug}`);
         const products = postResponse.data.data.category;
+
+        console.log(selectedCategorySlug);
     
         let filteredProducts = [...products];
     
@@ -113,9 +113,14 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
       }
     };
     
-  
     useEffect(() => {
       fetchSubCategory();
+      dispatch({
+        type: 'SET_PRODUCT_FILTER',
+        payload: {
+            productFilter: null,
+        },
+      });
     }, []);
   
     // Fetch products whenever `selectedCategorySlug` changes
@@ -200,7 +205,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                           }}
                           onPress={()=>
                             dispatch({
-                              type: 'SET_PRODUCT_FLITER',
+                              type: 'SET_PRODUCT_FILTER',
                               payload: {
                                   productFilter: null,
                               },

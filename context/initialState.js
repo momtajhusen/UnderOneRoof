@@ -22,8 +22,7 @@ const initialState = {
   isCartLoader: false,
   isHomeRefresh: false,
 
-
-
+  isOrderRefresh: false,
 
   productFilter: null,
 

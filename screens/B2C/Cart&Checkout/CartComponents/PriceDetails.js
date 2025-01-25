@@ -19,6 +19,7 @@ const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
     try {
       const response = await apiClient.get(`/applyCoupon?coupon_code=${couponCode}&amount=${data.grand_total}`);
  
+         console.log(response.data.status);
       if (response.data.status === 1) {
         const discountAmount =  response.data.data.discount;
         const newSaving = saving + discountAmount;
@@ -27,7 +28,7 @@ const PriceDetails = ({style, data, promoCode="true", saveMessage="false"}) => {
         setSaving(newSaving);
         setGrandTotal(newGrandTotal);
 
-        // Alert.alert('Success', response.data.data.discount+"% Discount" );
+        Alert.alert('Success', response.data.data.discount+"% Discount" );
       } else {
         Alert.alert('Wrong Coupon Code', response.title);
         setGrandTotal(data.grand_total);

@@ -15,6 +15,7 @@ export const useViewCartData = () => {
       const response = await apiClient.get('/viewCart');
       const cartProduct = response.data?.data?.cartProduct || {};
       const cartData = response.data?.data;
+      console.log(response);
 
       if (cartData) {
         // Dispatch updated cart data

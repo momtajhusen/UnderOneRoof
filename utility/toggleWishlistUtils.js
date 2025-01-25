@@ -28,6 +28,12 @@ export const useToggleWishlist = () => {
               isWishlishRefresh: Math.ceil(Math.random() * 100),
           },
         });
+        dispatch({
+          type: 'SET_CART_LOADER',
+          payload: {
+            isCartLoader: Math.ceil(Math.random() * 100),
+          },
+        });
         return { success: true, isInWishlist: !isInWishlist }; 
       } else {
         console.error('Failed to update wishlist:', response.data.title);

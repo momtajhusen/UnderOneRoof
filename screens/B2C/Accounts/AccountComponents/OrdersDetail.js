@@ -146,11 +146,11 @@ const OrderDetails = ({navigation, route }) => {
                 </View>
                </ScrollView>
 
-               <View style={{backgroundColor:"white", paddingHorizontal:rw(5), paddingVertical:rh(1)}}>
+               {/* <View style={{backgroundColor:"white", paddingHorizontal:rw(5), paddingVertical:rh(1)}}>
                    <TouchableOpacity style={{backgroundColor:"#FF3131", paddingVertical:rh(2), borderRadius:10}}>
                            <Text style={{color:"white", fontWeight:"bold", textAlign:"center"}}>Get It Again</Text>
                    </TouchableOpacity>
-               </View>
+               </View> */}
 
         </View>
     );

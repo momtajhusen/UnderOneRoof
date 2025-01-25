@@ -1,11 +1,48 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ScrollView } from 'react-native';
+import React,{useContext} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import apiClient from '../../Service/apiClient';
+import { AppContext } from '../../context/AppContext';
 
 const OrderCard = ({ orders }) => {
   const navigation = useNavigation();
+
+
+  const { state, dispatch } = useContext(AppContext);
+
+  // API call to cancel an order
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const response = await apiClient.get(`/order_cancel?oid=${orderId}`);
+
+      console.log(response.data);
+      if (response.status === 200) {
+        dispatch({
+          type: 'ORDER_REFRESH',
+          payload: {
+            isOrderRefresh: Math.ceil(Math.random() * 100),
+          },
+        });
+      } else {
+        Alert.alert('Error', 'Failed to cancel the order. Please try again.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while canceling the order.');
+      console.error(error);
+    }
+  };
 
   // Map status_order to style and text
   const getStatusStyle = (statusOrder) => {
@@ -30,7 +67,9 @@ const OrderCard = ({ orders }) => {
       9: { text: 'Order Reject', color: '#F44336', icon: 'close' },
     };
 
-    return statusMap[statusOrder] || { text: 'Unknown', color: '#607D8B', icon: 'help-outline', bgColor: '#ECEFF1' };
+    return (
+      statusMap[statusOrder] || { text: 'Unknown', color: '#607D8B', icon: 'help-outline', bgColor: '#ECEFF1' }
+    );
   };
 
   const renderOrder = ({ item }) => {
@@ -54,7 +93,7 @@ const OrderCard = ({ orders }) => {
               </Text>
             </View>
           </View>
-          <MaterialIcons name="arrow-forward-ios" size={rw(4)} style={{position:"absolute", top:0, right:0}} />
+          <MaterialIcons name="arrow-forward-ios" size={rw(4)} style={{ position: 'absolute', top: 0, right: 0 }} />
         </View>
 
         {/* Product Images Section */}
@@ -70,24 +109,26 @@ const OrderCard = ({ orders }) => {
           )}
         </View>
 
-        {/* Total Amount and CTA Section */}
-        <View style={styles.amountContainer}>
+          {/* Total Amount and CTA Section */}
+          <View style={styles.amountContainer}>
           <Text style={styles.totalAmount}>
             Total Amount: <Text style={styles.amountHighlight}>₹{item.grand_total}</Text>
           </Text>
-          {statusStyle.text === 'Delivered' ? (
+          {/* {statusStyle.text === 'Delivered' ? (
             <TouchableOpacity>
               <Text style={styles.getItAgainButton}>Get It Again</Text>
             </TouchableOpacity>
-          ) : statusStyle.text === 'Pending' || statusStyle.text === 'On The Way' ? (
-            <TouchableOpacity>
+          ) :  */}
+          {statusStyle.text === 'Pending' || statusStyle.text === 'On The Way' ? (
+              <TouchableOpacity onPress={() => handleCancelOrder(item.order_id)}>
               <Text style={styles.cancelButton}>Cancel</Text>
             </TouchableOpacity>
           ) : null}
         </View>
-      </TouchableOpacity>
-    );
-  };
+
+        </TouchableOpacity>
+      );
+    };
 
   return (
     <FlatList
@@ -101,6 +142,7 @@ const OrderCard = ({ orders }) => {
 };
 
 export default OrderCard;
+
 
 const styles = StyleSheet.create({
   card: {

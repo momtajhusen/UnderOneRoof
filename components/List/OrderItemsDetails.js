@@ -24,7 +24,7 @@ const OrderItemsDetails = ({ OrderData }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Order Items({OrderData.length})</Text>
+      <Text style={styles.title}>Order Items ({OrderData.length})</Text>
       <FlatList
         data={OrderData}
         keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}

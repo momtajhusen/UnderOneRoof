@@ -14,6 +14,8 @@ const SET_PRODUCT_FILTER = 'SET_PRODUCT_FILTER';
 const SET_ORDER_NAVIGATION = 'SET_ORDER_NAVIGATION';
 const WISHLIST_REFRESH = 'WISHLIST_REFRESH';
 const HOME_REFRESH = 'HOME_REFRESH';
+const ORDER_REFRESH = 'ORDER_REFRESH';
+
 const RESET_STATE = 'RESET_STATE';
 
 // Reducer
@@ -53,6 +55,15 @@ const Reducer = (state = initialState, action) => {
         ...state,
         isHomeRefresh: action.payload,
       };
+
+      case ORDER_REFRESH:
+        return {
+          ...state,
+          isOrderRefresh: action.payload,
+        };
+
+
+      
 
     case SET_LOADER:
       return {

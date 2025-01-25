@@ -35,7 +35,7 @@ const SortByModal = ({ isVisible, toggleModal, options }) => {
         setCustomDate(null);
         toggleModal();
         dispatch({
-            type: 'SET_PRODUCT_FLITER',
+            type: 'SET_PRODUCT_FILTER',
             payload: {
                 productFilter: null,
             },
@@ -43,10 +43,12 @@ const SortByModal = ({ isVisible, toggleModal, options }) => {
     };
 
     const handleApply = () => {
+
+        console.log(selectedOption);
         // Apply logic here
         toggleModal();
         dispatch({
-            type: 'SET_PRODUCT_FLITER',
+            type: 'SET_PRODUCT_FILTER',
             payload: {
                 productFilter: selectedOption,
             },

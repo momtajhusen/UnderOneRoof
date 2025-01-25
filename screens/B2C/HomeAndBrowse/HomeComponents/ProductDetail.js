@@ -33,6 +33,7 @@ import { useWindowDimensions } from 'react-native';
 
 import { useQtyUpdate } from '../../../../utility/QtyUpdateUtils';
 
+
 // Shimmer Placeholder component
 const Shimmer = createShimmerPlaceholder(LinearGradient);
 
@@ -79,6 +80,9 @@ const ProductDetail = ({ route, navigation }) => {
    const { isCartDeleteLoading, removeFromCart } = useRemoveFromCart();
 
    const [selectedVariantId, setSelectedVariantId] = useState(null);
+
+   const [deliveryTime, setDeliveryTime] = useState(null);
+
 
     const addToCart = async () => {
     const moq = productDetails.moq || 1;
@@ -170,7 +174,8 @@ const ProductDetail = ({ route, navigation }) => {
         const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
         const product = response.data;
 
-        const multiImage = product.data.productDetails[0]?.multi_image || [];
+          setDeliveryTime(response.data.data.delivery_time);
+          const multiImage = product.data.productDetails[0]?.multi_image || [];
 
         setMultiProductImage(multiImage);
         setProductDetails(product.data.productDetails[0]);
@@ -180,6 +185,7 @@ const ProductDetail = ({ route, navigation }) => {
         setProductVarient(product.data.varient);
         selectedVariantId(product.data[0].psid);
         setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
+
       } catch (error) {
         console.error('Error fetching product:', error);
       } finally {
@@ -371,10 +377,26 @@ const ProductDetail = ({ route, navigation }) => {
           <Text style={styles.productTitle}>{productDetails.name}</Text>
 
           {state.shoppingMode === "retail" && (
-            <Text style={styles.ratingText}>
-              ★★★★☆ <Text style={styles.reviewCount}>(22,500)</Text>
-            </Text>
+            <View style={{ flexDirection: 'row', marginTop:rh(1) }}>
+              {Array.from({ length: 5 }, (_, index) => {
+                const avg = productDetails.avg || 0;  
+                const isHalfFilled = avg > index && avg < index + 1;  
+                const isFilled = avg >= index + 1; 
+
+                return (
+                  <MaterialIcons
+                    key={index}
+                    name={isFilled ? 'star' : isHalfFilled ? 'star-half' : 'star-outline'}
+                    size={rf(2)}
+                    style={styles.ratingText}
+                  />
+                );
+              })}
+              <Text style={styles.reviewCount}>({productDetails.rating})</Text>
+            </View>
           )}
+
+
 
 
           <Text style={styles.selectText}>
@@ -472,21 +494,21 @@ const ProductDetail = ({ route, navigation }) => {
             </View>
 
             <View style={styles.DescriptionContainer}>
-              <Text style={styles.sectionTitle}>Delivery Options:</Text>
+              <Text style={styles.sectionTitle}>Delivery</Text>
 
               <View style={{flexDirection:"row", gap:rw(3), marginBottom:rh(1)}}>
                 <MaterialIcons name="local-shipping" size={20} color="#FF9100" />
-                <Text style={styles.deliveryText}>
-                  <Text style={{ fontWeight: 'bold' }}>Standard Delivery:</Text> 3-5 business days
+                  <Text style={styles.deliveryText}>
+                  <Text style={{ fontWeight: 'bold' }}>Standard Delivery:</Text> {deliveryTime}
                 </Text>
               </View>
 
-              <View style={{flexDirection:"row", gap:rw(3)}}>
+              {/* <View style={{flexDirection:"row", gap:rw(3)}}>
                 <MaterialIcons name="local-shipping" size={20} color="#FF3131" />
                 <Text style={styles.deliveryText}>
                   <Text style={{ fontWeight: 'bold' }}>Express Delivery:</Text> Within 24 hours {'\n'} (depending on location)
                 </Text>
-              </View>
+              </View> */}
             
             </View>
 
@@ -605,6 +627,9 @@ const ProductDetail = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  starIcon: {
+    color: '#FF3131',
+  },
   container: { flex: 1 },
   scrollContainer: { paddingBottom: rh(2) },
   carouselItem: { justifyContent: 'center', alignItems: 'center' },
@@ -616,7 +641,7 @@ const styles = StyleSheet.create({
   discountText: { color: '#FF6D00', fontSize: rf(1.8), fontWeight: 'bold', marginBottom:rh(1) },
   productTitle: { fontSize: rf(2), fontWeight: 'bold' },
   ratingText: { color: '#FF3131', fontSize: rf(2.5), fontWeight: 'bold', marginBottom: rh(1) },
-  reviewCount: { color: '#A0A0A0', fontSize: rf(1.8) },
+  reviewCount: {marginLeft:rw(1), color: '#A0A0A0', fontSize: rf(1.8), fontWeight:'bold' },
   selectText: { fontSize: rf(1.8), marginTop:rh(2), color:"#717171", marginBottom:rh(1) },
   quantityContainer: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: rh(0.5) },
   quantityBox: { 

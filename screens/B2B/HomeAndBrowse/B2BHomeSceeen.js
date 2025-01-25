@@ -1,5 +1,5 @@
-import React,{ useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar, RefreshControl} from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView, StatusBar, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
 import SearchDesigne from '../../../components/Search/searchDesigne';
@@ -14,138 +14,142 @@ import B2BSimilarProducts from './ComponentsSections/B2BSimilarProducts';
 import { AppContext } from '../../../context/AppContext';
 import apiClient from '../../../Service/apiClient';
 
-
-
 const B2BHomeScreen = () => {
-    const { state, dispatch } = useContext(AppContext);
-
+  const { state, dispatch } = useContext(AppContext);
   const navigation = useNavigation();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-
+  const [HomeSliderData, setHomeSliderData] = useState([]);
+  const [isScreenLoaded, setIsScreenLoaded] = useState(false); // New state to track screen rendering
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FBDFDF");
   });
 
-  const [HomeSliderData, setHomeSliderData] = useState([]);
-    
- 
-
   // Dummy data for items
-    const dateItems = [
-        {
-            id: '1',
-            name: 'Medjool Dates',
-            image: require('../../../assets/items/image1345.png'),
-        },
-        {
-            id: '2',
-            name: 'Ajwa Dates',
-            image: require('../../../assets/items/image23323.png'),
-        },
-        {
-            id: '3',
-            name: 'Barhi Dates',
-            image: require('../../../assets/items/image3432.png'),
-        },
-        {
-            id: '4',
-            name: 'Deglet Noor',
-            image: require('../../../assets/items/image3ww23.png'),
-        },
-    ];
+  const dateItems = [
+    {
+      id: '1',
+      name: 'Medjool Dates',
+      image: require('../../../assets/items/image1345.png'),
+    },
+    {
+      id: '2',
+      name: 'Ajwa Dates',
+      image: require('../../../assets/items/image23323.png'),
+    },
+    {
+      id: '3',
+      name: 'Barhi Dates',
+      image: require('../../../assets/items/image3432.png'),
+    },
+    {
+      id: '4',
+      name: 'Deglet Noor',
+      image: require('../../../assets/items/image3ww23.png'),
+    },
+  ];
 
-    const fetchHomeSliderData = async () => {
-      try {
-        const response = await apiClient.get('/home');
-        const slider = response.data.data.slider;
-        setHomeSliderData(slider);
-      } catch (error) {
-        console.error('Error fetching slider data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Fetch slider data from API
+  const fetchHomeSliderData = async () => {
+    try {
+      const response = await apiClient.get('/home');
+      const slider = response.data.data.slider;
+      setHomeSliderData(slider);
+    } catch (error) {
+      console.error('Error fetching slider data:', error);
+    }
+  };
 
-    const onRefresh = async () => {
-      dispatch({
-        type: 'HOME_REFRESH',
-        payload: {
-          isHomeRefresh: Math.ceil(Math.random() * 100),
-        },
-      });
-    };
+  // Trigger API call only after the screen is fully loaded
+  useEffect(() => {
+    if (isScreenLoaded) {
+      fetchHomeSliderData();
+    }
+  }, [isScreenLoaded]);
 
-      // Fetch slider image from API
-      useEffect(() => {
-        fetchHomeSliderData();
-      }, [state.isHomeRefresh]);
+  // Set `isScreenLoaded` to true after screen rendering
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsScreenLoaded(true);
+    }, 0); // Ensure slight delay to allow rendering
+    return () => clearTimeout(timer);
+  }, []);
 
+  const onRefresh = async () => {
+    dispatch({
+      type: 'HOME_REFRESH',
+      payload: {
+        isHomeRefresh: Math.ceil(Math.random() * 100),
+      },
+    });
+  };
 
   return (
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FBDFDF" />
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FBDFDF" />
 
-        {/* Header Section */}
-        <LinearGradient
-          colors={['#FBDFDF', '#EBEBEB']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.headerContainer}
-        >
-          <View style={{position:"absolute", top:rh(4), zIndex:100}}>
-            <Text style={{fontWeight:"bold", color:"#FF5454", fontSize:rf(1.5), textAlign:"center"}}>Find Your All Shop Need</Text>
-            <Text style={styles.headerTitle}>UnderOneRoof</Text>
+      {/* Header Section */}
+      <LinearGradient
+        colors={['#FBDFDF', '#EBEBEB']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={styles.headerContainer}
+      >
+        <View style={{ position: "absolute", top: rh(4), zIndex: 100 }}>
+          <Text style={{ fontWeight: "bold", color: "#FF5454", fontSize: rf(1.5), textAlign: "center" }}>
+            Find Your All Shop Need
+          </Text>
+          <Text style={styles.headerTitle}>UnderOneRoof</Text>
+        </View>
+        <View style={{ position: "absolute", bottom: rh(8) }}>
+          <SearchDesigne onPress={() => navigation.navigate('SearchScreen')} />
+        </View>
+      </LinearGradient>
+
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+      >
+        {/* Slider & Categories Section */}
+        <View style={styles.SliderCategoryContainer}>
+          {/* Slider Container */}
+          <View style={{ paddingTop: rh(5) }}>
+            <HomeSlider sliderData={HomeSliderData} sliderStyle={{ width: rw(80), height: rh(20) }} />
           </View>
-          <View style={{position:"absolute", bottom:rh(8)}}>
-             <SearchDesigne onPress={()=>navigation.navigate('SearchScreen')} />
+          {/* Bestsellers Category Container */}
+          <View style={{ marginTop: rh(2) }}>
+            <BestSellers />
           </View>
-        </LinearGradient>
-        <ScrollView
-                refreshControl={
-                    <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-                }
-        >
-            {/* Slider & Categories Section */}
-            <View style={styles.SliderCategoryContainer}>
-            {/* Slider Container */}
-            <View style={{ paddingTop: rh(5) }}>
-                <HomeSlider sliderData={HomeSliderData} sliderStyle={{width: rw(80), height: rh(20)}} />
-            </View>
-            {/* Bestsellers Category Container */}
-            <View style={{marginTop:rh(2)}}>
-                <BestSellers />
-            </View>
-            {/* Shop By Category Container */}
-            <View>
-                <ShopByCategory />
-            </View>
-            {/* Explore More Slider Container */}
-            <View>
-                <HomeSlider sliderData={HomeSliderData} sliderStyle={{width: rw(80), height: rh(17)}} />
-            </View>
-            {/* Refresh Your Day Container */}
-            <View style={{marginVertical:rh(2)}}>
-                <Essentials />
-            </View>
+          {/* Shop By Category Container */}
+          <View>
+            <ShopByCategory />
+          </View>
+          {/* Explore More Slider Container */}
+          <View>
+            <HomeSlider sliderData={HomeSliderData} sliderStyle={{ width: rw(80), height: rh(17) }} />
+          </View>
+          {/* Refresh Your Day Container */}
+          <View style={{ marginVertical: rh(2) }}>
+            <Essentials />
+          </View>
 
-            {/* Savor the Sweetness of Premium Dates!  */}
-            <PremiumDates data={dateItems} />
+          {/* Savor the Sweetness of Premium Dates! */}
+          <PremiumDates data={dateItems} />
 
-            {/* B2BSimilarProducts */}
-            <View style={{marginHorizontal:rw(4)}}>
-              <B2BSimilarProducts />
-            </View>
-
-            </View>
-        </ScrollView>
-
-      </View>
+          {/* B2BSimilarProducts */}
+          <View style={{ marginHorizontal: rw(4) }}>
+            <B2BSimilarProducts />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
 export default B2BHomeScreen;
+
 
 const styles = StyleSheet.create({
   container: {

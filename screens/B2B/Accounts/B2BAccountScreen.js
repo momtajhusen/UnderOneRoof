@@ -16,6 +16,7 @@ const B2BAccountScreen = ({ navigation }) => {
 
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isScreenLoaded, setIsScreenLoaded] = useState(false); // New state to track screen rendering
 
   useEffect(() => {
     const checkAuthToken = async () => {
@@ -29,20 +30,33 @@ const B2BAccountScreen = ({ navigation }) => {
     checkAuthToken();
   }, [navigation]);
 
+  // Fetch profile data from API
+  const fetchProfileData = async () => {
+    try {
+      const response = await apiClient.get('/viewprofile');
+      console.log(response.data);
+      setProfileData(response.data.data.viewProfile);
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Trigger API call only after the screen is fully loaded
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get('/viewprofile');
-        console.log(response.data);
-        setProfileData(response.data.data.viewProfile);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [state.reFresh]);
+    if (isScreenLoaded) {
+      fetchProfileData();
+    }
+  }, [isScreenLoaded]);
+
+  // Set `isScreenLoaded` to true after screen rendering
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsScreenLoaded(true);
+    }, 0); // Slight delay for screen rendering
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <View>
@@ -121,8 +135,10 @@ const B2BAccountScreen = ({ navigation }) => {
     </View>
   );
 };
+ 
 
 export default B2BAccountScreen;
+
 
 const styles = StyleSheet.create({
   container: {
