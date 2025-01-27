@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/themes/responsive';
 import apiClient from '../../../../Service/apiClient';
 import { AppContext } from '../../../../context/AppContext';
@@ -16,6 +16,10 @@ const Essentials = () => {
         const response = await apiClient.get('/home');
         const category = response.data.data.essentialcategory;
         setCategories(category);
+
+        console.log('/////////////////////');
+        console.log(category);
+        console.log('/////////////////////');
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
@@ -71,7 +75,7 @@ const Essentials = () => {
           {/* List Items */}
           <View style={{ flexDirection: 'row', gap: 20 }}>
             {[0, 1, 2].map((index) => (
-              <View
+              <TouchableOpacity
                 key={index}
                 style={{ width: rw(25), justifyContent: 'center', alignItems: 'center' }}
               >
@@ -101,7 +105,7 @@ const Essentials = () => {
                 >
                   {getCategoryName(index)}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
 

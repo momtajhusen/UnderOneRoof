@@ -14,7 +14,7 @@ import { rw, rh } from '../../Service/responsive';
 const CartScreen = ({ navigation }) => {
   const { state, dispatch } = useContext(AppContext);
   const { viewCartData } = useViewCartData();
-  const [isScreenLoaded, setIsScreenLoaded] = useState(false); // New state
+  const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
 
   // API call function
   const fetchCartData = async () => {

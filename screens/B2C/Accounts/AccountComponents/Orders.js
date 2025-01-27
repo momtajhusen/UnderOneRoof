@@ -16,7 +16,7 @@ const Orders = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [isScreenLoaded, setIsScreenLoaded] = useState(false); // New state for screen load tracking
+    const [isScreenLoaded, setIsScreenLoaded] = useState(false);
 
     const { state, dispatch } = useContext(AppContext);
 

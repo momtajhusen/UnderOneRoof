@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,11 +15,19 @@ import * as ImagePicker from "expo-image-picker";
 import { rh, rw, rf } from "../../Service/responsive";
 import apiClient from "../../Service/apiClient";
 
-const CollapsibleReviewCard = ({ p_id, review, rating, imageUri, title }) => {
+const CollapsibleReviewCard = ({ p_id, review, review_image, rating, imageUri, title }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [currentReview, setCurrentReview] = useState(review || ""); // Default review
   const [currentRating, setCurrentRating] = useState(rating || 0); // Default rating
   const [selectedImages, setSelectedImages] = useState([]); // Store selected images
+
+  // Initialize `selectedImages` with `review_image`
+  useEffect(() => {
+    if (review_image && Array.isArray(review_image)) {
+      const initialImages = review_image.map((uri) => ({ uri }));
+      setSelectedImages(initialImages);
+    }
+  }, [review_image]);
 
   const handleStarPress = (index) => {
     setCurrentRating(index + 1); // Update the rating when a star is clicked
@@ -33,7 +41,7 @@ const CollapsibleReviewCard = ({ p_id, review, rating, imageUri, title }) => {
     });
 
     if (!result.canceled && result.assets) {
-      setSelectedImages([...selectedImages, ...result.assets]); // Add selected images
+      setSelectedImages([...selectedImages, ...result.assets]);
     }
   };
 
@@ -51,11 +59,13 @@ const CollapsibleReviewCard = ({ p_id, review, rating, imageUri, title }) => {
       formData.append("review", currentReview);
 
       selectedImages.forEach((image, index) => {
-        formData.append("image[]", {
-          uri: image.uri,
-          type: "image/jpeg",
-          name: `image${index + 1}.jpg`,
-        });
+        if (!review_image?.includes(image.uri)) {
+          formData.append("image[]", {
+            uri: image.uri,
+            type: "image/jpeg",
+            name: `image${index + 1}.jpg`,
+          });
+        }
       });
 
       const response = await apiClient.post("/addReview", formData, {
@@ -63,7 +73,7 @@ const CollapsibleReviewCard = ({ p_id, review, rating, imageUri, title }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      
+
       console.log(response.data);
       if (response.data.status === 1) {
         Alert.alert("Success", response.data.title);
@@ -71,7 +81,7 @@ const CollapsibleReviewCard = ({ p_id, review, rating, imageUri, title }) => {
         setCurrentRating(0);
         setSelectedImages([]);
       } else {
-         alert(response.data);
+        Alert.alert("Error", response.data.message || "Failed to submit review.");
       }
     } catch (error) {
       console.error("Error submitting review:", error);
@@ -121,7 +131,7 @@ const CollapsibleReviewCard = ({ p_id, review, rating, imageUri, title }) => {
               placeholder="Tell Us What You Think"
               style={styles.textInput}
               multiline
-              value={currentReview} // Default review value
+              value={currentReview}
               onChangeText={(text) => setCurrentReview(text)}
             />
 

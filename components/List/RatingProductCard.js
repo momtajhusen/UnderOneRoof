@@ -3,6 +3,11 @@ import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive'; // Responsive utilities
 
 const RatingProductCard = ({ rating, reviewCount, images }) => {
+
+  console.log('//////////////////////////////');
+  console.log(reviewCount);
+  console.log('//////////////////////////////');
+
   return (
     <View style={styles.card}>
       {/* Title Section */}
@@ -20,7 +25,7 @@ const RatingProductCard = ({ rating, reviewCount, images }) => {
               ★
             </Text>
           ))}
-          <Text style={styles.reviewCount}>({reviewCount})</Text>
+          <Text style={styles.reviewCount}> ({reviewCount})</Text>
         </View>
         </View>
 
@@ -28,26 +33,23 @@ const RatingProductCard = ({ rating, reviewCount, images }) => {
 
       {/* Images Section */}
       <FlatList
-        data={images}
+        data={images.slice(0, 4)} // Show only the first 4 images
         horizontal
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <View
-            style={[
-              styles.imageWrapper,
-              index === images.length - 1 && { position: 'relative' }, // Special style for the last image
-            ]}
-          >
-            <Image source={item} style={styles.productImage} />
-            {index === images.length - 1 && images.length > 3 && (
+          <View style={styles.imageWrapper}>
+            <Image source={{ uri: item }} style={styles.productImage} />
+            {index === 3 && images.length > 4 && ( // Check if it's the last visible image and there are more than 4 images
               <View style={styles.overlay}>
-                <Text style={styles.moreImagesText}>+{images.length - 394}</Text>
+                <Text style={styles.moreImagesText}>+{images.length - 4}</Text>
               </View>
             )}
           </View>
         )}
         showsHorizontalScrollIndicator={false}
       />
+
+
     </View>
   );
 };
@@ -63,12 +65,11 @@ const styles = StyleSheet.create({
     fontSize: rf(2),
     fontWeight: 'bold',
     color: '#333',
-    // marginBottom: rh(1),
   },
   ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: rh(0.5),
+    marginBottom: rh(1),
   },
   starsContainer: {
     flexDirection: 'row',
@@ -78,19 +79,19 @@ const styles = StyleSheet.create({
   },
   activeStar: {
     color: '#FF3131',
-    fontSize: rf(2.2),
+    fontSize: rf(3),
   },
   inactiveStar: {
     color: '#ddd',
-    fontSize: rf(2.2),
+    fontSize: rf(3),
   },
   reviewCount: {
     fontSize: rf(1.8),
     color: '#888',
   },
   imageWrapper: {
-    width: rw(21),
-    height: rw(21),
+    width: rw(20),
+    height: rw(20),
     marginRight: rw(2),
     borderRadius: rw(2),
     overflow: 'hidden',

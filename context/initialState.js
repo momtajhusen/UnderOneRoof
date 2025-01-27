@@ -18,7 +18,7 @@ const initialState = {
   // Refresh or Loader
   reFresh: false,
   isLoader: false,
-  isWishlishRefresh: false,
+  isWishlistRefresh: false,
   isCartLoader: false,
   isHomeRefresh: false,
 

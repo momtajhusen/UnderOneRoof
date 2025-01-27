@@ -23,9 +23,15 @@ export const useToggleWishlist = () => {
 
       if (response.data.status === 1) {
         dispatch({
-          type: 'WISHLISH_REFRESH',
+          type: 'WISHLIST_REFRESH',
           payload: {
-              isWishlishRefresh: Math.ceil(Math.random() * 100),
+            isWishlistRefresh: Math.ceil(Math.random() * 100),
+          },
+        });
+        dispatch({
+          type: 'HOME_REFRESH',
+          payload: {
+            isHomeRefresh: Math.ceil(Math.random() * 100),
           },
         });
         dispatch({

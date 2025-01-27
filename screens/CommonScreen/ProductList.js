@@ -9,7 +9,7 @@ import {
   Image,
   ScrollView,
   Animated,
-  ActivityIndicator
+  RefreshControl
 } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import Header from '../../components/header';
@@ -43,6 +43,10 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     const [productListing, setProductListing] = useState([]);
     const [categoryData, setCategory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    
+    
   
     const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
@@ -114,24 +118,52 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     };
     
     useEffect(() => {
-      fetchSubCategory();
-      dispatch({
-        type: 'SET_PRODUCT_FILTER',
-        payload: {
-            productFilter: null,
-        },
-      });
+      // Set `isScreenLoaded` to true after screen rendering
+      const timer = setTimeout(() => {
+        setIsScreenLoaded(true);
+      }, 0); // Slight delay to ensure layout rendering
+    
+      return () => clearTimeout(timer);
     }, []);
-  
-    // Fetch products whenever `selectedCategorySlug` changes
+    
     useEffect(() => {
-      if (selectedCategorySlug) {
+      // Fetch subcategories only when the screen is fully loaded
+      if (isScreenLoaded) {
+        fetchSubCategory();
+    
+        // Reset product filter
+        dispatch({
+          type: 'SET_PRODUCT_FILTER',
+          payload: {
+            productFilter: null,
+          },
+        });
+      }
+    }, [isScreenLoaded]);
+    
+    useEffect(() => {
+      // Fetch product listing when `selectedCategorySlug` or filter changes
+      if (isScreenLoaded && selectedCategorySlug) {
         fetchProductListing();
       }
-    }, [selectedCategorySlug, state.productFilter]);
+    }, [isScreenLoaded, selectedCategorySlug, state.productFilter]);
+    
+        // Refresh handler for pull-to-refresh
+        const handleRefresh = async () => {
+          setIsRefreshing(true);
+          try {
+            await fetchProductListing(); // Ensure this fetch logic works as expected
+          } catch (error) {
+            console.error('Error during refresh:', error);
+          } finally {
+            setIsRefreshing(false); // Always reset the refreshing state
+          }
+        };
+        
   
     return (
-      <View style={styles.screen}>
+      <View style={styles.screen}
+      >
         {/* Header */}
         <Header
           title={selectedCategoryName+' '+state.shoppingMode}
@@ -147,7 +179,8 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
           }
         />
   
-        <View style={styles.container}>
+        <View style={styles.container}
+        >
           <View style={styles.sideContainer}>
             <FlatList
               data={categoryData}
@@ -225,62 +258,119 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
             {state.shoppingMode === 'wholesale' ? (
               /* B2B container */
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <ScrollView 
-                  contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingVertical: rh(1), paddingBottom: rh(5) }}
-                  showsVerticalScrollIndicator={false}
-                  showsHorizontalScrollIndicator={false}
-                >
-                  {
-                    loading ? (
-                      <B2BProductLoader 
-                        layout="vertical" 
-                        styleCardContainer={{
-                          width: categoryData.length === 0 ? rw(90) : rw(75),
-                          marginBottom: 10,
-                        }}
-                      />
-                    ) : productListing?.length > 0 ? (
-                      <B2BProductCard
-                        items={productListing}
-                        styleCardContainer={{
-                          width: categoryData.length === 0 ? rw(90) : rw(75),
-                          marginBottom: 10,
-                        }}
-                        layout="vertical"
-                      />
-                    ) : (
-                      <View style={{ height: rh(70), justifyContent: "center", alignItems: "center" }}>
-                        <Image 
-                          source={require('../../assets/product-not-avable.png')} 
-                          style={{ width: rw(50), height: rw(50) }} 
-                        />
-                      </View>
-                    )
+                <ScrollView
+                  contentContainerStyle={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    paddingVertical: rh(1),
+                    paddingBottom: rh(5),
+                  }}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={isRefreshing}
+                      onRefresh={handleRefresh}
+                      tintColor="#FF3131"
+                      colors={['#FF3131']}  
+                    />
                   }
-                </ScrollView>
-              </View>
-            ) : (
-              /* B2C container */
-              <View style={{ paddingTop: rh(1), flexDirection: 'row', flex: 1, paddingBottom: rh(5), paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0), justifyContent: 'center' }}>
+                >
                 {loading ? (
-                  <View style={{width:rw(100), height:rh(100)}}>
-                    <ItemsListLoader count="6" layout = 'vertical' 
-                    itemContainerStyle={{
-                      width: categoryData.length === 0 ? rw(44) : rw(37),
-                      }} />
-                  </View>
-                ) : productListing.length !== 0 ? (
-                  <ItemsList items={productListing} layout="vertical" listContainerStyle={{ width: categoryData.length === 0 ? rw(45) : rw(37.3), marginBottom: rh(1) }} />
+                  <B2BProductLoader
+                    layout="vertical"
+                    styleCardContainer={{
+                      width: categoryData.length === 0 ? rw(90) : rw(75),
+                      marginBottom: 10,
+                    }}
+                  />
+                ) : productListing?.length > 0 ? (
+                  <B2BProductCard
+                    items={productListing}
+                    styleCardContainer={{
+                      width: categoryData.length === 0 ? rw(90) : rw(75),
+                      marginBottom: 10,
+                    }}
+                    layout="vertical"
+                  />
                 ) : (
-                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontSize: rf(2), color: '#555', textAlign: 'center' }}>
-                      No products available
-                    </Text>
+                  <View
+                    style={{
+                      height: rh(70),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Image
+                      source={require('../../assets/product-not-avable.png')}
+                      style={{ width: rw(50), height: rw(50) }}
+                    />
                   </View>
                 )}
+              </ScrollView>
+
+              </View>
+            ) : (
+              <View
+                style={{
+                  paddingTop: rh(1),
+                  flex: 1,
+                  paddingBottom: rh(5),
+                  paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
+                  justifyContent: 'center',
+                }}
+              >
+                <ScrollView
+                  contentContainerStyle={{ flexGrow: 1 }}  
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={isRefreshing}
+                      onRefresh={handleRefresh}
+                      tintColor="#FF3131"  
+                      colors={['#FF3131']}  
+                    />
+                  }
+                >
+                  {loading ? (
+                    <View style={{ width: rw(100), height: rh(100) }}>
+                      <ItemsListLoader
+                        count="6"
+                        layout="vertical"
+                        itemContainerStyle={{
+                          width: categoryData.length === 0 ? rw(40) : rw(37),
+                        }}
+                      />
+                    </View>
+                  ) : productListing.length !== 0 ? (
+                    <ItemsList
+                      items={productListing}
+                      layout="vertical"
+                      listContainerStyle={{
+                        width: categoryData.length === 0 ? rw(45) : rw(37.3),
+                        marginBottom: rh(1),
+                      }}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: rf(2),
+                          color: '#555',
+                          textAlign: 'center',
+                        }}
+                      >
+                        No products available
+                      </Text>
+                    </View>
+                  )}
+                </ScrollView>
               </View>
             )}
-
           </View>
         </View>
          {/* Sort By Modal Method Modal */}
@@ -289,7 +379,6 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     );
   };
   
-
 export default ProductListing;
 
 // Styles

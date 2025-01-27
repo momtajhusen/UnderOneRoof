@@ -55,7 +55,7 @@ const Wishlist = ({ navigation }) => {
     // Fetch wishlist data on component mount
     useEffect(() => {
         fetchWishlistData();
-    }, [state.isWishlishRefresh]);
+    }, [state.isCartLoader]);
 
     return (
         <View style={{ flex: 1 }}>
@@ -75,6 +75,10 @@ const Wishlist = ({ navigation }) => {
                     <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
                 }
             >
+               <View style={{paddingVertical:rh(1)}}>
+                  <Text style={{fontWeight:"bold"}}>{wishlistProduct.length} items added</Text>
+               </View>
+
                 {/* Conditionally render wishlist data, empty message, or loading message */}
                 {isLoading ? (
                     <ItemsListLoader count="6" itemContainerStyle={{ width: rw(42.5) }} />

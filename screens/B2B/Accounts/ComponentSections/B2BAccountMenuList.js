@@ -33,8 +33,8 @@ const B2BAccountMenuList = () => {
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/location.png')} onPress={() => navigation.navigate('AddressBook')} text="Address Book" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/sms-search.png')} onPress={() => navigation.navigate('B2BRequestProductsScreen')} text="Request Product" />
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/HelpCircle.png')} onPress={() => navigation.navigate('B2BHelpAndSupport')} text="Help & Support" />
-        <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/Group26.png')} onPress={() => navigation.navigate('B2BTermsConditions')} text="Terms & Conditions" />
-        <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} iconImageStyle={{width:rw(4), height:rw(5)}} icon={require('../../../../assets/account/Group.png')} onPress={() => navigation.navigate('B2BPrivacyPolicy')} text="Privacy Policy" />
+        <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/Group26.png')} onPress={() => navigation.navigate('TermsConditions')} text="Terms & Conditions" />
+        <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} iconImageStyle={{width:rw(4), height:rw(5)}} icon={require('../../../../assets/account/Group.png')} onPress={() => navigation.navigate('PrivacyPolicy')} text="Privacy Policy" />
         
         {/* Delete Account Button */}
         <IconBtnList ListStyle={{borderRadius:10, marginBottom:5 }} icon={require('../../../../assets/account/user-remove.png')}text="Delete Account" onPress={toggleDeleteAccountAlertModal} />

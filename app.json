@@ -27,6 +27,7 @@
     "ios": {
       "bundleIdentifier": "com.example.underoneroof",
       "buildNumber": "1.0.0"
-    }
+    },
+    "newArchEnabled": true
   }
 }

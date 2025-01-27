@@ -1,15 +1,36 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { rw, rh, rf } from '../../Service/responsive'; // Ensure this is correctly linked in your project.
+import React from "react";
+import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { rw, rh, rf } from "../../Service/responsive"; // Ensure this is correctly linked in your project.
 
-const ReviewCard = ({ image, rating, reviewText, reviewer, date, style }) => {
+const ReviewCard = ({ image = [], rating, review, name, created_at, style }) => {
+  // Ensure `image` is an array and filter out empty strings
+  const filteredImages = Array.isArray(image) ? image.filter((img) => img && img.trim() !== "") : [];
+
   return (
     <View style={[styles.card, style]}>
-      <View style={styles.imageContainer}>
-        <Image source={image} style={styles.productImage} />
-      </View>
-      <View style={styles.cardContent}>
-        <View style={styles.row}>
+      <View >
+        {/* Images Row with Horizontal Scroll */}
+        <ScrollView
+          horizontal
+          style={styles.imageContainer}
+          showsHorizontalScrollIndicator={false}
+        >
+          {filteredImages.length > 0 ? (
+            filteredImages.map((img, index) => (
+              <Image
+                key={index}
+                source={{ uri: img }}
+                style={styles.productImage}
+              />
+            ))
+          ) : (
+            null
+          )}
+        </ScrollView>
+
+        {/* Card Content */}
+        <View style={styles.cardContent}>
+          {/* Stars */}
           <View style={styles.ratingRow}>
             {[...Array(5)].map((_, index) => (
               <Text
@@ -20,12 +41,18 @@ const ReviewCard = ({ image, rating, reviewText, reviewer, date, style }) => {
               </Text>
             ))}
           </View>
-          <Text style={styles.reviewText}>{reviewText}</Text>
+
+          {/* Review Text */}
+          <Text style={styles.reviewText}>{review}</Text>
+
+          {/* Description */}
+          <Text style={styles.productDescription}>Value for money product</Text>
+
+          {/* Reviewer Name and Date */}
+          <Text style={styles.reviewerText}>
+            {name} | {new Date(created_at).toLocaleDateString()}
+          </Text>
         </View>
-        <Text style={styles.productDescription}>Value for money product</Text>
-        <Text style={styles.reviewerText}>
-          {reviewer} | {date}
-        </Text>
       </View>
     </View>
   );
@@ -33,56 +60,53 @@ const ReviewCard = ({ image, rating, reviewText, reviewer, date, style }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: rw(3),
     padding: rw(3),
     marginBottom: rh(1),
   },
   imageContainer: {
-    width: rw(15),
-    padding: rw(1),
-    borderRadius: rw(2),
-    marginRight: rw(3),
+    flexDirection: "row",
+    flexWrap: "nowrap", 
+    marginBottom: rh(1),
+    gap: rw(2), 
   },
   productImage: {
+    width: rw(18),
     height: rw(18),
-    width:rw(18),
     borderRadius: rw(2),
+    resizeMode: "cover",
+    marginRight: rw(2),
   },
   cardContent: {
     flex: 1,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: rh(1),
-    gap: rw(2), // Using rw for consistent spacing
-  },
   ratingRow: {
-    flexDirection: 'row',
-    marginRight: rw(2),
+    flexDirection: "row",
+    marginBottom: rh(0.5),
   },
   activeStar: {
-    color: '#FF3131',
-    fontSize: rf(2), // Scaled font size for stars
+    color: "#FF3131",
+    fontSize: rf(2),
   },
   inactiveStar: {
-    color: '#ddd',
+    color: "#ddd",
     fontSize: rf(2),
   },
   reviewText: {
     fontSize: rf(1.8),
-    color: '#333',
+    color: "#333",
+    marginBottom: rh(0.5),
   },
   productDescription: {
     fontSize: rf(1.8),
-    color: '#555',
+    color: "#555",
+    fontWeight: "bold",
     marginBottom: rh(0.5),
-    fontWeight:"bold"
   },
   reviewerText: {
     fontSize: rf(1.6),
-    color: '#888',
+    color: "#888",
   },
 });
 

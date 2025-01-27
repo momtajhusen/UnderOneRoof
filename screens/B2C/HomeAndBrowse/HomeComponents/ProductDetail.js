@@ -83,6 +83,12 @@ const ProductDetail = ({ route, navigation }) => {
 
    const [deliveryTime, setDeliveryTime] = useState(null);
 
+   const [reviewData, setReviewData] = useState({
+      rating: 0,
+      reviewCount: 0,
+      images: [],
+    });
+
 
     const addToCart = async () => {
     const moq = productDetails.moq || 1;
@@ -171,27 +177,44 @@ const ProductDetail = ({ route, navigation }) => {
     const ProductDetails = async () => {
       setIsLoading(true);
       try {
-        const response = await apiClient.get(`/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`);
+        const response = await apiClient.get(
+          `/product/detail?slug=${selectedSlug}&var=${selectedVarientId}`
+        );
         const product = response.data;
-
-          setDeliveryTime(response.data.data.delivery_time);
-          const multiImage = product.data.productDetails[0]?.multi_image || [];
-
+    
+        setDeliveryTime(response.data.data.delivery_time || null);
+    
+        const multiImage = product.data.productDetails[0]?.multi_image || [];
+    
+        // Fetch review-related data
+        const reviewImages = product.data.reviewData || [];
+        const totalRating = product.data.allrating || 0;
+        const totalReviews = product.data.allreview || 0;
+    
+        // Update reviewData
+        setReviewData({
+          rating: totalRating,
+          reviewCount: totalReviews,
+          images: reviewImages,
+        });
+    
+        setReview(response.data.data.review);
         setMultiProductImage(multiImage);
         setProductDetails(product.data.productDetails[0]);
         setCartQty(product.data.productDetails[0].added_to_cart);
         setProductId(product.data.productDetails[0].pid);
         setRelatedProduct(product.data.relatedProduct);
         setProductVarient(product.data.varient);
-        selectedVariantId(product.data[0].psid);
+        setSelectedVariantId(product.data.varient.psid);
         setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
 
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
       } finally {
         setIsLoading(false);
       }
     };
+    
 
     const wishlistHandle = async () => {
       const payloadAddWishlist = {
@@ -242,35 +265,7 @@ const ProductDetail = ({ route, navigation }) => {
            setCartQty(itemQty);
         }
       }, [item, ProductVarient, selectedVariantId]);
-      
-      const reviews = [
-        {
-            image: require('../../../../assets/RatingImage/image5.png'),
-            rating: 4,
-            reviewText: 'Taste is very good.',
-            reviewer: 'Mr. Aman Shukla',
-            date: '24/March/2024',
-        },
-        {
-            image: require('../../../../assets/RatingImage/image9.png'),
-            rating: 5,
-            reviewText: 'Value for money product',
-            reviewer: 'Mr. Aman Shukla',
-            date: '24/March/2024',
-        },
-      ];
 
-      const reviewData = {
-          rating: 4.5,
-          reviewCount: 22500,
-          images: [
-              require('../../../../assets/RatingImage/image.png'),
-              require('../../../../assets/RatingImage/image-1.png'),
-              require('../../../../assets/RatingImage/image-2.png'),
-              require('../../../../assets/RatingImage/image5.png'),
-          ],
-      };
-      
       const hasDescription = !!productDetails.short_desc;
       const hasDescriptionFull = !!productDetails.full_desc;
 
@@ -515,23 +510,49 @@ const ProductDetail = ({ route, navigation }) => {
               {
                 Array.isArray(ProductReview) && ProductReview.length > 0 ? (
                   <View  style={{backgroundColor:"white", borderRadius:10}}>
-                        <FlatList
-                            data={reviews}
-                            renderItem={({ item }) => <ReviewCard style={{borderTopWidth:1, borderColor:"#ccc"}} {...item} />}
-                            keyExtractor={(item, index) => index.toString()}
-                            ListHeaderComponent={
-                                <View>
-                                    <RatingProductCard
-                                        rating={reviewData.rating}
-                                        reviewCount={reviewData.reviewCount}
-                                        images={reviewData.images}
-                                    />
-                                    <TouchableOpacity onPress={()=>navigation.navigate('AllRating')} style={{padding:rw(2), backgroundColor:"black", width:rw(20), height:rh(4.5), borderRadius:10, alignItems:"center", justifyContent:"center", position:"absolute", right:"2%", top:"4%"}}>
-                                        <Text style={{color:"white", textAlign:"center"}}>View All</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                        />
+                      <FlatList
+                        data={ProductReview.slice(0, 3)} // Only pass the first 3 items
+                        renderItem={({ item }) => (
+                          <ReviewCard
+                            style={{ borderTopWidth: 1, borderColor: "#ccc" }}
+                            {...item}
+                          />
+                        )}
+                        keyExtractor={(item, index) => index.toString()}
+                        ListHeaderComponent={
+                          <View>
+                            <RatingProductCard
+                              rating={reviewData.rating}
+                              reviewCount={reviewData.reviewCount}
+                              images={reviewData.images}
+                            />
+                            <TouchableOpacity
+                              onPress={() =>
+                                navigation.navigate("AllRating", {
+                                  review: ProductReview,
+                                  reviewData: reviewData,
+                                })
+                              }
+                              style={{
+                                padding: rw(2),
+                                backgroundColor: "black",
+                                width: rw(20),
+                                height: rh(4.5),
+                                borderRadius: 10,
+                                alignItems: "center",
+                                justifyContent: "center",
+                                position: "absolute",
+                                right: "2%",
+                                top: "4%",
+                              }}
+                            >
+                              <Text style={{ color: "white", textAlign: "center" }}>
+                                View All
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        }
+                      />
                       </View>
                 ) : null 
               }

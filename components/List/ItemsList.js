@@ -169,50 +169,52 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
                   style={{ color: wishlist[item.pid] ? '#DC3545' : '#BCBCBC' }}
                 />
               </TouchableOpacity>
-
-              {isInCart ? (
-                <View style={styles.IncreaseAurDecreaseContener}>
+              
+              {!cartbtn && ( // If cartbtn is true, this block will be hidden
+                isInCart ? (
+                  <View style={styles.IncreaseAurDecreaseContener}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleDecrease(item.pid, itemQty, item.varient_id, item.moq)
+                      }
+                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}
+                    >
+                      <Text style={styles.controlText}>-</Text>
+                    </TouchableOpacity>
+                    {loadingVariants[`${item.pid}-${item.varient_id}-delete`] ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                      <Text style={{ color: 'white', fontWeight: 'bold' }}>{itemQty}</Text>
+                    )}
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleIncrease(item.pid, itemQty, item.varient_id, item.moq)
+                      }
+                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}
+                    >
+                      <Text style={styles.controlText}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
                   <TouchableOpacity
                     onPress={() =>
-                      handleDecrease(item.pid, itemQty, item.varient_id, item.moq)
+                      handleAddToCart(item.pid, item.varient_id, item.moq)
                     }
-                    disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}
+                    disabled={loadingVariants[`${item.pid}-${item.varient_id}`]}
+                    style={styles.addbtn}
                   >
-                    <Text style={styles.controlText}>-</Text>
+                    {loadingVariants[`${item.pid}-${item.varient_id}`] ? (
+                      <ActivityIndicator size="small" color="#FF3131" />
+                    ) : (
+                      <Text style={styles.btntext}>Add</Text>
+                    )}
                   </TouchableOpacity>
-                  {loadingVariants[`${item.pid}-${item.varient_id}-delete`] ? (
-                    <ActivityIndicator size="small" color="#fff" />
-                  ) : loadingVariants[`${item.pid}-${item.varient_id}-qty`] ? (
-                    <ActivityIndicator size="small" color="#fff" />
-                  ) : (
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>{itemQty}</Text>
-                  )}
-
-
-                  <TouchableOpacity
-                    onPress={() =>
-                      handleIncrease(item.pid, itemQty, item.varient_id, item.moq)
-                    }
-                    disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}
-                  >
-                    <Text style={styles.controlText}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  onPress={() =>
-                    handleAddToCart(item.pid, item.varient_id, item.moq)
-                  }
-                  disabled={loadingVariants[`${item.pid}-${item.varient_id}`]}
-                  style={styles.addbtn}
-                >
-                  {loadingVariants[`${item.pid}-${item.varient_id}`] ? (
-                    <ActivityIndicator size="small" color="#FF3131" />
-                  ) : (
-                    <Text style={styles.btntext}>Add</Text>
-                  )}
-                </TouchableOpacity>
+                )
               )}
+
+
               <SharedElement id={`item.${item.pid}.image`}>
                 <Image
                   source={{ uri: item.itemimage || 'https://via.placeholder.com/150' }}
@@ -263,17 +265,50 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
               </View>
 
             {/* add to cart  */}
-              {cartbtn && (
-                <TouchableOpacity
-                style={{borderWidth:1, paddingVertical:rh(0.5), marginHorizontal:rw(3), marginBottom:rh(1), borderColor:"#FF3131", borderRadius:5}}
-                  onPress={async () => {
+            {cartbtn && (
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  paddingVertical: rh(0.5),
+                  marginHorizontal: rw(3),
+                  marginBottom: rh(1),
+                  borderColor: "#FF3131",
+                  borderRadius: 5,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={async () => {
+                  const key = `${item.pid}-${item.varient_id}-moveToCart`;
+                  setLoadingVariants((prevState) => ({
+                    ...prevState,
+                    [key]: true,
+                  }));
+
+                  try {
                     await handleAddToCart(item.pid, item.varient_id, item.moq);
                     await handleWishlistToggle(item);
-                  }}
-                >
-                  <Text style={{textAlign:"center", fontWeight:"400", color:"#FF3131"}}>Move to Cart</Text>
-                </TouchableOpacity>
-              )}
+                  } catch (error) {
+                    console.error("Error moving item to cart:", error);
+                  } finally {
+                    setLoadingVariants((prevState) => ({
+                      ...prevState,
+                      [key]: false,
+                    }));
+                  }
+                }}
+                disabled={loadingVariants[`${item.pid}-${item.varient_id}-moveToCart`]} // Disable button during loading
+              >
+                {loadingVariants[`${item.pid}-${item.varient_id}-moveToCart`] ? (
+                  <ActivityIndicator size="small" color="#FF3131" />
+                ) : (
+                  <Text style={{ textAlign: "center", fontWeight: "400", color: "#FF3131" }}>
+                    Move to Cart
+                  </Text>
+                )}
+              </TouchableOpacity>
+            )}
+
+
 
         
             </View>

@@ -94,6 +94,7 @@ const RatingAndReviews = ({ route }) => {
                                     title={product.pname}
                                     onSubmit={() => alert(`Review submitted for ${product.pname}`)}
                                     review={product.review}
+                                    review_image={product.review_image}
                                     rating={product.rating}
                                     p_id={product.p_id}
                                 />
