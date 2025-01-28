@@ -46,7 +46,7 @@ const B2BAccountScreen = ({ navigation }) => {
   // Trigger API call only after the screen is fully loaded
   useEffect(() => {
       fetchProfileData();
-  }, []);
+  }, [state.reFresh]);
 
   // Set `isScreenLoaded` to true after screen rendering
   useEffect(() => {
