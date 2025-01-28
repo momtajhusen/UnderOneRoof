@@ -78,7 +78,7 @@ const OrderPlaced = ({route}) => {
                   </View>
 
                   <View style={{marginVertical:rh(1)}}>
-                         <PriceDetails data={state.viewCartData} promoCode={false} style={{ backgroundColor: "green" }} />
+                         <PriceDetails data={state.viewCartData} promoCode={false} couponCancle={false} />
                   </View>
 
                   <View style={{marginBottom:rh(1), padding:rw(3), backgroundColor:"white", borderRadius:10}}>

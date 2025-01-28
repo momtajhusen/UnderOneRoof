@@ -8,19 +8,11 @@ import apiClient from '../../Service/apiClient';
 import { AppContext } from '../../context/AppContext';
 
 const PaymentMethodModal = ({ isVisible, toggleModal }) => {
-      const { state } = useContext(AppContext);
+    const { state, dispatch } = useContext(AppContext);
 
-
-      console.log('type '+state.shoppingMode);
-      console.log('user ID '+state.userId);
-
-    
     const navigation = useNavigation();
-
     const [selectedOption, setSelectedOption] = useState(null);
-
     const [isLoading, setIsLoading] = useState(null);
-
 
     // Animation references
     const shakeTextRef = useRef(null);
@@ -44,16 +36,26 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
     };
 
     const placeOrder = async () => {
+
         setIsLoading(true);
         try {
             const aid = state.selectAddressData[0].aid;
-            const response = await apiClient.post('/checkout', {
+            const payload = {
                 address_id: aid,
                 payment_type: 'cod',
-            });
+            };
             
-            console.log(response.data);
+            // Add coupon details only if the coupon is applied
+            if (state.couponData.isCouponApplied) {
+                payload.coupon_code = state.couponData.couponCode;
+                payload.coupon_amount = state.couponData.discountAmount;
+            }
+            const response = await apiClient.post('/checkout', payload);
+
             if (response.data.title == 'Order Successfully') {
+                dispatch({
+                    type: 'CLEAR_COUPON',
+                  });
                 navigation.navigate('OrderPlaced', { data: response.data.data });
                 toggleModal();
             } else {

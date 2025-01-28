@@ -15,8 +15,7 @@ const CartScreen = ({ navigation }) => {
   const { state, dispatch } = useContext(AppContext);
   const { viewCartData } = useViewCartData();
   const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
-
-  // API call function
+ 
   const fetchCartData = async () => {
     try {
       await viewCartData();
@@ -24,23 +23,20 @@ const CartScreen = ({ navigation }) => {
       console.error('Error fetching cart data:', error);
     }
   };
-
-  // Trigger API call only after screen is fully loaded
+ 
   useEffect(() => {
     if (isScreenLoaded) {
       fetchCartData();
     }
   }, [isScreenLoaded]);
 
-  // Set `isScreenLoaded` to true after screen rendering
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsScreenLoaded(true);
-    }, 0); // Slight delay to ensure layout rendering
+    }, 0); 
     return () => clearTimeout(timer);
   }, []);
-
-  // onRefresh function for pull-to-refresh
+ 
   const onRefresh = async () => {
     dispatch({
       type: 'GLOBAL_REFRESH',

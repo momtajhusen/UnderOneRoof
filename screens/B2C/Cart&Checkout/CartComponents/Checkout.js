@@ -16,20 +16,18 @@ import apiClient from '../../../../Service/apiClient';
 import { useViewCartData } from '../../../../utility/viewCardDataUtils';
 
 const Checkout = ({ navigation }) => {
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
 
   // Modal visibility state
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [issLoading, setIsLoading] = useState(true);  
 
   const { isViewCartLoading, viewCartData } = useViewCartData();
-  
 
   // Function to toggle modal visibility
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
-    console.log('Modal state toggled:', !isModalVisible); 
   };
 
   const placeOrder = async () => {
@@ -37,55 +35,59 @@ const Checkout = ({ navigation }) => {
       // Show loading indicator
       setIsLoading(true);
   
+      // Construct payload
       const aid = state.selectAddressData[0].aid;
-      const response = await apiClient.post('/checkout', {
+  
+      const payload = {
         address_id: aid,
         payment_type: 'cod',
-      });
-      
-
-      if (response.data.title == 'Order Successfully') {
-        const result = await viewCartData(); 
-        navigation.navigate('B2BOrderPlaced', { data: response.data.data });
-      } else {
-        alert('Error occurred. Please try again.');
+      };
+    
+      // Add coupon details only if the coupon is applied
+      if (state.isCouponApplied) {
+          payload.coupon_code = state.couponCode;
+          payload.coupon_amount = state.discountAmount;
       }
+
+       const response = await apiClient.post('/checkout', payload);
   
+      // Handle success or failure
       if (response.data.status) {
+          dispatch({
+            type: 'CLEAR_COUPON',
+          });
         navigation.navigate('B2BOrderPlaced', { data: response.data.data });
       } else {
         alert('Error occurred. Please try again.');
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error during checkout:', error);
       alert('Something went wrong. Please check your connection or try again later.');
     } finally {
       // Hide loading indicator
       setIsLoading(false);
     }
   };
+  
+  
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         try {
           const result = await viewCartData();
-          // Handle the result as needed
         } catch (error) {
           console.error("Error fetching cart data:", error);
         }
       };
-  
+
       fetchData();
-  
-      // Optionally return a cleanup function if needed
+
       return () => {
         console.log("Cleanup on focus change");
       };
     }, [state.reFresh])
   );
-  
-  
 
   return (
     <View style={styles.container}>
@@ -94,23 +96,21 @@ const Checkout = ({ navigation }) => {
 
       {/* Scrollable Content */}
       <ScrollView
-      contentContainerStyle={{ paddingBottom: rh(15) }}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false} // Hides vertical scroll indicator
-      showsHorizontalScrollIndicator={false} // Hides horizontal scroll indicator (if needed)
-    >
+        contentContainerStyle={{ paddingBottom: rh(15) }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
         {/* Stepper */}
-        {state.shoppingMode === "retail" && (
+        {state.shoppingMode === 'retail' && (
           <Stepper steps={['Address', 'Order Summary', 'Payment']} currentStep={1} />
         )}
-
 
         <View style={{ marginTop: rh(1) }}>
           <UserDetails userData={state.selectAddressData} />
         </View>
 
         {/* Cart Items */}
-        <View style={{ marginHorizontal:rw(2), marginVertical:rh(1), backgroundColor: "white", borderRadius: rw(5) }}>
+        <View style={{ marginHorizontal: rw(2), marginVertical: rh(1), backgroundColor: 'white', borderRadius: rw(5) }}>
           <FlatList
             data={state?.viewCartData?.cartProduct || []}
             keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
@@ -129,51 +129,51 @@ const Checkout = ({ navigation }) => {
 
         {/* Price Details */}
         <View style={[styles.container, { marginBottom: rh(6) }]}>
-          <PriceDetails data={state.viewCartData} saveMessage={false} style={{ backgroundColor: "green" }} />
+          <PriceDetails
+            data={state.viewCartData}
+            saveMessage={false}
+          />
         </View>
       </ScrollView>
 
-      {state.shoppingMode === "wholesale" && (
-        <View style={[styles.proceedDetails, {backgroundColor: "white", position:"absolute", bottom:rh(0), flexDirection: "row", justifyContent: "space-between", padding: rh(2)}]}> 
-              <View style={{flexDirection: "row", alignItems: "center", gap: 10, width: rw(50)}}>
-                <Text style={{fontWeight: "bold", fontSize: rf(2)}}>₹ {state.viewCartData.grand_total}</Text>
-                <Text style={{fontSize: rf(1.5)}}>
-                  MRP <Text style={{textDecorationLine: "line-through"}}>₹ {state.viewCartData.total}</Text>
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={placeOrder}
-                disabled={isViewCartLoading}
-                style={{
-                  backgroundColor: isViewCartLoading ? "#D3D3D3" : "#FF3131",
-                  borderRadius: 10,
-                  paddingHorizontal: rw(11),
-                  paddingVertical: rh(1.5),
-                }}
-              >
-                {isViewCartLoading ? (
-                  <ActivityIndicator size="small" color="#FF3131" />
-                ) : (
-                  <Text style={{color: isViewCartLoading ? "#A9A9A9" : "white"}}>Place Order</Text>
-                )}
-
-              </TouchableOpacity>
+      {state.shoppingMode === 'wholesale' && (
+        <View style={[styles.proceedDetails, { backgroundColor: 'white', position: 'absolute', bottom: rh(0), flexDirection: 'row', justifyContent: 'space-between', padding: rh(2) }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, width: rw(50) }}>
+            <Text style={{ fontWeight: 'bold', fontSize: rf(2) }}>₹ {state.viewCartData.grand_total}</Text>
+            <Text style={{ fontSize: rf(1.5) }}>
+              MRP <Text style={{ textDecorationLine: 'line-through' }}>₹ {state.viewCartData.total}</Text>
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={placeOrder}
+            disabled={isViewCartLoading}
+            style={{
+              backgroundColor: isViewCartLoading ? '#D3D3D3' : '#FF3131',
+              borderRadius: 10,
+              paddingHorizontal: rw(11),
+              paddingVertical: rh(1.5),
+            }}
+          >
+            {isViewCartLoading ? (
+              <ActivityIndicator size="small" color="#FF3131" />
+            ) : (
+              <Text style={{ color: isViewCartLoading ? '#A9A9A9' : 'white' }}>Place Order</Text>
+            )}
+          </TouchableOpacity>
         </View>
-
       )}
 
       {/* Fixed Proceed Details at the bottom */}
-      {state.shoppingMode === "retail" && (
-      <View style={styles.proceedDetails}>
-        <ProceedDetails 
-          loading={state.isLoader}
-          data={state.viewCartData} 
-          btnText="Continue"
-          onPress={toggleModal} 
-        />
-      </View>
+      {state.shoppingMode === 'retail' && (
+        <View style={styles.proceedDetails}>
+          <ProceedDetails
+            loading={state.isLoader}
+            data={state.viewCartData}
+            btnText="Continue"
+            onPress={toggleModal}
+          />
+        </View>
       )}
-
 
       {/* Payment Method Modal */}
       <PaymentMethodModal isVisible={isModalVisible} toggleModal={toggleModal} />

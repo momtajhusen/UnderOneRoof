@@ -21,7 +21,7 @@ const ProceedDetails = ({ data, loading, btnText, onPress }) => {
           <View style={styles.priceDetails}>
             <Text style={styles.weightText}></Text>
             <Text style={styles.priceText}>
-              ₹{grand_total} <Text style={styles.mrpText}> MRP </Text>
+              ₹{grand_total - state.couponData.discountAmount} <Text style={styles.mrpText}> MRP </Text>
               <Text style={styles.mrpPrice}> ₹ {total}</Text>
             </Text>
           </View>

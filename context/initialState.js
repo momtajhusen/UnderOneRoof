@@ -29,6 +29,13 @@ const initialState = {
   // order navigation 
   orderNavigation: null,
 
+    // Coupon Data
+    couponData: {
+      couponCode: '',
+      discountAmount: 0,
+      isCouponApplied: false,
+    },
+
 
 };
 

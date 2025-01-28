@@ -18,6 +18,9 @@ const ORDER_REFRESH = 'ORDER_REFRESH';
 
 const RESET_STATE = 'RESET_STATE';
 
+const SET_COUPON = 'SET_COUPON';
+const CLEAR_COUPON = 'CLEAR_COUPON';
+
 // Reducer
 const Reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -105,6 +108,27 @@ const Reducer = (state = initialState, action) => {
       return {
         ...state,
         orderNavigation: [action.payload.orderNavigation],
+      };
+
+       // Coupon actions
+    case SET_COUPON:
+      return {
+        ...state,
+        couponData: {
+          couponCode: action.payload.couponCode,
+          discountAmount: action.payload.discountAmount,
+          isCouponApplied: true,
+        },
+      };
+
+    case CLEAR_COUPON:
+      return {
+        ...state,
+        couponData: {
+          couponCode: '',
+          discountAmount: 0,
+          isCouponApplied: false,
+        },
       };
 
     case RESET_STATE:
