@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -78,6 +78,10 @@ const PriceDetails = ({
     // Remove message after 3 seconds
     setTimeout(() => setMessage(''), 3000);
   };
+
+    useEffect(() => {
+      setGrandTotal(state.viewCartData.grand_total);
+    }, [state.viewCartData]);
 
   return (
     <View style={[styles.container, style]}>
@@ -163,6 +167,8 @@ const renderPriceDetails = (data, grandTotal, couponDiscount = 0, isCouponApplie
     <View style={[styles.textListSection, styles.totalSection]}>
       <Text style={styles.totalLabel}>Total Payment</Text>
       <Text style={styles.totalValue}>₹{grandTotal - discountAmount}</Text>
+      {/* <Text style={styles.totalValue}>₹{state.viewCartData.grand_total - discountAmount}</Text> */}
+
     </View>
   </>
 );
