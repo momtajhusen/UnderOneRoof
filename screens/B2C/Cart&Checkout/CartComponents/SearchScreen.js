@@ -22,26 +22,49 @@ const PrivacyPolicy = ({ navigation }) => {
         try {
             const payload = { name: query };
             const response = await apiClient.post(`/search`, payload);
-            setSearchResults(response.data.data.searchProduct);
+            let searchResults = response.data.data.searchProduct;
+    
+            // Filter search results based on state.shoppingMode
+            if (state.shoppingMode === 'wholesale') {
+                searchResults = searchResults.filter(product => product.role_type === 3 || product.role_type === null);
+            } else if (state.shoppingMode === 'retail') {
+                searchResults = searchResults.filter(product => product.role_type === 2);
+            }
+    
+            setSearchResults(searchResults);
+            console.log(searchResults);
         } catch (error) {
             console.error('Error fetching search results:', error);
-        } finally{
-          setIsLaading(false);
+        } finally {
+            setIsLaading(false);
         }
-    };
+    };    
 
     const fetchTreandingSearchResults = async () => {
         setIsLaading(true);
         try {
             const response = await apiClient.get(`/trending_search`);
-            setTreandingData(response.data.data.product);
-            console.log(response.data.data.product);
+            let trendingProducts = response.data.data.product;
+
+            console.log('trending_search');
+            console.log(trendingProducts);
+            
+            // Filter trending products based on state.shoppingMode
+            if (state.shoppingMode === 'wholesale') {
+                trendingProducts = trendingProducts.filter(product => product.role_type === 3 || product.role_type === null);
+            } else if (state.shoppingMode === 'retail') {
+                trendingProducts = trendingProducts.filter(product => product.role_type === 2);
+            }
+    
+            setTreandingData(trendingProducts);
+
         } catch (error) {
-            console.error('Error fetching search results:', error);
-        } finally{
-          setIsLaading(false);
+            console.error('Error fetching trending search results:', error);
+        } finally {
+            setIsLaading(false);
         }
     };
+    
 
     // Debounce the API call
     useEffect(() => {
@@ -64,21 +87,6 @@ const PrivacyPolicy = ({ navigation }) => {
 
     const renderSearchItem = ({ item }) => (
         <TouchableOpacity 
-        //   onPress={() =>
-        //     navigation.navigate('B2BProductListing', {
-        //       selectCategoryId: item.category,
-        //       selectCategoryName: item.catname,
-        //       selectCategorySlug: item.cslug,
-        //     })
-        //   }
-        //   onPress={() =>
-        //     navigation.navigate('ProductDetail', {
-        //       item: item,
-        //       itemImage: item.itemimage,
-        //       itemQty:state.viewCartData.cartProduct.find(cartItem => cartItem.pid === item.pid)?.qty || 0,
-        //     })
-        //   }
-
           onPress={() =>
             navigation.navigate('ProductDetail', {
               item: item,

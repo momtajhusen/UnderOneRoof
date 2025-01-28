@@ -21,11 +21,12 @@ const SplashScreen = () => {
 
                 setTimeout(() => {
                     if (token) {
-                        console.log(token);
                          if (ShoppingMode === 'wholesale') {
                             navigation.replace('B2BBottomNavigator');
                         } else if (ShoppingMode === 'retail') {
                              navigation.replace('BottomNavigator');
+                        }else{
+                          navigation.replace('SignupOrLogin');
                         }
                         dispatch({
                             type: 'SET_USER',

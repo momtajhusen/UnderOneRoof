@@ -36,14 +36,31 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const validateForm = () => {
     const errors = {};
   
+    // Validate first name
     if (!fname) errors.fname = 'First name is required';
+  
+    // Validate last name
     if (!lname) errors.lname = 'Last name is required';
-    if (!email) errors.email = 'Email is required';
-    if (!ownerMobile) errors.ownerMobile = 'Mobile number is required';
+  
+    // Validate email
+    if (!email) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {  // Regex for email validation
+      errors.email = 'Email is invalid';
+    }
+  
+    // Validate mobile number
+    if (!ownerMobile) {
+      errors.ownerMobile = 'Mobile number is required';
+    } else if (!/^[6-9]\d{9}$/.test(ownerMobile)) {
+      errors.ownerMobile = 'Please enter a valid 10-digit mobile number.';
+    }
+    
+    // Validate business type
     if (!selectedBusinessType) {
       errors.businessType = 'Please select a business type';
   
-      // शेक एनिमेशन ट्रिगर करें
+      // Shake animation trigger
       Animated.sequence([
         Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
         Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
@@ -52,12 +69,11 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
         Animated.timing(shakeAnimation, { toValue: 0, duration: 100, useNativeDriver: true }),
       ]).start();
     }
-
-
   
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
+  
   
 
   const handleBusinessTypeSelection = (type) => {

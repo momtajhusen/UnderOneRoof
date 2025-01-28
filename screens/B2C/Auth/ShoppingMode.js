@@ -24,41 +24,45 @@ const ShoppingMode = ({ navigation, route }) => {
     const mode = type === "wholesale" ? "b2b" : "b2c";
     setLoadingType(type);
     try {
-      const response = await apiClient.post('/selectFlow', { mobile, type:mode });
-
-        if (type === 'wholesale') {
-            if (response.data.status === 1) {
-              await AsyncStorage.setItem('ShoppingMode',  'wholesale');
-              navigation.replace('B2BBottomNavigator');
-            }
-            if (response.data.status === 0) {
-              await AsyncStorage.setItem('ShoppingMode',  'wholesale');
-              navigation.navigate('RegistrationOwnerScreen', {mobile: mobile});
-            }
-        } else if (type === 'retail') {
-          await AsyncStorage.setItem('ShoppingMode',  'retail');
-          navigation.replace('BottomNavigator');
+      const response = await apiClient.post('/selectFlow', { mobile, type: mode });
+  
+      if (type === 'wholesale') {
+        if (response.data.status === 1) {
+          await AsyncStorage.setItem('ShoppingMode', 'wholesale');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'B2BBottomNavigator' }],
+          });
         }
-
-        await AsyncStorage.setItem('authToken', response.data.data.token);
- 
-        dispatch({
-          type: 'SET_USER',
-          payload: {
-              userId: userId,
-              shoppingMode: type,
-              userNumber: mobile,
-          },
+        if (response.data.status === 0) {
+          navigation.navigate('RegistrationOwnerScreen', { mobile: mobile });
+        }
+      } else if (type === 'retail') {
+        await AsyncStorage.setItem('ShoppingMode', 'retail');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'BottomNavigator' }],
         });
-      
+      }
+  
+      await AsyncStorage.setItem('authToken', response.data.data.token);
+  
+      dispatch({
+        type: 'SET_USER',
+        payload: {
+          userId: userId,
+          shoppingMode: type,
+          userNumber: mobile,
+        },
+      });
+  
     } catch (error) {
       console.error(error);
-      alert('Failed to select shopping mode. Please try again.');
     } finally {
       setLoadingType(null);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       {/* Title and Description */}

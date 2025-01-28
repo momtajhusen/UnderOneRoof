@@ -22,12 +22,10 @@ const HomeScreen = () => {
   const [HomeSliderData, setHomeSliderData] = useState([]);
   const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
 
- 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FF6D6D");
   });
 
- 
   const onRefresh = async () => {
     dispatch({
       type: 'HOME_REFRESH',
@@ -37,7 +35,6 @@ const HomeScreen = () => {
     });
   };
 
- 
   const fetchHomeSliderData = async () => {
     try {
       const response = await apiClient.get('/home');
@@ -48,25 +45,24 @@ const HomeScreen = () => {
     }
   };
 
- 
   useEffect(() => {
     if (isScreenLoaded) {
       fetchHomeSliderData();
     }
+  }, [isScreenLoaded]);
+ 
+  useEffect(() => {
     dispatch({
       type: 'HOME_REFRESH',
       payload: {
         isHomeRefresh: Math.ceil(Math.random() * 100),
       },
     });
-  }, [isScreenLoaded]);
-
- 
-  useEffect(() => {
     const timer = setTimeout(() => {
       setIsScreenLoaded(true);
     }, 0);  
     return () => clearTimeout(timer);
+
   }, []);
 
   return (

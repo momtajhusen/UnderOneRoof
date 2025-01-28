@@ -16,6 +16,8 @@ import TextInputField from '../../../components/Inputs/TextInputField';
 import FileUploadField from '../../../components/Inputs/FileUploadField';
 import apiClient from '../../../Service/apiClient';
 import CustomButtons from '../../../components/Buttons/CustomButtons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const BusinessDetails = ({ navigation, route }) => {
   const { mobile } = route.params;
@@ -46,29 +48,37 @@ const BusinessDetails = ({ navigation, route }) => {
   const validateForm = () => {
     const errors = {};
   
-    // PAN और Firm Name हमेशा आवश्यक हैं
-    if (!panNumber) errors.panNumber = 'PAN Number is required.';
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    if (!panNumber) {
+      errors.panNumber = 'PAN Number is required.';
+    } else if (!panRegex.test(panNumber)) {
+      errors.panNumber = 'Please enter a valid PAN Number (e.g. ABCDE1234F).';
+    }
+  
     if (!firmName) errors.firmName = 'Firm Name is required.';
   
-    // GST और FSSAI में से केवल एक आवश्यक होगा
     if (!gstNumber && !fssai) {
       errors.gstNumber = 'Either GST Number or FSSAI Number is required.';
       errors.fssai = 'Either FSSAI Number or GST Number is required.';
+    } else {
+      if (gstNumber && fssai) {
+        delete errors.gstNumber;
+        delete errors.fssai;
+      }
     }
   
-    // GST Registered होने पर GST डिटेल्स की जांच
     if (isGstRegistered) {
       if (!gstNumber) {
         errors.gstNumber = 'GST Number is required if GST registered.';
       }
       if (!gstDoc) {
-        errors.gstDoc = 'GST document is required.';
+        errors.gstDoc = 'GST document is required.';  
       }
     }
   
-    // PAN Document हमेशा आवश्यक है
     if (!panDoc) errors.panDoc = 'PAN document is required.';
-  
+    if (!gstDoc) errors.gstDoc = 'GST/FSSAI document is required.';  
+    
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -130,8 +140,9 @@ const BusinessDetails = ({ navigation, route }) => {
     setIsModalVisible(false);
   };
 
-  const handleContinueShopping = () => {
+  const handleContinueShopping = async () => {
     handleModalClose();
+    await AsyncStorage.setItem('ShoppingMode',  'wholesale');
     navigation.replace('B2BBottomNavigator');
   };
 
@@ -205,8 +216,9 @@ const BusinessDetails = ({ navigation, route }) => {
                     title="Upload GST/FSSAI Document"
                     onFileSelect={(file) => handleFileSelection('gst', file)}
                   />
-                  {formErrors.gstDoc && <Text style={{margin:rw(1), color: 'red', fontSize: 14 }}>{formErrors.gstDoc}</Text>}
-                  </View>
+                  {formErrors.gstDoc && <Text style={{ margin: rw(1), color: 'red', fontSize: 14 }}>{formErrors.gstDoc}</Text>}
+                </View>
+
               </View>
             </View>
           </View>

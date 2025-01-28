@@ -7,7 +7,6 @@ import TextInputField from '../../../components/Inputs/TextInputField';
 import apiClient from '../../../Service/apiClient';
 import CustomButtons from '../../../components/Buttons/CustomButtons';
 
-
 const OutletDetailsScreen = ({ navigation, route }) => {
     const { mobile } = route.params;
 
@@ -20,14 +19,24 @@ const OutletDetailsScreen = ({ navigation, route }) => {
     const [landmark, setLandmark] = useState('');
     
     const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);  
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [errors, setErrors] = useState({});
 
     // Validation function
     const validateInputs = () => {
-        if (!name || !address || !city || !state || !pincode || !landmark) {
-            return false;
-        }
-        return true;
+        let validationErrors = {};
+        
+        if (!name) validationErrors.name = 'Outlet name is required';
+        if (!address) validationErrors.address = 'Address is required';
+        if (!city) validationErrors.city = 'City is required';
+        if (!state) validationErrors.state = 'State is required';
+        if (!pincode || !/^\d{6}$/.test(pincode)) validationErrors.pincode = 'Pincode is required and should be 6 digits';
+        if (!landmark) validationErrors.landmark = 'Landmark is required';
+
+        setErrors(validationErrors);
+
+        // Return false if there are errors, true if no errors
+        return Object.keys(validationErrors).length === 0;
     };
 
     // Handle form submission
@@ -35,7 +44,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
         setIsSubmitted(true); 
         
         if (!validateInputs()) {
-            return;  
+            return;  // Don't proceed if validation fails
         }
 
         setIsLoading(true);
@@ -61,9 +70,8 @@ const OutletDetailsScreen = ({ navigation, route }) => {
         } catch (error) {
             Alert.alert('Error', 'Something went wrong. Please try again.');
         } finally {
-            // Stop loading state
             setIsLoading(false);
-          }
+        }
     };
 
     return (
@@ -83,14 +91,14 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                 value={name}
                                 onChange={setName}
                                 maxLength={30}
-                                errorMessage={isSubmitted && !name ? 'Outlet name is required' : ''}
+                                errorMessage={isSubmitted && errors.name}
                             />
                             <TextInputField
                                 placeholder="Address"
                                 value={address}
                                 onChange={setAddress}
                                 maxLength={30}
-                                errorMessage={isSubmitted && !address ? 'Address is required' : ''}
+                                errorMessage={isSubmitted && errors.address}
                             />
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <View style={{ width: rw(45) }}>
@@ -99,7 +107,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                         value={city}
                                         onChange={setCity}
                                         maxLength={20}
-                                        errorMessage={isSubmitted && !city ? 'City is required' : ''}
+                                        errorMessage={isSubmitted && errors.city}
                                     />
                                 </View>
                                 <View style={{ width: rw(45) }}>
@@ -108,7 +116,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                         value={state}
                                         onChange={setState}
                                         maxLength={20}
-                                        errorMessage={isSubmitted && !state ? 'State is required' : ''}
+                                        errorMessage={isSubmitted && errors.state}
                                     />
                                 </View>
                             </View>
@@ -118,26 +126,25 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                                 onChange={setPincode}
                                 keyboardType="numeric"
                                 maxLength={6}
-                                errorMessage={isSubmitted && !pincode ? 'Pincode is required' : ''}
+                                errorMessage={isSubmitted && errors.pincode}
                             />
                             <TextInputField
                                 placeholder="Landmark"
                                 value={landmark}
                                 onChange={setLandmark}
-                                errorMessage={isSubmitted && !landmark ? 'Landmark is required' : ''}
+                                errorMessage={isSubmitted && errors.landmark}
                             />
                         </View>
                     </View>
                 </ScrollView>
 
-
                 {/* Floating Button */}
-                <View style={{width:rw(100), padding:rw(2), paddingHorizontal:rw(5), paddingBottom:rh(2), backgroundColor:"white", position: 'absolute',bottom: rh(0)}}>
+                <View style={{ width: rw(100), padding: rw(2), paddingHorizontal: rw(5), paddingBottom: rh(2), backgroundColor: "white", position: 'absolute', bottom: rh(0) }}>
                     <CustomButtons 
-                    onPress={handleSubmit} 
-                    title="Next"
-                    disabled={isLoading}  
-                    loading={isLoading}
+                        onPress={handleSubmit} 
+                        title="Next"
+                        disabled={isLoading}  
+                        loading={isLoading}
                     />
                 </View>
             </View>

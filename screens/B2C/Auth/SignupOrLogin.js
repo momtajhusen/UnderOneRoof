@@ -53,7 +53,7 @@ const SignupOrLogin = ({ navigation }) => {
       console.error("API Error: ", error);
       setErrorMessage("Failed to connect to the server. Please try again later."); 
     } finally {
-      setLoading(false);  
+      setLoading(false); 
     }
   };
 
