@@ -46,10 +46,8 @@ const AccountScreen = ({ navigation }) => {
 
   // Trigger API call only after screen is fully loaded
   useEffect(() => {
-    if (isScreenLoaded) {
       fetchProfileData();
-    }
-  }, [isScreenLoaded]);
+  }, []);
 
   // Set `isScreenLoaded` to true after screen rendering
   useEffect(() => {

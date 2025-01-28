@@ -75,7 +75,7 @@ const Essentials = () => {
           {/* List Items */}
           <View style={{ flexDirection: 'row', gap: 20 }}>
             {[0, 1, 2].map((index) => (
-              <TouchableOpacity
+              <View
                 key={index}
                 style={{ width: rw(25), justifyContent: 'center', alignItems: 'center' }}
               >
@@ -105,7 +105,7 @@ const Essentials = () => {
                 >
                   {getCategoryName(index)}
                 </Text>
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
 

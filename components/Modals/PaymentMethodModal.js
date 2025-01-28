@@ -53,9 +53,6 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
             const response = await apiClient.post('/checkout', payload);
 
             if (response.data.title == 'Order Successfully') {
-                dispatch({
-                    type: 'CLEAR_COUPON',
-                  });
                 navigation.navigate('OrderPlaced', { data: response.data.data });
                 toggleModal();
             } else {

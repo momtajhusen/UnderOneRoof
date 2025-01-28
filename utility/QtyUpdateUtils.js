@@ -30,7 +30,6 @@ export const useQtyUpdate = () => {
           },300);
           dispatch({ type: 'SET_LOADER', payload: false });
         } 
-
         return { success: true };  
       } else {
         console.error('Failed to update quantity');

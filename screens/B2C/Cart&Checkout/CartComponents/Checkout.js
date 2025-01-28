@@ -53,9 +53,6 @@ const Checkout = ({ navigation }) => {
   
       // Handle success or failure
       if (response.data.status) {
-          dispatch({
-            type: 'CLEAR_COUPON',
-          });
         navigation.navigate('B2BOrderPlaced', { data: response.data.data });
       } else {
         alert('Error occurred. Please try again.');
@@ -139,7 +136,7 @@ const Checkout = ({ navigation }) => {
       {state.shoppingMode === 'wholesale' && (
         <View style={[styles.proceedDetails, { backgroundColor: 'white', position: 'absolute', bottom: rh(0), flexDirection: 'row', justifyContent: 'space-between', padding: rh(2) }]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, width: rw(50) }}>
-            <Text style={{ fontWeight: 'bold', fontSize: rf(2) }}>₹ {state.viewCartData.grand_total}</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: rf(2) }}>₹ {state.viewCartData.grand_total - state.couponData.discountAmount}</Text>
             <Text style={{ fontSize: rf(1.5) }}>
               MRP <Text style={{ textDecorationLine: 'line-through' }}>₹ {state.viewCartData.total}</Text>
             </Text>

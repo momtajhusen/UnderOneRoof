@@ -24,6 +24,10 @@ export const useViewCartData = () => {
           payload: { viewCartData: cartData },
         });
 
+        dispatch({
+          type: 'CLEAR_COUPON',
+        });
+
         return { success: true, cartProduct, cartData };
       } else {
         console.error('Failed to fetch cart data');

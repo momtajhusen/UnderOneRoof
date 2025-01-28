@@ -81,6 +81,11 @@ const PriceDetails = ({
 
     useEffect(() => {
       setGrandTotal(state.viewCartData.grand_total);
+      if(state.couponData.isCouponApplied){
+        if (couponCode) {
+          applyCoupon();
+        }
+      }
     }, [state.viewCartData]);
 
   return (

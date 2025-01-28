@@ -10,6 +10,7 @@ import ProceedDetails from '../B2C/Cart&Checkout/CartComponents/ProceedDetails';
 import { AppContext } from '../../context/AppContext';
 import { useViewCartData } from '../../utility/viewCardDataUtils';
 import { rw, rh } from '../../Service/responsive';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CartScreen = ({ navigation }) => {
   const { state, dispatch } = useContext(AppContext);

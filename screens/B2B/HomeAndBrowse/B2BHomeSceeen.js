@@ -20,35 +20,11 @@ const B2BHomeScreen = () => {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [HomeSliderData, setHomeSliderData] = useState([]);
-  const [isScreenLoaded, setIsScreenLoaded] = useState(false); // New state to track screen rendering
+  const [isScreenLoaded, setIsScreenLoaded] = useState(false);
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FBDFDF");
   });
-
-  // Dummy data for items
-  const dateItems = [
-    {
-      id: '1',
-      name: 'Medjool Dates',
-      image: require('../../../assets/items/image1345.png'),
-    },
-    {
-      id: '2',
-      name: 'Ajwa Dates',
-      image: require('../../../assets/items/image23323.png'),
-    },
-    {
-      id: '3',
-      name: 'Barhi Dates',
-      image: require('../../../assets/items/image3432.png'),
-    },
-    {
-      id: '4',
-      name: 'Deglet Noor',
-      image: require('../../../assets/items/image3ww23.png'),
-    },
-  ];
 
   // Fetch slider data from API
   const fetchHomeSliderData = async () => {
@@ -66,6 +42,12 @@ const B2BHomeScreen = () => {
     if (isScreenLoaded) {
       fetchHomeSliderData();
     }
+    dispatch({
+      type: 'HOME_REFRESH',
+      payload: {
+        isHomeRefresh: Math.ceil(Math.random() * 100),
+      },
+    });
   }, [isScreenLoaded]);
 
   // Set `isScreenLoaded` to true after screen rendering
@@ -136,7 +118,7 @@ const B2BHomeScreen = () => {
           </View>
 
           {/* Savor the Sweetness of Premium Dates! */}
-          <PremiumDates data={dateItems} />
+          <PremiumDates />
 
           {/* B2BSimilarProducts */}
           <View style={{ marginHorizontal: rw(4) }}>
