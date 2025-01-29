@@ -50,7 +50,7 @@ const HomeScreen = () => {
       fetchHomeSliderData();
     }
   }, [isScreenLoaded]);
- 
+
   useEffect(() => {
     dispatch({
       type: 'HOME_REFRESH',
@@ -58,6 +58,9 @@ const HomeScreen = () => {
         isHomeRefresh: Math.ceil(Math.random() * 100),
       },
     });
+  }, []);
+ 
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsScreenLoaded(true);
     }, 0);  

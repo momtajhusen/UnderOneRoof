@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     width: rw(41),
     marginRight: rw(1.5),
     marginLeft: rw(1.5),
-    rowGap: 3,
+    // rowGap: 3,
     backgroundColor: '#FFF',
     borderRadius: rw(2),
     padding: rw(1),

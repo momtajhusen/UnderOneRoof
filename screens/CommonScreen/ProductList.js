@@ -43,6 +43,8 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     const [productListing, setProductListing] = useState([]);
     const [categoryData, setCategory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingSubCategory, setloadingSubCategory] = useState(true);
+
     const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
     const [isRefreshing, setIsRefreshing] = useState(false);
     
@@ -67,7 +69,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
   
     const fetchSubCategory = async () => {
       try {
-        setLoading(true);
+        setloadingSubCategory(true);
         const response = await apiClient.get(`/subCategoryList/${selectedCategorySlug}`);
         
         // Check if 'catlist' exists in the response
@@ -85,6 +87,8 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
         }
       } catch (error) {
         console.error('Error fetching category:', error);
+      } finally {
+        setloadingSubCategory(false);
       }
     };
   
@@ -277,37 +281,39 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                     />
                   }
                 >
-                {loading ? (
-                  <B2BProductLoader
-                    layout="vertical"
-                    styleCardContainer={{
-                      width: categoryData.length === 0 ? rw(90) : rw(75),
-                      marginBottom: 10,
-                    }}
+
+              {!(loading === false && loadingSubCategory === false) ? (
+                <B2BProductLoader
+                  layout="vertical"
+                  styleCardContainer={{
+                    width: categoryData.length === 0 ? rw(90) : rw(75),
+                    marginBottom: 10,
+                  }}
+                />
+              ) : productListing?.length > 0 ? (
+                <B2BProductCard
+                  items={productListing}
+                  styleCardContainer={{
+                    width: categoryData.length === 0 ? rw(90) : rw(75),
+                    marginBottom: 10,
+                  }}
+                  layout="vertical"
+                />
+              ) : (
+                <View
+                  style={{
+                    height: rh(70),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={require('../../assets/product-not-avable.png')}
+                    style={{ width: rw(50), height: rw(50) }}
                   />
-                ) : productListing?.length > 0 ? (
-                  <B2BProductCard
-                    items={productListing}
-                    styleCardContainer={{
-                      width: categoryData.length === 0 ? rw(90) : rw(75),
-                      marginBottom: 10,
-                    }}
-                    layout="vertical"
-                  />
-                ) : (
-                  <View
-                    style={{
-                      height: rh(70),
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Image
-                      source={require('../../assets/product-not-avable.png')}
-                      style={{ width: rw(50), height: rw(50) }}
-                    />
-                  </View>
-                )}
+                </View>
+              )}
+
               </ScrollView>
 
               </View>
@@ -317,12 +323,11 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   paddingTop: rh(1),
                   flex: 1,
                   paddingBottom: rh(5),
-                  paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
                   justifyContent: 'center',
                 }}
               >
                 <ScrollView
-                 showsVerticalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                   contentContainerStyle={{ flexGrow: 1 }}  
                   refreshControl={
                     <RefreshControl
@@ -334,17 +339,26 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   }
                 >
                   {loading ? (
-                    <View style={{ width: rw(100), height: rh(100) }}>
+                    <View style={{ 
+                      width: categoryData.length === 0 ? rw(100) : rw(78), 
+                      height: rh(100),
+                      paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0), 
+                      }}>
                       <ItemsListLoader
                         count="6"
                         layout="vertical"
                         itemContainerStyle={{
-                          width: categoryData.length === 0 ? rw(40) : rw(37),
+                          width: categoryData.length === 0 ? rw(40) : rw(34),
                         }}
                       />
                     </View>
                   ) : productListing.length !== 0 ? (
-                    <ItemsList
+                    <View
+                     style={{
+                      paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
+                     }}
+                    >
+                     <ItemsList
                       items={productListing}
                       layout="vertical"
                       listContainerStyle={{
@@ -352,6 +366,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                         marginBottom: rh(1),
                       }}
                     />
+                    </View>
                   ) : (
                     <View
                       style={{
