@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { rw, rh, rf } from '../../../../Service/themes/responsive';
 import apiClient from '../../../../Service/apiClient';
 import { AppContext } from '../../../../context/AppContext';
+import { useNavigation } from '@react-navigation/native';
 
 const Essentials = () => {
   const { state, dispatch } = useContext(AppContext);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   // Fetch categories from API
   useEffect(() => {
@@ -16,10 +18,6 @@ const Essentials = () => {
         const response = await apiClient.get('/home');
         const category = response.data.data.essentialcategory;
         setCategories(category);
-
-        console.log('/////////////////////');
-        console.log(category);
-        console.log('/////////////////////');
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
@@ -30,9 +28,7 @@ const Essentials = () => {
   }, [state.isHomeRefresh]);
 
   // Fallback check for missing data
-  const getCategoryImage = (index) =>
-    categories[index]?.image || '../../../../assets/placeholder.png'; // Fallback image
-
+  const getCategoryImage = (index) => categories[index]?.image || '../../../../assets/placeholder.png';
   const getCategoryName = (index) => categories[index]?.cname || 'No Name';
 
   if (loading) {
@@ -59,10 +55,7 @@ const Essentials = () => {
         >
           Essentials
         </Text>
-        <Image
-          source={require('../../../../assets/Rectangle 27.png')}
-          style={styles.image}
-        />
+        <Image source={require('../../../../assets/Rectangle 27.png')} style={styles.image} />
         <View
           style={{
             position: 'absolute',
@@ -75,9 +68,16 @@ const Essentials = () => {
           {/* List Items */}
           <View style={{ flexDirection: 'row', gap: 20 }}>
             {[0, 1, 2].map((index) => (
-              <View
+              <TouchableOpacity
                 key={index}
                 style={{ width: rw(25), justifyContent: 'center', alignItems: 'center' }}
+                onPress={() =>
+                  navigation.navigate('ProductListing', {
+                    selectCategoryId: categories[index]?.sid,
+                    selectCategoryName: categories[index]?.cname,
+                    selectCategorySlug: categories[index]?.cslug,
+                  })
+                }
               >
                 <View
                   style={{
@@ -92,27 +92,29 @@ const Essentials = () => {
                   <Image
                     source={{ uri: getCategoryImage(index) }}
                     style={{ width: rw(18), height: rw(20), marginTop: rh(1) }}
-                    onError={(e) => console.log(`Image failed at index ${index}:`, e.nativeEvent.error)}
                   />
                 </View>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: rh(0.5),
-                    fontSize: rf(1.8),
-                    fontWeight: '500',
-                  }}
-                >
+                <Text style={{ textAlign: 'center', marginTop: rh(0.5), fontSize: rf(1.8), fontWeight: '500' }}>
                   {getCategoryName(index)}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
 
           {/* Container List Items */}
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10, gap: 20 }}>
             {[3, 4].map((index) => (
-              <View key={index} style={{ width: '45%', justifyContent: 'center' }}>
+              <TouchableOpacity
+                key={index}
+                style={{ width: '45%', justifyContent: 'center' }}
+                onPress={() =>
+                  navigation.navigate('ProductListing', {
+                    selectCategoryId: categories[index]?.sid,
+                    selectCategoryName: categories[index]?.cname,
+                    selectCategorySlug: categories[index]?.cslug,
+                  })
+                }
+              >
                 <View
                   style={{
                     backgroundColor: '#FFFFFF',
@@ -124,22 +126,12 @@ const Essentials = () => {
                   <Image
                     source={{ uri: getCategoryImage(index) }}
                     style={{ width: rw(35), height: rw(25), marginTop: rh(1) }}
-                    onError={(e) =>
-                      console.log(`Image failed at index ${index}:`, e.nativeEvent.error)
-                    }
                   />
                 </View>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    marginTop: rh(1),
-                    fontSize: rf(1.8),
-                    fontWeight: '500',
-                  }}
-                >
+                <Text style={{ textAlign: 'center', marginTop: rh(1), fontSize: rf(1.8), fontWeight: '500' }}>
                   {getCategoryName(index)}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>

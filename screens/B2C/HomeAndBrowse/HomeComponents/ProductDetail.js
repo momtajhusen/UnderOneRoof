@@ -115,6 +115,11 @@ const ProductDetail = ({ route, navigation }) => {
       setCartBtnLoading(false); // Reset loading state
     }
     };
+
+    const buyNow = ()=>{
+      addToCart();
+      navigation.navigate('CartScreen');
+    }
     
     const handleIncrease = async (psid, qty, var_id, moq) => {
       const newQty = qty + 1;
@@ -571,68 +576,72 @@ const ProductDetail = ({ route, navigation }) => {
       {!isLoading && (
         <View style={{width: rw(100), height: rh(9), backgroundColor: "white", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: rh(1), paddingHorizontal: rw(5)}}>
           <TouchableOpacity 
-              onPress={() => navigation.navigate('CartScreen')} 
+              onPress={buyNow} 
+              // onPress={() => navigation.navigate('CartScreen')} 
               style={{backgroundColor: "#DFDFDF", paddingVertical: rh(1.5), paddingHorizontal: rw(13), borderRadius: 10}}
           >
               <Text style={{color: "black", fontWeight: "bold"}}>Buy Now</Text>
           </TouchableOpacity>
 
           {cartQty > 0 ? (
-  <View
-    style={{
-      backgroundColor: "#FF3131",
-      borderRadius: 10,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-    }}
-  >
-    <TouchableOpacity
-      style={{
-        paddingVertical: rh(1.5),
-        paddingHorizontal: rw(7),
-      }}
-      onPress={() => handleDecrease(productId, cartQty, selectedVariantId, productDetails.moq)}
-      disabled={cartBtnLoading} // Prevent multiple operations
-    >
-      <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
-    </TouchableOpacity>
-    {cartBtnLoading ? (
-      <ActivityIndicator size="small" color="white" />
-    ) : (
-      <Text style={{ color: "white", fontWeight: "bold" }}>{cartQty}</Text>
-    )}
-    <TouchableOpacity
-      style={{
-        paddingVertical: rh(1.5),
-        paddingHorizontal: rw(7),
-      }}
-      onPress={() => handleIncrease(productId, cartQty, selectedVariantId, productDetails.moq)}
-      disabled={cartBtnLoading} // Prevent multiple operations
-    >
-      <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
-    </TouchableOpacity>
-  </View>
-) : (
-  <TouchableOpacity
-    style={{
-      backgroundColor: "#FF3131",
-      paddingVertical: rh(1.5),
-      paddingHorizontal: rw(13),
-      borderRadius: 10,
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-    onPress={addToCart}
-    disabled={cartBtnLoading} // Prevent multiple operations
-  >
-    {cartBtnLoading ? (
-      <ActivityIndicator size="small" color="#FFFFFF" />
-    ) : (
-      <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
-    )}
-  </TouchableOpacity>
-)}
+            <View
+              style={{
+                backgroundColor: "#FF3131",
+                borderRadius: 10,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width:rw(40),
+                overflow:"hidden",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  paddingVertical: rh(1.5),
+                  paddingHorizontal: rw(5),
+                  // backgroundColor:"green",
+                }}
+                onPress={() => handleDecrease(productId, cartQty, selectedVariantId, productDetails.moq)}
+                disabled={cartBtnLoading} // Prevent multiple operations
+              >
+                <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
+              </TouchableOpacity>
+              {cartBtnLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={{ color: "white", fontWeight: "bold" }}>{cartQty}</Text>
+              )}
+              <TouchableOpacity
+                style={{
+                  paddingVertical: rh(1.5),
+                  paddingHorizontal: rw(5),
+                }}
+                onPress={() => handleIncrease(productId, cartQty, selectedVariantId, productDetails.moq)}
+                disabled={cartBtnLoading} // Prevent multiple operations
+              >
+                <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#FF3131",
+                paddingVertical: rh(1.5),
+                paddingHorizontal: rw(13),
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={addToCart}
+              disabled={cartBtnLoading} // Prevent multiple operations
+            >
+              {cartBtnLoading ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Text style={{ color: "white", fontWeight: "bold" }}>Add to Cart</Text>
+              )}
+            </TouchableOpacity>
+          )}
 
 
 

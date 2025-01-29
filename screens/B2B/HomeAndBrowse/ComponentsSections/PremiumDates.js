@@ -1,16 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../../Service/themes/responsive';
 import { AppContext } from '../../../../context/AppContext';
 import apiClient from '../../../../Service/apiClient';
+import { useNavigation } from '@react-navigation/native';
 
-const DateCard = ({ name, image }) => (
-  <View style={styles.dateCard}>
-    <Image source={{ uri: image }} style={styles.dateImage} accessibilityLabel={`Image of ${name}`} />
-    <Text style={styles.dateName} numberOfLines={2}>{name}</Text>
-  </View>
-);
+const DateCard = ({ name, image, category }) => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      style={styles.dateCard}
+      onPress={() =>
+        navigation.navigate('ProductListing', {
+          selectCategoryId: category.sid,
+          selectCategoryName: category.cname,
+          selectCategorySlug: category.cslug,
+        })
+      }
+    >
+      <Image source={{ uri: image }} style={styles.dateImage} accessibilityLabel={`Image of ${name}`} />
+      <Text style={styles.dateName} numberOfLines={2}>{name}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const PremiumDates = () => {
   const { state } = useContext(AppContext);
@@ -54,7 +67,7 @@ const PremiumDates = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.sid.toString()}
-            renderItem={({ item }) => <DateCard name={item.cname} image={item.image} />}
+            renderItem={({ item }) => <DateCard name={item.cname} image={item.image} category={item} />}
             contentContainerStyle={styles.flatListContainer}
           />
         )}

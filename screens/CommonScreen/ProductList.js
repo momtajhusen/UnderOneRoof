@@ -226,6 +226,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   keyExtractor={(item) => item.id.toString()}
                   horizontal
                   showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   renderItem={({ item }) => (
                     <View style={styles.filterList}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
@@ -259,6 +260,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
               /* B2B container */
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <ScrollView
+                  showsVerticalScrollIndicator={false}
                   contentContainerStyle={{
                     flexDirection: 'row',
                     flexWrap: 'wrap',
@@ -320,6 +322,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                 }}
               >
                 <ScrollView
+                 showsVerticalScrollIndicator={false}
                   contentContainerStyle={{ flexGrow: 1 }}  
                   refreshControl={
                     <RefreshControl
