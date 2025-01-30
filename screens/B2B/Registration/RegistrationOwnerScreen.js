@@ -45,7 +45,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     // Validate email
     if (!email) {
       errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {  // Regex for email validation
+    } else if (!/\S+@\S+\.\S+/.test(email)) { 
       errors.email = 'Email is invalid';
     }
   
@@ -77,14 +77,14 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   
 
   const handleBusinessTypeSelection = (type) => {
-    setSelectedBusinessType(type); // केवल एक प्रकार चयन करें
+    setSelectedBusinessType(type); 
   };
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
+  
     setIsLoading(true);
-
+  
     const ownerDetails = {
       mobile,
       fname,
@@ -93,21 +93,37 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
       business_type: selectedBusinessType,
       owner_mobile: ownerMobile,
     };
-
+  
     try {
       const response = await apiClient.post('/registerOwner', ownerDetails);
-
-      if (response.data.status === 1) {
+  
+      if (response.data?.status === 1) {
         navigation.navigate('OutletDetailsScreen', { mobile });
+      } else if (response.data?.status === 0) {
+        if (response.data.msg === "Email Already Registered") {
+          setFormErrors(prevErrors => ({
+            ...prevErrors,
+            email: response.data.msg,
+          }));
+        } else {
+          Alert.alert('Registration Failed', response.data.msg || 'Please try again.');
+        }
       } else {
-        Alert.alert('Error', response.data.msg || 'Registration failed. Please try again.');
+        Alert.alert('Unexpected Response', 'Something went wrong. Please try again.');
       }
     } catch (error) {
-      Alert.alert('Error', 'Something went wrong. Please try again later.');
+      console.error("Error:", error);
+      
+      if (error.response) {
+        Alert.alert('Server Error', error.response.data?.msg || 'Something went wrong on the server.');
+      } else {
+        Alert.alert('Network Error', 'Please check your internet connection and try again.');
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <View style={styles.container}>
