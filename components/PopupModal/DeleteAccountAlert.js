@@ -1,46 +1,55 @@
 // import libraries
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ImageBackground, Image, Alert } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 import apiClient from '../../Service/apiClient';
 import { useNavigation } from '@react-navigation/native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppContext } from '../../context/AppContext';
 
 // create a component
 const DeleteAccountAlert = ({ isModalVisible, toggleModal }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const navigation = useNavigation();
-  
 
-// Function to handle account deletion
-const handleDeleteAccount = async () => {
-  setIsDeleting(true);
-  try {
-    const response = await apiClient.get('/deleteAccount');
-    if (response?.data?.status === 1) {
-      Alert.alert(
-        'Account Deleted',
-        'Your account has been successfully deleted. We’re sad to see you go! If you change your mind, you’re always welcome to join us again.',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              toggleModal();
-              navigation.replace('SignupOrLogin');
+  const { dispatch } = useContext(AppContext);
+  
+  // Function to handle account deletion
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await apiClient.get('/deleteAccount');
+      if (response?.data?.status === 1) {
+
+        // Reset all application state
+        dispatch({ type: 'RESET_STATE' });
+
+        // Remove all keys from AsyncStorage
+        await AsyncStorage.clear();
+
+        Alert.alert(
+          'Account Deleted',
+          'Your account has been successfully deleted. We’re sad to see you go! If you change your mind, you’re always welcome to join us again.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                toggleModal();
+                navigation.replace('SignupOrLogin');
+              },
             },
-          },
-        ]
-      );
-    } else {
-      Alert.alert('Error', 'Failed to delete the account. Please try again.');
+          ]
+        );
+      } else {
+        Alert.alert('Error', 'Failed to delete the account. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      Alert.alert('Error', 'Something went wrong. Please try again later.');
+    } finally {
+      setIsDeleting(false);
     }
-  } catch (error) {
-    console.error('Error deleting account:', error);
-    Alert.alert('Error', 'Something went wrong. Please try again later.');
-  } finally {
-    setIsDeleting(false);
-  }
-};
+  };
 
   return (
     <Modal
@@ -97,6 +106,7 @@ const handleDeleteAccount = async () => {
       </View>
     </Modal>
   );
+  
 };
 
 // define your styles
