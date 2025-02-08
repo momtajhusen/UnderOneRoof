@@ -1,6 +1,6 @@
 // TextInputField.js
 import React from 'react';
-import { TextInput, View, Text, StyleSheet } from 'react-native';
+import { TextInput, View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { rw, rh, rf } from '../../Service/responsive';
 
 const TextInputField = ({ 
@@ -13,7 +13,8 @@ const TextInputField = ({
   errorMessage = "",
   maxLength = 255, // Default maxLength
   minLength = 0,   // Default minLength
-  editable = true
+  editable = true,
+  loading = false 
 }) => (
   <View style={styles.container}>
     {label && <Text style={styles.label}>{label}</Text>}
@@ -37,6 +38,13 @@ const TextInputField = ({
       editable={editable}
     />
     {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+    {loading && (
+      <ActivityIndicator 
+        size={rf(2)}  
+        color="#777" 
+        style={styles.LoaderIcon} 
+      />
+    )}
   </View>
 );
 
@@ -59,13 +67,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   errorInput: {
-    borderColor: '#FF0000', // Red border to indicate an error
+    borderColor: '#FF0000',
   },
   errorText: {
     color: '#FF0000',
     fontSize: rf(1.8),
     marginTop: 4,
   },
+  LoaderIcon: {
+    position: "absolute",
+    right: "6%",
+    top: "30%",
+  }
 });
 
 export default TextInputField;

@@ -12,7 +12,7 @@ const LinearStepIndicator = ({ steps, currentStep }) => {
                     style={[
                         styles.stepIndicator,
                         index <= currentStep && styles.activeStep,
-                        index !== steps.length - 1 && styles.stepGap, // Add gap between steps
+                        index !== steps.length - 1 && styles.stepGap, 
                     ]}
                 />
             ))}
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     stepIndicator: {
-        paddingHorizontal:rw(15), 
+        paddingHorizontal:rw(22.5), 
         height: rh(1), 
         backgroundColor: '#BFBFBF',
         position: 'relative',

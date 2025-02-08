@@ -129,7 +129,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <Header title="Register" />
       <View style={styles.ContentContaine}>
-        <LinearStepIndicator steps={[1, 2, 3]} currentStep={0} />
+        <LinearStepIndicator steps={[1, 2]} currentStep={0} />
 
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           <View style={styles.informationCard}>

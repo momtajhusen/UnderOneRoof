@@ -150,7 +150,7 @@ const BusinessDetails = ({ navigation, route }) => {
     <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
       <Header title="Business details" />
       <View style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 16, backgroundColor: '#F3F3F3' }}>
-        <LinearStepIndicator steps={[1, 2, 3]} currentStep={2} />
+        <LinearStepIndicator steps={[1, 2]} currentStep={2} />
         <ScrollView style={{ marginBottom: 60 }} showsVerticalScrollIndicator={false}>
           <View style={{ marginTop: 16 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 16, color: '#272727' }}>
