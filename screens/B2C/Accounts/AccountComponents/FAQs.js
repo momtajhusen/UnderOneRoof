@@ -9,7 +9,7 @@ const FAQ = () => {
     {
       title: "What is UnderOneRoof?",
       content:
-        "TurantLo is a fast and reliable delivery service that brings your favorite products right to your doorstep. Whether you need groceries, restaurant meals, or household essentials, we’ve got you covered.",
+        "Under One Roof is a fast and reliable delivery service that brings your favorite products right to your doorstep. Whether you need groceries, restaurant meals, or household essentials, we’ve got you covered.",
     },
     {
       title: "How do I place an order?",
@@ -48,3 +48,6 @@ const styles = StyleSheet.create({
     // flex: 1,
   },
 });
+
+
+

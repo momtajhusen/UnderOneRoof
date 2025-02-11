@@ -3,54 +3,59 @@ import { View, Text, StyleSheet } from 'react-native';
 import CategoryList from '../../../../components/List/CategoryList';  
 import { rw, rf, rh } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
-import apiClient from '../../../../Service/apiClient';  
 import CategoryListLoader from '../../../../components/ShimmerLoader/CategoryListLoader';
 import { AppContext } from '../../../../context/AppContext';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const BestSellers = () => {
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+
+const BestSellers = ({ data }) => {
   const navigation = useNavigation();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const { state } = useContext(AppContext);
 
-  const fetchHomeCategories = async () => {
-    try {
-      const response = await apiClient.get('/home');  
-      const bestCategories = response.data.data.bestcategory;
-
-      // Filter best categories based on state.shoppingMode
-      const filteredBestCategories = bestCategories.filter(category => {
-        if (state.shoppingMode === 'wholesale') {
-          return category.role_type === 3 || category.role_type === null;
-        } else if (state.shoppingMode === 'retail') {
-          return category.role_type === 2;
-        }
-        return false;
-      });
-
-      setCategories(filteredBestCategories);
-      console.log('Shop Best Categories:', filteredBestCategories);
-    } catch (error) {
-      console.error('Error fetching best categories:', error);
-    } finally {
-      setLoading(false);  
+  useEffect(() => {
+    if (!data) {
+      setLoading(true);
+      return;
     }
-  };
 
-  // Fetch categories on mount so they load immediately
-  useEffect(() => {
-    fetchHomeCategories();
-  }, []);
+    if (data && data.bestcategory && Array.isArray(data.bestcategory)) {
+      if (data.bestcategory.length === 0) {
+        setCategories([]);
+        setLoading(false);
+      } else {
+        const filteredBestCategories = data.bestcategory.filter(category => {
+          if (state.shoppingMode === 'wholesale') {
+            return category.role_type === 3 || category.role_type === null;
+          } else if (state.shoppingMode === 'retail') {
+            return category.role_type === 2;
+          }
+          return false;
+        });
+        setCategories(filteredBestCategories);
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+    }
+  }, [data, state.shoppingMode]);
 
-  // Also re-fetch categories when state.isHomeRefresh changes (i.e., on pull-to-refresh)
-  useEffect(() => {
-    fetchHomeCategories();
-  }, [state.isHomeRefresh]);
+  if (!loading && categories.length === 0) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Bestsellers</Text>
+      {loading ? (
+        <ShimmerPlaceholder style={[styles.headerText, { width: '50%' }]} />
+      ) : (
+        <Text style={styles.headerText}>Bestsellers</Text>
+      )}
+      
       {loading ? (
         <View style={styles.categoryListContainer}>
           {Array.from({ length: 8 }).map((_, index) => (
@@ -94,6 +99,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: rw(3),
+  },
+  noDataContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: rh(5),
+  },
+  noDataText: {
+    fontSize: rf(2),
+    color: 'gray',
   },
 });
 

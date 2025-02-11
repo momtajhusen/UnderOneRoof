@@ -48,7 +48,7 @@ const Header = ({ title = '', rightContent = null }) => {
 const styles = StyleSheet.create({
   gradientBackground: {
     width: '100%',
-    paddingTop: rh(1), // Add padding for StatusBar
+    paddingTop: rh(1), 
     paddingBottom: rh(2),
     borderBottomWidth:1,
     borderColor:"#E9E9E9",

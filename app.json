@@ -22,6 +22,7 @@
     },
     "android": {
       "package": "com.example.underoneroof",
+      "googleServicesFile": "./google-services.json",
       "versionCode": 1
     },
     "ios": {

@@ -21,6 +21,9 @@ const RESET_STATE = 'RESET_STATE';
 const SET_COUPON = 'SET_COUPON';
 const CLEAR_COUPON = 'CLEAR_COUPON';
 
+const SET_PUSH_TOKEN = 'SET_PUSH_TOKEN';
+
+
 // Reducer
 const Reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -53,6 +56,12 @@ const Reducer = (state = initialState, action) => {
         isWishlistRefresh: action.payload,
       };
 
+      case SET_PUSH_TOKEN:
+        return {
+          ...state,
+          expoPushToken: action.payload,
+        };
+
     case HOME_REFRESH:
       return {
         ...state,
@@ -64,9 +73,6 @@ const Reducer = (state = initialState, action) => {
           ...state,
           isOrderRefresh: action.payload,
         };
-
-
-      
 
     case SET_LOADER:
       return {

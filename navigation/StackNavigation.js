@@ -29,6 +29,8 @@ import RatingAndReviews from '../screens/B2C/Accounts/AccountComponents/RatingAn
 import EditAddress from '../screens/B2C/Accounts/AccountComponents/EditAddress';
 import FAQs from '../screens/B2C/Accounts/AccountComponents/FAQs';
 
+import Notification from '../screens/notification';
+
 // B2B Navigation 
 import RegistrationOwnerScreen from '../screens/B2B/Registration/RegistrationOwnerScreen';
 import OutletDetailsScreen from '../screens/B2B/Registration/OutletDetailsScreen';
@@ -54,7 +56,6 @@ import ProductImageView from '../components/ProductImageView';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 const Stack = createSharedElementStackNavigator();
 
-
 // create a component
 const StackNavigation = () => {
 
@@ -70,7 +71,10 @@ const StackNavigation = () => {
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
         <Stack.Screen name="CartScreen" component={CartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ headerShown: false }} />
-        
+
+        <Stack.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
+
+ 
         {/* Auth navigation  */}
         <Stack.Screen name="SignupOrLogin" component={SignupOrLogin} options={{ headerShown: false }} />
         <Stack.Screen name="VerifyOtp" component={VerifyOtp} options={{ headerShown: false }} />

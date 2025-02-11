@@ -19,29 +19,30 @@ const B2BHomeScreen = () => {
   const navigation = useNavigation();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [HomeSliderData, setHomeSliderData] = useState([]);
   const [isScreenLoaded, setIsScreenLoaded] = useState(false);
+  const [homeData, setHomeData] = useState(null);
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FBDFDF");
   });
 
-  // Fetch slider data from API
-  const fetchHomeSliderData = async () => {
+  const fetchHomeData = async () => {
     try {
       const response = await apiClient.get('/home');
-      const slider = response.data.data.slider;
-      setHomeSliderData(slider);
+      setHomeData(response.data.data);
     } catch (error) {
-      console.error('Error fetching slider data:', error);
+      console.error('Error fetching home data:', error);
     }
   };
+  
+  useEffect(() => {
+    if (isScreenLoaded) {
+      fetchHomeData();
+    }
+  }, [isScreenLoaded]);
 
   // Trigger API call only after the screen is fully loaded
   useEffect(() => {
-    if (isScreenLoaded) {
-      fetchHomeSliderData();
-    }
     dispatch({
       type: 'HOME_REFRESH',
       payload: {
@@ -98,19 +99,27 @@ const B2BHomeScreen = () => {
         <View style={styles.SliderCategoryContainer}>
           {/* Slider Container */}
           <View style={{ paddingTop: rh(5) }}>
-            <HomeSlider sliderData={HomeSliderData} sliderStyle={{ width: rw(80), height: rh(20) }} />
+          <HomeSlider
+            sliderData={homeData?.slider?.length ? homeData.slider : []}
+            sliderStyle={{ width: rw(80), height: rh(20) }}
+          />
+
           </View>
           {/* Bestsellers Category Container */}
           <View style={{ marginTop: rh(2) }}>
-            <BestSellers />
+            <BestSellers data={homeData} />
           </View>
           {/* Shop By Category Container */}
           <View>
-            <ShopByCategory />
+            <ShopByCategory data={homeData} />
           </View>
           {/* Explore More Slider Container */}
           <View>
-            <HomeSlider sliderData={HomeSliderData} sliderStyle={{ width: rw(80), height: rh(17) }} />
+          <HomeSlider
+            sliderData={homeData?.slider?.length ? homeData.slider : []}
+            sliderStyle={{ width: rw(80), height: rh(17) }}
+          />
+
           </View>
           {/* Refresh Your Day Container */}
           <View style={{ marginVertical: rh(2) }}>

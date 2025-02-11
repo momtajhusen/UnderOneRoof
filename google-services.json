@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "515367195474",
+    "project_id": "underoneroof-5c40a",
+    "storage_bucket": "underoneroof-5c40a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515367195474:android:2284c8ad04ab9668fba08b",
+        "android_client_info": {
+          "package_name": "com.example.underoneroof"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr9CT2qEo_qLnjfD6t4i_RYJgkqsJaNf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

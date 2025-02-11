@@ -36,7 +36,7 @@ const initialState = {
       isCouponApplied: false,
     },
 
-
+    expoPushToken: null,
 };
 
 export default initialState;

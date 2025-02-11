@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, StatusBar, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, StatusBar, RefreshControl, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
 import SearchDesigne from '../../../components/Search/searchDesigne';
@@ -7,7 +7,9 @@ import HomeSlider from '../../../components/Sliders/HomeSlider';
 import ExploreMoreSlider from '../../../components/Sliders/ExploreMoreSlider';
 import BestSellers from './HomeComponents/BestSellers';
 import ShopByCategory from './HomeComponents/ShopByCategory';
-import RefreshYourDay from './HomeComponents/RefreshYourDay';
+import Section1 from './HomeComponents/section1';
+import Section2 from './HomeComponents/section2';
+import Catsection from './HomeComponents/Catsection';
 import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
@@ -19,8 +21,8 @@ const HomeScreen = () => {
   const navigation = useNavigation();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [HomeSliderData, setHomeSliderData] = useState([]);
   const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
+  const [homeData, setHomeData] = useState(null);
 
   useFocusEffect(() => {
     StatusBar.setBackgroundColor("#FF6D6D");
@@ -35,19 +37,18 @@ const HomeScreen = () => {
     });
   };
 
-  const fetchHomeSliderData = async () => {
+  const fetchHomeData = async () => {
     try {
       const response = await apiClient.get('/home');
-      const slider = response.data.data.slider;
-      setHomeSliderData(slider);
+      setHomeData(response.data.data);
     } catch (error) {
-      console.error('Error fetching slider data:', error);
+      console.error('Error fetching home data:', error);
     }
   };
-
+  
   useEffect(() => {
     if (isScreenLoaded) {
-      fetchHomeSliderData();
+      fetchHomeData();
     }
   }, [isScreenLoaded]);
 
@@ -84,12 +85,12 @@ const HomeScreen = () => {
           end={{ x: 0, y: 1 }}
           style={styles.headerContainer}
         >
-          <View style={{ position: "absolute", top: rh(4), zIndex: 100 }}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Notification')} style={{ position: "absolute", top: rh(4), zIndex: 100 }}>
             <Text style={styles.headerTitle}>Shop Your Daily Essentials</Text>
             <Text style={styles.headerSubtitle}>
               From groceries to personal care, everything you {'\n'} need in one place.
             </Text>
-          </View>
+          </TouchableOpacity>
           <Animatable.Image animation="fadeInUp" source={require('../../../assets/HeaderImage/image1.png')} style={styles.imageCup} resizeMode="cover" />
           <Animatable.Image animation="fadeInRight" source={require('../../../assets/HeaderImage/Cheaseedsleaves.png')} style={{ position: "absolute", width: rw(25), height: rh(22), right: rw(0), top: rh(0) }} />
           <Image source={require('../../../assets/HeaderImage/image4.png')} style={{ width: rw(25), height: rh(18), position: "absolute", left: rw(0), top: rh(0) }} resizeMode="cover" />
@@ -100,25 +101,34 @@ const HomeScreen = () => {
 
         {/* Slider & Categories Section */}
         <View style={styles.SliderCategoryContainer}>
-          {/* Slider Container */}
           <View style={{ paddingTop: rh(5) }}>
-            <HomeSlider sliderData={HomeSliderData} sliderStyle={{ width: rw(80), height: rh(17) }} />
+          <HomeSlider
+            sliderData={homeData?.slider?.length ? homeData.slider : []}
+            sliderStyle={{ width: rw(80), height: rh(17) }}
+          />
           </View>
-          {/* Bestsellers Category Container */}
+          
           <View style={{ marginTop: rh(2) }}>
-            <BestSellers />
+            <BestSellers data={homeData} />
           </View>
+
           {/* Shop By Category Container */}
           <View>
-            <ShopByCategory />
+            <ShopByCategory data={homeData} />
           </View>
           {/* Explore More Slider Container */}
           <View>
-            <ExploreMoreSlider />
+            <ExploreMoreSlider data={homeData} />
           </View>
           {/* Refresh Your Day Container */}
           <View>
-            <RefreshYourDay />
+            <Section1 data={homeData} />
+          </View>
+          <View>
+              <Catsection data={homeData} />
+          </View>
+          <View>
+              <Section2 data={homeData} />
           </View>
         </View>
       </View>

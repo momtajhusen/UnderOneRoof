@@ -1,56 +1,61 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import CategoryList from '../../../../components/List/CategoryList';
+import CategoryList from '../../../../components/List/CategoryList';  
 import { rw, rf, rh } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
-import apiClient from '../../../../Service/apiClient';
 import CategoryListLoader from '../../../../components/ShimmerLoader/CategoryListLoader';
 import { AppContext } from '../../../../context/AppContext';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const ShopByCategory = () => {
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+
+const ShopByCategory = ({ data }) => {
   const navigation = useNavigation();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   const { state } = useContext(AppContext);
 
-  const fetchHomeCategories = async () => {
-    try {
-      const response = await apiClient.get('/home');
-      const category = response.data.data.category;
+  useEffect(() => {
+    if (!data) {
+      setLoading(true);
+      return;
+    }
 
-      // Filter home categories based on state.shoppingMode
-      const filteredCategories = category.filter((cat) => {
-        if (state.shoppingMode === 'wholesale') {
-          return cat.role_type === 3 || cat.role_type === null;
-        } else if (state.shoppingMode === 'retail') {
-          return cat.role_type === 2;
-        }
-        return false;
-      });
-
-      setCategories(filteredCategories);
-      console.log('Shop Category:', filteredCategories);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    } finally {
+    if (data && data.category && Array.isArray(data.category)) {
+      if (data.category.length === 0) {
+        setCategories([]);
+        setLoading(false);
+      } else {
+        const filteredBestCategories = data.category.filter(category => {
+          if (state.shoppingMode === 'wholesale') {
+            return category.role_type === 3 || category.role_type === null;
+          } else if (state.shoppingMode === 'retail') {
+            return category.role_type === 2;
+          }
+          return false;
+        });
+        setCategories(filteredBestCategories);
+        setLoading(false);
+      }
+    } else {
       setLoading(false);
     }
-  };
+  }, [data, state.shoppingMode]);
 
-  // Fetch categories when the component mounts
-  useEffect(() => {
-    fetchHomeCategories();
-  }, []);
-
-  // Also re-fetch categories when state.isHomeRefresh changes (e.g., on pull-to-refresh)
-  useEffect(() => {
-    fetchHomeCategories();
-  }, [state.isHomeRefresh]);
+  if (!loading && categories.length === 0) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Shop By Category</Text>
+      {loading ? (
+        <ShimmerPlaceholder style={[styles.headerText, { width: '50%' }]} />
+      ) : (
+        <Text style={styles.headerText}>Shop By Category</Text>
+      )}
+      
       {loading ? (
         <View style={styles.categoryListContainer}>
           {Array.from({ length: 8 }).map((_, index) => (
@@ -94,6 +99,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: rw(3),
+  },
+  noDataContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: rh(5),
+  },
+  noDataText: {
+    fontSize: rf(2),
+    color: 'gray',
   },
 });
 
