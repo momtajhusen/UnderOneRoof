@@ -32,6 +32,7 @@ export const useQtyUpdate = () => {
         } 
         return { success: true };  
       } else {
+        console.log(response.data);
         console.error('Failed to update quantity');
         return { success: false, error: 'Failed to update quantity' };  
       }

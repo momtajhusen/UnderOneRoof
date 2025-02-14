@@ -34,22 +34,25 @@ const OutletDetailsScreen = ({ navigation, route }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // New state: Pin Code Validity
+  const [isPinCodeValid, setIsPinCodeValid] = useState(false);
+
   // Modal state for successful registration
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Validate inputs including GST number with Indian GSTIN format validation
+  // Validate inputs including GST Number
   const validateInputs = () => {
     let validationErrors = {};
 
-    if (!name) validationErrors.name = 'Outlet name is required';
+    if (!name.trim()) validationErrors.name = 'Outlet name is required';
     if (!pincode || !/^\d{6}$/.test(pincode))
       validationErrors.pincode = 'Pincode is required and should be 6 digits';
-    if (!address) validationErrors.address = 'Address is required';
-    if (!city) validationErrors.city = 'City is required';
-    if (!stateValue) validationErrors.state = 'State is required';
-    if (!landmark) validationErrors.landmark = 'Landmark is required';
+    if (!address.trim()) validationErrors.address = 'Address is required';
+    if (!city.trim()) validationErrors.city = 'City is required';
+    if (!stateValue.trim()) validationErrors.state = 'State is required';
+    if (!landmark.trim()) validationErrors.landmark = 'Landmark is required';
 
-    if (!gstNumber) {
+    if (!gstNumber.trim()) {
       validationErrors.gstNumber = 'GST Number is required';
     } else {
       // Regular expression for validating Indian GSTIN
@@ -63,7 +66,22 @@ const OutletDetailsScreen = ({ navigation, route }) => {
     return Object.keys(validationErrors).length === 0;
   };
 
-  // Fetch postal details by pincode
+  // Remove GST error when a valid GST number is filled
+  useEffect(() => {
+    const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    if (gstRegex.test(gstNumber)) {
+      setErrors(prev => ({ ...prev, gstNumber: '' }));
+    }
+  }, [gstNumber]);
+
+  // Remove Outlet Name error when name is filled
+  useEffect(() => {
+    if (name.trim()) {
+      setErrors(prev => ({ ...prev, name: '' }));
+    }
+  }, [name]);
+
+  // Fetch postal details by pincode and update isPinCodeValid accordingly
   const fetchPincodeData = async (pin) => {
     try {
       setPinCodeLoading(true);
@@ -77,48 +95,25 @@ const OutletDetailsScreen = ({ navigation, route }) => {
         json[0].PostOffice.length > 0
       ) {
         const postOffice = json[0].PostOffice[0];
-        setCity(postOffice.District);
-        setStateValue(postOffice.State);
-        setLandmark(postOffice.Name);
-        const combinedAddress = `${postOffice.Name}, ${postOffice.Block}`;
-        setAddress(combinedAddress);
-
-        setErrors(prev => ({
-          ...prev,
-          pincode: postOffice.Pincode ? '' : 'Pincode not available',
-          city: postOffice.District ? '' : 'City not available',
-          state: postOffice.State ? '' : 'State not available',
-          landmark: postOffice.Name ? '' : 'Landmark not available',
-          address: (postOffice.Name && postOffice.Block) ? '' : 'Address not available',
-        }));
+        // Auto-fill city and state (address is not auto-filled)
+        setCity(postOffice.District || '');
+        setStateValue(postOffice.State || '');
+        setIsPinCodeValid(true);
+        // Remove error messages for pincode, city and state
+        setErrors(prev => ({ ...prev, pincode: '', city: '', state: '' }));
       } else {
+        // Clear auto-filled fields for manual entry
         setCity('');
         setStateValue('');
-        setLandmark('');
-        setAddress('');
-        setErrors(prev => ({
-          ...prev,
-          pincode: 'Pincode not available',
-          city: '',
-          state: '',
-          landmark: '',
-          address: '',
-        }));
+        setIsPinCodeValid(false);
+        setErrors(prev => ({ ...prev, pincode: 'Invalid pin code' }));
       }
     } catch (error) {
       console.error('Error fetching pincode data:', error);
       setCity('');
       setStateValue('');
-      setLandmark('');
-      setAddress('');
-      setErrors(prev => ({
-        ...prev,
-        pincode: 'Pincode not available',
-        city: '',
-        state: '',
-        landmark: '',
-        address: '',
-      }));
+      setIsPinCodeValid(false);
+      setErrors(prev => ({ ...prev, pincode: 'Invalid pin code' }));
     } finally {
       setPinCodeLoading(false);
     }
@@ -128,24 +123,37 @@ const OutletDetailsScreen = ({ navigation, route }) => {
     if (pincode.length === 6) {
       fetchPincodeData(pincode);
     } else {
+      // If pincode is not 6 digits, clear auto-filled city and state and remove any pin code error
       setCity('');
       setStateValue('');
-      setLandmark('');
-      setAddress('');
+      setIsPinCodeValid(false);
+      setErrors(prev => ({ ...prev, pincode: '' }));
     }
   }, [pincode]);
 
   const handleAddressBlur = () => {
+    // Optional: If you want to check address for a 6-digit number, you can keep this logic.
     const match = address.match(/\b\d{6}\b/);
     if (match) {
       fetchPincodeData(match[0]);
     }
   };
 
-  // Submit details via the registerOutlet API
+  // If API auto-fills city & state, disable manual editing for these fields
+  const isAutoFilled = pincode.length === 6 && isPinCodeValid && city.trim() !== '' && stateValue.trim() !== '';
+
+  // Submit details via API
   const handleSubmit = async () => {
     setIsSubmitted(true);
+
+    // Validate other inputs first
     if (!validateInputs()) {
+      return;
+    }
+
+    // Check if pincode is 6 digits and API validated it
+    if (pincode.length === 6 && !isPinCodeValid) {
+      setErrors(prev => ({ ...prev, pincode: 'Invalid pin code' }));
       return;
     }
 
@@ -163,7 +171,6 @@ const OutletDetailsScreen = ({ navigation, route }) => {
       });
       const { status, msg } = response.data;
       if (status === 1) {
-        // Show success modal
         setIsModalVisible(true);
       } else {
         Alert.alert('Error', msg);
@@ -175,12 +182,11 @@ const OutletDetailsScreen = ({ navigation, route }) => {
     }
   };
 
-  // Close the modal
+  // Modal close and continue shopping
   const handleModalClose = () => {
     setIsModalVisible(false);
   };
 
-  // Continue shopping: close modal and redirect to B2BBottomNavigator
   const handleContinueShopping = async () => {
     handleModalClose();
     navigation.replace('B2BBottomNavigator');
@@ -204,7 +210,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                 maxLength={30}
                 errorMessage={isSubmitted && errors.name}
               />
-            <TextInputField
+              <TextInputField
                 placeholder="GST Number"
                 value={gstNumber}
                 onChange={setGstNumber}
@@ -226,8 +232,6 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                 onChange={setAddress}
                 maxLength={30}
                 errorMessage={isSubmitted && errors.address}
-                onBlur={handleAddressBlur}  
-                loading={isPinCodeLoading}
               />
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View style={{ width: rw(45) }}>
@@ -238,6 +242,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                     maxLength={20}
                     errorMessage={isSubmitted && errors.city}
                     loading={isPinCodeLoading}
+                    editable={!isAutoFilled}
                   />
                 </View>
                 <View style={{ width: rw(45) }}>
@@ -248,6 +253,7 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                     maxLength={20}
                     errorMessage={isSubmitted && errors.state}
                     loading={isPinCodeLoading}
+                    editable={!isAutoFilled}
                   />
                 </View>
               </View>
@@ -256,23 +262,19 @@ const OutletDetailsScreen = ({ navigation, route }) => {
                 value={landmark}
                 onChange={setLandmark}
                 errorMessage={isSubmitted && errors.landmark}
-                loading={isPinCodeLoading}
               />
             </View>
           </View>
         </ScrollView>
-        {/* Floating Submit Button */}
         <View style={styles.floatingButtonContainer}>
           <CustomButtons 
             onPress={handleSubmit} 
             title="Submit"
-            disabled={isLoading}  
             loading={isLoading}
           />
         </View>
       </View>
 
-      {/* Registration Success Modal */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -330,38 +332,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center', 
     alignItems: 'center', 
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
     width: '80%', 
     backgroundColor: 'white', 
     borderRadius: 10, 
     padding: 20, 
-    alignItems: 'center'
+    alignItems: 'center',
   },
   modalTitle: {
     fontSize: rf(2), 
     fontWeight: 'bold', 
     color: '#272727', 
     marginBottom: 8, 
-    textAlign: 'center'
+    textAlign: 'center',
   },
   modalMessage: {
     fontSize: rf(2), 
     color: '#9D9D9D', 
     textAlign: 'center', 
-    marginBottom: 16
+    marginBottom: 16,
   },
   modalButton: {
     width: '90%', 
     backgroundColor: '#FF3131', 
     paddingVertical: 12, 
-    borderRadius: 10
+    borderRadius: 10,
   },
   modalButtonText: {
     color: 'white', 
     fontWeight: 'bold', 
-    textAlign: 'center'
+    textAlign: 'center',
   },
 });
 

@@ -15,14 +15,35 @@
 5. product Qualitity add on product details
 
 6. product search with related word
-
  
 
-
-. Added more product rows on the home screen
 . Address details auto-filled with pin code
+. Added more product rows on the home screen
 . Removed third B2B registration form and added GST number in Outlet Details
 . Fixed issue with Bestsellers category not loading on home screen
+
+issue with this email
+Parth 
+Kaushik
+9625977440
+prthkshk14@gmail.com
+
+
+-----------------------  New Update ----------------------------------
+2. Rows aur product mai kaha se add karu
+3. Jaise hum toogle nahi kar rahe wholesale aur retail mai ki aapko log out karke hi dusra section use karna hoga
+4. Toh notifications kaise send hongi
+
+  my work 
+// 1. Wholesale mai login karte time problem ho raha hai Email 
+// 2. Pincode address aur landmark bhi automatically pick kar raha hai only use state aur city 
+// 3. Phone number autopick karte waqt vo +91 bhi le raha hai Register Screen 
+
+1. Add to cart work nahi kar raha  quantity increase  issue in product details 
+
+
+
+-----------------------------------------------------------------------
 
 
 

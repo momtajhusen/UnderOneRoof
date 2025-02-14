@@ -56,6 +56,9 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
   };
 
   const handleIncrease = async (psid, qty, var_id, moq) => {
+
+    console.log(psid, qty, var_id, moq);
+    // return false;
     const newQty = qty + 1;
 
     setLoadingVariants((prevState) => ({
@@ -149,6 +152,7 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
                 item: item,
                 itemImage: item.itemimage,
                 itemQty:itemQty,
+                fromSimilar: true,
               })
             }
             disabled={item.stock === 0}

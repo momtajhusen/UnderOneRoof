@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -21,10 +21,11 @@ import CustomButtons from '../../../components/Buttons/CustomButtons';
 const RegistrationOwnerScreen = ({ navigation, route }) => {
   const { mobile } = route.params;
 
+  // Owner details fields
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
-  const [ownerMobile, setOwnerMobile] = useState('');
+  const [ownerMobile, setOwnerMobile] = useState(''); // will store only 10-digit number
   const [selectedBusinessType, setSelectedBusinessType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,23 +34,24 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const [formErrors, setFormErrors] = useState({});
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
+  // Validate form fields
   const validateForm = () => {
     const errors = {};
   
     // Validate first name
-    if (!fname) errors.fname = 'First name is required';
+    if (!fname.trim()) errors.fname = 'First name is required';
   
     // Validate last name
-    if (!lname) errors.lname = 'Last name is required';
+    if (!lname.trim()) errors.lname = 'Last name is required';
   
-    // Validate email
+    // Validate email using a basic regex
     if (!email) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(email)) { 
       errors.email = 'Email is invalid';
     }
   
-    // Validate mobile number
+    // Validate mobile number (only 10-digit numbers allowed)
     if (!ownerMobile) {
       errors.ownerMobile = 'Mobile number is required';
     } else if (!/^[6-9]\d{9}$/.test(ownerMobile)) {
@@ -60,7 +62,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     if (!selectedBusinessType) {
       errors.businessType = 'Please select a business type';
   
-      // Shake animation trigger
+      // Shake animation trigger for business type
       Animated.sequence([
         Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
         Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
@@ -74,10 +76,45 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     return Object.keys(errors).length === 0;
   };
   
-  
+  // useEffect to remove fname error when first name is filled
+  useEffect(() => {
+    if (fname.trim()) {
+      setFormErrors(prevErrors => ({ ...prevErrors, fname: '' }));
+    }
+  }, [fname]);
+
+  // useEffect to remove lname error when last name is filled
+  useEffect(() => {
+    if (lname.trim()) {
+      setFormErrors(prevErrors => ({ ...prevErrors, lname: '' }));
+    }
+  }, [lname]);
+
+  // useEffect to remove email error when a valid email is filled
+  useEffect(() => {
+    if (email && /\S+@\S+\.\S+/.test(email)) {
+      setFormErrors(prevErrors => ({ ...prevErrors, email: '' }));
+    }
+  }, [email]);
+
+  // useEffect to remove mobile number error when a valid number is filled
+  useEffect(() => {
+    if (ownerMobile && /^[6-9]\d{9}$/.test(ownerMobile)) {
+      setFormErrors(prevErrors => ({ ...prevErrors, ownerMobile: '' }));
+    }
+  }, [ownerMobile]);
+
+  // This function extracts only digits and takes the last 10 digits
+  const handleOwnerMobileChange = (text) => {
+    let digits = text.replace(/\D/g, '');
+    if (digits.length > 10) {
+      digits = digits.slice(-10);
+    }
+    setOwnerMobile(digits);
+  };
 
   const handleBusinessTypeSelection = (type) => {
-    setSelectedBusinessType(type); 
+    setSelectedBusinessType(type);
   };
 
   const handleSubmit = async () => {
@@ -96,7 +133,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   
     try {
       const response = await apiClient.post('/registerOwner', ownerDetails);
-  
+      console.log(response.data);
       if (response.data?.status === 1) {
         navigation.navigate('OutletDetailsScreen', { mobile });
       } else if (response.data?.status === 0) {
@@ -113,7 +150,6 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      
       if (error.response) {
         Alert.alert('Server Error', error.response.data?.msg || 'Something went wrong on the server.');
       } else {
@@ -124,7 +160,6 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     }
   };
   
-
   return (
     <View style={styles.container}>
       <Header title="Register" />
@@ -138,7 +173,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
                 Register Your Business on UnderOneRoof
               </Text>
               <Text style={{ marginTop: rh(1), color: '#9D9D9D', fontSize: rf(1.8) }}>
-                Get started by providing some {'\n'} basic information about your {'\n'} business.
+                Get started by providing some{'\n'}basic information about your{'\n'}business.
               </Text>
             </View>
             <View style={{ position: 'absolute', right: 0, bottom: 0 }}>
@@ -172,9 +207,9 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
                 placeholder="Mobile Number"
                 keyboardType="phone-pad"
                 value={ownerMobile}
-                onChange={setOwnerMobile}
+                onChange={handleOwnerMobileChange}
                 errorMessage={formErrors.ownerMobile}
-                maxLength={10}
+                maxLength={10} // We only store 10 digits
               />
               <TextInputField
                 placeholder="Email"
@@ -186,9 +221,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
             </View>
           </View>
 
-          <View
-            style={[styles.checkboxContainer]}
-          >
+          <View style={styles.checkboxContainer}>
             <View
               style={{
                 borderBottomWidth: 1,
@@ -197,21 +230,18 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
                 paddingBottom: rh(1),
               }}
             >
-            <Animated.Text
-              style={[
-                {
-                  fontWeight: '400',
-                  fontSize: rf(2),
-                  color: '#717171',
-                },
-                {
-                  transform: [{ translateX: shakeAnimation }],
-                },
-              ]}
-            >
-              Business Type
-            </Animated.Text>
-
+              <Animated.Text
+                style={[
+                  {
+                    fontWeight: '400',
+                    fontSize: rf(2),
+                    color: '#717171',
+                  },
+                  { transform: [{ translateX: shakeAnimation }] },
+                ]}
+              >
+                Business Type
+              </Animated.Text>
             </View>
 
             <FlatList
@@ -235,17 +265,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
           </View>
         </ScrollView>
 
-        <View
-          style={{
-            width: rw(100),
-            padding: rw(2),
-            paddingHorizontal: rw(5),
-            paddingBottom: rh(2),
-            backgroundColor: 'white',
-            position: 'absolute',
-            bottom: rh(0),
-          }}
-        >
+        <View style={styles.floatingButtonContainer}>
           <CustomButtons
             onPress={handleSubmit}
             title="Next"
@@ -260,55 +280,53 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
 
 export default RegistrationOwnerScreen;
 
-
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    ContentContaine: {
-        flex: 1,
-        paddingVertical: rh(1),
-        paddingHorizontal: rw(4),
-        backgroundColor: '#F3F3F3',
-    },
-    scrollContainer: {
-        paddingBottom: rh(20), // Prevent content overlap with the button
-    },
-    informationCard: {
-        height: rh(17),
-        paddingTop: rh(1),
-        paddingHorizontal: rw(3),
-        justifyContent: 'space-between',
-        backgroundColor: '#FFFFFF',
-        flexDirection: 'row',
-        borderRadius: 10,
-        overflow: 'hidden',
-        marginTop: rh(1),
-    },
-    checkboxContainer: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
-        padding: rw(3),
-        marginBottom:rh(15)
-    },
-    checkboxItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: rh(1.5),
-    },
-    checkboxLabel: {
-        fontSize: rf(2),
-        color: '#717171',
-        marginLeft: rw(2),
-    },
-    floatingButton: {
-        position: 'absolute',
-        bottom: rh(5),
-        alignSelf: 'center',
-        backgroundColor: '#FF3131',
-        paddingVertical: rh(1.7),
-        paddingHorizontal: rw(20),
-        borderRadius: 10,
-    }
+  container: {
+    flex: 1,
+  },
+  ContentContaine: {
+    flex: 1,
+    paddingVertical: rh(1),
+    paddingHorizontal: rw(4),
+    backgroundColor: '#F3F3F3',
+  },
+  scrollContainer: {
+    paddingBottom: rh(20),
+  },
+  informationCard: {
+    height: rh(17),
+    paddingTop: rh(1),
+    paddingHorizontal: rw(3),
+    justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: rh(1),
+  },
+  checkboxContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: rw(3),
+    marginBottom: rh(15),
+  },
+  checkboxItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: rh(1.5),
+  },
+  checkboxLabel: {
+    fontSize: rf(2),
+    color: '#717171',
+    marginLeft: rw(2),
+  },
+  floatingButtonContainer: {
+    width: rw(100),
+    padding: rw(2),
+    paddingHorizontal: rw(5),
+    paddingBottom: rh(2),
+    backgroundColor: 'white',
+    position: 'absolute',
+    bottom: rh(0),
+  },
 });
