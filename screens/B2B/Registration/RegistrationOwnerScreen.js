@@ -34,24 +34,18 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const [formErrors, setFormErrors] = useState({});
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
-  // This function extracts only digits and takes the last 10 digits
   const handleOwnerMobileChange = (text) => {
-    // Input ko trim karein aur agar leading '+' hai to remove karein
     let cleaned = text.trim();
     if (cleaned.startsWith('+')) {
       cleaned = cleaned.slice(1);
     }
-    
-    // Sirf digits nikal lein
     let digits = cleaned.replace(/\D/g, '');
-    
-    // Agar digits zyada hain to assume karein country code hai, aur last 10 digits ko set karein
     if (digits.length > 10) {
       digits = digits.slice(-10);
     }
-    
     setOwnerMobile(digits);
   };
+  
   
 
   // Prefill ownerMobile using the mobile number from route params (if available)
