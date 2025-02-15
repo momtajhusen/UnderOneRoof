@@ -34,23 +34,50 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const [formErrors, setFormErrors] = useState({});
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
+  // This function extracts only digits and takes the last 10 digits
+  const handleOwnerMobileChange = (text) => {
+    // Input ko trim karein aur agar leading '+' hai to remove karein
+    let cleaned = text.trim();
+    if (cleaned.startsWith('+')) {
+      cleaned = cleaned.slice(1);
+    }
+    
+    // Sirf digits nikal lein
+    let digits = cleaned.replace(/\D/g, '');
+    
+    // Agar digits zyada hain to assume karein country code hai, aur last 10 digits ko set karein
+    if (digits.length > 10) {
+      digits = digits.slice(-10);
+    }
+    
+    setOwnerMobile(digits);
+  };
+  
+
+  // Prefill ownerMobile using the mobile number from route params (if available)
+  useEffect(() => {
+    if (mobile) {
+      handleOwnerMobileChange(mobile);
+    }
+  }, [mobile]);
+
   // Validate form fields
   const validateForm = () => {
     const errors = {};
-  
+
     // Validate first name
     if (!fname.trim()) errors.fname = 'First name is required';
-  
+
     // Validate last name
     if (!lname.trim()) errors.lname = 'Last name is required';
-  
+
     // Validate email using a basic regex
     if (!email) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(email)) { 
       errors.email = 'Email is invalid';
     }
-  
+
     // Validate mobile number (only 10-digit numbers allowed)
     if (!ownerMobile) {
       errors.ownerMobile = 'Mobile number is required';
@@ -61,7 +88,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     // Validate business type
     if (!selectedBusinessType) {
       errors.businessType = 'Please select a business type';
-  
+
       // Shake animation trigger for business type
       Animated.sequence([
         Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
@@ -71,11 +98,11 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
         Animated.timing(shakeAnimation, { toValue: 0, duration: 100, useNativeDriver: true }),
       ]).start();
     }
-  
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
-  
+
   // useEffect to remove fname error when first name is filled
   useEffect(() => {
     if (fname.trim()) {
@@ -104,15 +131,6 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     }
   }, [ownerMobile]);
 
-  // This function extracts only digits and takes the last 10 digits
-  const handleOwnerMobileChange = (text) => {
-    let digits = text.replace(/\D/g, '');
-    if (digits.length > 10) {
-      digits = digits.slice(-10);
-    }
-    setOwnerMobile(digits);
-  };
-
   const handleBusinessTypeSelection = (type) => {
     setSelectedBusinessType(type);
   };
@@ -123,7 +141,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     setIsLoading(true);
   
     const ownerDetails = {
-      mobile,
+      mobile, // from route params
       fname,
       lname,
       email,
@@ -205,11 +223,11 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
               />
               <TextInputField
                 placeholder="Mobile Number"
-                keyboardType="phone-pad"
+                keyboardType="numeric"
                 value={ownerMobile}
                 onChange={handleOwnerMobileChange}
                 errorMessage={formErrors.ownerMobile}
-                maxLength={13}
+                maxLength={10}
               />
               <TextInputField
                 placeholder="Email"
