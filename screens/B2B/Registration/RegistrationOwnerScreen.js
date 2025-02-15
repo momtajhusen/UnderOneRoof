@@ -209,7 +209,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
                 value={ownerMobile}
                 onChange={handleOwnerMobileChange}
                 errorMessage={formErrors.ownerMobile}
-                maxLength={10} // We only store 10 digits
+                maxLength={13}
               />
               <TextInputField
                 placeholder="Email"

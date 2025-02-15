@@ -34,18 +34,18 @@ prthkshk14@gmail.com
 3. Jaise hum toogle nahi kar rahe wholesale aur retail mai ki aapko log out karke hi dusra section use karna hoga
 4. Toh notifications kaise send hongi
 
-  my work 
+my work 
 // 1. Wholesale mai login karte time problem ho raha hai Email 
 // 2. Pincode address aur landmark bhi automatically pick kar raha hai only use state aur city 
 // 3. Phone number autopick karte waqt vo +91 bhi le raha hai Register Screen 
-
-1. Add to cart work nahi kar raha  quantity increase  issue in product details 
+// 1. Add to cart work nahi kar raha  quantity increase  issue in product details 
 
 
 
 -----------------------------------------------------------------------
-
-
+Wholesale login, pincode/address/landmark fill, phone number autopick,
+and product details quantity increase issues have been fixed.
+Please restart your installed app to see the update.
 
 
 
