@@ -206,12 +206,12 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
               <TextInputField
                 placeholder="Mobile Number"
                 keyboardType="phone-pad"
-                textContentType="telephoneNumber" // Helps Android understand the input type
-                autoCompleteType="tel"           // Ensures proper number suggestions
+                textContentType="telephoneNumber"  
+                autoCompleteType="tel"  
                 value={ownerMobile}
                 onChange={handleOwnerMobileChange}
                 errorMessage={formErrors.ownerMobile}
-                maxLength={10}
+                maxLength={13}
               />
               <TextInputField
                 placeholder="Email"
