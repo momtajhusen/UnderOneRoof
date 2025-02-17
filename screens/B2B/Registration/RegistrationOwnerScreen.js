@@ -35,17 +35,8 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
   const handleOwnerMobileChange = (text) => {
-    let cleaned = text.trim();
-    if (cleaned.startsWith('+')) {
-      cleaned = cleaned.slice(1);
-    }
-    let digits = cleaned.replace(/\D/g, '');
-    if (digits.length > 10) {
-      digits = digits.slice(-10);
-    }
-    setOwnerMobile(digits);
+    setOwnerMobile(text);
   };
-  
   
 
   // Prefill ownerMobile using the mobile number from route params (if available)
@@ -217,9 +208,9 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
               />
               <TextInputField
                 placeholder="Mobile Number"
-                keyboardType="numeric"
+                keyboardType="phone-pad"
                 value={ownerMobile}
-                onChange={handleOwnerMobileChange}
+                onChange={setOwnerMobile}
                 errorMessage={formErrors.ownerMobile}
                 maxLength={10}
               />
