@@ -34,7 +34,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
 
-  
+
   const handleOwnerMobileChange = (text) => {
     const digits = text.replace(/\D/g, '');
     if (digits.length > 10) {
@@ -42,7 +42,6 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
       if (ownerMobile.length === 10) {
         return;
       } else {
-        // Likely a paste or auto-fill event: take the last 10 digits.
         setOwnerMobile(digits.slice(-10));
       }
     } else {
@@ -50,7 +49,6 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     }
   };
 
-  // Prefill ownerMobile using the mobile number from route params (if available)
   useEffect(() => {
     if (mobile) {
       handleOwnerMobileChange(mobile);

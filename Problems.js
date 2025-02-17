@@ -48,6 +48,6 @@ and product details quantity increase issues have been fixed.
 Please restart your installed app to see the update.
 
 
-
-
-
+All issues fixed. Please restart your app to see the update. 
+Also, let me know if there are any further issues.
+ 
