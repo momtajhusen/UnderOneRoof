@@ -34,10 +34,10 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   const [formErrors, setFormErrors] = useState({});
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
+  // Using onChange to update the mobile field
   const handleOwnerMobileChange = (text) => {
     setOwnerMobile(text);
   };
-  
 
   // Prefill ownerMobile using the mobile number from route params (if available)
   useEffect(() => {
@@ -59,7 +59,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     // Validate email using a basic regex
     if (!email) {
       errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(email)) { 
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
       errors.email = 'Email is invalid';
     }
 
@@ -88,28 +88,25 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
     return Object.keys(errors).length === 0;
   };
 
-  // useEffect to remove fname error when first name is filled
+  // Remove error messages as fields become valid
   useEffect(() => {
     if (fname.trim()) {
       setFormErrors(prevErrors => ({ ...prevErrors, fname: '' }));
     }
   }, [fname]);
 
-  // useEffect to remove lname error when last name is filled
   useEffect(() => {
     if (lname.trim()) {
       setFormErrors(prevErrors => ({ ...prevErrors, lname: '' }));
     }
   }, [lname]);
 
-  // useEffect to remove email error when a valid email is filled
   useEffect(() => {
     if (email && /\S+@\S+\.\S+/.test(email)) {
       setFormErrors(prevErrors => ({ ...prevErrors, email: '' }));
     }
   }, [email]);
 
-  // useEffect to remove mobile number error when a valid number is filled
   useEffect(() => {
     if (ownerMobile && /^[6-9]\d{9}$/.test(ownerMobile)) {
       setFormErrors(prevErrors => ({ ...prevErrors, ownerMobile: '' }));
@@ -209,8 +206,10 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
               <TextInputField
                 placeholder="Mobile Number"
                 keyboardType="phone-pad"
+                textContentType="telephoneNumber" // Helps Android understand the input type
+                autoCompleteType="tel"           // Ensures proper number suggestions
                 value={ownerMobile}
-                onChange={setOwnerMobile}
+                onChange={handleOwnerMobileChange}
                 errorMessage={formErrors.ownerMobile}
                 maxLength={10}
               />
