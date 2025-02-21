@@ -16,7 +16,7 @@ const CartScreen = ({ navigation }) => {
   const { state, dispatch } = useContext(AppContext);
   const { viewCartData } = useViewCartData();
   const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
- 
+
   const fetchCartData = async () => {
     try {
       await viewCartData();
@@ -24,7 +24,7 @@ const CartScreen = ({ navigation }) => {
       console.error('Error fetching cart data:', error);
     }
   };
- 
+
   useEffect(() => {
     if (isScreenLoaded) {
       fetchCartData();
@@ -39,11 +39,10 @@ const CartScreen = ({ navigation }) => {
   }, []);
  
   const onRefresh = async () => {
+    console.log(state.selectAddressData);
     dispatch({
       type: 'GLOBAL_REFRESH',
-      payload: {
-        reFresh: Math.ceil(Math.random() * 100),
-      },
+      payload: { reFresh: Math.ceil(Math.random() * 100) },
     });
   };
 
@@ -70,8 +69,11 @@ const CartScreen = ({ navigation }) => {
       >
         {/* User Details */}
         <View style={styles.container}>
-          <UserDetails userData={state.selectAddressData} type="selected_change" />
+          {state.selectAddressData && (
+            <UserDetails userData={[state.selectAddressData]} type="selected_change" />
+          )}
         </View>
+
 
         {/* Cart Items or Empty Message */}
         {cartProducts.length > 0 ? (
@@ -93,7 +95,9 @@ const CartScreen = ({ navigation }) => {
           </View>
         ) : (
           <View style={styles.emptyCartContainer}>
-            <Text style={styles.emptyCartText}>Your cart is currently empty. Add some items to proceed.</Text>
+            <Text style={styles.emptyCartText}>
+              Your cart is currently empty. Add some items to proceed.
+            </Text>
           </View>
         )}
 
@@ -128,32 +132,32 @@ const CartScreen = ({ navigation }) => {
 export default CartScreen;
 
 const styles = StyleSheet.create({
-    screenContainer: {
-        flex: 1,
-        backgroundColor: '#f5f5f5',
-    },
-    container: {
-        marginHorizontal: rw(3.5),
-    },
-    emptyCartContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: rh(20),
-    },
-    emptyCartText: {
-        fontSize: rw(4.5),
-        color: '#888',
-        textAlign: 'center',
-        paddingHorizontal: rw(5),
-    },
-    similarProducts: {
-        marginHorizontal: rw(3.5),
-    },
-    proceedDetails: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        backgroundColor: '#fff',
-    },
+  screenContainer: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  container: {
+    marginHorizontal: rw(3.5),
+  },
+  emptyCartContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: rh(20),
+  },
+  emptyCartText: {
+    fontSize: rw(4.5),
+    color: '#888',
+    textAlign: 'center',
+    paddingHorizontal: rw(5),
+  },
+  similarProducts: {
+    marginHorizontal: rw(3.5),
+  },
+  proceedDetails: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#fff',
+  },
 });

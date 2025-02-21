@@ -4,14 +4,15 @@ import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../../../../context/AppContext';
 
-// create a component
 const ProceedDetails = ({ data, loading, btnText, onPress }) => {
   const { grand_total, total } = data;
-
   const navigation = useNavigation();
   const { state } = useContext(AppContext);
 
-  const isAddressSelected = state?.selectAddressData && Object.keys(state.selectAddressData).length > 0;
+  // Agar state.selectAddressData ek direct object hai, to aid property check karen.
+  const isAddressSelected = !!(state?.selectAddressData && state.selectAddressData.aid);
+
+  console.log("isAddressSelected:", isAddressSelected);
 
   return (
     <View style={styles.container}>
@@ -21,11 +22,12 @@ const ProceedDetails = ({ data, loading, btnText, onPress }) => {
           <View style={styles.priceDetails}>
             <Text style={styles.weightText}></Text>
             <Text style={styles.priceText}>
-              ₹{grand_total - state.couponData.discountAmount} <Text style={styles.mrpText}> MRP </Text>
+              ₹{grand_total - state.couponData.discountAmount}{' '}
+              <Text style={styles.mrpText}> MRP </Text>
               <Text style={styles.mrpPrice}> ₹ {total}</Text>
             </Text>
           </View>
-          {/* Button */}
+          {/* Proceed Button */}
           <TouchableOpacity
             onPress={loading ? null : onPress}
             style={[styles.btn, loading && styles.disabledBtn]}
@@ -58,7 +60,6 @@ const ProceedDetails = ({ data, loading, btnText, onPress }) => {
   );
 };
 
-//make this component available to the app
 export default ProceedDetails;
 
 const styles = StyleSheet.create({
@@ -104,5 +105,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: rf(2),
     fontWeight: 'bold',
+  },
+  disabledBtn: {
+    opacity: 0.7,
   },
 });

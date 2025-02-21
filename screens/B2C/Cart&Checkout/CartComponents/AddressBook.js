@@ -1,40 +1,53 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import UserDetails from './userDetails';
 import Header from '../../../../components/header';
 import { useViewAddressData } from '../../../../utility/viewaddressUtils';
+import { CommonActions } from '@react-navigation/native';
 
 const AddressBook = ({ navigation }) => {
-  const { isViewAddressLoading, viewAddressData } = useViewAddressData();
+  const { viewAddressData } = useViewAddressData();
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchAddress = async () => {
+    setLoading(true);
+    try {
+      const result = await viewAddressData();
+      if (result.success) {
+        setAddresses(result.addressData.reverse());
+      } else {
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error('Failed to fetch addresses:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchAddress = async () => {
-      setLoading(true);
-      try {
-        const result = await viewAddressData();
-        if (result.success) {
-          setAddresses(result.addressData);
-        } else {
-          console.error(result.error);
-        }
-      } catch (error) {
-        console.error('Failed to fetch addresses:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchAddress();
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchAddress();
+    setRefreshing(false);
   }, []);
 
   return (
     <View style={styles.wrapper}>
       <Header title="Address Book" />
-
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <TouchableOpacity
           onPress={() => navigation.navigate('AddAddress')}
           style={styles.addAddressBtn}
@@ -46,15 +59,13 @@ const AddressBook = ({ navigation }) => {
         {loading ? (
           <ActivityIndicator size="large" color="#FF3131" style={styles.loader} />
         ) : addresses && addresses.length > 0 ? (
- 
-            <UserDetails userData={addresses} style={{marginBottom:rh(0.5)}} type="view_all" />
-     
+          <UserDetails userData={addresses} style={{ marginBottom: rh(0.5) }} type="view_all" />
         ) : (
           <View style={styles.noAddressContainer}>
             <Text style={styles.noAddressText}>No addresses found</Text>
           </View>
         )}
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -66,7 +77,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: rw(4),
     paddingVertical: rh(2),
-    flex: 1,
+    flexGrow: 1,
   },
   addAddressBtn: {
     flexDirection: 'row',

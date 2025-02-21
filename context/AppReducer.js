@@ -104,11 +104,12 @@ const Reducer = (state = initialState, action) => {
         viewAddressData: action.payload.viewAddressData,
       };
 
-    case SELECT_ADDRESS_DATA:
-      return {
-        ...state,
-        selectAddressData: [action.payload.selectAddressData],
-      };
+      case SELECT_ADDRESS_DATA:
+        return {
+          ...state,
+          selectAddressData: action.payload.selectAddressData,
+        };
+      
 
     case SET_ORDER_NAVIGATION:
       return {

@@ -15,7 +15,6 @@ const Catsection = ({ data }) => {
   const { state } = useContext(AppContext);
 
   useEffect(() => {
-    // Agar data undefined hai, to kuch process nahi karte
     if (!data) {
       return;
     }

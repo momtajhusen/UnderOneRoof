@@ -251,7 +251,7 @@ const EditAddress = ({ navigation, route }) => {
     }
     setIsLoading(true);
     try {
-      const response = await apiClient.post("/updateAddress", formData);
+      const response = await apiClient.post("/addAddress", formData);
       if (response.status === 200) {
         Alert.alert("Success", "Address updated successfully!");
         navigation.navigate("AddressBook");
@@ -290,7 +290,7 @@ const EditAddress = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Edit Address" />
+      <Header title="Add Address" />
       <ScrollView>
         <View style={styles.contentContainer}>
           <TextInputField
@@ -385,7 +385,7 @@ const EditAddress = ({ navigation, route }) => {
           </View>
 
           <SaveButton
-            title="Update"
+            title="Save"
             onPress={handleSaveAddress}
             btnStyle={{ marginTop: rh(3) }}
             loading={isLoading}

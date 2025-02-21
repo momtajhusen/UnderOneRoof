@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../../../../context/AppContext';
 import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import apiClient from '../../../../Service/apiClient';
 
 const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
   const navigation = useNavigation();
@@ -13,34 +14,83 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
 
   const [selectedId, setSelectedId] = useState(null);
 
-  // Set selectedId based on state.selectAddressData[0].aid
+  // Agar state.selectAddressData ek direct object hai, to uske aid se selectedId set karein.
   useEffect(() => {
-    if (state.selectAddressData.length > 0) {
-      setSelectedId(state.selectAddressData[0].aid);
+    if (state.selectAddressData && state.selectAddressData.aid) {
+      setSelectedId(state.selectAddressData.aid);
+    } else {
+      setSelectedId(null);
     }
   }, [state.selectAddressData]);
 
-  // Function to handle Edit action
+  // Handle Edit
   const handleEdit = (item) => {
     navigation.navigate('EditAddress', { item });
-  };  
-
-  // Function to handle Delete action
-  const handleDelete = (item) => {
-    alert(`Deleting address of ${item.fname} ${item.lname}`);
-    alert(item.aid);
-    return false;
-    // const response = await apiClient.post("/updateAddress", formData);
   };
 
+  // Handle Delete with local storage removal
+  const handleDelete = (item) => {
+    console.log("Before deletion, selectAddressData:", state.selectAddressData);
+    
+    Alert.alert(
+      'Confirm Delete',
+      `Deleting address of ${item.fname} ${item.lname}. Are you sure?`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Deletion cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            try {
+              const response = await apiClient.get(`/deleteAddress?aid=${item.aid}`);
+
+              if (response.data.status === 1) {
+                console.log(`Address with aid ${item.aid} deleted successfully.`);
+
+                // Dispatch global refresh
+                dispatch({
+                  type: "GLOBAL_REFRESH",
+                  payload: { reFresh: Math.ceil(Math.random() * 100) },
+                });
+
+                // Agar deleted address hi selected address hai, to clear it and remove from AsyncStorage
+                if (state.selectAddressData && state.selectAddressData.aid === item.aid) {
+                  dispatch({
+                    type: 'SELECT_ADDRESS_DATA',
+                    payload: { selectAddressData: null },
+                  });
+                  await AsyncStorage.removeItem('selectedAddress');
+                  console.log("Selected address removed from local storage.");
+                }
+              } else {
+                console.error('Deletion failed:', response.error);
+              }
+            } catch (error) {
+              console.error('Error deleting address:', error);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  // Handle Address Select (saving to local storage)
   const handleAddressSelect = async (item) => {
     if (type === "view_all") {
       setSelectedId(selectedId === item.aid ? null : item.aid);
+
+      console.log("Selected address aid:", item.aid);
 
       dispatch({
         type: 'SELECT_ADDRESS_DATA',
         payload: { selectAddressData: item },
       });
+
+      navigation.navigate('CartScreen')
 
       try {
         await AsyncStorage.setItem('selectedAddress', JSON.stringify(item));
@@ -54,14 +104,14 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       disabled={type === "selected_view"}
-      style={[ 
+      style={[
         styles.container,
         style,
         type === "view_all" && styles.radioContainer,
         type === "selected_view" && styles.selectedViewContainer,
         selectedId === item.aid && styles.selectedCard,
       ]}
-      onPress={() => handleAddressSelect(item)} 
+      onPress={() => handleAddressSelect(item)}
     >
       <View style={styles.headerRow}>
         <View style={styles.locationContainer}>
@@ -81,24 +131,21 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
           <Text style={styles.locationText}>{item.address_type}</Text>
         </View>
 
-        {/* More-Vert Icon and MenuTrigger */}
-        {type === "view_all" && 
-        <Menu>
-          <MenuTrigger>
-            <MaterialIcons name="more-vert" size={rw(6)} color="#717171" />
-          </MenuTrigger>
-          <MenuOptions>
-            {/* Edit Option */}
-            <MenuOption onSelect={() => handleEdit(item)}>
-              <Text style={styles.menuOption}>Edit</Text>
-            </MenuOption>
-            {/* Delete Option */}
-            <MenuOption onSelect={() => handleDelete(item)}>
-              <Text style={styles.menuOption}>Delete</Text>
-            </MenuOption>
-          </MenuOptions>
-        </Menu>
-       }
+        {type === "view_all" &&
+          <Menu>
+            <MenuTrigger>
+              <MaterialIcons name="more-vert" size={rw(6)} color="#717171" />
+            </MenuTrigger>
+            <MenuOptions>
+              <MenuOption onSelect={() => handleEdit(item)}>
+                <Text style={styles.menuOption}>Edit</Text>
+              </MenuOption>
+              <MenuOption onSelect={() => handleDelete(item)}>
+                <Text style={styles.menuOption}>Delete</Text>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
+        }
 
         {type === "selected_change" && (
           <TouchableOpacity onPress={() => navigation.navigate("AddressBook")} style={{ paddingRight: rw(3) }}>
@@ -128,7 +175,7 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
     <FlatList
       data={userData}
       renderItem={renderItem}
-      keyExtractor={(item) => item.aid.toString()}
+      keyExtractor={(item) => item.aid}
       showsVerticalScrollIndicator={false}
     />
   );
