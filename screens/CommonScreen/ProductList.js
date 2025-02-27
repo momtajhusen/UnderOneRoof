@@ -48,8 +48,6 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     const [isScreenLoaded, setIsScreenLoaded] = useState(false);  
     const [isRefreshing, setIsRefreshing] = useState(false);
     
-    
-  
     const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
       setModalVisible(!isModalVisible);

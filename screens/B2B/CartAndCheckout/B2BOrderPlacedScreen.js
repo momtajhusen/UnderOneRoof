@@ -76,7 +76,9 @@ const B2BOrderPlaced = ({route}) => {
                   </View>
 
                   <View style={{ marginVertical: rh(1) }}>
-                     <UserDetails userData={state.selectAddressData} />
+                  {state.selectAddressData && (
+                    <UserDetails userData={[state.selectAddressData]} type="selected" />
+                  )}  
                   </View>
 
 

@@ -32,6 +32,7 @@ const B2BBottomNavigator = () => {
  
   return (
     <Tab.Navigator
+      lazy={true}
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "#FF3131",
         tabBarInactiveTintColor: "#6C6C6C",

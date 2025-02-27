@@ -93,17 +93,19 @@ const StackNavigation = () => {
         <Stack.Screen name="MyProfile" component={MyProfile} options={{ headerShown: false }} />
         {/* <Stack.Screen name="ProductDetail" component={ProductDetail} options={{ headerShown: false }} /> */}
         <Stack.Screen
-        name="ProductDetail"
-        component={ProductDetail}
-        options={{ headerShown: false }}
-        sharedElements={(route) => {
-            const { item } = route.params;
-            return [
-              `item.${item.pid}.image`, 
-              `item.${item.pid}.name`
-            ];
-          }}
-      />
+  name="ProductDetail"
+  component={ProductDetail}
+  options={{ headerShown: false }}
+  sharedElements={(route) => {
+      const { item } = route.params;
+      return [
+        `item.${item.pid}.image`, 
+        `item.${item.pid}.name`
+      ];
+    }}
+/>
+
+
         <Stack.Screen name="AllRating" component={AllRating} options={{ headerShown: false }} />
         <Stack.Screen name="OrderDetails" component={OrderDetails} options={{ headerShown: false }} />
         <Stack.Screen name="RatingAndReviews" component={RatingAndReviews} options={{ headerShown: false }} />

@@ -250,7 +250,7 @@ const EditAddress = ({ navigation, route }) => {
       const response = await apiClient.post("/updateAddress", formData);
       if (response.status === 200) {
         Alert.alert("Success", "Address updated successfully!");
-        navigation.navigate("AddressBook");
+        navigation.replace("AddressBook");
         dispatch({
           type: "GLOBAL_REFRESH",
           payload: { reFresh: Math.ceil(Math.random() * 100) },

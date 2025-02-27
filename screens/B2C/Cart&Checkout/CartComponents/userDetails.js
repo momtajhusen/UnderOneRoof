@@ -25,7 +25,7 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
 
   // Handle Edit
   const handleEdit = (item) => {
-    navigation.navigate('EditAddress', { item });
+    navigation.replace('EditAddress', { item });
   };
 
   // Handle Delete with local storage removal
@@ -49,6 +49,8 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
 
               if (response.data.status === 1) {
                 console.log(`Address with aid ${item.aid} deleted successfully.`);
+
+                Alert.alert('Deleted', `Address deleted successfully.`);
 
                 // Dispatch global refresh
                 dispatch({
@@ -76,6 +78,7 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
       ],
       { cancelable: false }
     );
+    
   };
 
   // Handle Address Select (saving to local storage)
@@ -90,7 +93,13 @@ const UserDetails = ({ type, style, addresType = "Home", userData = [] }) => {
         payload: { selectAddressData: item },
       });
 
-      navigation.navigate('CartScreen')
+      if (state.shoppingMode === 'wholesale') {
+        navigation.navigate('B2BBottomNavigator', { screen: 'B2BCart' });
+      } else if (state.shoppingMode === 'retail') {
+          navigation.navigate('BottomNavigator', { screen: 'Cart' });
+      } 
+
+      
 
       try {
         await AsyncStorage.setItem('selectedAddress', JSON.stringify(item));

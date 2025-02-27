@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "UnderOneRoof",
+    "name": "Under One Roof",
     "slug": "UnderOneRoof",
     "version": "1.0.0",
     "icon": "./assets/auth/applogo.png",
     "extra": {
       "eas": {
-        "projectId": "76908546-1ec1-41d9-83e6-67248f213c93"
+        "projectId": "d842f218-bd83-49bd-99f8-aaa5c67a4b3e"
       }
     },
     "splash": {
@@ -18,7 +18,7 @@
     "updates": {
       "enabled": true,
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/76908546-1ec1-41d9-83e6-67248f213c93"
+      "url": "https://u.expo.dev/d842f218-bd83-49bd-99f8-aaa5c67a4b3e"
     },
     "android": {
       "package": "com.example.underoneroof",

@@ -36,8 +36,8 @@ const Checkout = ({ navigation }) => {
       setIsLoading(true);
   
       // Construct payload
-      const aid = state.selectAddressData[0].aid;
-  
+      const aid = state.selectAddressData.aid;
+
       const payload = {
         address_id: aid,
         payment_type: 'cod',

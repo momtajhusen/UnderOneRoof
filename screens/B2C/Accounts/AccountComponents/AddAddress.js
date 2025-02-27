@@ -14,6 +14,8 @@ import TextInputField from "../../../../components/Inputs/TextInputField";
 import SaveButton from "../../../../components/Buttons/CustomButtons";
 import apiClient from "../../../../Service/apiClient"; 
 import { AppContext } from "../../../../context/AppContext";
+import { CommonActions } from '@react-navigation/native';
+
 
 const EditAddress = ({ navigation, route }) => {
   const item = route.params?.item || null;
@@ -253,12 +255,15 @@ const EditAddress = ({ navigation, route }) => {
     try {
       const response = await apiClient.post("/addAddress", formData);
       if (response.status === 200) {
-        Alert.alert("Success", "Address updated successfully!");
-        navigation.navigate("AddressBook");
+        console.log(formData);
         dispatch({
           type: "GLOBAL_REFRESH",
           payload: { reFresh: Math.ceil(Math.random() * 100) },
         });
+
+        Alert.alert("Success", "Address add successfully!");
+        navigation.replace('AddressBook');
+
       } else {
         Alert.alert("Error", "Failed to save address.");
       }

@@ -39,7 +39,7 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
 
         setIsLoading(true);
         try {
-            const aid = state.selectAddressData[0].aid;
+            const aid = state.selectAddressData.aid;
             const payload = {
                 address_id: aid,
                 payment_type: 'cod',
@@ -53,7 +53,7 @@ const PaymentMethodModal = ({ isVisible, toggleModal }) => {
             const response = await apiClient.post('/checkout', payload);
 
             if (response.data.title == 'Order Successfully') {
-                navigation.navigate('OrderPlaced', { data: response.data.data });
+                navigation.replace('OrderPlaced', { data: response.data.data });
                 toggleModal();
             } else {
                 alert('Error occurred. Please try again.');

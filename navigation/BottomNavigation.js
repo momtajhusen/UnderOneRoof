@@ -1,4 +1,4 @@
-import React,{useEffect, useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, Pressable, Image } from 'react-native';
 
@@ -10,7 +10,6 @@ import { rw, rh, rf } from '../Service/responsive';
 import { AppContext } from '../context/AppContext';
 import { useViewCartData } from '../utility/viewCardDataUtils';
 
-
 const Tab = createBottomTabNavigator();
 
 const BottomNavigator = () => {
@@ -21,15 +20,16 @@ const BottomNavigator = () => {
   const { isViewCartLoading, viewCartData } = useViewCartData();
 
   const fetchCartDetails = async () => {
-      const result = await viewCartData();
+    await viewCartData();
   };
 
   useEffect(() => {
-      fetchCartDetails();
+    fetchCartDetails();
   }, []);
 
   return (
     <Tab.Navigator
+      lazy={true}
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "#FF3131",
         tabBarInactiveTintColor: "#6C6C6C",
@@ -103,7 +103,7 @@ const BottomNavigator = () => {
         }}
       />
 
-<Tab.Screen
+      <Tab.Screen
         name="Cart"
         component={CartScreen}
         options={{

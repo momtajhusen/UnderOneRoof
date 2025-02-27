@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useContext, useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { rw, rh, rf } from '../../../../Service/responsive';
@@ -6,12 +6,17 @@ import UserDetails from './userDetails';
 import Header from '../../../../components/header';
 import { useViewAddressData } from '../../../../utility/viewaddressUtils';
 import { CommonActions } from '@react-navigation/native';
+import { AppContext } from "../../../../context/AppContext";
+
 
 const AddressBook = ({ navigation }) => {
   const { viewAddressData } = useViewAddressData();
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
+  const {state, dispatch } = useContext(AppContext);
+  
 
   const fetchAddress = async () => {
     setLoading(true);
@@ -31,7 +36,7 @@ const AddressBook = ({ navigation }) => {
 
   useEffect(() => {
     fetchAddress();
-  }, []);
+  }, [state.reFresh]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
