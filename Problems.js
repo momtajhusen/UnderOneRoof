@@ -3,7 +3,7 @@
 //  3. Mai home layout mai aur rows kaha se add karu
  6. Notification kaise start honge 7
  7. App start hone ke baad products show hone mai bahut time lg raha hai 
- 8. Bhaiya wholesale mai select quantity ka option nahi aa raha
+//  8. Bhaiya wholesale mai select quantity ka option nahi aa raha
 ---------------------------  B2C Work Pending ---------------------------
 
 ---------------- UnderOneRoof Meeting Time Update Discuss   --------------
@@ -11,8 +11,8 @@
 // 2. Register third form remove and add gst number in Outlet Details - it updated 
 // 3. home par category aur product infinite load
 
-4. Notification 
-5. product Qualitity add on product details
+// 4. Notifications 
+// 5. product Qualitity add on product details
 
 // 6. product search with related word
  

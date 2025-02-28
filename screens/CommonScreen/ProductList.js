@@ -49,6 +49,14 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     const [isRefreshing, setIsRefreshing] = useState(false);
     
     const [isModalVisible, setModalVisible] = useState(false);
+
+    // True if both APIs have finished loading AND both arrays are empty
+    const showNoDataImage  =
+    !loadingSubCategory &&   // fetchSubCategory is done
+    !loading &&              // fetchProductListing is done
+    categoryData.length === 0 &&
+    productListing.length === 0;
+
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
@@ -120,10 +128,9 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
     };
     
     useEffect(() => {
-      // Set `isScreenLoaded` to true after screen rendering
       const timer = setTimeout(() => {
         setIsScreenLoaded(true);
-      }, 0); // Slight delay to ensure layout rendering
+      }, 0); 
     
       return () => clearTimeout(timer);
     }, []);
@@ -307,10 +314,12 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                     alignItems: 'center',
                   }}
                 >
-                  <Image
-                    source={require('../../assets/product-not-avable.png')}
-                    style={{ width: rw(50), height: rw(50) }}
-                  />
+                      {showNoDataImage && (
+                        <Image
+                          source={require('../../assets/product-not-avable.png')}
+                          style={{ width: rw(50), height: rw(50) }}
+                        />
+                      )}
                 </View>
               )}
 
@@ -374,15 +383,12 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                         alignItems: 'center',
                       }}
                     >
-                      <Text
-                        style={{
-                          fontSize: rf(2),
-                          color: '#555',
-                          textAlign: 'center',
-                        }}
-                      >
-                        No products available
-                      </Text>
+                      {showNoDataImage && (
+                        <Image
+                          source={require('../../assets/product-not-avable.png')}
+                          style={{ width: rw(50), height: rw(50) }}
+                        />
+                      )}
                     </View>
                   )}
                 </ScrollView>
