@@ -1,13 +1,13 @@
 // B2BCatSectionProducts.js
 
-// import liraries
+// import libraries
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import B2BProductCard from '../../../../components/List/B2BProductCard';
 import { rw, rf, rh } from '../../../../Service/responsive';
 
 const B2BCatSectionProducts = ({ data }) => {
-  // If data is null/undefined or no categories, return nothing
+  // If data is null/undefined or no categories exist, return nothing
   if (!data || Object.keys(data).length === 0) {
     return null;
   }
@@ -20,7 +20,7 @@ const B2BCatSectionProducts = ({ data }) => {
       {categoryNames.map((categoryName, index) => {
         const productList = data[categoryName];
 
-        // If no products in this category, skip rendering
+        // If no products in this category, skip rendering this section
         if (!productList || productList.length === 0) {
           return null;
         }

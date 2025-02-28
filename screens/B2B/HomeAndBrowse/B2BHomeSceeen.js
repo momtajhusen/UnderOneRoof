@@ -131,14 +131,19 @@ const B2BHomeScreen = () => {
           <PremiumDates />
 
           {/* B2BSimilarProducts */}
-          <View style={{ marginHorizontal: rw(4) }}>
-            <B2BSimilarProducts data={homeData.section1} />
-          </View>
+          {homeData && homeData.section1 && (
+            <View style={{ marginHorizontal: rw(4) }}>
+              <B2BSimilarProducts data={homeData.section1} />
+            </View>
+          )}
 
           {/* B2BSimilarProducts */}
-          <View style={{ marginHorizontal: rw(4) }}>
-            <B2BCatSectionProducts data={homeData.catsection} />
-          </View>
+          {/* {homeData && homeData.catsection && (
+            <View style={{ marginHorizontal: rw(4) }}>
+              <B2BCatSectionProducts data={homeData.catsection} />
+            </View>
+          )} */}
+          
         </View>
       </ScrollView>
     </View>
