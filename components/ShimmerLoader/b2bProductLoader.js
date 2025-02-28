@@ -20,7 +20,7 @@ const B2BProductLoader = ({ styleCardContainer, layout = "horizontal", count = 6
         showsVerticalScrollIndicator={false}
         renderItem={() => (
           <View
-            style={[styles.cardContainer, styleCardContainer, { marginRight: 10 }]}
+            style={[styles.cardContainer, styleCardContainer]}
           >
             {/* Product Information Placeholder */}
             <View style={styles.infoContainer}>
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E0E0E0",
     marginBottom: rh(2),
-    marginRight: rw(2),
     width: rw(75),
     overflow: "hidden",
   },

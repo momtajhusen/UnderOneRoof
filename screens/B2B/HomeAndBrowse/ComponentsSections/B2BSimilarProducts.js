@@ -28,6 +28,7 @@ const B2BSimilarProducts = ({data}) => {
                 styleCardContainer={{
                   width: rw(77),
                   height:rh(30),
+                  marginRight:rw(3)
                 }}
                 layout="horizontal"
               />

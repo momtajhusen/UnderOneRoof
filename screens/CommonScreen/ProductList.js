@@ -220,8 +220,8 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
   
           {/* Product Section */}
           <View style={styles.productSection}>
-            <View style={{ flexDirection: 'row', gap: 3, width: rw(70) }}>
-              <SortByBtn style={{ width: rw(25), height:rh(4), backgroundColor: '#DFDFDF' }} onPress={toggleModal} />
+            <View style={{ flexDirection: 'row', marginTop:rh(1), width: rw(70) }}>
+              <SortByBtn style={{marginLeft:rw(2.5), width: rw(25), height:rh(4), backgroundColor: '#DFDFDF' }} onPress={toggleModal} />
               <View style={styles.filterContainer}>
                 <FlatList
                   data={filters}
@@ -260,15 +260,16 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
   
             {state.shoppingMode === 'wholesale' ? (
               /* B2B container */
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ justifyContent: 'center', alignItems: 'center'}}>
                 <ScrollView
                   showsVerticalScrollIndicator={false}
                   contentContainerStyle={{
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    justifyContent: 'space-between',
+                    justifyContent:"center",
+                    flex:1,
                     paddingVertical: rh(1),
-                    paddingBottom: rh(5),
+                    paddingBottom:rh(7),
                   }}
                   refreshControl={
                     <RefreshControl
@@ -279,13 +280,14 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                     />
                   }
                 >
+                  
 
               {!(loading === false && loadingSubCategory === false) ? (
                 <B2BProductLoader
                   layout="vertical"
                   styleCardContainer={{
                     width: categoryData.length === 0 ? rw(90) : rw(75),
-                    marginBottom: 10,
+                    marginBottom: 5,
                   }}
                 />
               ) : productListing?.length > 0 ? (
@@ -293,7 +295,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   items={productListing}
                   styleCardContainer={{
                     width: categoryData.length === 0 ? rw(90) : rw(75),
-                    marginBottom: 10,
+                    marginBottom: 5,
                   }}
                   layout="vertical"
                 />
@@ -320,7 +322,6 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                 style={{
                   paddingTop: rh(1),
                   flex: 1,
-                  paddingBottom: rh(5),
                   justifyContent: 'center',
                 }}
               >
@@ -340,28 +341,28 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                     <View style={{ 
                       width: categoryData.length === 0 ? rw(100) : rw(78), 
                       height: rh(100),
-                      paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0), 
+                      paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
                       }}>
                       <ItemsListLoader
                         count="6"
                         layout="vertical"
                         itemContainerStyle={{
-                          width: categoryData.length === 0 ? rw(40) : rw(34),
+                          width: categoryData.length === 0 ? rw(44) : rw(37)
                         }}
                       />
                     </View>
                   ) : productListing.length !== 0 ? (
                     <View
                      style={{
-                      paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
+                      paddingHorizontal:rw(1)
                      }}
                     >
                      <ItemsList
                       items={productListing}
                       layout="vertical"
                       listContainerStyle={{
-                        width: categoryData.length === 0 ? rw(45) : rw(37.3),
-                        marginBottom: rh(1),
+                        width: categoryData.length === 0 ? rw(45) : rw(37),
+                        marginBottom: rh(1), marginRight:rw(2)
                       }}
                     />
                     </View>
@@ -405,14 +406,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex: 1,
-    paddingVertical:rh(1)
   },
   sideContainer:{
     position:"relative",
     borderRightWidth:1,
-    borderColor:"#E9E9E9",
-    marginBottom:rh(2),
-    // backgroundColor:"blue"
+    borderColor:"#E9E9E9"
   },
   categoryItem: {
     marginVertical: rh(0.5),
@@ -470,7 +468,6 @@ const styles = StyleSheet.create({
   },
   productSection: {
     flex: 1,
-    paddingHorizontal: rw(1.5),
   },
   productTitle: {
     fontSize: rf(2.5),

@@ -25,6 +25,9 @@ const Checkout = ({ navigation }) => {
 
   const { isViewCartLoading, viewCartData } = useViewCartData();
 
+  const isAddressSelected = !!(state?.selectAddressData && state.selectAddressData.aid);
+
+
   // Function to toggle modal visibility
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -53,7 +56,7 @@ const Checkout = ({ navigation }) => {
   
       // Handle success or failure
       if (response.data.status) {
-        navigation.navigate('B2BOrderPlaced', { data: response.data.data });
+        navigation.replace('B2BOrderPlaced', { data: response.data.data });
       } else {
         alert('Error occurred. Please try again.');
       }
@@ -93,7 +96,7 @@ const Checkout = ({ navigation }) => {
 
       {/* Scrollable Content */}
       <ScrollView
-        contentContainerStyle={{ paddingBottom: rh(15) }}
+        contentContainerStyle={{ paddingBottom: rh(0) }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -102,9 +105,16 @@ const Checkout = ({ navigation }) => {
           <Stepper steps={['Address', 'Order Summary', 'Payment']} currentStep={1} />
         )}
 
-        <View style={{ marginTop: rh(1) }}>
-          <UserDetails userData={state.selectAddressData} />
+        {/* Address / User Details */}
+        {isAddressSelected ? (
+        <View>
+          {state.selectAddressData && (
+            <UserDetails userData={[state.selectAddressData]} type="selected" />
+          )}   
         </View>
+        ) : (  
+           null
+        )}
 
         {/* Cart Items */}
         <View style={{ marginHorizontal: rw(2), marginVertical: rh(1), backgroundColor: 'white', borderRadius: rw(5) }}>
@@ -125,7 +135,7 @@ const Checkout = ({ navigation }) => {
         </View>
 
         {/* Price Details */}
-        <View style={[styles.container, { marginBottom: rh(6) }]}>
+        <View style={[styles.container]}>
           <PriceDetails
             data={state.viewCartData}
             saveMessage={false}

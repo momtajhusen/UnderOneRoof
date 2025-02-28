@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, StatusBar, RefreshControl, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, StatusBar, RefreshControl, Clipboard, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rw, rh, rf } from '../../../Service/themes/responsive';
 import SearchDesigne from '../../../components/Search/searchDesigne';
@@ -15,6 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../../Service/apiClient';
 import { AppContext } from '../../../context/AppContext';
+import { registerForPushNotificationsAsync } from '../../../NotificationService';
 
 const HomeScreen = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -45,6 +46,44 @@ const HomeScreen = () => {
       console.error('Error fetching home data:', error);
     }
   };
+
+    // Notification Expo Token Update 
+    useEffect(() => {
+      const updateExpoToken = async () => {
+        try {
+          const expoPushToken = await registerForPushNotificationsAsync();
+          console.log('Expo Token:', expoPushToken);
+  
+          if (expoPushToken) {
+              dispatch({
+                type: 'SET_EXPO_TOKEN',
+                payload: {
+                  expoToken: expoPushToken,
+                },
+              });
+            // Update token in API
+            const updateResponse = await apiClient.post('/notifications/update-expo-token', { 
+              expo_token: expoPushToken 
+            });
+            console.log("Update response:", updateResponse.data);
+          } else {
+            console.log("Expo push token not received.");
+            Alert.alert("Notification Error", "Push notification token was not received. Please check your permissions.");
+            dispatch({
+              type: 'SET_EXPO_TOKEN',
+              payload: {
+                expoToken:  'Push notification token was not received. Please check your permissions.',
+              },
+            });
+          }
+        } catch (error) {
+          console.error("Error updating expo token:", error);
+          Alert.alert("Error", "An error occurred while updating the push notification token.");
+        }
+      };
+  
+      updateExpoToken();
+    }, [state.userId]);
   
   useEffect(() => {
     if (isScreenLoaded) {
@@ -69,6 +108,19 @@ const HomeScreen = () => {
 
   }, []);
 
+  const lastTapRef = useRef(0);
+    // Handle header taps to detect double-tap
+    const handleHeaderTap = () => {
+      const now = Date.now();
+      if (lastTapRef.current && (now - lastTapRef.current) < 300) {
+        // Double tap detected: copy expo token for developer
+        if (state.expoToken) {
+          Clipboard.setString(state.expoToken);
+        } 
+      }
+      lastTapRef.current = now;
+    };
+
   return (
     <ScrollView
       refreshControl={
@@ -85,7 +137,7 @@ const HomeScreen = () => {
           end={{ x: 0, y: 1 }}
           style={styles.headerContainer}
         >
-          <TouchableOpacity onPress={()=>navigation.navigate('Notification')} style={{ position: "absolute", top: rh(4), zIndex: 100 }}>
+          <TouchableOpacity onPress={handleHeaderTap}  style={{ position: "absolute", top: rh(4), zIndex: 100 }}>
             <Text style={styles.headerTitle}>Shop Your Daily Essentials</Text>
             <Text style={styles.headerSubtitle}>
               From groceries to personal care, everything you {'\n'} need in one place.
@@ -127,7 +179,7 @@ const HomeScreen = () => {
           <View>
               <Catsection data={homeData} />
           </View>
-          <View>
+          <View style={{marginBottom:rh(2), paddingLeft:rw(2)}}>
               <Section2 data={homeData} />
           </View>
         </View>

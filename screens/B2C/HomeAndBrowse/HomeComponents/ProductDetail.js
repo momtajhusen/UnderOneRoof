@@ -49,14 +49,12 @@ const ProductDetail = ({ route, navigation }) => {
 
   const { width: contentWidth } = useWindowDimensions();
 
-  console.log('/////////////////');
-  console.log(item.varient_id);
-  console.log('/////////////////');
-
-  // Set the initial selected variant based on route data:
-  // If item.varient_id exists, use it; otherwise, fall back to the first variant in item.varient
+  // Set the initial selected variant based on route data
   const [selectedVariantId, setSelectedVariantId] = useState(
-    item.varient_id || (Array.isArray(item.varient) && item.varient.length > 0 ? item.varient[0].psid : null)
+    item.varient_id ||
+    (Array.isArray(item.varient) && item.varient.length > 0
+      ? item.varient[0].psid
+      : null)
   );
 
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
@@ -83,12 +81,18 @@ const ProductDetail = ({ route, navigation }) => {
     images: [],
   });
 
+  // ------------------------
+  //       Event Handlers
+  // ------------------------
+
+  // Add to cart
   const addToCart = async () => {
     const moq = productDetails.moq || 1;
     try {
       setCartBtnLoading(true);
       await addFromCart(productDetails.pid, selectedVariantId, moq);
       setCartQty(moq);
+
       dispatch({
         type: 'UPDATE_CART',
         payload: {
@@ -105,12 +109,13 @@ const ProductDetail = ({ route, navigation }) => {
     }
   };
 
+  // Buy now
   const buyNow = () => {
     addToCart();
     navigation.navigate('CartScreen');
   };
 
-  // Increase quantity
+  // Increase quantity in cart
   const handleIncrease = async (psid, qty, var_id) => {
     const newQty = qty + 1;
     try {
@@ -126,7 +131,7 @@ const ProductDetail = ({ route, navigation }) => {
     }
   };
 
-  // Decrease quantity
+  // Decrease quantity in cart
   const handleDecrease = async (psid, qty, var_id) => {
     const minQuantity = 1;
     if (qty <= minQuantity) {
@@ -134,6 +139,7 @@ const ProductDetail = ({ route, navigation }) => {
         setCartBtnLoading(true);
         await removeFromCart(psid, var_id);
         setCartQty(0);
+
         dispatch({
           type: 'UPDATE_CART',
           payload: {
@@ -149,6 +155,7 @@ const ProductDetail = ({ route, navigation }) => {
       }
       return;
     }
+
     const newQty = qty - 1;
     try {
       setCartBtnLoading(true);
@@ -163,40 +170,46 @@ const ProductDetail = ({ route, navigation }) => {
     }
   };
 
+  // Fetch product details from API
   const ProductDetails = async () => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
+      console.log('Fetching for variant:', selectedVariantId);
+
       const response = await apiClient.get(
         `/product/detail?slug=${selectedSlug}&var=${selectedVariantId}`
       );
       const product = response.data;
-      setDeliveryTime(response.data.data.delivery_time || null);
+
+      setDeliveryTime(product.data.delivery_time || null);
+
+      // Set multi-images, reviews, etc.
       const multiImage = product.data.productDetails[0]?.multi_image || [];
       const reviewImages = product.data.reviewData || [];
       const totalRating = product.data.allrating || 0;
       const totalReviews = product.data.allreview || 0;
+
       setReviewData({
         rating: totalRating,
         reviewCount: totalReviews,
         images: reviewImages,
       });
-      setReview(response.data.data.review);
+
+      setReview(product.data.review);
       setMultiProductImage(multiImage);
       setProductDetails(product.data.productDetails[0]);
-      setCartQty(product.data.productDetails[0].added_to_cart);
       setProductId(product.data.productDetails[0].pid);
       setRelatedProduct(product.data.relatedProduct);
       setProductVarient(product.data.varient);
-      // Optionally, update selectedVariantId here if needed:
-      setSelectedVariantId(product.data.varient.psid);
       setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
     } catch (error) {
-      console.error("Error fetching product:", error);
+      console.error('Error fetching product:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Handle wishlist add/remove
   const wishlistHandle = async () => {
     const payloadAddWishlist = {
       pid: productDetails.pid,
@@ -226,29 +239,44 @@ const ProductDetail = ({ route, navigation }) => {
     }
   };
 
-  // When a variant is pressed, update the selectedVariantId based on the pressed variant
-  const varentHandle = async (variantItem) => {
+  // Variant selection
+  const varentHandle = (variantItem) => {
     setSelectedVariantId(variantItem.psid);
-    ProductDetails();
   };
 
-  // Fetch product details when the component mounts or when "item" changes
+  // ------------------------
+  //         useEffect
+  // ------------------------
+
+  // Refetch product details when slug or variant changes
   useEffect(() => {
-    ProductDetails();
+    if (selectedSlug && selectedVariantId) {
+      ProductDetails();
+    }
+  }, [selectedSlug, selectedVariantId]);
+
+  // Reset selected variant and cartQty when "item" changes
+  useEffect(() => {
+    setSelectedVariantId(
+      item.varient_id ||
+      (Array.isArray(item.varient) && item.varient.length > 0
+        ? item.varient[0].psid
+        : null)
+    );
+    setCartQty(itemQty);
+    setSelectedSlug(item.slug);
   }, [item]);
 
-  useEffect(() => {
-    setSelectedVariantId(item.varient_id);
-    setCartQty(itemQty);
-  }, [item, ProductVarient, selectedVariantId]);
 
+  // Helper booleans
   const hasDescription = !!productDetails.short_desc;
   const hasDescriptionFull = !!productDetails.full_desc;
 
+  // Render item for image carousel
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("ProductImageView", {
+        navigation.navigate('ProductImageView', {
           images: multiProductImage,
           selectedIndex: activeIndex,
         })
@@ -261,6 +289,10 @@ const ProductDetail = ({ route, navigation }) => {
       />
     </TouchableOpacity>
   );
+  
+  // ------------------------
+  //  END OF LOGIC (BEFORE RETURN)
+  // ------------------------
 
   return (
     <View style={styles.container}>
@@ -348,8 +380,12 @@ const ProductDetail = ({ route, navigation }) => {
           </View>
         </View>
 
-        <View style={styles.detailsContainer}>
-          <Text style={styles.discountText}>{productDetails.discount}% OFF</Text>
+        <View style={styles.detailsContainer}>  
+          {productDetails.discount > 0 && (
+            <Text style={styles.discountText}>
+              {productDetails.discount}% OFF
+            </Text>
+          )}
           <Text style={styles.productTitle}>{productDetails.name}</Text>
 
           {state.shoppingMode === "retail" && (
@@ -592,12 +628,12 @@ const styles = StyleSheet.create({
   indicatorContainer: { flexDirection: 'row', justifyContent: 'center', marginVertical: rh(1) },
   indicator: { width: rw(2), height: rw(2), borderRadius: rw(1), backgroundColor: '#D3D3D3', margin: rw(1) },
   activeIndicator: { backgroundColor: '#FF6D00' },
-  detailsContainer: { marginHorizontal: rw(4), padding: rw(2), borderRadius: 10, overflow: "hidden", backgroundColor: "white" },
+  detailsContainer: { marginHorizontal: rw(4), marginTop:rh(1), padding: rw(2), borderRadius: 10, overflow: "hidden", backgroundColor: "white" },
   discountText: { color: '#FF6D00', fontSize: rf(1.8), fontWeight: 'bold', marginBottom: rh(1) },
   productTitle: { fontSize: rf(2), fontWeight: 'bold' },
   ratingText: { color: '#FF3131', fontSize: rf(2.5), fontWeight: 'bold', marginBottom: rh(1) },
   reviewCount: { marginLeft: rw(1), color: '#A0A0A0', fontSize: rf(1.8), fontWeight: 'bold' },
-  selectText: { fontSize: rf(1.8), marginTop: rh(2), color: "#717171", marginBottom: rh(1) },
+  selectText: { fontSize: rf(1.8), marginTop: rh(0), color: "#717171", marginBottom: rh(1) },
   quantityContainer: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: rh(0.5) },
   quantityBox: {
     borderWidth: 1,

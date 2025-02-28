@@ -21,7 +21,11 @@ const SimilarProducts = ({ data }) => {
             <Text style={styles.headerText}>Similar Products</Text>
             <View>
                 {/* Passing productList as props */}
-                <ItemsList items={productList} />
+                <ItemsList items={productList} 
+                    listContainerStyle={{
+                        marginRight:rw(1)
+                    }}
+                />
             </View>
         </View>
     );

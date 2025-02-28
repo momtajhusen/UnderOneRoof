@@ -117,18 +117,17 @@ const ItemsListLoader = ({ count = 4, itemContainerStyle, layout = 'vertical' })
 
 const styles = StyleSheet.create({
   listContainer: {
-    paddingHorizontal: rw(2),
     justifyContent:"center",
+    height:"100%",
+    justifyContent:"space-around",
+    width:"100%"
   },
   itemContainer: {
     width: rw(41),
-    marginRight: rw(1.5),
-    marginLeft: rw(1.5),
-    // rowGap: 3,
     backgroundColor: '#FFF',
     borderRadius: rw(2),
     padding: rw(1),
-    marginBottom:rw(3),
+    marginBottom:rw(2),
   },
   image: {
     width: '100%',
@@ -156,7 +155,7 @@ const styles = StyleSheet.create({
   start: {
     width: '50%',
     height: rh(1.2),
-    marginTop: rh(0.5),
+    marginVertical: rh(1.2),
     borderRadius: rw(2),
     backgroundColor: '#F0F0F0',
   },

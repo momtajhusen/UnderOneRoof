@@ -47,7 +47,6 @@ import B2BPrivacyPolicy from '../screens/B2B/Accounts/B2BPrivacyPolicy';
 import B2BTermsConditions from '../screens/B2B/Accounts/B2BTermsConditions';
 import B2BRequestProductsScreen from '../screens/B2B/Accounts/B2BRequestProductsScreen';
 import B2BSelectAddressScreen from '../screens/B2B/CartAndCheckout/B2BSelectAddressScreen';
-import B2BCheckOutScreen from '../screens/B2B/CartAndCheckout/B2BCheckOutScreen';
 import B2BOrderPlaced from '../screens/B2B/CartAndCheckout/B2BOrderPlacedScreen';
 import B2BProceedDetails from '../screens/B2B/HomeAndBrowse/B2BProductDetails';
 import AddAddress from '../screens/B2C/Accounts/AccountComponents/AddAddress';
@@ -130,7 +129,6 @@ const StackNavigation = () => {
         <Stack.Screen name="B2BTermsConditions" component={B2BTermsConditions} options={{ headerShown: false }} />
         <Stack.Screen name="B2BRequestProductsScreen" component={B2BRequestProductsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="B2BSelectAddressScreen" component={B2BSelectAddressScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="B2BCheckOutScreen" component={B2BCheckOutScreen} options={{ headerShown: false }} />
         <Stack.Screen name="B2BOrderPlaced" component={B2BOrderPlaced} options={{ headerShown: false }} />
         <Stack.Screen name="B2BProceedDetails" component={B2BProceedDetails} options={{ headerShown: false }} />
         <Stack.Screen name="ProductImageView" component={ProductImageView} options={{ headerShown: false }} />

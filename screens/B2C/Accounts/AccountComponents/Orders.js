@@ -31,6 +31,7 @@ const Orders = ({ navigation }) => {
                 Alert.alert('Error', 'Failed to fetch orders.');
             }
         } catch (error) {
+            console.log(error.response.data);
             console.error('Error fetching orders:', error);
             Alert.alert('Error', 'Something went wrong while fetching orders.');
         } finally {

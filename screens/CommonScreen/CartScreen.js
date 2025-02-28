@@ -24,9 +24,12 @@ import PriceDetails from '../B2C/Cart&Checkout/CartComponents/PriceDetails';
 import SimilarProducts from '../B2C/Cart&Checkout/CartComponents/SimilarProducts';
 import ProceedDetails from '../B2C/Cart&Checkout/CartComponents/ProceedDetails';
 
+
 const CartScreen = ({ navigation }) => {
   const { state, dispatch } = useContext(AppContext);
   const { viewCartData } = useViewCartData();
+
+  const isAddressSelected = !!(state?.selectAddressData && state.selectAddressData.aid);
 
   // 1) Wrap the fetch call in a useCallback to keep it stable,
   //    referencing only `viewCartData` (and NOTHING else).
@@ -84,18 +87,23 @@ const CartScreen = ({ navigation }) => {
       />
 
       <ScrollView
-        contentContainerStyle={{ paddingBottom: rh(10), marginTop: rh(1.5) }}
+        contentContainerStyle={{ paddingBottom: rh(1), marginTop: rh(1.5) }}
         refreshControl={
           // Pull to Refresh calls onRefresh
           <RefreshControl refreshing={false} onRefresh={onRefresh} />
         }
       >
         {/* Address / User Details */}
+        {isAddressSelected ? (
         <View style={styles.container}>
           {state.selectAddressData && (
             <UserDetails userData={[state.selectAddressData]} type="selected_change" />
           )}   
         </View>
+        ) : (  
+           null
+        )}
+
 
         {/* Cart Items */}
         {cartProducts.length > 0 ? (

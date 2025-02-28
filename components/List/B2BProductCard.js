@@ -103,7 +103,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <View
-            style={[styles.cardContainer, styleCardContainer, { marginRight: 10 }]}  
+            style={[styles.cardContainer, styleCardContainer]}  
           >
             <TouchableOpacity
               onPress={() =>
@@ -302,7 +302,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E0E0E0",
     marginBottom: rh(2),
-    marginRight: rw(2),
     width: rw(75),
     overflow: "scroll",
   },

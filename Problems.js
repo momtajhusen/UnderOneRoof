@@ -1,53 +1,53 @@
  -----------  Today Update No Posible --------------- 
- 1. Product Details 33% off kaha se change karu 
- 3. Mai home layout mai aur rows kaha se add karu
+//  1. Product Details 33% off kaha se change karu 
+//  3. Mai home layout mai aur rows kaha se add karu
  6. Notification kaise start honge 7
  7. App start hone ke baad products show hone mai bahut time lg raha hai 
  8. Bhaiya wholesale mai select quantity ka option nahi aa raha
 ---------------------------  B2C Work Pending ---------------------------
 
 ---------------- UnderOneRoof Meeting Time Update Discuss   --------------
-1. home category BestSeal not load issue   - it fixed  
-2. Register third form remove and add gst number in Outlet Details - it updated 
-3. home par category aur product infinite load
+// 1. home category BestSeal not load issue   - it fixed  
+// 2. Register third form remove and add gst number in Outlet Details - it updated 
+// 3. home par category aur product infinite load
 
 4. Notification 
 5. product Qualitity add on product details
 
-6. product search with related word
+// 6. product search with related word
  
 
-. Address details auto-filled with pin code
-. Added more product rows on the home screen
-. Removed third B2B registration form and added GST number in Outlet Details
-. Fixed issue with Bestsellers category not loading on home screen
-
-issue with this email
-Parth 
-Kaushik
-9625977440
-prthkshk14@gmail.com
+// . Address details auto-filled with pin code
+// . Added more product rows on the home screen
+// . Removed third B2B registration form and added GST number in Outlet Details
+// . Fixed issue with Bestsellers category not loading on home screen
+ 
 
 
 -----------------------  New Update ----------------------------------
-2. Rows aur product mai kaha se add karu
-3. Jaise hum toogle nahi kar rahe wholesale aur retail mai ki aapko log out karke hi dusra section use karna hoga
-4. Toh notifications kaise send hongi
+// 2. Rows aur product mai kaha se add karu
+// 3. Jaise hum toogle nahi kar rahe wholesale aur retail mai ki aapko log out karke hi dusra section use karna hoga
+// 4. Toh notifications kaise send hongi
 
-my work 
+// my work 
 // 1. Wholesale mai login karte time problem ho raha hai Email 
 // 2. Pincode address aur landmark bhi automatically pick kar raha hai only use state aur city 
 // 3. Phone number autopick karte waqt vo +91 bhi le raha hai Register Screen 
 // 1. Add to cart work nahi kar raha  quantity increase  issue in product details 
 
-
-
 -----------------------------------------------------------------------
-Wholesale login, pincode/address/landmark fill, phone number autopick,
-and product details quantity increase issues have been fixed.
-Please restart your installed app to see the update.
+// Wholesale login, pincode/address/landmark fill, phone number autopick,
+// and product details quantity increase issues have been fixed.
+// Please restart your installed app to see the update.
 
 
-All issues fixed. Please restart your app to see the update. 
-Also, let me know if there are any further issues.
+// All issues fixed. Please restart your app to see the update. 
+// Also, let me know if there are any further issues.
  
+
+
+--------------  issue mai check kiya tab mila -------------
+// 1. address select nahi honepar cart screen address container hide karo 
+2. Product listing me produc nay avable 
+// 3. Product Details me varent select not select 
+4. 

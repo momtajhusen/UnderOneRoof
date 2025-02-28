@@ -21,7 +21,7 @@ const RESET_STATE = 'RESET_STATE';
 const SET_COUPON = 'SET_COUPON';
 const CLEAR_COUPON = 'CLEAR_COUPON';
 
-const SET_PUSH_TOKEN = 'SET_PUSH_TOKEN';
+const SET_EXPO_TOKEN = 'SET_EXPO_TOKEN';
 
 
 // Reducer
@@ -56,10 +56,10 @@ const Reducer = (state = initialState, action) => {
         isWishlistRefresh: action.payload,
       };
 
-      case SET_PUSH_TOKEN:
+      case SET_EXPO_TOKEN:
         return {
           ...state,
-          expoPushToken: action.payload,
+          expoToken: action.payload.expoToken,
         };
 
     case HOME_REFRESH:

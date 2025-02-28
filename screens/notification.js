@@ -1,28 +1,27 @@
+// import libraries
 import React, { useContext } from 'react';
-import { View, Text, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { AppContext } from '../context/AppContext';
-import { sendPushNotification } from '../Service/pushNotificationService';
 
-const HomeScreen = () => {
+// create a component
+const Notification = () => {
   const { state } = useContext(AppContext);
-
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Your Expo Push Token:</Text>
-      <Text>{state.pushToken || 'Fetching...'}</Text>
-
-      <Button
-        title="Send Test Notification"
-        onPress={() => {
-          if (state.pushToken) {
-            sendPushNotification(state.pushToken);
-          } else {
-            Alert.alert('Push Token', 'Push Token not load');
-          }
-        }}
-      />
+    <View style={styles.container}>
+      <Text>Token: {state.expoToken}</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+// define your styles
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#2c3e50',
+  },
+});
+
+// make this component available to the app
+export default Notification;

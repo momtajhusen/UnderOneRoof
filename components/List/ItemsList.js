@@ -238,10 +238,9 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
                 </Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   {Array.from({ length: 5 }, (_, index) => {
-                    const avg = item.avg || 0;  
+                    const avg = item.avg || 0;
                     const isHalfFilled = avg > index && avg < index + 1;  
-                    const isFilled = avg >= index + 1; 
-
+                    const isFilled = avg >= index + 1;
                     return (
                       <MaterialIcons
                         key={index}
@@ -287,7 +286,6 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
                     ...prevState,
                     [key]: true,
                   }));
-
                   try {
                     await handleAddToCart(item.pid, item.varient_id, item.moq);
                     await handleWishlistToggle(item);
@@ -305,16 +303,12 @@ const ItemsList = ({ items, listContainerStyle, layout = 'horizontal', cartbtn }
                 {loadingVariants[`${item.pid}-${item.varient_id}-moveToCart`] ? (
                   <ActivityIndicator size="small" color="#FF3131" />
                 ) : (
-                  <Text style={{ textAlign: "center", fontWeight: "400", color: "#FF3131" }}>
+                  <Text style={{textAlign: "center", fontWeight: "400", color: "#FF3131"}}>
                     Move to Cart
                   </Text>
                 )}
               </TouchableOpacity>
             )}
-
-
-
-        
             </View>
           </TouchableOpacity>
         );
@@ -327,15 +321,13 @@ export default ItemsList;
 
 const styles = StyleSheet.create({
   listContainer: {
-    paddingHorizontal: rw(0),
     flexDirection: "row",
     flexWrap: 'wrap',
-    marginBottom: rh(2),
     overflow: "hidden",
+    justifyContent:"start",
   },
   itemContainer: {
     width: rw(39),
-    marginRight: rw(1.5),
     backgroundColor: '#fff',
     borderRadius: 10,
     borderWidth: 2,
