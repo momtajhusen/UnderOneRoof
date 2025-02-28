@@ -49,7 +49,7 @@ const Catsection = ({ data }) => {
   }
 
   return (
-    <View style={{ paddingLeft: rw(4) }}>
+    <View style={{ marginTop:rh(2), paddingLeft: rw(4) }}>
       {loading ? (
         <>
           <ShimmerPlaceholder style={[styles.headerText, { width: '50%' }]} />
@@ -60,7 +60,7 @@ const Catsection = ({ data }) => {
           <View key={section.sectionTitle}>
             <Text style={styles.headerText}>{section.sectionTitle}</Text>
             <ItemsList 
-              listContainerStyle={{ width: rw(44), marginLeft: rw(0.5), marginBottom: rh(1) }} 
+              listContainerStyle={{ width: rw(44), marginRight: rw(2.5), marginBottom: rh(1) }} 
               layout="vertical" 
               items={section.items} 
             />

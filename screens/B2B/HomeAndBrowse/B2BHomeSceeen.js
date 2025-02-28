@@ -11,6 +11,7 @@ import Essentials from './ComponentsSections/Essentials';
 import PremiumDates from './ComponentsSections/PremiumDates';
 import { useNavigation } from '@react-navigation/native';
 import B2BSimilarProducts from './ComponentsSections/B2BSimilarProducts';
+import B2BCatSectionProducts from './ComponentsSections/B2BCatSectionProducts';
 import { AppContext } from '../../../context/AppContext';
 import apiClient from '../../../Service/apiClient';
 
@@ -131,7 +132,12 @@ const B2BHomeScreen = () => {
 
           {/* B2BSimilarProducts */}
           <View style={{ marginHorizontal: rw(4) }}>
-            <B2BSimilarProducts />
+            <B2BSimilarProducts data={homeData.section1} />
+          </View>
+
+          {/* B2BSimilarProducts */}
+          <View style={{ marginHorizontal: rw(4) }}>
+            <B2BCatSectionProducts data={homeData.catsection} />
           </View>
         </View>
       </ScrollView>

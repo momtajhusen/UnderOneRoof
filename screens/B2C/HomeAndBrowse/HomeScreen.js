@@ -41,10 +41,7 @@ const HomeScreen = () => {
   });
 
   const onRefresh = async () => {
-    dispatch({
-      type: 'HOME_REFRESH',
-      payload: { isHomeRefresh: Math.ceil(Math.random() * 100) },
-    });
+    fetchHomeData();
   };
 
   const fetchHomeData = async () => {

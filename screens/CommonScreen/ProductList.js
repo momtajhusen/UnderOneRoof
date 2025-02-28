@@ -332,6 +332,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   paddingTop: rh(1),
                   flex: 1,
                   justifyContent: 'center',
+
                 }}
               >
                 <ScrollView
@@ -347,23 +348,23 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   }
                 >
                   {loading ? (
-                    <View style={{ 
+                    <View style={{
                       width: categoryData.length === 0 ? rw(100) : rw(78), 
                       height: rh(100),
-                      paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
+                      paddingHorizontal: categoryData.length === 0 ? rw(2) : rw(0),
                       }}>
                       <ItemsListLoader
                         count="6"
                         layout="vertical"
                         itemContainerStyle={{
-                          width: categoryData.length === 0 ? rw(44) : rw(37)
+                          width: categoryData.length === 0 ? rw(46) : rw(37)
                         }}
                       />
                     </View>
                   ) : productListing.length !== 0 ? (
                     <View
                      style={{
-                      paddingHorizontal:rw(1)
+                      paddingHorizontal:rw(1),
                      }}
                     >
                      <ItemsList

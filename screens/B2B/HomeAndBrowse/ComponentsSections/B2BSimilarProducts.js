@@ -12,6 +12,11 @@ const B2BSimilarProducts = ({data}) => {
   // Use data from props directly for productList
   const productList = data || []; 
 
+  console.log('/////////Similar////////////');
+  console.log(productList);
+  console.log('/////////Similar////////////');
+
+
   // Only render if productList has items
   if (productList.length === 0) {
       return null;  
@@ -27,7 +32,6 @@ const B2BSimilarProducts = ({data}) => {
                 items={productList}
                 styleCardContainer={{
                   width: rw(77),
-                  height:rh(30),
                   marginRight:rw(3)
                 }}
                 layout="horizontal"
