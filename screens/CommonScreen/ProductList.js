@@ -364,14 +364,16 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   ) : productListing.length !== 0 ? (
                     <View
                      style={{
-                      paddingHorizontal:rw(1),
+                      width: categoryData.length === 0 ? rw(100) : rw(78), 
+                      height: rh(100),
+                      paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
                      }}
                     >
                      <ItemsList
                       items={productListing}
                       layout="vertical"
                       listContainerStyle={{
-                        width: categoryData.length === 0 ? rw(45) : rw(37),
+                        width: categoryData.length === 0 ? rw(46) : rw(37),
                         marginBottom: rh(1), marginRight:rw(2)
                       }}
                     />

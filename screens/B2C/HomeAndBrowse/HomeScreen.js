@@ -72,10 +72,6 @@ const HomeScreen = () => {
           console.log('Update response:', updateResponse.data);
         } else {
           console.log('Expo push token not received.');
-          Alert.alert(
-            'Notification Error',
-            'Push notification token was not received. Please check your permissions.'
-          );
           dispatch({
             type: 'SET_EXPO_TOKEN',
             payload: {
@@ -85,10 +81,6 @@ const HomeScreen = () => {
         }
       } catch (error) {
         console.error('Error updating expo token:', error);
-        Alert.alert(
-          'Error',
-          'An error occurred while updating the push notification token.'
-        );
       }
     };
 
