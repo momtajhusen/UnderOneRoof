@@ -204,7 +204,7 @@ const HomeScreen = () => {
           </View>
 
           <View style={{ marginTop: rh(2) }}>
-            <BestSellers data={homeData} />
+            <BestSellers data={homeData} /> 
           </View>
 
           {/* Shop By Category */}
@@ -218,7 +218,7 @@ const HomeScreen = () => {
           </View>
 
           {/* Section 1 */}
-          <View>
+          <View style={{ marginTop: rh(2) }}>
             <Section1 data={homeData} />
           </View>
 

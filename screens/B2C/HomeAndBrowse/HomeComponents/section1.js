@@ -56,7 +56,7 @@ const Section1 = ({ data }) => {
 
       <View>
         {loading ? (
-          <ItemsListLoader layout="horizontal" />
+          <ItemsListLoader layout="horizontal" itemContainerStyle={{marginLeft:10}}/>
         ) : (
           <ItemsList items={productData} />
         )}

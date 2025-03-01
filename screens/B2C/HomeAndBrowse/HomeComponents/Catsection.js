@@ -53,7 +53,7 @@ const Catsection = ({ data }) => {
       {loading ? (
         <>
           <ShimmerPlaceholder style={[styles.headerText, { width: '50%' }]} />
-          <ItemsListLoader layout="horizontal" />
+          <ItemsListLoader layout="horizontal" itemContainerStyle={{marginLeft:10}}/>
         </>
       ) : (
         sections.map(section => (
