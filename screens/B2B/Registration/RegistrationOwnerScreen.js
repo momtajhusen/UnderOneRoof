@@ -128,7 +128,7 @@ const RegistrationOwnerScreen = ({ navigation, route }) => {
   
     try {
       const response = await apiClient.post('/registerOwner', ownerDetails);
-      console.log(response.data);
+ 
       if (response.data?.status === 1) {
         navigation.navigate('OutletDetailsScreen', { mobile });
       } else if (response.data?.status === 0) {

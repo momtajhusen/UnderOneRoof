@@ -144,7 +144,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                           item.varient[0].moq
                         )
                       }
-                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]} // Disable during loading
+                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}  
                     >
                         <Text style={{ color: "white", fontWeight: "bold" }}>-</Text>
                     </TouchableOpacity>
@@ -174,7 +174,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                           item.varient[0].moq
                         )
                       }
-                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]} // Disable during loading
+                      disabled={loadingVariants[`${item.pid}-${item.varient_id}-qty`]}  
                     >
                       <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
                     </TouchableOpacity>
@@ -184,7 +184,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                   <TouchableOpacity
                     style={styles.cartButton}
                     onPress={() => addToCart(item.pid, item.varient_id, item.varient[0].moq)}
-                    disabled={loadingVariants[`${item.pid}-${item.varient_id}`]} // Disable during loading
+                    disabled={loadingVariants[`${item.pid}-${item.varient_id}`]}  
                   >
                     {loadingVariants[`${item.pid}-${item.varient_id}`] ? (
                       <ActivityIndicator size="small" color="#FF3131" />
@@ -213,8 +213,9 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
 
                   return (
                     <View key={index} style={styles.packetRow}>
-                      <Text style={styles.packetText}>
-                          {variant.pmeasurement} {variant.punit} - ₹{variant.moq_price ? variant.moq_price : variant.pselling_price}
+                      <Text 
+                      style={styles.packetText}>
+                          ({variant.pmeasurement} {variant.punit} - ₹{variant.moq_price ? variant.moq_price : variant.pselling_price})
                       </Text>
 
                       {isInCart ? (
@@ -261,7 +262,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                                 alignItems: "center",
                               }}
                               onPress={() => handleIncrease(item.pid, totalQtyInCart, variant.psid, variant.moq)}
-                              disabled={loadingVariants[`${item.pid}-${variant.psid}-qty`]} // Disable during loading
+                              disabled={loadingVariants[`${item.pid}-${variant.psid}-qty`]} 
                             >
                               <Text style={{ color: "white", fontWeight: "bold" }}>+</Text>
                             </TouchableOpacity>
@@ -269,7 +270,7 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
                         ) : (
                           <TouchableOpacity
                             onPress={() => addToCart(item.pid, variant.psid, variant.moq)}
-                            disabled={loadingVariants[`${item.pid}-${variant.psid}`]} // Disable during loading
+                            disabled={loadingVariants[`${item.pid}-${variant.psid}`]} 
                           >
                             {loadingVariants[`${item.pid}-${variant.psid}`] ? (
                               <ActivityIndicator size="small" color="#0000ff" />

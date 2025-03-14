@@ -25,6 +25,10 @@ const ShoppingMode = ({ navigation, route }) => {
     setLoadingType(type);
     try {
       const response = await apiClient.post('/selectFlow', { mobile, type: mode });
+      
+
+      // console.log(response.data);
+      // return false;
   
       if (type === 'wholesale') {
         if (response.data.status === 1) {

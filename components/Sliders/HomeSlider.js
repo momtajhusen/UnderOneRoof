@@ -50,13 +50,14 @@ const HomeSlider = ({ sliderData, sliderStyle }) => {
           inactiveSlideScale={0.9}
           inactiveSlideOpacity={0.7}
           autoplay={true}
-          autoplayInterval={2000}
+          autoplayInterval={1000}
           loop={true}
         />
       )}
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
     slide: {

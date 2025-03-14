@@ -42,7 +42,9 @@ const SignupOrLogin = ({ navigation }) => {
     try {
       const response = await apiClient.post('/signupLogin', { mobile }); 
       const { status, msg, data, userid } = response.data;
+       console.log(response.data);
 
+      //  return false;
       if (status === 1) {
         // Navigate if success
         navigation.navigate('VerifyOtp', { mobile: data.mobile });

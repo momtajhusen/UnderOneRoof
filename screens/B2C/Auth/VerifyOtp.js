@@ -46,6 +46,8 @@ const VerifyOtp = ({ navigation, route }) => {
         setIsLoading(false);
   
         const { status, msg, data } = response.data;
+        // console.log(response.data);
+        // return false;
 
         const token = response.data.data.token.token;
         const userid = response.data.data.userid;
