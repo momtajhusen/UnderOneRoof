@@ -18,7 +18,7 @@ import apiClient from '../../../Service/apiClient';
 const B2BHomeScreen = () => {
   const { state, dispatch } = useContext(AppContext);
   const navigation = useNavigation();
-
+ 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isScreenLoaded, setIsScreenLoaded] = useState(false);
   const [homeData, setHomeData] = useState(null);
@@ -52,11 +52,10 @@ const B2BHomeScreen = () => {
     });
   }, [isScreenLoaded]);
 
-  // Set `isScreenLoaded` to true after screen rendering
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsScreenLoaded(true);
-    }, 0); // Ensure slight delay to allow rendering
+    }, 0);  
     return () => clearTimeout(timer);
   }, []);
 

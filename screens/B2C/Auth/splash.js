@@ -18,7 +18,7 @@ const SplashScreen = () => {
                 const userId = await AsyncStorage.getItem('userId');
                 const userNumber = await AsyncStorage.getItem('userNumber');
                 const ShoppingMode = await AsyncStorage.getItem('ShoppingMode');
-
+                
                 setTimeout(() => {
                     if (token) {
                          if (ShoppingMode === 'wholesale') {

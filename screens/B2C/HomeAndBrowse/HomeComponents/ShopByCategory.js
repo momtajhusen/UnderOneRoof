@@ -25,27 +25,19 @@ const ShopByCategory = ({ data }) => {
 
     if (data && data.category && Array.isArray(data.category)) {
       if (data.category.length === 0) {
-        setCategories([]);
+        setCategories([]); 
         setLoading(false);
       } else {
-        const filteredBestCategories = data.category.filter(category => {
-          if (state.shoppingMode === 'wholesale') {
-            return category.role_type === 3 || category.role_type === null;
-          } else if (state.shoppingMode === 'retail') {
-            return category.role_type === 2;
-          }
-          return false;
-        });
-        setCategories(filteredBestCategories);
+        setCategories(data.category);  
         setLoading(false);
       }
     } else {
       setLoading(false);
     }
-  }, [data, state.shoppingMode]);
+  }, [data, state.shoppingMode]);  
 
   if (!loading && categories.length === 0) {
-    return null;
+    return null; 
   }
 
   return (

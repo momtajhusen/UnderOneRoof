@@ -15,11 +15,18 @@ const Essentials = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log('Essentials');
+        console.log(state.userId);
+        console.log(state.userNumber);
+        console.log(state.shoppingMode);
+
         const response = await apiClient.get('/home');
         const category = response.data.data.essentialcategory;
+        console.log('Essentials');
+        console.log(response.data.data);
         setCategories(category);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Error fetching categories:', error.response);
       } finally {
         setLoading(false);
       }

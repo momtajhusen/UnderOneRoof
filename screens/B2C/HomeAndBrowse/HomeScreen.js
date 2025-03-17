@@ -46,8 +46,13 @@ const HomeScreen = () => {
 
   const fetchHomeData = async () => {
     try {
+      console.log('B2C Home');
+      console.log(state.userId);   
+      console.log(state.userNumber);
+      console.log(state.shoppingMode);
       const response = await apiClient.get('/home');
       setHomeData(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.error('Error fetching home data:', error);
     }

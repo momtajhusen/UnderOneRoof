@@ -350,7 +350,6 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                   {loading ? (
                     <View style={{
                       width: categoryData.length === 0 ? rw(100) : rw(78), 
-                      height: rh(100),
                       paddingHorizontal: categoryData.length === 0 ? rw(2) : rw(0),
                       }}>
                       <ItemsListLoader
@@ -365,7 +364,7 @@ import ItemsListLoader from '../../components/ShimmerLoader/ItemsListLoader';
                     <View
                      style={{
                       width: categoryData.length === 0 ? rw(100) : rw(78), 
-                      height: rh(100),
+                      flex: 1,
                       paddingLeft: categoryData.length === 0 ? rw(2.5) : rw(0),
                      }}
                     >

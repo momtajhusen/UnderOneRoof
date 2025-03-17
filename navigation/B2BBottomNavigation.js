@@ -1,6 +1,6 @@
-import React,{useEffect, useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {View, Text, Pressable, Image } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 
 import B2BHomeScreen from '../screens/B2B/HomeAndBrowse/B2BHomeSceeen';
 import B2BAccountScreen from '../screens/B2B/Accounts/B2BAccountScreen';
@@ -8,7 +8,6 @@ import CategoryScreen from '../screens/CommonScreen/CategorysScreen';
 import CartScreen from '../screens/CommonScreen/CartScreen';
 import { AppContext } from '../context/AppContext';
 import { useViewCartData } from '../utility/viewCardDataUtils';
-
 
 import { rw, rh, rf } from '../Service/responsive';
 
@@ -21,15 +20,22 @@ const B2BBottomNavigator = () => {
 
   const { isViewCartLoading, viewCartData } = useViewCartData();
 
-  const fetchCartDetails = async () => {
-      const result = await viewCartData();
-  };
-
   useEffect(() => {
-      fetchCartDetails();
-  }, []);
+    let isMounted = true;
 
- 
+    const fetchCartDetails = async () => {
+      if (viewCartData && isMounted) {
+        await viewCartData();
+      }
+    };
+
+    fetchCartDetails();
+
+    return () => {
+      isMounted = false; 
+    };
+  }, [state.isHomeRefresh]);
+
   return (
     <Tab.Navigator
       lazy={true}
@@ -74,9 +80,7 @@ const B2BBottomNavigator = () => {
               />
             )
           ),
-          tabBarButton: (props) => (
-            <Pressable {...props} android_ripple={null} />
-          ),
+          tabBarButton: (props) => <Pressable {...props} android_ripple={null} />,
         }}
       />
 
@@ -100,9 +104,7 @@ const B2BBottomNavigator = () => {
               />
             )
           ),
-          tabBarButton: (props) => (
-            <Pressable {...props} android_ripple={null} />
-          ),
+          tabBarButton: (props) => <Pressable {...props} android_ripple={null} />,
         }}
       />
 
@@ -126,8 +128,8 @@ const B2BBottomNavigator = () => {
                 <View
                   style={{
                     position: 'absolute',
-                    right: -10,
-                    top: -5,
+                    right: 5,  
+                    top: 0, 
                     backgroundColor: 'red',
                     borderRadius: 10,
                     width: 20,
@@ -136,16 +138,14 @@ const B2BBottomNavigator = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: rf(1.2) }}>
+                  <Text style={{ color: 'white', fontSize: rf(1.2), fontWeight: 'bold' }}>
                     {cartCount}
                   </Text>
                 </View>
               )}
             </View>
           ),
-          tabBarButton: (props) => (
-            <Pressable {...props} android_ripple={null} />
-          ),
+          tabBarButton: (props) => <Pressable {...props} android_ripple={null} />,
         }}
       />
 
@@ -169,9 +169,7 @@ const B2BBottomNavigator = () => {
               />
             )
           ),
-          tabBarButton: (props) => (
-            <Pressable {...props} android_ripple={null} />
-          ),
+          tabBarButton: (props) => <Pressable {...props} android_ripple={null} />,
         }}
       />
     </Tab.Navigator>

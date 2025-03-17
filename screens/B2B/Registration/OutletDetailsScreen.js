@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { 
   View, 
   Text, 
@@ -15,9 +15,14 @@ import LinearStepIndicator from '../../../components/Stepper/LinearIndicatorStep
 import TextInputField from '../../../components/Inputs/TextInputField';
 import apiClient from '../../../Service/apiClient';
 import CustomButtons from '../../../components/Buttons/CustomButtons';
+import { AppContext } from '../../../context/AppContext';  
+
+
 
 const OutletDetailsScreen = ({ navigation, route }) => {
   const { mobile } = route.params;
+    const { state, dispatch } = useContext(AppContext);  
+  
 
   // Outlet details fields
   const [name, setName] = useState('');
@@ -189,6 +194,10 @@ const OutletDetailsScreen = ({ navigation, route }) => {
 
   const handleContinueShopping = async () => {
     handleModalClose();
+    console.log('continus');
+    console.log(state.userId);   
+    console.log(state.userNumber);
+    console.log(state.shoppingMode);
     navigation.replace('B2BBottomNavigator');
   };
 

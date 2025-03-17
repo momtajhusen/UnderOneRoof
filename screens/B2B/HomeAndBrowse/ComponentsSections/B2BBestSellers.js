@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import CategoryList from '../../../../components/List/CategoryList';  
 import { rw, rf, rh } from '../../../../Service/responsive';
 import { useNavigation } from '@react-navigation/native';
 import apiClient from '../../../../Service/apiClient';  
+import { AppContext } from '../../../../context/AppContext';
+
 import CategoryListLoader from '../../../../components/ShimmerLoader/CategoryListLoader';
 
 
 const B2BBestSellers = () => {
+      const { state, dispatch } = useContext(AppContext);
+    
     const navigation = useNavigation();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true); 
@@ -18,9 +22,8 @@ const B2BBestSellers = () => {
             try {
                 const response = await apiClient.get('/home');  
                 const category = response.data.data.bestcategory;
-                setCategories(category);
-                console.log('Shop Category');
                 console.log(category);
+                setCategories(category);
             } catch (error) {
                 console.error('Error fetching categories:', error);
             } finally {
@@ -28,7 +31,7 @@ const B2BBestSellers = () => {
             }
         };
         fetchCategories();
-    }, []);
+    }, [state.isHomeRefresh]);
 
     return (
         <View style={styles.container}>
