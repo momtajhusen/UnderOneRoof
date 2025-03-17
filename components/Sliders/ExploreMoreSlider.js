@@ -62,24 +62,23 @@ const ExploreMoreSlider = ({ data }) => {
           <Text style={styles.headerText}>Explore More</Text>
         )}
 
-{loading ? (
-null
-) : (
-    <View
-    style={{
-      marginRight: rw(3),
-      width: rw(14),
-      backgroundColor: 'black',
-      paddingVertical: rh(0.8),
-      borderRadius: 10,
-    }}
-  >
-    <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-      {`${activeSlide + 1}/${sliderData.length}`}
-    </Text>
-  </View>
-  )}
-
+        {loading ? (
+        null
+        ) : (
+            <View
+            style={{
+              marginRight: rw(3),
+              width: rw(14),
+              backgroundColor: 'black',
+              paddingVertical: rh(0.8),
+              borderRadius: 10,
+            }}
+          >
+            <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+              {`${activeSlide + 1}/${sliderData.length}`}
+            </Text>
+          </View>
+          )}
       </View>
 
       {/* Shimmer Loader or Carousel */}
@@ -94,7 +93,7 @@ null
           inactiveSlideScale={0.9}
           inactiveSlideOpacity={0.7}
           autoplay={true}
-          autoplayInterval={1000}
+          autoplayInterval={4000}
           loop={true}
           onSnapToItem={(index) => setActiveSlide(index)}
         />

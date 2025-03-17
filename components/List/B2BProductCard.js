@@ -213,10 +213,10 @@ const B2BProductCard = ({ items, styleCardContainer, layout = "horizontal" }) =>
 
                   return (
                     <View key={index} style={styles.packetRow}>
-                      <Text 
-                      style={styles.packetText}>
-                          ({variant.pmeasurement} {variant.punit} - ₹{variant.moq_price ? variant.moq_price : variant.pselling_price})
-                      </Text>
+                    <Text style={styles.packetText}>
+                      {`${(variant.pmeasurement + " " + variant.punit + " - ₹" + (variant.moq_price ? variant.moq_price : variant.pselling_price))
+                        .substring(0, 23)}${(variant.pmeasurement + " " + variant.punit + " - ₹" + (variant.moq_price ? variant.moq_price : variant.pselling_price)).length > 20 ? "..." : ""}`}
+                    </Text>
 
                       {isInCart ? (
                           <View
