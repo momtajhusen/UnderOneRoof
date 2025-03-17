@@ -88,26 +88,29 @@ const ProductDetail = ({ route, navigation }) => {
   // Add to cart
   const addToCart = async () => {
     const moq = productDetails.moq || 1;
+    console.log("Adding to cart - PID:", productDetails.pid, "Variant ID:", selectedVariantId);
+    
     try {
-      setCartBtnLoading(true);
-      await addFromCart(productDetails.pid, selectedVariantId, moq);
-      setCartQty(moq);
+        setCartBtnLoading(true);
+        await addFromCart(productDetails.pid, selectedVariantId, moq);
+        setCartQty(moq);
 
-      dispatch({
-        type: 'UPDATE_CART',
-        payload: {
-          cartProduct: [
-            ...state.viewCartData.cartProduct,
-            { pid: productDetails.pid, var_id: selectedVariantId, qty: moq },
-          ],
-        },
-      });
+        dispatch({
+            type: 'UPDATE_CART',
+            payload: {
+                cartProduct: [
+                    ...state.viewCartData.cartProduct,
+                    { pid: productDetails.pid, var_id: selectedVariantId, qty: moq },
+                ],
+            },
+        });
     } catch (error) {
-      console.error('Error adding to cart:', error);
+        console.error('Error adding to cart:', error);
     } finally {
-      setCartBtnLoading(false);
+        setCartBtnLoading(false);
     }
-  };
+};
+
 
   // Buy now
   const buyNow = () => {
@@ -175,26 +178,27 @@ const ProductDetail = ({ route, navigation }) => {
     try {
       setIsLoading(true);
       console.log('Fetching for variant:', selectedVariantId);
-
+  
       const response = await apiClient.get(
         `/product/detail?slug=${selectedSlug}&var=${selectedVariantId}`
       );
       const product = response.data;
-
+  
+      // Set delivery time
       setDeliveryTime(product.data.delivery_time || null);
-
-      // Set multi-images, reviews, etc.
+  
+      // Set multi-images, reviews, ratings, etc.
       const multiImage = product.data.productDetails[0]?.multi_image || [];
       const reviewImages = product.data.reviewData || [];
       const totalRating = product.data.allrating || 0;
       const totalReviews = product.data.allreview || 0;
-
+  
       setReviewData({
         rating: totalRating,
         reviewCount: totalReviews,
         images: reviewImages,
       });
-
+  
       setReview(product.data.review);
       setMultiProductImage(multiImage);
       setProductDetails(product.data.productDetails[0]);
@@ -202,12 +206,16 @@ const ProductDetail = ({ route, navigation }) => {
       setRelatedProduct(product.data.relatedProduct);
       setProductVarient(product.data.varient);
       setIsInWishlist(product.data.productDetails[0].added_to_wishlist);
+      setCartQty(product.data.productDetails[0].added_to_cart);
+ 
     } catch (error) {
       console.error('Error fetching product:', error);
     } finally {
       setIsLoading(false);
     }
   };
+  
+  
 
   // Handle wishlist add/remove
   const wishlistHandle = async () => {
@@ -242,6 +250,7 @@ const ProductDetail = ({ route, navigation }) => {
   // Variant selection
   const varentHandle = (variantItem) => {
     setSelectedVariantId(variantItem.psid);
+    setCartQty(0);
   };
 
   // ------------------------
