@@ -46,6 +46,7 @@ const Section2 = ({ data }) => {
     return null;
   }
 
+
   return (
     <View style={{ paddingLeft: rw(4)}}>
       {loading ? (

@@ -25,7 +25,6 @@ const ExploreMoreSlider = ({ data }) => {
     }
   }, [data]);
 
-  // Agar loading complete ho chuki hai aur slider data empty hai, to kuch bhi render na karein
   if (!loading && (!data || !data.slider || data.slider.length === 0)) {
     return null;
   }
@@ -47,41 +46,22 @@ const ExploreMoreSlider = ({ data }) => {
   return (
     <View>
       {/* Header with Slide Number */}
-      <View
-        style={{
-          paddingLeft: rw(4.5),
-          marginBottom: rh(1),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.headerContainer}>
         {loading ? (
           <Shimmer style={[styles.headerText, { width: '50%' }]} />
         ) : (
           <Text style={styles.headerText}>Explore More</Text>
         )}
 
-        {loading ? (
-        null
-        ) : (
-            <View
-            style={{
-              marginRight: rw(3),
-              width: rw(14),
-              backgroundColor: 'black',
-              paddingVertical: rh(0.8),
-              borderRadius: 10,
-            }}
-          >
-            <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+        {!loading && (
+          <View style={styles.counterContainer}>
+            <Text style={styles.counterText}>
               {`${activeSlide + 1}/${sliderData.length}`}
             </Text>
           </View>
-          )}
+        )}
       </View>
 
-      {/* Shimmer Loader or Carousel */}
       {loading ? (
         <Shimmer style={styles.shimmer} />
       ) : (
@@ -103,9 +83,32 @@ const ExploreMoreSlider = ({ data }) => {
 };
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    paddingLeft: rw(4.5),
+    marginBottom: rh(1),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: rf(2),
+    fontWeight: 'bold',
+  },
+  counterContainer: {
+    marginRight: rw(3),
+    width: rw(14),
+    backgroundColor: 'black',
+    paddingVertical: rh(0.8),
+    borderRadius: 10,
+  },
+  counterText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
   slide: {
     width: rw(80),
-    height: rw(45),
+    height: rh(17), // Same size as HomeSlider's sliderStyle
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -114,13 +117,9 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
   },
-  headerText: {
-    fontSize: rf(2),
-    fontWeight: 'bold',
-  },
   shimmer: {
     width: rw(80),
-    height: rw(45),
+    height: rh(17),
     borderRadius: 10,
     justifyContent: 'center',
     marginLeft: rw(10),
