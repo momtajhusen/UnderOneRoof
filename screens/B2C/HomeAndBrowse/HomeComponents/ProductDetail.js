@@ -55,8 +55,9 @@ const ProductDetail = ({ route, navigation }) => {
     (Array.isArray(item.varient) && item.varient.length > 0
       ? item.varient[0].psid
       : null)
-  );
-
+  );  
+  
+  
   const [selectedSlug, setSelectedSlug] = useState(item.slug);
   const [multiProductImage, setMultiProductImage] = useState([]);
   const [productDetails, setProductDetails] = useState([]);
@@ -177,12 +178,16 @@ const ProductDetail = ({ route, navigation }) => {
   const ProductDetails = async () => {
     try {
       setIsLoading(true);
-      console.log('Fetching for variant:', selectedVariantId);
+      console.log('Fetching for slug:', selectedSlug);
+      console.log('Fetching for var:', selectedVariantId);
+
   
       const response = await apiClient.get(
         `/product/detail?slug=${selectedSlug}&var=${selectedVariantId}`
       );
       const product = response.data;
+
+
   
       // Set delivery time
       setDeliveryTime(product.data.delivery_time || null);
@@ -252,10 +257,12 @@ const ProductDetail = ({ route, navigation }) => {
     setSelectedVariantId(variantItem.psid);
     setCartQty(0);
   };
-
+  
   // ------------------------
   //         useEffect
   // ------------------------
+
+  
 
   // Refetch product details when slug or variant changes
   useEffect(() => {
@@ -269,12 +276,13 @@ const ProductDetail = ({ route, navigation }) => {
     setSelectedVariantId(
       item.varient_id ||
       (Array.isArray(item.varient) && item.varient.length > 0
-        ? item.varient[0].psid
+        ? item.varient[0].varient_id
         : null)
     );
     setCartQty(itemQty);
     setSelectedSlug(item.slug);
   }, [item]);
+  
 
 
   // Helper booleans
@@ -442,6 +450,7 @@ const ProductDetail = ({ route, navigation }) => {
                   <Text style={styles.weightText}>
                     {variantItem.pmeasurement} {variantItem.punit}
                   </Text>
+                  
                   <View style={{ flexDirection: "row", alignItems: "center", gap: rw(1) }}>
                     <Text style={styles.priceText}>
                       ₹{variantItem.moq_price != null ? variantItem.moq_price : variantItem.pselling_price}
