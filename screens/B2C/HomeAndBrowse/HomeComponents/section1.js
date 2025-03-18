@@ -58,7 +58,7 @@ const Section1 = ({ data }) => {
         {loading ? (
           <ItemsListLoader layout="horizontal" itemContainerStyle={{marginLeft:10}}/>
         ) : (
-          <ItemsList items={productData} />
+          <ItemsList items={productData}  listContainerStyle={{ marginRight: rw(2.5) }} />
         )}
       </View>
     </View>
