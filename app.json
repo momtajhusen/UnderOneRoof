@@ -1,34 +1,31 @@
 {
   "expo": {
     "name": "Under One Roof",
-    "slug": "UnderOneRoof",
+    "slug": "underoneroof",
     "version": "1.0.0",
-    "icon": "./assets/auth/applogo.png",
+    "runtimeVersion": "1.0.0",
+     "orientation": "portrait",
+    "android": {
+      "package": "com.underoneroof.underoneroof",
+      "icon": "./assets/auth/applogo.png",  
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/auth/applogo.png",  
+        "backgroundColor": "#fffb00"         
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.underoneroof.underoneroof"
+    },
     "extra": {
       "eas": {
-        "projectId": "d842f218-bd83-49bd-99f8-aaa5c67a4b3e"
+        "projectId": "6ff5809a-d938-4003-90f1-05d2f323db1a"
       }
     },
     "splash": {
-      "image": "./assets/auth/logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#FFFF00"
+      "image": "./assets/auth/applogo.png",
+      "backgroundColor": "#fffb00",
+      "resizeMode": "contain"
     },
-    "runtimeVersion": "1.0.0",
-    "updates": {
-      "enabled": true,
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/d842f218-bd83-49bd-99f8-aaa5c67a4b3e"
-    },
-    "android": {
-      "package": "com.example.underoneroof",
-      "googleServicesFile": "./google-services.json",
-      "versionCode": 1
-    },
-    "ios": {
-      "bundleIdentifier": "com.example.underoneroof",
-      "buildNumber": "1.0.0"
-    },
-    "newArchEnabled": true
+    "owner": "codeprou"
   }
 }

@@ -14,8 +14,17 @@
       "channel": "preview"
     },
     "production": {
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle"   
+      },
       "autoIncrement": true,
       "channel": "production"
+    },
+    "apk": {
+      "android": {
+        "buildType": "apk"     
+      }
     }
   },
   "submit": {
