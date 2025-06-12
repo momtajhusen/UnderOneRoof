@@ -1,24 +1,27 @@
 {
   "expo": {
     "name": "Under One Roof",
-    "slug": "underoneroof",
+    "slug": "under-one-roof",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
-     "orientation": "portrait",
+    "orientation": "portrait",
     "android": {
       "package": "com.underoneroof.underoneroof",
-      "icon": "./assets/auth/applogo.png",  
+      "icon": "./assets/auth/applogo.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/auth/applogo.png",  
-        "backgroundColor": "#fffb00"         
+        "foregroundImage": "./assets/auth/applogo.png",
+        "backgroundColor": "#fffb00"
       }
     },
     "ios": {
-      "bundleIdentifier": "com.underoneroof.underoneroof"
+      "bundleIdentifier": "com.underoneroof.underoneroof",
+      "infoPlist": {
+        "CFBundleDisplayName": "Under One Roof"
+      }
     },
     "extra": {
       "eas": {
-        "projectId": "6ff5809a-d938-4003-90f1-05d2f323db1a"
+        "projectId": "251e2151-022b-465a-80c7-311317bc1ea5"
       }
     },
     "splash": {
@@ -26,6 +29,6 @@
       "backgroundColor": "#fffb00",
       "resizeMode": "contain"
     },
-    "owner": "codeprou"
+    "owner": "technicalmaithili"
   }
 }
