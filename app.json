@@ -7,9 +7,9 @@
     "orientation": "portrait",
     "android": {
       "package": "com.underoneroof.underoneroof",
-      "icon": "./assets/auth/applogo.png",
+      "icon": "./assets/auth/applogo-square.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/auth/applogo.png",
+        "foregroundImage": "./assets/auth/applogo-square.png",
         "backgroundColor": "#fffb00"
       }
     },
@@ -34,14 +34,11 @@
       }
     },
     "splash": {
-      "image": "./assets/auth/applogo.png",
+      "image": "./assets/auth/applogo-square.png",
       "backgroundColor": "#fffb00",
       "resizeMode": "contain"
     },
     "owner": "technicalmaithili",
-    "experiments": {
-      "newArchEnabled": true
-    },
     "plugins": [
       "expo-video",
       "react-native-video"

@@ -13,7 +13,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - EXConstants (17.0.8):
     - ExpoModulesCore
-  - EXImageLoader (5.1.0):
+  - EXImageLoader (5.0.0):
     - ExpoModulesCore
     - React-Core
   - EXJSONUtils (0.14.0)
@@ -31,11 +31,11 @@ PODS:
     - ExpoModulesCore
   - ExpoDocumentPicker (13.0.3):
     - ExpoModulesCore
-  - ExpoFileSystem (18.1.10):
+  - ExpoFileSystem (18.0.12):
     - ExpoModulesCore
   - ExpoFont (13.3.1):
     - ExpoModulesCore
-  - ExpoImagePicker (16.1.4):
+  - ExpoImagePicker (16.0.6):
     - ExpoModulesCore
   - ExpoKeepAwake (14.0.3):
     - ExpoModulesCore
@@ -66,12 +66,12 @@ PODS:
     - Yoga
   - ExpoPrint (14.0.3):
     - ExpoModulesCore
-  - ExpoSharing (13.1.5):
+  - ExpoSharing (13.0.1):
     - ExpoModulesCore
   - ExpoVideo (2.0.6):
     - ExpoModulesCore
   - EXStructuredHeaders (4.0.0)
-  - EXUpdates (0.26.19):
+  - EXUpdates (0.27.4):
     - DoubleConversion
     - EASClient
     - EXManifests
@@ -2227,7 +2227,7 @@ SPEC CHECKSUMS:
   EXApplication: 4c72f6017a14a65e338c5e74fca418f35141e819
   EXAV: 4c41f0a6ae54a0b96597abc90e37962ab2ee0d85
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
-  EXImageLoader: 4d3d3284141f1a45006cc4d0844061c182daf7ee
+  EXImageLoader: e5da974e25b13585c196b658a440720c075482d5
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: a19d50504b8826546a4782770317bc83fffec87d
   EXNotifications: 9d3d17e52c95f377750d4a2ae553a716313dd4aa
@@ -2236,17 +2236,17 @@ SPEC CHECKSUMS:
   ExpoClipboard: 44fd1c8959ee8f6175d059dc011b154c9709a969
   ExpoDevice: d36ab4186b6799a28fd449bb9a1c77455f23fd1a
   ExpoDocumentPicker: 6d3d499cf15b692688a804f42927d0f35de5ebaa
-  ExpoFileSystem: c36eb8155eb2381c83dda7dc210e3eec332368b6
+  ExpoFileSystem: 42d363d3b96f9afab980dcef60d5657a4443c655
   ExpoFont: abbb91a911eb961652c2b0a22eef801860425ed6
-  ExpoImagePicker: 0963da31800c906e01c03e25d7c849f16ebf02a2
+  ExpoImagePicker: 24e5ba8da111f74519b1e6dc556e0b438b2b8464
   ExpoKeepAwake: b0171a73665bfcefcfcc311742a72a956e6aa680
   ExpoLinearGradient: 35ebd83b16f80b3add053a2fd68cc328ed927f60
   ExpoModulesCore: 725faec070d590810d2ea5983d9f78f7cf6a38ec
   ExpoPrint: 13208d67f48c190ccfeb9b97aa3394ff31ec606b
-  ExpoSharing: b0377be82430d07398c6a4cd60b5a15696accbd3
+  ExpoSharing: 849a5ce9985c22598c16ec027e32969be8062e8e
   ExpoVideo: 10e69b9c0652aba5c2edee2c572090e0412bd7ce
   EXStructuredHeaders: 09c70347b282e3d2507e25fb4c747b1b885f87f6
-  EXUpdates: f66968c0ce422b775a988017518cc33d10200b0d
+  EXUpdates: 6cb35d269f033f8f72aaf25c6f18ad14678771b5
   EXUpdatesInterface: 7c977640bdd8b85833c19e3959ba46145c5719db
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 7605ea4810e0e10ae4815292433c09bf4324ba45
