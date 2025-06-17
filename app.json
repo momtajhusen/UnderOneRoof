@@ -16,7 +16,16 @@
     "ios": {
       "bundleIdentifier": "com.underoneroof.underoneroof",
       "infoPlist": {
-        "CFBundleDisplayName": "Under One Roof"
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSExceptionDomains": {
+            "u1rfoods.com": {
+              "NSIncludesSubdomains": true,
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+              "NSExceptionRequiresForwardSecrecy": false
+            }
+          }
+        }
       }
     },
     "extra": {
@@ -29,6 +38,13 @@
       "backgroundColor": "#fffb00",
       "resizeMode": "contain"
     },
-    "owner": "technicalmaithili"
+    "owner": "technicalmaithili",
+    "experiments": {
+      "newArchEnabled": true
+    },
+    "plugins": [
+      "expo-video",
+      "react-native-video"
+    ]
   }
 }

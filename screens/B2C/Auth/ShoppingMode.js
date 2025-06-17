@@ -9,8 +9,12 @@ import apiClient from '../../../Service/apiClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppContext } from '../../../context/AppContext';
 import B2BBottomNavigator from '../../../navigation/B2BBottomNavigation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 const ShoppingMode = ({ navigation, route }) => {
+  const insets = useSafeAreaInsets();
+
   const { state, dispatch } = useContext(AppContext);
 
   const { mobile, userId } = route.params;
@@ -26,10 +30,6 @@ const ShoppingMode = ({ navigation, route }) => {
     try {
       const response = await apiClient.post('/selectFlow', { mobile, type: mode });
       
-
-      // console.log(response.data);
-      // return false;
-  
       if (type === 'wholesale') {
         if (response.data.status === 1) {
           await AsyncStorage.setItem('ShoppingMode', 'wholesale');
@@ -68,7 +68,7 @@ const ShoppingMode = ({ navigation, route }) => {
   };
   
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{paddingTop: insets.top}]}>
       {/* Title and Description */}
       <View>
         <Text style={styles.titleText}>Choose Your Shopping Mode</Text>

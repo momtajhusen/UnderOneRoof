@@ -16,14 +16,20 @@
     "production": {
       "distribution": "store",
       "android": {
-        "buildType": "app-bundle"   
+        "buildType": "app-bundle"
       },
       "autoIncrement": true,
       "channel": "production"
     },
     "apk": {
       "android": {
-        "buildType": "apk"     
+        "buildType": "apk"
+      }
+    },
+    "adhoc": {
+      "distribution": "internal",
+      "ios": {
+        "enterpriseProvisioning": "adhoc"
       }
     }
   },
@@ -31,4 +37,3 @@
     "production": {}
   }
 }
- 

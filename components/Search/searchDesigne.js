@@ -32,15 +32,25 @@ const SearchDesigne = ({onPress}) => {
 export default SearchDesigne;
 
 const styles = StyleSheet.create({
-    search: {
-      backgroundColor: "white",
-      height:rh(5.5),
-      width:rw(90),
-      position:"absolute",
-      justifyContent:"center",
-      left:rw(-45),
-      top:rh(3),
-      zIndex:100,
-      borderRadius:10
-    }
+  search: {
+    backgroundColor: 'white',
+    height: rh(5.5),
+    width: rw(90),
+    position: 'absolute',
+    justifyContent: 'center',
+    left: rw(-45),
+    top: rh(0),
+    zIndex: 100,
+    borderRadius: 10,
+  
+    // ✅ Android shadow
+    elevation: 1,
+  
+    // ✅ iOS shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 1,
+  }
+  
   });

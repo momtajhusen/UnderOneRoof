@@ -8,9 +8,7 @@ export const useQtyUpdate = () => {
   const [isQtyUpdateLoading, setIsLoading] = useState(false);
 
   const { isViewCartLoading, viewCartData } = useViewCartData();
-
-  
-    const { dispatch, state } = useContext(AppContext);
+  const { dispatch, state } = useContext(AppContext);
 
   const qtyUpdate = async (pid, qty, var_id) => {
     try {

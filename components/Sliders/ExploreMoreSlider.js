@@ -5,6 +5,7 @@ import { rw, rh, rf } from '../../Service/responsive';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import { Video } from 'expo-av'; // video import for Expo
 
 const Shimmer = createShimmerPlaceholder(LinearGradient);
 const { width: screenWidth } = Dimensions.get('window');
@@ -37,11 +38,30 @@ const ExploreMoreSlider = ({ data }) => {
     });
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleImagePress(item.cname, item.link)} style={styles.slide}>
-      <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    const isVideo = item.image?.toLowerCase().endsWith('.mp4');
+
+    return (
+      <TouchableOpacity onPress={() => handleImagePress(item.cname, item.link)} style={styles.slide} activeOpacity={0.9}>
+        {isVideo ? (
+          <Video
+            source={{ uri: item.image }}
+            style={styles.image}
+            resizeMode="cover"
+            isMuted
+            shouldPlay
+            isLooping
+          />
+        ) : (
+          <Image
+            source={{ uri: item.image }}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View>
@@ -108,7 +128,7 @@ const styles = StyleSheet.create({
   },
   slide: {
     width: rw(80),
-    height: rh(17), // Same size as HomeSlider's sliderStyle
+    height: rh(17),
     justifyContent: 'center',
     alignItems: 'center',
   },
