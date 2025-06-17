@@ -1,38 +1,31 @@
 pluginManagement {
-    includeBuild(new File(["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()).getParentFile().toString())
-}
-plugins { id("com.facebook.react.settings") }
-
-extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
-  if (System.getenv('EXPO_USE_COMMUNITY_AUTOLINKING') == '1') {
-    ex.autolinkLibrariesFromCommand()
-  } else {
-    def command = [
-      'node',
-      '--no-warnings',
-      '--eval',
-      'require(require.resolve(\'expo-modules-autolinking\', { paths: [require.resolve(\'expo/package.json\')] }))(process.argv.slice(1))',
-      'react-native-config',
-      '--json',
-      '--platform',
-      'android'
-    ].toList()
-    ex.autolinkLibrariesFromCommand(command)
+  repositories {
+    gradlePluginPortal()
+    google()
+    mavenCentral()
+    // Expo modules-core
+    maven { url("$rootDir/../node_modules/expo-modules-core/android/maven") }
+    // Expo updates plugin
+    maven { url("$rootDir/../node_modules/expo-updates/android/maven") }
+    // Expo font, notifications, sharing आदि
+    maven { url("$rootDir/../node_modules/expo-font/android/maven") }
+    // (अगर और Expo packages हैं जिनके पास android/maven है, वो भी add कर देना)
   }
-}
-
-rootProject.name = 'Under One Roof'
-
-dependencyResolutionManagement {
-  versionCatalogs {
-    reactAndroidLibs {
-      from(files(new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), "../gradle/libs.versions.toml")))
+  resolutionStrategy {
+    eachPlugin { details ->
+      if (details.requested.id.id == "expo-module-gradle-plugin") {
+        details.useModule("expo.modules:expo-module-gradle-plugin:${details.requested.version}")
+      }
+      if (details.requested.id.id == "expo-updates-gradle-plugin") {
+        details.useModule("expo.updates:expo-updates-gradle-plugin:${details.requested.version}")
+      }
     }
   }
 }
 
-apply from: new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle");
-useExpoModules()
+rootProject.name = "UnderOneRoof"
+include(":app")
 
-include ':app'
-includeBuild(new File(["node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()).getParentFile())
+// Expo autolinking
+apply from: new File(rootDir, "../node_modules/expo/scripts/autolinking.gradle")
+useExpoModules()

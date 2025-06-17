@@ -2,8 +2,8 @@
   "expo": {
     "name": "Under One Roof",
     "slug": "under-one-roof",
-    "version": "1.0.0",
-    "runtimeVersion": "1.0.0",
+    "version": "1.0.1",
+    "runtimeVersion": "1.0.1",
     "orientation": "portrait",
     "android": {
       "package": "com.underoneroof.underoneroof",
@@ -11,22 +11,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/auth/applogo-square.png",
         "backgroundColor": "#fffb00"
-      }
+      },
+      "versionCode": 2
     },
     "ios": {
       "bundleIdentifier": "com.underoneroof.underoneroof",
-      "infoPlist": {
-        "NSAppTransportSecurity": {
-          "NSAllowsArbitraryLoads": true,
-          "NSExceptionDomains": {
-            "u1rfoods.com": {
-              "NSIncludesSubdomains": true,
-              "NSExceptionAllowsInsecureHTTPLoads": true,
-              "NSExceptionRequiresForwardSecrecy": false
-            }
-          }
-        }
-      }
+      "buildNumber": "2"
     },
     "extra": {
       "eas": {
